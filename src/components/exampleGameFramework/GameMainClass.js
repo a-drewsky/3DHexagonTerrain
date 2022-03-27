@@ -59,7 +59,7 @@ export default class GameMainClass {
 
    //SETUP FUNCTIONS
    startGame = () => {
-      this.gameManager.state.setState1(0);
+      this.gameManager.state.setShowHexMapState();
    }
 
 
@@ -87,6 +87,8 @@ export default class GameMainClass {
 
    //DRAW FUNCTION
    draw = () => {
+      console.log("draw")
+
       //clear the canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

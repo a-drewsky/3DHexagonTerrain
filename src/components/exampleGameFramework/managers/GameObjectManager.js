@@ -1,7 +1,6 @@
 
 //Import Game Object
-import ExampleGameObeject1Class from '../gameObjects/ExampleGameObject1/ExampleGameObject1'
-import ExampleGameObeject2Class from '../gameObjects/ExampleGameObject2/ExampleGameObject2';
+import HexMapClass from "../gameObjects/hexMap/HexMap"
 
 export default class GameObjectManagerClass {
 
@@ -37,18 +36,13 @@ export default class GameObjectManagerClass {
     createObjects = (settings) => {
 
         //Initialize game objects
-        this.objectMap.set("exampleGameObject1", {
-            object: new ExampleGameObeject1Class(this.ctx, 100, 100, settings.size),
-            state: this.objectStates.active
-        });
-
-        this.objectMap.set("exampleGameObject2", {
-            object: new ExampleGameObeject2Class(this.ctx, 100, 100, settings.size),
+        this.objectMap.set("hexMap", {
+            object: new HexMapClass(this.ctx, 30, 30, 15, 0.8),
             state: this.objectStates.active
         });
 
         //build game objects
-        this.objectMap.get('exampleGameObject1').object.builder.build(settings.size);
+        this.objectMap.get('hexMap').object.builder.build(20, 20, 0, false);
     }
 
 }

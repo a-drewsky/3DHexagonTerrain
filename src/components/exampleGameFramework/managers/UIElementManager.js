@@ -37,7 +37,7 @@ export default class UIElementManagerClass {
    createElements = (canvas) => {
       this.elementMap.set("exampleButton", {
          element: new PixelButtonElementClass(this.ctx, "Example", 300, 300, 100, 50, 5, 2, `${canvas.width * 0.03}px Arial`),
-         state: 'active'
+         state: this.elementStates.disabled
       })
    }
 
