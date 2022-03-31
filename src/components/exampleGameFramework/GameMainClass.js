@@ -20,7 +20,7 @@ export default class GameMainClass {
       this.ctx.lineCap = 'round';
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle'
-      this.ctx.lineWidth = canvas.width * 0.005;
+      this.ctx.lineWidth = 3;
 
       //win condition
       this.setWinCondition = setWinCondition;

@@ -37,12 +37,12 @@ export default class GameObjectManagerClass {
 
         //Initialize game objects
         this.objectMap.set("hexMap", {
-            object: new HexMapClass(this.ctx, 30, 30, 15, 0.8),
+            object: new HexMapClass(this.ctx, 30, 60, 30, 0.65),
             state: this.objectStates.active
         });
 
         //build game objects
-        this.objectMap.get('hexMap').object.builder.build(20, 20, 0, false);
+        this.objectMap.get('hexMap').object.builder.build(15, 25, 0, true);
     }
 
 }

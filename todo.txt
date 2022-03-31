@@ -1,0 +1,7 @@
+-shadows
+    -proper wall colors for each direction
+    -refactor
+
+
+-Map rotation
+-Map panning

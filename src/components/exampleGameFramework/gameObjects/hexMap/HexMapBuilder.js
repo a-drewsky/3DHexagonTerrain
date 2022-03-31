@@ -15,13 +15,13 @@ export default class HexMapBuilderClass {
       for (let r = 0; r < Rgen; r++) {
          for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
             this.hexMapData.setEntry(q, r, {
-               data: null
-            })
+               height: 0
+            });
          }
       }
    }
 
-   removeNoiseTiles = (noiseFluctuation, noiseSeedMultiplier, noiseThreshold) => {
+   setTilesHeight = (noiseFluctuation, noiseSeedMultiplier, lowerNoiseThreshold, upperNoiseThreshold) => {
 
       let seed = Math.random() * noiseSeedMultiplier;
 
@@ -31,7 +31,17 @@ export default class HexMapBuilderClass {
 
          let tileNoise = noise(seed+keyObj.q/noiseFluctuation, seed+keyObj.r/noiseFluctuation);
 
-         if(tileNoise < noiseThreshold) this.hexMapData.deleteEntry(keyObj.q, keyObj.r);
+         // if(tileNoise < lowerNoiseThreshold) this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+         //    height: -1
+         // });
+
+         // if(tileNoise > upperNoiseThreshold) this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+         //    height: 1
+         // });
+
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+            height: Math.max(Math.floor(tileNoise * 12)-3, 0)
+         });
 
       }
       
@@ -40,7 +50,7 @@ export default class HexMapBuilderClass {
 
    deleteIslands = () => {
 
-      let keyStrings = this.hexMapData.keyStrings();
+      let keyStrings = this.hexMapData.getKeyStrings();
       let tileGroups = [];
 
       let getNeighborKeysInList = (q, r) => {
@@ -94,14 +104,16 @@ export default class HexMapBuilderClass {
    
    build = (q, r, mapSize, mapGeneration) => {
 
-      let noiseFluctuation = (mapSize == "small" ? 3 : mapSize == "medium" ? 4 : 5)
+      //make a settings variable or some shit
+      let noiseFluctuation = (mapSize == "small" ? 3 : mapSize == "medium" ? 4 : 6)
       let noiseSeedMultiplier = 10
-      let noiseThreshold = 0.4
+      let lowerNoiseThreshold = 0.4
+      let upperNoiseThreshold = 0.7
 
       if (mapGeneration == true) {
             this.generateMap(q, r);
-            this.removeNoiseTiles(noiseFluctuation, noiseSeedMultiplier, noiseThreshold);
-            this.deleteIslands();
+            this.setTilesHeight(noiseFluctuation, noiseSeedMultiplier, lowerNoiseThreshold, upperNoiseThreshold);
+            //this.deleteIslands();
       } else {
             this.generateMap(q, r);
       }

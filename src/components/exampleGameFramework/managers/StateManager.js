@@ -22,7 +22,7 @@ export default class StateManagerClass {
          showHexMapState: new GameStateClass(
             'showHexMapState',
             {
-               attribute1: null
+               rotation: 0
             }
          )
       }

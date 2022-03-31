@@ -9,6 +9,8 @@ export default class HexMapDataClass {
       this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
       this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
       this.squish = squish;
+
+      this.rotation = 6;
    }
 
 
@@ -55,6 +57,10 @@ export default class HexMapDataClass {
       return [...this.hexMap.keys()].map(key => this.split(key))
    }
 
+   getValues = () => {
+      return [...this.hexMap.values()]
+   }
+
    //return all key strings
    getKeyStrings = () => {
       return [...this.hexMap.keys()]
@@ -64,12 +70,12 @@ export default class HexMapDataClass {
    getNeighborKeys = (q, r) => {
       let neighbors = [];
 
-      if (this.has(q, r - 1)) neighbors.push(this.join(q, r - 1));
-      if (this.has(q + 1, r - 1)) neighbors.push(this.join(q + 1, r - 1));
-      if (this.has(q + 1, r)) neighbors.push(this.join(q + 1, r));
-      if (this.has(q, r + 1)) neighbors.push(this.join(q, r + 1));
-      if (this.has(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
-      if (this.has(q - 1, r)) neighbors.push(this.join(q - 1, r));
+      if (this.hasEntry(q, r - 1)) neighbors.push(this.join(q, r - 1));
+      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.join(q + 1, r - 1));
+      if (this.hasEntry(q + 1, r)) neighbors.push(this.join(q + 1, r));
+      if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
+      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
+      if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
 
       return neighbors.map(key => this.split(key));
    }
