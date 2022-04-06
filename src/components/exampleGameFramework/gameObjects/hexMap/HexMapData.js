@@ -10,7 +10,14 @@ export default class HexMapDataClass {
       this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
       this.squish = squish;
 
-      this.rotation = 6;
+      this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
+      this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
+
+      this.rotation = 7;
+
+      this.tileHeight = 10;
+
+      this.flipped = false;
    }
 
 

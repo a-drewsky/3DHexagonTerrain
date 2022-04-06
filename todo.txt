@@ -1,7 +1,27 @@
--shadows
-    -proper wall colors for each direction
-    -refactor
+
+-Use hexagonclipping path to draw all hexagon shadows like in drawGroundShadowLayer function
+
+-Camera
+    -Create camera game object
+    -Draw map from other axis
+        -Should have the same map layout as regular direction
+            -Add button input to switch between regular and off axis to make sure it looks the same
+        -Needs different shadow logic
+    -Map rotation
+    -Map panning
+    -Map zooming
 
 
--Map rotation
--Map panning
+-Map size, camera starting position and game board background
+    -Make it look like a board on a table top
+
+
+-climate generation
+    -elevation
+    -temperature
+    -dryness/wetness
+    -lakes and waterfalls
+        -generate rivers and lakes
+        -water tiles should not be on the edge (like a cliff) unless connecting to a water tile below
+        -hexagon wall colors should be a waterfall if connecting water tiles
+        

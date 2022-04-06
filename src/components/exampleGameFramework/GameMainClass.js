@@ -17,10 +17,14 @@ export default class GameMainClass {
       //canvas
       this.canvas = canvas;
       this.ctx = canvas.getContext("2d");
+      this.ctx.lineJoin = 'round';
       this.ctx.lineCap = 'round';
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle'
       this.ctx.lineWidth = 3;
+
+      //loading
+      this.loaded = false;
 
       //win condition
       this.setWinCondition = setWinCondition;
@@ -51,8 +55,28 @@ export default class GameMainClass {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
    }
 
-   click = (x, y) => {
-      this.inputController.click(x, y);
+   mouseDown = (x, y) => {
+      this.inputController.mouseDown(x, y);
+   }
+
+   mouseUp = (x, y) => {
+      this.inputController.mouseUp(x, y);
+   }
+
+   mouseMove = (x, y) => {
+      this.inputController.mouseMove(x, y);
+   }
+
+   mouseLeave = (x, y) => {
+      this.inputController.mouseLeave(x, y);
+   }
+
+   mouseEnter = (x, y) => {
+      this.inputController.mouseEnter(x, y);
+   }
+
+   keyPress = (key) => {
+      this.inputController.keyPress(key);
    }
    //END TOP LEVEL CONTROLLERS
 
@@ -60,6 +84,7 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
       this.gameManager.state.setShowHexMapState();
+      this.loaded = true;
    }
 
 

@@ -1,6 +1,7 @@
 
 //Import Game Object
 import HexMapClass from "../gameObjects/hexMap/HexMap"
+import CameraClass from "../gameObjects/camera/Camera";
 
 export default class GameObjectManagerClass {
 
@@ -36,10 +37,15 @@ export default class GameObjectManagerClass {
     createObjects = (settings) => {
 
         //Initialize game objects
+        this.objectMap.set("camera", {
+            object: new CameraClass(), //temporary attributes. Will become dynamic when camera is implemented
+            state: this.objectStates.disabled
+        });
         this.objectMap.set("hexMap", {
-            object: new HexMapClass(this.ctx, 30, 60, 30, 0.65),
+            object: new HexMapClass(this.ctx, this.objectMap.get("camera").object, 0, 0, 30, 2/3), //temporary attributes. Will become dynamic when camera is implemented
             state: this.objectStates.active
         });
+
 
         //build game objects
         this.objectMap.get('hexMap').object.builder.build(15, 25, 0, true);

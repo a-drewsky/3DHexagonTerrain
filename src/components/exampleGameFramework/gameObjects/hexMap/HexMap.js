@@ -5,11 +5,11 @@ import HexMapViewClass from "./HexMapView"
 
 export default class HexMapClass {
 
-    constructor(ctx, x, y, size, squish){
+    constructor(ctx, camera, x, y, size, squish){
         this.data = new HexMapDataClass(x, y, size, squish);
         this.builder = new HexMapBuilderClass(this.data);
         this.controller = new HexMapControllerClass(this.data);
-        this.view = new HexMapViewClass(ctx, this.data);
+        this.view = new HexMapViewClass(ctx, camera, this.data);
     }
 
 }

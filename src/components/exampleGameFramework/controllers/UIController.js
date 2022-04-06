@@ -5,21 +5,21 @@ export default class UIControllerClass {
     }
 
     click = (x, y) => {
-        for (let [key, value] of this.gameManager.ui.buttonMap) {
-           if (value.data.state == this.gameManager.ui.elementStates.active && value.controller.click(x, y)) {
+        for (let [key, value] of this.gameManager.ui.elementMap) {
+           if (value.state == this.gameManager.ui.elementStates.active && value.element.controller.click(x, y)) {
   
               value.data.setState(this.gameManager.ui.elementStates.clicked);
   
               let clickTimer = setInterval(() => {
-                 if(value.data.state == this.gameManager.ui.elementStates.clicked) value.data.setState(this.gameManager.ui.elementStates.active);
+                 if(value.state == this.gameManager.ui.elementStates.clicked) value.element.data.setState(this.gameManager.ui.elementStates.active);
                  clearInterval(clickTimer);
-                 this.gameManager.state.gameStates.current.draw();
+                 this.gameManager.state.draw();
               }, 200)
   
-              this.gameManager.state.gameStates.current.draw();
+              this.gameManager.state.draw();
               return {
                  key: key,
-                 value: value.controller.click(x, y)
+                 value: value.element.controller.click(x, y)
               }
            }
         }

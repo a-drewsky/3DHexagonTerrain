@@ -1,22 +1,38 @@
 export default class ShowHexMapStateControllerClass {
 
-    constructor(gameManager, uiController){
+    constructor(gameManager){
         this.gameManager = gameManager;
-        this.uiController = uiController
     }
 
-    click = (x, y) => {
-
-
+     mouseDown = (x, y) => {
 
         //if no ui element clicked (do something)
-        this.gameManager.objects.objectMap.get('hexMap').object.data.rotation++;
-        if(this.gameManager.objects.objectMap.get('hexMap').object.data.rotation == 12) this.gameManager.objects.objectMap.get('hexMap').object.data.rotation = 0;
+        this.gameManager.objects.objectMap.get('hexMap').object.data.flipped = !this.gameManager.objects.objectMap.get('hexMap').object.data.flipped;
 
-        this.gameManager.state.setGlobalAttribute('globalAttribute1', null)
-        
-        console.log(this.gameManager.objects.objectMap.get('hexMap').object.data.rotation)
+        this.gameManager.state.draw();
+     }
   
+     mouseUp = (x, y) => {
+
+     }
+  
+     mouseMove = (x, y) => {
+
+     }
+  
+     mouseLeave = (x, y) => {
+
+     }
+  
+     mouseEnter = (x, y) => {
+
+     }
+
+     keyPress = (key) => {
+
+        if(key == 'r') this.gameManager.objects.objectMap.get('camera').object.data.rotation++;
+        if(this.gameManager.objects.objectMap.get('camera').object.data.rotation == 12) this.gameManager.objects.objectMap.get('camera').object.data.rotation = 0;
+
      }
 
 }

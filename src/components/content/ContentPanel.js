@@ -40,12 +40,56 @@ const ContentPanel = () => {
    //END CREATE NEW GAME METHOD
 
 
+   useEffect(() => {
+      document.addEventListener('keypress', e => keyPress(e))
+  }, [gameClass])
+
+
    //INPUTS
    const mouseDown = ({ nativeEvent }) => {
+      nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      gameClass.click(offsetX, offsetY);
+      if(gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
 
+   }
+
+   const mouseUp = ({ nativeEvent }) => {
+      nativeEvent.preventDefault();
+      const { offsetX, offsetY } = nativeEvent;
+
+      if(gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
+
+   }
+
+   const mouseMove = ({ nativeEvent }) => {
+      nativeEvent.preventDefault();
+      const { offsetX, offsetY } = nativeEvent;
+
+      if(gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
+
+   }
+
+   const mouseLeave = ({ nativeEvent }) => {
+      nativeEvent.preventDefault();
+
+      const { offsetX, offsetY } = nativeEvent;
+
+      if(gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
+
+   }
+
+   const mouseEnter = ({ nativeEvent }) => {
+      nativeEvent.preventDefault();
+      const { offsetX, offsetY } = nativeEvent;
+
+      if(gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
+
+   }
+
+   const keyPress = (nativeEvent) => {
+      nativeEvent.preventDefault();
+      if(gameClass.loaded) gameClass.keyPress(nativeEvent.key)
    }
    //END INPUJTS
 
@@ -71,6 +115,10 @@ const ContentPanel = () => {
                   width={window.innerWidth / 3}
                   height={window.innerWidth / 3}
                   onMouseDown={mouseDown}
+                  onMouseUp={mouseUp}
+                  onMouseMove={mouseMove}
+                  onMouseLeave={mouseLeave}
+                  onMouseEnter={mouseEnter}
                   style={
                      { imageRendering: 'crisp-edges' }
                   }
