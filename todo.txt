@@ -1,14 +1,14 @@
 
--Use hexagonclipping path to draw all hexagon shadows like in drawGroundShadowLayer function
+-Set up pre rendering
+    -draws the scene to a seperate canvas then draws that canvas
+    -draw scene relative to camera position
+    -Only need to rerender when rotating and possibly when zooming
+    -https://www.html5rocks.com/en/tutorials/canvas/performance/
+    -create a render map for each rotation and zoom level when object is created
+
 
 -Camera
-    -Create camera game object
-    -Draw map from other axis
-        -Should have the same map layout as regular direction
-            -Add button input to switch between regular and off axis to make sure it looks the same
-        -Needs different shadow logic
     -Map rotation
-    -Map panning
     -Map zooming
 
 

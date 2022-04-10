@@ -42,16 +42,21 @@ export default class GameMainClass {
       }
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.draw, this.intervalsList);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);
+
+      this.drawInterval = setInterval(this.draw, 1000/60);
+      this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
    }
 
 
    //TOP LEVEL CONTROLLERS
    clear = () => {
       clearInterval(this.gameManager.state.interval);
+      clearInterval(this.drawInterval);
+      clearInterval(this.fpsInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
    }
 
@@ -112,7 +117,6 @@ export default class GameMainClass {
 
    //DRAW FUNCTION
    draw = () => {
-      console.log("draw")
 
       //clear the canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -126,8 +130,12 @@ export default class GameMainClass {
       for (let [key, value] of this.gameManager.ui.elementMap) {
          if(value.state != 'disabled') value.element.view.draw(value.state);
       }
+
+      console.log("draw")
    }
    //END DRAW FUNCTION
+
+   
 
 
    //INTERVAL FUNCTIONS

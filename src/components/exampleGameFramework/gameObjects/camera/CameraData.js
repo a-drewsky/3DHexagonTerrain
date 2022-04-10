@@ -10,6 +10,9 @@ export default class CameraDataClass {
         this.rotation = 0;
         this.zoom = 0;
 
+        this.anchorPoint = null;
+        this.mouseAnchorPoint = null;
+
     }
 
     setPosition = (x, y) => {
@@ -25,6 +28,23 @@ export default class CameraDataClass {
 
     setZoom = (zoom) => {
         this.zoom = zoom;
+    }
+
+    setAnchorPoint = (x, y) => {
+        this.anchorPoint = {
+            x: this.position.x,
+            y: this.position.y
+        }
+
+        this.mouseAnchorPoint = {
+            x: x,
+            y: y
+        }
+    }
+
+    clearAnchorPoint = () => {
+        this.anchorPoint = null;
+        this.mouseAnchorPoint = null;
     }
 
 }

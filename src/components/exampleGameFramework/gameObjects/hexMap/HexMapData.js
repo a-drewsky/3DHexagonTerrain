@@ -13,9 +13,11 @@ export default class HexMapDataClass {
       this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
 
-      this.rotation = 7;
+      this.rotation = 6;
 
       this.tileHeight = 10;
+
+      this.maxHeight = null;
 
       this.flipped = false;
    }
@@ -32,13 +34,13 @@ export default class HexMapDataClass {
       this.hexMap.delete(q + "," + r);
    }
 
-   setDimensions = (x, y, size, squish) => {
+   setDimensions = (x, y) => {
       this.x = x;
       this.y = y;
-      this.size = size;
-      this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
-      this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
-      this.squish = squish;
+   }
+
+   setMaxHeight = (maxHeight) => {
+      this.maxHeight = maxHeight;
    }
    //END SET METHODS
 

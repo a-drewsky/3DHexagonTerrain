@@ -50,7 +50,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
+      if(gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
 
    }
 
@@ -58,7 +58,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
+      if(gameClass && gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
 
    }
 
@@ -66,7 +66,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
+      if(gameClass && gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
 
    }
 
@@ -75,7 +75,7 @@ const ContentPanel = () => {
 
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
+      if(gameClass && gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
 
    }
 
@@ -83,13 +83,13 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
+      if(gameClass && gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
 
    }
 
    const keyPress = (nativeEvent) => {
       nativeEvent.preventDefault();
-      if(gameClass.loaded) gameClass.keyPress(nativeEvent.key)
+      if(gameClass && gameClass.loaded) gameClass.keyPress(nativeEvent.key)
    }
    //END INPUJTS
 

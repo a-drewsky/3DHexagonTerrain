@@ -10,8 +10,6 @@ export default class HexMapBuilderClass {
 
    generateMap = (Qgen, Rgen) => {
 
-      console.log("generate")
-
       for (let r = 0; r < Rgen; r++) {
          for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
             this.hexMapData.setEntry(q, r, {
@@ -44,6 +42,8 @@ export default class HexMapBuilderClass {
          });
 
       }
+
+      this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
       
 
    }
