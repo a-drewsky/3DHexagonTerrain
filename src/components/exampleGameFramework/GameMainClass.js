@@ -45,10 +45,10 @@ export default class GameMainClass {
       this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList);
 
       //Input controller
-      this.inputController = new InputControllerClass(this.gameManager);
+      this.inputController = new InputControllerClass(this.gameManager, this.canvas);
 
       this.drawInterval = setInterval(this.draw, 1000/60);
-      this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
+      //this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
    }
 
 
@@ -131,7 +131,10 @@ export default class GameMainClass {
          if(value.state != 'disabled') value.element.view.draw(value.state);
       }
 
-      console.log("draw")
+      this.ctx.fillStyle = 'black'
+      this.ctx.fillRect(this.canvas.width/2 - 1, this.canvas.height/2 - 1, 2, 2)
+
+      //console.log("draw")
    }
    //END DRAW FUNCTION
 

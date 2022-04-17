@@ -1,4 +1,12 @@
 
+-Background should be a seperate component
+-organize draw interval
+-fix colors
+
+-fix rotation
+    -fix render cropping
+    -jump to correct posistion after rotation
+
 -Set up pre rendering
     -draws the scene to a seperate canvas then draws that canvas
     -draw scene relative to camera position
@@ -7,9 +15,9 @@
     -create a render map for each rotation and zoom level when object is created
 
 
--Camera
-    -Map rotation
-    -Map zooming
+-Map zooming
+
+-REFACTOR
 
 
 -Map size, camera starting position and game board background

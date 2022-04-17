@@ -3,13 +3,14 @@ export default class HexMapDataClass {
    constructor(x, y, size, squish) {
       this.hexMap = new Map();
 
-      this.x = x;
-      this.y = y;
+      this.x = 1000;
+      this.y = 1000;
       this.size = size;
-      this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
-      this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
       this.squish = squish;
 
+      this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
+      this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
+      
       this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
 
@@ -18,8 +19,6 @@ export default class HexMapDataClass {
       this.tileHeight = 10;
 
       this.maxHeight = null;
-
-      this.flipped = false;
    }
 
 

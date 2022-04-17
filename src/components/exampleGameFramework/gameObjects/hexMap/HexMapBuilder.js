@@ -38,7 +38,7 @@ export default class HexMapBuilderClass {
          // });
 
          this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-            height: Math.max(Math.floor(tileNoise * 12)-3, 0)
+            height: Math.max(Math.floor(tileNoise * 13)-3, 1)
          });
 
       }

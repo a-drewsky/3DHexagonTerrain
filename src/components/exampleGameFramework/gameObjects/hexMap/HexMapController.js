@@ -18,4 +18,9 @@ export default class HexMapControllerClass {
          return null;
     }
 
+    keyPress = (key) => {
+        this.hexMapData.rotation++;
+        if (this.hexMapData.rotation == 12) this.hexMapData.rotation = 0;
+    }
+
 }

@@ -3,9 +3,9 @@ import CameraDataClass from "./CameraData";
 
 export default class CameraClass {
 
-    constructor(){
+    constructor(canvas){
         this.data = new CameraDataClass();
-        this.controller = new CameraControllerClass(this.data);
+        this.controller = new CameraControllerClass(this.data, canvas);
     }
 
 }

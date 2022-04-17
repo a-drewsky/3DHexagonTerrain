@@ -39,7 +39,7 @@ export default class GameObjectManagerClass {
 
         //Initialize game objects
         this.objectMap.set("camera", {
-            object: new CameraClass(), //temporary attributes. Will become dynamic when camera is implemented
+            object: new CameraClass(this.canvas), //temporary attributes. Will become dynamic when camera is implemented
             state: this.objectStates.disabled
         });
         this.objectMap.set("hexMap", {

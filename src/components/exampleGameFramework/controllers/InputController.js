@@ -3,12 +3,14 @@ import ShowHexMapStateControllerClass from './ShowHexMapStateController';
 
 export default class InputControllerClass {
 
-   constructor(gameManager) {
+   constructor(gameManager, canvas) {
       this.gameManager = gameManager;
       this.uiController = new UIControllerClass(this.gameManager);
 
+      this.canvas = canvas;
+
       //State controller List
-      this.showHexMapStateController = new ShowHexMapStateControllerClass(this.gameManager);
+      this.showHexMapStateController = new ShowHexMapStateControllerClass(this.gameManager, canvas);
 
    }
 
