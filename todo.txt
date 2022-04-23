@@ -1,27 +1,16 @@
 
--Background should be a seperate component
--organize draw interval
--fix colors
-
--fix rotation
-    -fix render cropping
-    -jump to correct posistion after rotation
-
--Set up pre rendering
-    -draws the scene to a seperate canvas then draws that canvas
-    -draw scene relative to camera position
-    -Only need to rerender when rotating and possibly when zooming
-    -https://www.html5rocks.com/en/tutorials/canvas/performance/
-    -create a render map for each rotation and zoom level when object is created
-
-
 -Map zooming
+    -Modulate function to calculate camera position
+    -Just change the hexagon size and move the camera to correct position
 
 -REFACTOR
+    -table should be a seperate component
+    -create a render map for each rotation and zoom level when object is created
+    -organize draw interval
+    -fix colors
+    -initial camera position
 
-
--Map size, camera starting position and game board background
-    -Make it look like a board on a table top
+-Map size and camera starting position
 
 
 -climate generation

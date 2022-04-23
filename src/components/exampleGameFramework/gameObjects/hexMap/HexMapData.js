@@ -3,8 +3,8 @@ export default class HexMapDataClass {
    constructor(x, y, size, squish) {
       this.hexMap = new Map();
 
-      this.x = 1000;
-      this.y = 1000;
+      this.x = 0;
+      this.y = 0;
       this.size = size;
       this.squish = squish;
 

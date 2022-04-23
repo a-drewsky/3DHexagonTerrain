@@ -12,6 +12,7 @@ export default class HexMapViewClass {
 
       this.rotatedMap = null;
 
+      this.tablePosition = null;
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
@@ -37,42 +38,155 @@ export default class HexMapViewClass {
    render = () => {
 
 
+      //Rotate the hexmap and set the rotatedMap object
       let sortedArr = this.hexMapData.getKeys();
 
-      console.log(this.hexMapData.getMap());
-
-      for(let i=0; i<sortedArr.length; i++){
+      for (let i = 0; i < sortedArr.length; i++) {
          sortedArr[i] = {
             value: this.hexMapData.getEntry(sortedArr[i].q, sortedArr[i].r),
             position: this.rotateTile(sortedArr[i].q, sortedArr[i].r, this.camera.rotation)
          };
       }
 
-      sortedArr.sort((a, b) => {return a.position.r - b.position.r || a.position.q - b.position.q});
+      sortedArr.sort((a, b) => { return a.position.r - b.position.r || a.position.q - b.position.q });
 
       this.rotatedMap = new Map();
 
-      for(let i=0; i<sortedArr.length; i++){
+      for (let i = 0; i < sortedArr.length; i++) {
          this.rotatedMap.set(this.hexMapData.join(sortedArr[i].position.q, sortedArr[i].position.r), sortedArr[i].value)
       }
 
-      console.log(this.rotatedMap)
 
+      //Set render canvas size
       let keys = this.hexMapData.getKeys();
 
-      let canvasX = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-      let canvasY = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
+      let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      this.renderCanvas.width = (canvasY + this.hexMapData.maxHeight * this.hexMapData.VecQ.y + this.hexMapData.maxHeight * this.hexMapData.VecR.y) * 3
-      this.renderCanvas.height = (canvasY + this.hexMapData.maxHeight * this.hexMapData.VecQ.y + this.hexMapData.maxHeight * this.hexMapData.VecR.y) * 2
+      console.log(keys)
 
-      // this.hexMapData.setDimensions(
-      //    (this.hexMapData.maxHeight * this.hexMapData.VecQ.x + this.hexMapData.maxHeight * this.hexMapData.VecR.x) / 2,
-      //    (this.hexMapData.maxHeight * this.hexMapData.VecQ.y + this.hexMapData.maxHeight * this.hexMapData.VecR.y) / 2
-      // )
+      this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
+      this.renderCanvas.height = mapHyp * 2 + 100
 
+      //Need a way to set the camera position initially
+      //this.camera.setPosition(mapHyp, mapHyp)
+
+      //Set the hexmap position to the center of the canvas
+      this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2);
+
+      //fill in canvas for reference
       this.renderctx.fillStyle = 'rosybrown'
       this.renderctx.fillRect(0, 0, this.renderCanvas.width, this.renderCanvas.height)
+
+
+      //draw the table
+      let minR = Math.min(...keys.map(key => key.r));
+      let maxR = Math.max(...keys.map(key => key.r));
+      let minRminQ = Math.min(...keys.filter(key => key.r == minR).map(key => key.q));
+      let minRmaxQ = Math.max(...keys.filter(key => key.r == minR).map(key => key.q));
+      let maxRminQ = Math.min(...keys.filter(key => key.r == maxR).map(key => key.q));
+      let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
+
+      let tableDims = {
+         q1: this.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).q,
+         r1: this.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).r,
+
+         q2: this.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).q,
+         r2: this.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).r,
+
+         q3: this.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).q,
+         r3: this.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).r,
+
+         q4: this.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).q,
+         r4: this.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).r
+      }
+
+      let hexVecQ = this.camera.rotation % 2 == 0 ? this.hexMapData.VecQ : this.hexMapData.flatTopVecQ
+      let hexVecR = this.camera.rotation % 2 == 0 ? this.hexMapData.VecR : this.hexMapData.flatTopVecR
+
+      let tablePosition = [
+         {
+            x: this.hexMapData.x + hexVecQ.x * tableDims.q1 + hexVecR.x * tableDims.r1,
+            y: this.hexMapData.y + hexVecQ.y * tableDims.q1 * this.hexMapData.squish + hexVecR.y * tableDims.r1 * this.hexMapData.squish
+         },
+
+         {
+            x: this.hexMapData.x + hexVecQ.x * tableDims.q2 + hexVecR.x * tableDims.r2,
+            y: this.hexMapData.y + hexVecQ.y * tableDims.q2 * this.hexMapData.squish + hexVecR.y * tableDims.r2 * this.hexMapData.squish
+         },
+
+         {
+            x: this.hexMapData.x + hexVecQ.x * tableDims.q3 + hexVecR.x * tableDims.r3,
+            y: this.hexMapData.y + hexVecQ.y * tableDims.q3 * this.hexMapData.squish + hexVecR.y * tableDims.r3 * this.hexMapData.squish
+         },
+
+         {
+            x: this.hexMapData.x + hexVecQ.x * tableDims.q4 + hexVecR.x * tableDims.r4,
+            y: this.hexMapData.y + hexVecQ.y * tableDims.q4 * this.hexMapData.squish + hexVecR.y * tableDims.r4 * this.hexMapData.squish
+         }
+      ]
+
+      this.tablePosition = [...tablePosition];
+
+      this.renderctx.fillStyle = 'gainsboro'
+      this.renderctx.strokeStyle = 'grey'
+      this.renderctx.beginPath();
+      this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
+      this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
+      this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y);
+      this.renderctx.lineTo(tablePosition[3].x, tablePosition[3].y);
+      this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
+      this.renderctx.fill();
+      this.renderctx.stroke();
+
+      //draw table legs
+
+      tablePosition.sort((a, b) => a.y - b.y)
+
+      if (this.camera.rotation % 3 == 0) {
+
+         tablePosition.shift();
+         tablePosition.shift();
+
+         this.renderctx.beginPath();
+         this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + 50);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
+         this.renderctx.fill();
+         this.renderctx.stroke();
+
+      } else {
+
+         tablePosition.shift();
+
+         tablePosition.sort((a, b) => a.x - b.x)
+
+         this.renderctx.beginPath();
+         this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + 50);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
+         this.renderctx.fill();
+         this.renderctx.stroke();
+
+         this.renderctx.beginPath();
+         this.renderctx.moveTo(tablePosition[2].x, tablePosition[2].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
+         this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y + 50);
+         this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y);
+         this.renderctx.fill();
+         this.renderctx.stroke();
+
+      }
+
+
+
+      //draw the hex map
 
       this.drawGroundShadowLayer();
 
@@ -374,6 +488,18 @@ export default class HexMapViewClass {
          }
       }
 
+      //clip table
+      this.renderctx.beginPath();
+
+      this.renderctx.moveTo(this.tablePosition[0].x, this.tablePosition[0].y);
+      this.renderctx.lineTo(this.tablePosition[1].x, this.tablePosition[1].y);
+      this.renderctx.lineTo(this.tablePosition[2].x, this.tablePosition[2].y);
+      this.renderctx.lineTo(this.tablePosition[3].x, this.tablePosition[3].y);
+      this.renderctx.lineTo(this.tablePosition[0].x, this.tablePosition[0].y);
+
+      this.renderctx.save();
+      this.renderctx.clip();
+
       this.renderctx.beginPath();
 
       for (let [key, value] of this.rotatedMap) {
@@ -406,6 +532,7 @@ export default class HexMapViewClass {
 
       this.renderctx.fillStyle = 'rgba(25,25,25,0.3)';
       this.renderctx.fill();
+      this.renderctx.restore();
 
    }
 
