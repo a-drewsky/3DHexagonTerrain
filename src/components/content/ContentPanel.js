@@ -87,11 +87,17 @@ const ContentPanel = () => {
 
    }
 
+   const mouseWheel = ({ nativeEvent }) => {
+      const { deltaY } = nativeEvent;
+
+      if(gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY);
+   }
+
    const keyPress = (nativeEvent) => {
       nativeEvent.preventDefault();
       if(gameClass && gameClass.loaded) gameClass.keyPress(nativeEvent.key)
    }
-   //END INPUJTS
+   //END INPUTS
 
 
    return (
@@ -119,6 +125,7 @@ const ContentPanel = () => {
                   onMouseMove={mouseMove}
                   onMouseLeave={mouseLeave}
                   onMouseEnter={mouseEnter}
+                  onWheel={mouseWheel}
                   style={
                      { imageRendering: 'crisp-edges' }
                   }

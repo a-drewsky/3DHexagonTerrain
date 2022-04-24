@@ -74,6 +74,17 @@ export default class InputControllerClass {
       }
    }
 
+   mouseWheel = (deltaY) => {
+      //State controller functions
+      switch (this.gameManager.state.gameStates.current.stateName) {
+         case 'showHexMapState':
+            this.showHexMapStateController.mouseWheel(deltaY);
+            break;
+         default:
+            break;
+      }
+   }
+
    keyPress = (key) => {
       switch (this.gameManager.state.gameStates.current.stateName) {
          case 'showHexMapState':

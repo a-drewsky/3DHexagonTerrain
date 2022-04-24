@@ -80,6 +80,10 @@ export default class GameMainClass {
       this.inputController.mouseEnter(x, y);
    }
 
+   mouseWheel = (deltaY) => {
+      this.inputController.mouseWheel(deltaY);
+   }
+
    keyPress = (key) => {
       this.inputController.keyPress(key);
    }

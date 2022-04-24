@@ -25,11 +25,21 @@ export default class CameraControllerClass {
         );
     }
 
+    mouseWheel = (deltaY) => {
+        if(deltaY > 0) {
+            if(this.cameraData.zoom < this.cameraData.maxZoom) this.cameraData.zoom++;
+        } else {
+            if(this.cameraData.zoom > -this.cameraData.maxZoom) this.cameraData.zoom--;
+        }
+
+    }
+
     keyPress = (key) => {
         this.cameraData.rotation++;
         if (this.cameraData.rotation == 12) this.cameraData.rotation = 0;
     }
 
+    //change to setPosition
     rotateCamera(anchorX, anchorY) {
        
         this.cameraData.setPosition(anchorX, anchorY)

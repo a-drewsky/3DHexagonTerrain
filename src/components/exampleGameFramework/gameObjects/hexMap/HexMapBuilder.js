@@ -2,9 +2,11 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData) {
+   constructor(hexMapData, hexMapView) {
 
       this.hexMapData = hexMapData;
+
+      this.hexMapView = hexMapView;
 
    }
 
@@ -117,6 +119,7 @@ export default class HexMapBuilderClass {
       } else {
             this.generateMap(q, r);
       }
+      this.hexMapView.initialize();
    }
 
 }

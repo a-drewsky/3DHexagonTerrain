@@ -16,18 +16,18 @@ export default class HexMapViewClass {
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
-         0: { q: 0.25, r: -0.5, left: 0.9, right: 0.9, offset: 0.7 },
-         1: { q: 0.5, r: -0.5, left: 1, right: 0.8, offset: 0.6 },
-         2: { q: 0.5, r: -0.25, left: 0.9, right: 0.7, offset: 0.5 },
-         3: { q: 0.5, r: 0, left: 0.8, right: 0.6, offset: 0.4 },
-         4: { q: 0.25, r: 0.25, left: 0.7, right: 0.5, offset: 0.5 },
-         5: { q: 0, r: 0.5, left: 0.6, right: 0.4, offset: 0.6 },
-         6: { q: -0.25, r: 0.5, left: 0.5, right: 0.5, offset: 0.7 },
-         7: { q: -0.5, r: 0.5, left: 0.4, right: 0.6, offset: 0.8 },
-         8: { q: -0.5, r: 0.25, left: 0.5, right: 0.7, offset: 0.9 },
-         9: { q: -0.5, r: 0, left: 0.6, right: 0.8, offset: 1 },
-         10: { q: -0.25, r: -0.25, left: 0.7, right: 0.9, offset: 0.9 },
-         11: { q: 0, r: -0.5, left: 0.8, right: 1, offset: 0.8 },
+         0: { q: 0.25, r: -0.5, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
+         1: { q: 0.5, r: -0.5, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
+         2: { q: 0.5, r: -0.25, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
+         3: { q: 0.5, r: 0, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
+         4: { q: 0.25, r: 0.25, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
+         5: { q: 0, r: 0.5, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
+         6: { q: -0.25, r: 0.5, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
+         7: { q: -0.5, r: 0.5, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
+         8: { q: -0.5, r: 0.25, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
+         9: { q: -0.5, r: 0, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
+         10: { q: -0.25, r: -0.25, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
+         11: { q: 0, r: -0.5, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
    }
 
@@ -35,8 +35,49 @@ export default class HexMapViewClass {
       this.ctx.drawImage(this.renderCanvas, -this.camera.position.x, -this.camera.position.y)
    }
 
-   render = () => {
+   initialize = () => {
 
+      //set hexmap size to highest zoom level to calculate render size
+      let newSize = this.hexMapData.baseSize + this.camera.maxZoom;
+
+      console.log(newSize)
+
+      this.hexMapData.size = newSize;
+
+      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
+      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
+
+      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
+      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
+
+      //Set render canvas size
+      let keys = this.hexMapData.getKeys();
+
+      let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
+      let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+
+      this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
+      this.renderCanvas.height = mapHyp * 2 + 100
+
+      //set the camera position
+      this.camera.setPosition(this.renderCanvas.width / 2, this.renderCanvas.height / 2)
+
+      //Set the hexmap position to the center of the canvas
+      this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2); //causing zooming issue
+
+      //reset hexmap size
+      newSize = this.hexMapData.baseSize;
+      this.hexMapData.size = newSize;
+
+      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
+      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
+
+      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
+      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
+   }
+
+   render = () => {
 
       //Rotate the hexmap and set the rotatedMap object
       let sortedArr = this.hexMapData.getKeys();
@@ -57,23 +98,23 @@ export default class HexMapViewClass {
       }
 
 
-      //Set render canvas size
+      // //Set render canvas size
       let keys = this.hexMapData.getKeys();
 
-      let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-      let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
-      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+      // let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
+      // let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      // let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      console.log(keys)
+      // this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
+      // this.renderCanvas.height = mapHyp * 2 + 100
 
-      this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
-      this.renderCanvas.height = mapHyp * 2 + 100
+      // //Need a way to set the camera position initially
+      // //this.camera.setPosition(mapHyp, mapHyp)
 
-      //Need a way to set the camera position initially
-      //this.camera.setPosition(mapHyp, mapHyp)
-
-      //Set the hexmap position to the center of the canvas
-      this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2);
+      // //Set the hexmap position to the center of the canvas
+      // console.log(this.hexMapData.x, this.hexMapData.y)
+      // this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2); //causing zooming issue
+      // console.log(this.hexMapData.x, this.hexMapData.y)
 
       //fill in canvas for reference
       this.renderctx.fillStyle = 'rosybrown'
@@ -129,8 +170,8 @@ export default class HexMapViewClass {
 
       this.tablePosition = [...tablePosition];
 
-      this.renderctx.fillStyle = 'gainsboro'
-      this.renderctx.strokeStyle = 'grey'
+      this.renderctx.fillStyle = 'hsl(150, 30%, 65%)'
+      this.renderctx.strokeStyle = 'hsl(150, 30%, 55%)'
       this.renderctx.beginPath();
       this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
       this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
@@ -144,10 +185,22 @@ export default class HexMapViewClass {
 
       tablePosition.sort((a, b) => a.y - b.y)
 
+
+      let shadowRotation = this.hexMapData.rotation + this.camera.rotation;
+
+      if (shadowRotation > 11) shadowRotation -= 12;
+
+
+
       if (this.camera.rotation % 3 == 0) {
 
          tablePosition.shift();
          tablePosition.shift();
+
+         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shadowRotation].wallBot}%)`
+
+
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
@@ -163,6 +216,15 @@ export default class HexMapViewClass {
          tablePosition.shift();
 
          tablePosition.sort((a, b) => a.x - b.x)
+         
+
+         let shiftedShadowRotation = this.hexMapData.rotation + Math.floor(this.camera.rotation / 3) * 3;
+
+         if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
+
+
+         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
@@ -172,6 +234,12 @@ export default class HexMapViewClass {
          this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
          this.renderctx.fill();
          this.renderctx.stroke();
+
+         shiftedShadowRotation += 3;
+         if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
+
+         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[2].x, tablePosition[2].y);

@@ -13,6 +13,8 @@ export default class CameraDataClass {
         this.anchorPoint = null;
         this.mouseAnchorPoint = null;
 
+        this.maxZoom = 5;
+
     }
 
     setPosition = (x, y) => {
