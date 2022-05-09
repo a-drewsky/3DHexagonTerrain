@@ -4,8 +4,9 @@ import PixelButtonElementClass from "../uiElements/PixelButtonElement/PixelButto
 
 export default class UIElementManagerClass {
 
-   constructor(ctx) {
+   constructor(ctx, canvas) {
       this.ctx = ctx;
+      this.canvas = canvas;
 
       this.elementMap = new Map();
 
@@ -34,9 +35,9 @@ export default class UIElementManagerClass {
    }
 
    //Set up function
-   createElements = (canvas) => {
+   createElements = () => {
       this.elementMap.set("exampleButton", {
-         element: new PixelButtonElementClass(this.ctx, "Example", 300, 300, 100, 50, 5, 2, `${canvas.width * 0.03}px Arial`),
+         element: new PixelButtonElementClass(this.ctx, "Example", 300, 300, 100, 50, 5, 2, `${this.canvas.width * 0.03}px Arial`),
          state: this.elementStates.disabled
       })
    }

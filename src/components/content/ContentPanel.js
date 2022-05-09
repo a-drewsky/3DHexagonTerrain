@@ -15,7 +15,7 @@ const ContentPanel = () => {
 
 
    //SETTINGS
-   const [sizeSetting, setSize] = useState(50);
+   const [sizeSetting, setSize] = useState('small');
    //END SETTINGS
 
 
@@ -28,7 +28,7 @@ const ContentPanel = () => {
          canvas.current,
          setWinCondition,
          {
-            size: sizeSetting
+            mapSize: sizeSetting
          }
       );
 
@@ -143,9 +143,9 @@ const ContentPanel = () => {
                <Form.Label className='my-auto mx-1 w-50 text-right'>Example Size Setting</Form.Label>
                <div className='w-50 mx-1 '>
                   <Form.Control as="select" className='my-auto w-50' value={sizeSetting} onChange={(e) => setSize(e.target.value)}>
-                     <option value={30}>Small</option>
-                     <option value={40}>Medium</option>
-                     <option value={50}>Large</option>
+                     <option value={'small'}>Small</option>
+                     <option value={'medium'}>Medium</option>
+                     <option value={'large'}>Large</option>
                   </Form.Control>
                </div>
             </Form.Group>

@@ -1,38 +1,58 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, camera, hexMapData) {
+   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, colors, sideColorMultiplier) {
       this.ctx = ctx;
       this.camera = camera;
       this.hexMapData = hexMapData;
 
-      this.sideLength = Math.PI / 3;
-
-      this.renderCanvas = document.createElement('canvas');
-      this.renderctx = this.renderCanvas.getContext('2d');
-
+      this.renderCanvasDims = null;
+      this.renderctx = null;
+      this.renderMap = new Map();
       this.rotatedMap = null;
-
       this.tablePosition = null;
+
+      //Settings
+      this.sideLength = Math.PI / 3;
+      this.lineWidth = lineWidth;
+      this.tableHeight = tableHeight;
+      this.initCameraPosition = initCameraPosition;
+      this.colors = colors;
+      this.sideColorMultiplier = sideColorMultiplier;
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
-         0: { q: 0.25, r: -0.5, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
-         1: { q: 0.5, r: -0.5, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
-         2: { q: 0.5, r: -0.25, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
-         3: { q: 0.5, r: 0, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
-         4: { q: 0.25, r: 0.25, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
-         5: { q: 0, r: 0.5, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
-         6: { q: -0.25, r: 0.5, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
-         7: { q: -0.5, r: 0.5, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
-         8: { q: -0.5, r: 0.25, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
-         9: { q: -0.5, r: 0, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
-         10: { q: -0.25, r: -0.25, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
-         11: { q: 0, r: -0.5, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
+         0: { q: 0.25 * shadowSize, r: -0.5 * shadowSize, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
+         1: { q: 0.5 * shadowSize, r: -0.5 * shadowSize, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
+         2: { q: 0.5 * shadowSize, r: -0.25 * shadowSize, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
+         3: { q: 0.5 * shadowSize, r: 0 * shadowSize, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
+         4: { q: 0.25 * shadowSize, r: 0.25 * shadowSize, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
+         5: { q: 0 * shadowSize, r: 0.5 * shadowSize, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
+         6: { q: -0.25 * shadowSize, r: 0.5 * shadowSize, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
+         7: { q: -0.5 * shadowSize, r: 0.5 * shadowSize, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
+         8: { q: -0.5 * shadowSize, r: 0.25 * shadowSize, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
+         9: { q: -0.5 * shadowSize, r: 0 * shadowSize, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
+         10: { q: -0.25 * shadowSize, r: -0.25 * shadowSize, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
+         11: { q: 0 * shadowSize, r: -0.5 * shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
    }
 
+   setRender = (shadowRotation, cameraRotation, canvas) => {
+      this.renderMap.set(shadowRotation + ',' + cameraRotation, canvas);
+   }
+
+   getRender = (shadowRotation, cameraRotation) => {
+      return this.renderMap.get(shadowRotation + ',' + cameraRotation);
+   }
+
    draw = () => {
-      this.ctx.drawImage(this.renderCanvas, -this.camera.position.x, -this.camera.position.y)
+
+      if(!this.renderMap.has(this.hexMapData.rotation + ',' + this.camera.rotation)) this.render();
+
+      let render = this.getRender(this.hexMapData.rotation, this.camera.rotation);
+
+      console.log(this.camera.zoom)
+
+      this.ctx.drawImage(render, -this.camera.position.x, -this.camera.position.y, render.width + (this.camera.zoom * 100), render.height + (this.camera.zoom * 100))
    }
 
    initialize = () => {
@@ -57,14 +77,16 @@ export default class HexMapViewClass {
       let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
-      this.renderCanvas.height = mapHyp * 2 + 100
+      this.renderCanvasDims = {
+         width: mapHyp * 2 / this.hexMapData.squish + 100,
+         height: mapHyp * 2 + 100
+      }
 
-      //set the camera position
-      this.camera.setPosition(this.renderCanvas.width / 2, this.renderCanvas.height / 2)
+      //set the camera position (move to camera init function)
+      this.camera.setPosition(this.renderCanvasDims.width * this.initCameraPosition.x, this.renderCanvasDims.height * this.initCameraPosition.y)
 
       //Set the hexmap position to the center of the canvas
-      this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2); //causing zooming issue
+      this.hexMapData.setDimensions(this.renderCanvasDims.width / 2, this.renderCanvasDims.height / 2); //causing zooming issue
 
       //reset hexmap size
       newSize = this.hexMapData.baseSize;
@@ -75,9 +97,23 @@ export default class HexMapViewClass {
 
       this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
       this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
+
    }
 
    render = () => {
+
+      this.setRender(this.hexMapData.rotation, this.camera.rotation, document.createElement('canvas'));
+      this.getRender(this.hexMapData.rotation, this.camera.rotation).width = this.renderCanvasDims.width;
+      this.getRender(this.hexMapData.rotation, this.camera.rotation).height = this.renderCanvasDims.height;
+      this.renderctx = this.getRender(this.hexMapData.rotation, this.camera.rotation).getContext("2d");
+
+      //set renderctx properties
+      this.renderctx.lineWidth = this.lineWidth;
+      this.renderctx.lineJoin = 'round';
+      this.renderctx.lineCap = 'round';
+      this.renderctx.textAlign = 'center';
+      this.renderctx.textBaseline = 'middle'
+      this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
 
       //Rotate the hexmap and set the rotatedMap object
       let sortedArr = this.hexMapData.getKeys();
@@ -94,34 +130,31 @@ export default class HexMapViewClass {
       this.rotatedMap = new Map();
 
       for (let i = 0; i < sortedArr.length; i++) {
-         this.rotatedMap.set(this.hexMapData.join(sortedArr[i].position.q, sortedArr[i].position.r), sortedArr[i].value)
+         this.rotatedMap.set(this.hexMapData.join(sortedArr[i].position.q, sortedArr[i].position.r), sortedArr[i].value);
       }
 
 
-      // //Set render canvas size
+      //Draw the table
+      this.drawTable();
+
+
+      //draw the hex map
+
+      this.drawGroundShadowLayer();
+
+      for (let i = 1; i <= this.hexMapData.maxHeight; i++) {
+         this.drawTileLayer(i);
+
+         if (i < this.hexMapData.maxHeight) this.drawShadowLayer(i);
+
+      }
+
+   }
+
+   drawTable = () => {
+      
       let keys = this.hexMapData.getKeys();
-
-      // let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-      // let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
-      // let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
-
-      // this.renderCanvas.width = mapHyp * 2 / this.hexMapData.squish + 100
-      // this.renderCanvas.height = mapHyp * 2 + 100
-
-      // //Need a way to set the camera position initially
-      // //this.camera.setPosition(mapHyp, mapHyp)
-
-      // //Set the hexmap position to the center of the canvas
-      // console.log(this.hexMapData.x, this.hexMapData.y)
-      // this.hexMapData.setDimensions(this.renderCanvas.width / 2, this.renderCanvas.height / 2); //causing zooming issue
-      // console.log(this.hexMapData.x, this.hexMapData.y)
-
-      //fill in canvas for reference
-      this.renderctx.fillStyle = 'rosybrown'
-      this.renderctx.fillRect(0, 0, this.renderCanvas.width, this.renderCanvas.height)
-
-
-      //draw the table
+      
       let minR = Math.min(...keys.map(key => key.r));
       let maxR = Math.max(...keys.map(key => key.r));
       let minRminQ = Math.min(...keys.filter(key => key.r == minR).map(key => key.q));
@@ -170,8 +203,8 @@ export default class HexMapViewClass {
 
       this.tablePosition = [...tablePosition];
 
-      this.renderctx.fillStyle = 'hsl(150, 30%, 65%)'
-      this.renderctx.strokeStyle = 'hsl(150, 30%, 55%)'
+      this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l}%)`
+      this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l}%)`
       this.renderctx.beginPath();
       this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
       this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
@@ -197,16 +230,16 @@ export default class HexMapViewClass {
          tablePosition.shift();
          tablePosition.shift();
 
-         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
 
 
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
          this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
-         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
-         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + 50);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + this.tableHeight);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + this.tableHeight);
          this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
          this.renderctx.fill();
          this.renderctx.stroke();
@@ -216,21 +249,21 @@ export default class HexMapViewClass {
          tablePosition.shift();
 
          tablePosition.sort((a, b) => a.x - b.x)
-         
+
 
          let shiftedShadowRotation = this.hexMapData.rotation + Math.floor(this.camera.rotation / 3) * 3;
 
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
 
-         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
          this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
-         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
-         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + 50);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + this.tableHeight);
+         this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y + this.tableHeight);
          this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
          this.renderctx.fill();
          this.renderctx.stroke();
@@ -238,33 +271,19 @@ export default class HexMapViewClass {
          shiftedShadowRotation += 3;
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
-         this.renderctx.fillStyle = `hsl(150, 30%, ${75 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(150, 30%, ${65 * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[2].x, tablePosition[2].y);
          this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
-         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + 50);
-         this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y + 50);
+         this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y + this.tableHeight);
+         this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y + this.tableHeight);
          this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y);
          this.renderctx.fill();
          this.renderctx.stroke();
 
       }
-
-
-
-      //draw the hex map
-
-      this.drawGroundShadowLayer();
-
-      for (let i = 1; i <= this.hexMapData.maxHeight; i++) {
-         this.drawTileLayer(i);
-
-         if (i < this.hexMapData.maxHeight) this.drawShadowLayer(i);
-
-      }
-
    }
 
    rotateTile = (q, r, rotation) => {
@@ -313,8 +332,6 @@ export default class HexMapViewClass {
 
          let keyObj = this.hexMapData.split(key);
 
-         //keyObj = this.rotateTile(keyObj.q, keyObj.r, this.camera.rotation);
-
          let xOffset;
          let yOffset;
 
@@ -333,15 +350,31 @@ export default class HexMapViewClass {
                this.drawFlatHexagon(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.hexMapData.tileHeight,
-                  height >= 6 ? 'hsl(210, 100%, 90%)' : height >= 4 ? 'hsl(30, 60%, 50%)' : height >= 2 ? 'hsl(120, 100%, 25%)' : 'hsl(190, 90%, 50%)',
-                  height >= 6 ? 'hsl(210, 100%, 80%)' : height >= 4 ? 'hsl(30, 60%, 40%)' : height >= 2 ? 'hsl(120, 100%, 20%)' : 'hsl(190, 90%, 70%)'
+                  
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l}%)` 
+                  : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l}%)` 
+                  : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l}%)` 
+                  : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l}%)`,
+
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l}%)` 
+                  : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l}%)` 
+                  : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l}%)` 
+                  : `hsl(${this.colors.WATER_STROKE.h}, ${this.colors.WATER_STROKE.s}%, ${this.colors.WATER_STROKE.l}%)`
                );
             } else {
                this.drawPointyHexagon(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.hexMapData.tileHeight,
-                  height >= 6 ? 'hsl(210, 100%, 90%)' : height >= 4 ? 'hsl(30, 60%, 50%)' : height >= 2 ? 'hsl(120, 100%, 25%)' : 'hsl(190, 90%, 50%)',
-                  height >= 6 ? 'hsl(210, 100%, 80%)' : height >= 4 ? 'hsl(30, 60%, 40%)' : height >= 2 ? 'hsl(120, 100%, 20%)' : 'hsl(190, 90%, 70%)'
+
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l}%)` 
+                  : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l}%)` 
+                  : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l}%)` 
+                  : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l}%)`,
+
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l}%)` 
+                  : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l}%)` 
+                  : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l}%)` 
+                  : `hsl(${this.colors.WATER_STROKE.h}, ${this.colors.WATER_STROKE.s}%, ${this.colors.WATER_STROKE.l}%)`
                );
             }
 
@@ -354,61 +387,61 @@ export default class HexMapViewClass {
                this.drawFlatHexagonWall(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.hexMapData.tileHeight,
-                  height >= 6 ? `hsl(180, 20%, ${95 * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${55 * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${30 * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(190, 90%, ${55 * this.shadowRotationDims[shadowRotation].left}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
 
-                  height >= 6 ? `hsl(180, 20%, ${85 * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${45 * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${25 * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(190, 90%, ${75 * this.shadowRotationDims[shadowRotation].left}%)`,
-
-
-                  height >= 6 ? `hsl(180, 20%, ${95 * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${55 * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${30 * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(190, 90%, ${55 * this.shadowRotationDims[shadowRotation].right}%)`,
-
-                  height >= 6 ? `hsl(180, 20%, ${85 * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${45 * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${25 * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(190, 90%, ${75 * this.shadowRotationDims[shadowRotation].right}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
 
 
-                  height >= 6 ? `hsl(180, 20%, ${95 * this.shadowRotationDims[shadowRotation].offset}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${55 * this.shadowRotationDims[shadowRotation].offset}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${30 * this.shadowRotationDims[shadowRotation].offset}%)`
-                           : `hsl(190, 90%, ${55 * this.shadowRotationDims[shadowRotation].offset}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
 
-                  height >= 6 ? `hsl(180, 20%, ${85 * this.shadowRotationDims[shadowRotation].offset}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${45 * this.shadowRotationDims[shadowRotation].offset}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${25 * this.shadowRotationDims[shadowRotation].offset}%)`
-                           : `hsl(190, 90%, ${75 * this.shadowRotationDims[shadowRotation].offset}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+
+
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
+
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
                );
             } else {
                this.drawPointyHexagonWall(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.hexMapData.tileHeight,
-                  height >= 6 ? `hsl(180, 20%, ${95 * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${55 * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${30 * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(190, 90%, ${55 * this.shadowRotationDims[shadowRotation].left}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
 
-                  height >= 6 ? `hsl(180, 20%, ${85 * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${45 * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${25 * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(190, 90%, ${75 * this.shadowRotationDims[shadowRotation].left}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
 
-                  height >= 6 ? `hsl(180, 20%, ${95 * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${55 * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${30 * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(190, 90%, ${55 * this.shadowRotationDims[shadowRotation].right}%)`,
+                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
 
-                  height >= 6 ? `hsl(180, 20%, ${85 * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(30, 60%, ${45 * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(120, 100%, ${25 * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(190, 90%, ${75 * this.shadowRotationDims[shadowRotation].right}%)`
+                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
                );
             }
 

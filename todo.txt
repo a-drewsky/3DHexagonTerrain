@@ -1,22 +1,41 @@
 
-
 -REFACTOR
-    -table should be a seperate component
-    -create a render map for each rotation and zoom level when object is created
-    -organize draw interval
-    -fix colors
-    -initial camera position
-    -Modulate function to calculate camera position
-    -Options for map size and camera starting position
-    -Refactor game dev template and take a break from coding
-    -Change stoke size based on zoom level
+
+    -Fix bugs
+
+    -Refactor game dev template
+    
+    -Have a clear process for adding new features
+        -Environemnts
+        -Structures
+        -Characters / fighters
+        -animations & attacks
+        -Cards
+        -Overlay animations
+
+    -Take a break from coding, focus on game design and art
+        -Play tabletop video games for inspiration
 
 
 BUGS
     -Rotating while moving resets camera to the last position before moving
+    -Tile height & stroke size should be relative to zoom level
+    -Rendering is a bit slow
+        -Try to optimize Rendering
+        -Try pre-rendering
+        -Try resizing image when zooming
 
 
--climate generation
+
+-Make a trello board to track progess
+
+-Add settings for generation
+    -atm the settings would be height levels for grass, rock and snow.
+    -This could change when more complex generation is added.
+    -Maybe have a color for each biome + height range
+
+-biome generation
+    -Different generation patterns for different biomes
     -elevation
     -temperature
     -dryness/wetness
@@ -24,4 +43,14 @@ BUGS
         -generate rivers and lakes
         -water tiles should not be on the edge (like a cliff) unless connecting to a water tile below
         -hexagon wall colors should be a waterfall if connecting water tiles
+
+-Structure generation
+    -Mountain peaks
+    -Castles
+    -Trees / Forests / Swamps etc...
+
+-Add level builder mode
+
+-Save and set camera/shadow configuration with number keys (hold to save configuation, press to load configuation)
+    -Use ui icons to show which keys have a configuration saved to them
         

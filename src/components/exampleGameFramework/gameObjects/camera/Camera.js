@@ -3,8 +3,8 @@ import CameraDataClass from "./CameraData";
 
 export default class CameraClass {
 
-    constructor(canvas){
-        this.data = new CameraDataClass();
+    constructor(canvas, maxZoom, initRotation){
+        this.data = new CameraDataClass(maxZoom, initRotation);
         this.controller = new CameraControllerClass(this.data, canvas);
     }
 

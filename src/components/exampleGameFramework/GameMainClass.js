@@ -11,6 +11,9 @@ import ImagesClass from './GameImages';
 //Import Loading View
 import LoadingViewClass from './uiElements/LoadingElement/LoadingView';
 
+//Import Settings Class
+import SettingsClass from './Settings';
+
 export default class GameMainClass {
 
    constructor(canvas, setWinCondition, settings) {
@@ -30,7 +33,7 @@ export default class GameMainClass {
       this.setWinCondition = setWinCondition;
 
       //settings
-      this.settings = settings;
+      this.settings = new SettingsClass(settings);
 
       //Images
       this.images = new ImagesClass();
@@ -42,10 +45,10 @@ export default class GameMainClass {
       }
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.settings);
 
       //Input controller
-      this.inputController = new InputControllerClass(this.gameManager, this.canvas);
+      this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.settings);
 
       this.drawInterval = setInterval(this.draw, 1000/60);
       //this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
@@ -56,7 +59,6 @@ export default class GameMainClass {
    clear = () => {
       clearInterval(this.gameManager.state.interval);
       clearInterval(this.drawInterval);
-      clearInterval(this.fpsInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
    }
 
@@ -107,10 +109,10 @@ export default class GameMainClass {
       loadingView.draw();
 
       //Create game objects
-      this.gameManager.objects.createObjects(this.settings);
+      this.gameManager.objects.createObjects();
 
       //Create ui elements
-      this.gameManager.ui.createElements(this.canvas);
+      this.gameManager.ui.createElements();
 
       //load images and pass start game function
       this.images.loadImages(this.startGame);
