@@ -114,7 +114,7 @@ const ContentPanel = () => {
 
 
          {/*CANVAS*/}
-         <div className={(winCondition != null || gameClass == null) && 'd-none'}>
+         <div /*className={(winCondition != null || gameClass == null) && 'd-none'}*/>
             <Row className='py-2'>
                <canvas
                   ref={canvas}

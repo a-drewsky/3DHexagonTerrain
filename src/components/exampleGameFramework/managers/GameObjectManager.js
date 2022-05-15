@@ -40,7 +40,7 @@ export default class GameObjectManagerClass {
 
         //Initialize game objects
         this.objectMap.set("camera", {
-            object: new CameraClass(this.canvas, this.settings.MAX_ZOOM, this.settings.INIT_CAMERA_ROTATION),
+            object: new CameraClass(this.canvas, this.settings.MAX_ZOOM),
             state: this.objectStates.disabled
         });
         this.objectMap.set("hexMap", {
@@ -56,8 +56,10 @@ export default class GameObjectManagerClass {
                 this.settings.TABLE_HEIGHT,
                 this.settings.INIT_SHADOW_ROTATION,
                 this.settings.INIT_CAMERA_POSITION,
+                this.settings.INIT_CAMERA_ROTATION,
                 this.settings.HEXMAP_COLORS,
-                this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER
+                this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
+                this.settings.ZOOM_MULTIPLIER
                 ),
             state: this.objectStates.active
         });
@@ -65,7 +67,6 @@ export default class GameObjectManagerClass {
 
         //build game objects
         this.objectMap.get('hexMap').object.builder.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, 0, true);
-        this.objectMap.get('hexMap').object.view.render();
         
     }
 

@@ -50,7 +50,7 @@ export default class GameMainClass {
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.settings);
 
-      this.drawInterval = setInterval(this.draw, 1000/60);
+      this.drawInterval = null;
       //this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
    }
 
@@ -95,18 +95,25 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
       this.gameManager.state.setShowHexMapState();
+      this.drawInterval = setInterval(this.draw, 1000 / 60);
       this.loaded = true;
    }
 
 
-   createGame = () => {
+   createGame = async () => {
 
-      //Clear previous game
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      let promise = new Promise((resolve, reject) => {
+         //Clear previous game
+         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      //Show loading screen
-      let loadingView = new LoadingViewClass(this.ctx);
-      loadingView.draw();
+         //Show loading screen
+         let loadingView = new LoadingViewClass(this.ctx);
+         loadingView.draw();
+
+         setTimeout(() => resolve("done!"), 100)
+      });
+
+      await promise;
 
       //Create game objects
       this.gameManager.objects.createObjects();
@@ -129,22 +136,22 @@ export default class GameMainClass {
 
       //draw game objects
       for (let [key, value] of this.gameManager.objects.objectMap) {
-         if(value.state != 'disabled') value.object.view.draw(value.state);
+         if (value.state != 'disabled') value.object.view.draw(value.state);
       }
-      
+
       //draw UI
       for (let [key, value] of this.gameManager.ui.elementMap) {
-         if(value.state != 'disabled') value.element.view.draw(value.state);
+         if (value.state != 'disabled') value.element.view.draw(value.state);
       }
 
       this.ctx.fillStyle = 'black'
-      this.ctx.fillRect(this.canvas.width/2 - 1, this.canvas.height/2 - 1, 2, 2)
+      this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
 
       //console.log("draw")
    }
    //END DRAW FUNCTION
 
-   
+
 
 
    //INTERVAL FUNCTIONS

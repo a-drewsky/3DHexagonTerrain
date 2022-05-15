@@ -2,15 +2,15 @@ export default class SettingsClass {
 
     constructor(externalSettings){
 
-        this.MAP_SIZE = externalSettings.mapSize == 'small' ? { q: 10, r: 25} 
-            : externalSettings.mapSize == 'medium' ? { q: 20, r: 50} 
-            : { q: 30, r: 75} 
+        this.MAP_SIZE = externalSettings.mapSize == 'small' ? { q: 12, r: 30} 
+            : externalSettings.mapSize == 'medium' ? { q: 16, r: 40} 
+            : { q: 20, r: 50} 
 
         this.BASE_ZOOM_LEVEL = 30;
 
-        this.ZOOM_MULTIPLIER = 1.5;
+        this.ZOOM_MULTIPLIER = 3;
 
-        this.MAX_ZOOM = 10;
+        this.MAX_ZOOM = 2;
 
         this.HEXMAP_LINE_WIDTH = 3;
 
@@ -24,7 +24,7 @@ export default class SettingsClass {
 
         this.INIT_CAMERA_ROTATION = 2;
 
-        this.INIT_SHADOW_ROTATION = 0;
+        this.INIT_SHADOW_ROTATION = 11;
 
         this.INIT_CAMERA_POSITION = {
             x: 0.25,

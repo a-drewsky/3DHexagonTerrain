@@ -45,15 +45,11 @@ export default class ShowHexMapStateControllerClass {
 
 
         this.gameManager.objects.objectMap.get('camera').object.controller.mouseWheel(deltaY);
-
-        //set size based on zoom level
+        
         let newSize = this.gameManager.objects.objectMap.get('hexMap').object.data.baseSize - this.gameManager.objects.objectMap.get('camera').object.data.zoom * this.settings.ZOOM_MULTIPLIER;
-
         this.gameManager.objects.objectMap.get('hexMap').object.data.size = newSize;
-
         this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
         this.gameManager.objects.objectMap.get('hexMap').object.data.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-
         this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
         this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
 
@@ -94,11 +90,6 @@ export default class ShowHexMapStateControllerClass {
     keyPress = (key) => {
 
         if (key == 'r') {
-            this.gameManager.objects.objectMap.get('hexMap').object.controller.keyPress(key);
-            //this.gameManager.objects.objectMap.get('hexMap').object.view.render();
-        }
-
-        if (key == 't') {
 
             let centerHexPos = this.getCenterHexPos();
 
@@ -162,6 +153,8 @@ export default class ShowHexMapStateControllerClass {
                 r: ((-1 / 3) * centerPos.x + Math.sqrt(3) / 3 * (centerPos.y * (1 / squish))) / size
             }
         }
+
+        console.log(centerHexPos)
 
         return centerHexPos;
     }

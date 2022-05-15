@@ -1,10 +1,7 @@
 
 -REFACTOR
-
-    -Fix bugs
-
+    -clean up
     -Refactor game dev template
-    
     -Have a clear process for adding new features
         -Environemnts
         -Structures
@@ -12,19 +9,12 @@
         -animations & attacks
         -Cards
         -Overlay animations
-
     -Take a break from coding, focus on game design and art
         -Play tabletop video games for inspiration
 
 
-BUGS
-    -Rotating while moving resets camera to the last position before moving
-    -Tile height & stroke size should be relative to zoom level
-    -Rendering is a bit slow
-        -Try to optimize Rendering
-        -Try pre-rendering
-        -Try resizing image when zooming
 
+-For images, load a low res image first then replace them with high res images after starting the game
 
 
 -Make a trello board to track progess
