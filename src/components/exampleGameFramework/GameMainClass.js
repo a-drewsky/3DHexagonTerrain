@@ -17,6 +17,7 @@ import SettingsClass from './Settings';
 export default class GameMainClass {
 
    constructor(canvas, setWinCondition, settings) {
+
       //canvas
       this.canvas = canvas;
       this.ctx = canvas.getContext("2d");
@@ -50,8 +51,9 @@ export default class GameMainClass {
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.settings);
 
+      //Draw interval that is activated when the game finishes loading
       this.drawInterval = null;
-      //this.fpsInterval = setInterval(() => {console.log("sec")}, 1000);
+
    }
 
 
@@ -60,6 +62,10 @@ export default class GameMainClass {
       clearInterval(this.gameManager.state.interval);
       clearInterval(this.drawInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      for (let [key, value] of this.gameManager.objects.objectMap) {
+         if(value.state != 'disabled' && value.object.view.renderMap) value.object.view.renderMap.clear();
+      }
    }
 
    mouseDown = (x, y) => {
@@ -144,10 +150,6 @@ export default class GameMainClass {
          if (value.state != 'disabled') value.element.view.draw(value.state);
       }
 
-      this.ctx.fillStyle = 'black'
-      this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
-
-      //console.log("draw")
    }
    //END DRAW FUNCTION
 

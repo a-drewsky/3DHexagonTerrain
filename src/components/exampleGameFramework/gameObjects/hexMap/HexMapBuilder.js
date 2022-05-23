@@ -31,14 +31,6 @@ export default class HexMapBuilderClass {
 
          let tileNoise = noise(seed+keyObj.q/noiseFluctuation, seed+keyObj.r/noiseFluctuation);
 
-         // if(tileNoise < lowerNoiseThreshold) this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-         //    height: -1
-         // });
-
-         // if(tileNoise > upperNoiseThreshold) this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-         //    height: 1
-         // });
-
          this.hexMapData.setEntry(keyObj.q, keyObj.r, {
             height: Math.max(Math.floor(tileNoise * 13)-3, 1)
          });
@@ -46,8 +38,47 @@ export default class HexMapBuilderClass {
       }
 
       this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
-      
+   }
 
+   setTilesHeight2 = (noiseFluctuation, noiseSeedMultiplier, lowerNoiseThreshold, upperNoiseThreshold) => {
+
+      let seed = Math.random() * noiseSeedMultiplier;
+
+      let seed2 = Math.random() * noiseSeedMultiplier
+
+      for (let [key, value] of this.hexMapData.getMap()) {
+
+         let keyObj = this.hexMapData.split(key);
+
+         let tileNoise = noise(seed+keyObj.q/noiseFluctuation, seed+keyObj.r/noiseFluctuation) * noise(seed2+keyObj.q/noiseFluctuation, seed2+keyObj.r/noiseFluctuation);
+
+         let tileHeight = Math.ceil(tileNoise * 48);
+
+         let heightRanges = {
+            1: 8,
+            2: 13,
+            3: 16,
+            4: 18
+         }
+         let heightSet = false;
+         for(let i in heightRanges){
+            if(tileHeight <= heightRanges[i]){
+               tileHeight = parseInt(i);
+               heightSet = true;
+               break;
+            } 
+         }
+         if(!heightSet) tileHeight -= heightRanges[4]-4;
+         
+         tileHeight = Math.min(tileHeight, 12)
+
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+            height: tileHeight
+         });
+
+      }
+
+      this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
    }
 
    deleteIslands = () => {
@@ -107,15 +138,14 @@ export default class HexMapBuilderClass {
    build = (q, r, mapSize, mapGeneration) => {
 
       //make a settings variable or some shit
-      let noiseFluctuation = (mapSize == "small" ? 3 : mapSize == "medium" ? 4 : 6)
+      let noiseFluctuation = (mapSize == "small" ? 3 : mapSize == "medium" ? 5 : 8)
       let noiseSeedMultiplier = 10
       let lowerNoiseThreshold = 0.4
       let upperNoiseThreshold = 0.7
 
       if (mapGeneration == true) {
             this.generateMap(q, r);
-            this.setTilesHeight(noiseFluctuation, noiseSeedMultiplier, lowerNoiseThreshold, upperNoiseThreshold);
-            //this.deleteIslands();
+            this.setTilesHeight2(noiseFluctuation, noiseSeedMultiplier, lowerNoiseThreshold, upperNoiseThreshold);
       } else {
             this.generateMap(q, r);
       }

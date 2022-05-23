@@ -1,7 +1,9 @@
 
+-Procedural generation settings variables
+-Load images when page loads instead of every render
+    -Pass images to the game object
+
 -REFACTOR
-    -clean up
-    -Refactor game dev template
     -Have a clear process for adding new features
         -Environemnts
         -Structures

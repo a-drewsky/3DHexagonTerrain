@@ -22,8 +22,10 @@ const ContentPanel = () => {
    //CREATE NEW GAME METHOD
    const startNewGame = (e) => {
       e.preventDefault();
+      if(gameClass && !gameClass.loaded) return;
 
       if (gameClass) gameClass.clear();
+      setGameClass(null);
       let newGameClass = new GameMainClass(
          canvas.current,
          setWinCondition,
@@ -32,8 +34,8 @@ const ContentPanel = () => {
          }
       );
 
-      newGameClass.createGame();
       setGameClass(newGameClass);
+      newGameClass.createGame();
 
       setWinCondition(null);
    }
@@ -114,7 +116,7 @@ const ContentPanel = () => {
 
 
          {/*CANVAS*/}
-         <div /*className={(winCondition != null || gameClass == null) && 'd-none'}*/>
+         <div className={(winCondition != null || gameClass == null) && 'd-none'}>
             <Row className='py-2'>
                <canvas
                   ref={canvas}
