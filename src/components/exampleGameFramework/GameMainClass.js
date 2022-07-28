@@ -12,7 +12,7 @@ import ImagesClass from './GameImages';
 import LoadingViewClass from './uiElements/LoadingElement/LoadingView';
 
 //Import Settings Class
-import SettingsClass from './Settings';
+import SettingsClass from './GlobalSettings';
 
 export default class GameMainClass {
 
@@ -34,7 +34,7 @@ export default class GameMainClass {
       this.setWinCondition = setWinCondition;
 
       //settings
-      this.settings = new SettingsClass(settings);
+      this.globalSettings = new SettingsClass(settings);
 
       //Images
       this.images = new ImagesClass();
@@ -46,10 +46,10 @@ export default class GameMainClass {
       }
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.settings);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings);
 
       //Input controller
-      this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.settings);
+      this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.globalSettings);
 
       //Draw interval that is activated when the game finishes loading
       this.drawInterval = null;

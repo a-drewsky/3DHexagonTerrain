@@ -1,6 +1,6 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier) {
+   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges) {
       this.ctx = ctx;
       this.camera = camera;
       this.hexMapData = hexMapData;
@@ -21,6 +21,9 @@ export default class HexMapViewClass {
       this.sideColorMultiplier = sideColorMultiplier;
       this.zoomMultiplier = zoomMultiplier;
       this.renderTileHeight = null;
+      this.elevationRanges = elevationRanges
+
+      console.log("shadow size: " + shadowSize)
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
@@ -57,7 +60,7 @@ export default class HexMapViewClass {
       //set hexmap size to highest zoom level to calculate render size
       let newSize = this.hexMapData.baseSize + this.camera.maxZoom;
 
-      console.log(newSize)
+      console.log(this.hexMapData)
 
       this.hexMapData.size = newSize;
 
@@ -248,8 +251,10 @@ export default class HexMapViewClass {
 
       this.tablePosition = [...tablePosition];
 
-      this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l}%)`
-      this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l}%)`
+      console.log(this.colors)
+
+      this.renderctx.fillStyle = `hsl(${this.colors.table.fill.h}, ${this.colors.table.fill.s}%, ${this.colors.table.fill.l}%)`
+      this.renderctx.strokeStyle = `hsl(${this.colors.table.stroke.h}, ${this.colors.table.stroke.s}%, ${this.colors.table.stroke.l}%)`
       this.renderctx.beginPath();
       this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
       this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
@@ -259,7 +264,7 @@ export default class HexMapViewClass {
       this.renderctx.fill();
       this.renderctx.stroke();
 
-      //draw table legs
+      //draw table sides
 
       tablePosition.sort((a, b) => a.y - b.y)
 
@@ -275,8 +280,10 @@ export default class HexMapViewClass {
          tablePosition.shift();
          tablePosition.shift();
 
-         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         console.log("shadow rotation: " + this.hexMapData.rotation, this.camera.rotation)
+
+         this.renderctx.fillStyle = `hsl(${this.colors.table.fill.h}, ${this.colors.table.fill.s}%, ${this.colors.table.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.table.stroke.h}, ${this.colors.table.stroke.s}%, ${this.colors.table.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
 
 
 
@@ -301,8 +308,8 @@ export default class HexMapViewClass {
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
 
-         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.fillStyle = `hsl(${this.colors.table.fill.h}, ${this.colors.table.fill.s}%, ${this.colors.table.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.table.stroke.h}, ${this.colors.table.stroke.s}%, ${this.colors.table.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
@@ -316,8 +323,8 @@ export default class HexMapViewClass {
          shiftedShadowRotation += 3;
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
-         this.renderctx.fillStyle = `hsl(${this.colors.TABLE_FILL.h}, ${this.colors.TABLE_FILL.s}%, ${this.colors.TABLE_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         this.renderctx.strokeStyle = `hsl(${this.colors.TABLE_STROKE.h}, ${this.colors.TABLE_STROKE.s}%, ${this.colors.TABLE_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.fillStyle = `hsl(${this.colors.table.fill.h}, ${this.colors.table.fill.s}%, ${this.colors.table.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         this.renderctx.strokeStyle = `hsl(${this.colors.table.stroke.h}, ${this.colors.table.stroke.s}%, ${this.colors.table.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
 
          this.renderctx.beginPath();
          this.renderctx.moveTo(tablePosition[2].x, tablePosition[2].y);
@@ -395,31 +402,15 @@ export default class HexMapViewClass {
                this.drawFlatHexagon(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l}%)`
-                           : `hsl(${this.colors.WATER_STROKE.h}, ${this.colors.WATER_STROKE.s}%, ${this.colors.WATER_STROKE.l}%)`
+                  `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
+                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`
                );
             } else {
                this.drawPointyHexagon(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l}%)`
-                           : `hsl(${this.colors.WATER_STROKE.h}, ${this.colors.WATER_STROKE.s}%, ${this.colors.WATER_STROKE.l}%)`
+                  `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
+                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`
                );
             }
 
@@ -428,65 +419,40 @@ export default class HexMapViewClass {
          //draw hexagon wall
          if (value.height >= height) {
 
+            let tileBiome = value.verylowBiome;
+
+            if(height >= this.elevationRanges['low']){
+               tileBiome = value.lowBiome
+            }
+            if(height >= this.elevationRanges['mid']){
+               tileBiome = value.midBiome
+            }
+            if(height >= this.elevationRanges['high']){
+               tileBiome = value.highBiome
+            }
+            if(height >= this.elevationRanges['veryhigh']){
+               tileBiome = value.veryhighBiome
+            }
+
             if (this.camera.rotation % 2 == 1) {
                this.drawFlatHexagonWall(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
+                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
+                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`
                );
             } else {
                this.drawPointyHexagonWall(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_FILL.h}, ${this.colors.SNOW_FILL.s}%, ${this.colors.SNOW_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_FILL.h}, ${this.colors.ROCKS_FILL.s}%, ${this.colors.ROCKS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_FILL.h}, ${this.colors.GRASS_FILL.s}%, ${this.colors.GRASS_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_FILL.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-
-                  height >= 6 ? `hsl(${this.colors.SNOW_STROKE.h}, ${this.colors.SNOW_STROKE.s}%, ${this.colors.SNOW_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                     : height >= 4 ? `hsl(${this.colors.ROCKS_STROKE.h}, ${this.colors.ROCKS_STROKE.s}%, ${this.colors.ROCKS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                        : height >= 2 ? `hsl(${this.colors.GRASS_STROKE.h}, ${this.colors.GRASS_STROKE.s}%, ${this.colors.GRASS_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                           : `hsl(${this.colors.WATER_FILL.h}, ${this.colors.WATER_FILL.s}%, ${this.colors.WATER_STROKE.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
                );
             }
 

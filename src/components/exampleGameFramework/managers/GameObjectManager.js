@@ -46,19 +46,7 @@ export default class GameObjectManagerClass {
         this.objectMap.set("hexMap", {
             object: new HexMapClass(
                 this.ctx, 
-                this.objectMap.get("camera").object.data, 
-                0, 0, 
-                this.settings.BASE_ZOOM_LEVEL, 
-                this.settings.HEXMAP_SQUISH, 
-                this.settings.HEXMAP_LINE_WIDTH,
-                this.settings.SHADOW_SIZE,
-                this.settings.TILE_HEIGHT,
-                this.settings.TABLE_HEIGHT,
-                this.settings.INIT_SHADOW_ROTATION,
-                this.settings.INIT_CAMERA_POSITION,
-                this.settings.INIT_CAMERA_ROTATION,
-                this.settings.HEXMAP_COLORS,
-                this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
+                this.objectMap.get("camera").object.data,
                 this.settings.ZOOM_MULTIPLIER
                 ),
             state: this.objectStates.active
