@@ -42,7 +42,10 @@ export default class HexMapClass {
             this.settings.HEXMAP_ELEVATION_RANGES, 
             this.settings.LOW_TERRAIN_GENERATION_RANGES, 
             this.settings.MAX_ELEVATION, 
-            this.settings.ELEVATION_MULTIPLIER
+            this.settings.ELEVATION_MULTIPLIER,
+            this.settings.SEED_MULTIPLIER,
+            this.settings.NOISE_FLUCTUATION,
+            this.settings.TEMP_RANGES
             );
 
         this.controller = new HexMapControllerClass(this.data);

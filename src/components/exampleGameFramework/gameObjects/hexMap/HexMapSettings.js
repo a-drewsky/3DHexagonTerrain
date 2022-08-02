@@ -42,12 +42,24 @@ export default class HexMapSettingsClass {
                 stroke: {h: 30, s: 60, l: 40}
             },
             grasshill: {
-                fill: {h: 120, s: 100, l: 25},
-                stroke: {h: 120, s: 100, l: 20}
+                fill: {h: 120, s: 100, l: 28},
+                stroke: {h: 120, s: 100, l: 23}
             },
             woodlands: {
-                fill: {h: 120, s: 100, l: 25},
-                stroke: {h: 120, s: 100, l: 20}
+                fill: {h: 120, s: 90, l: 35},
+                stroke: {h: 120, s: 90, l: 30}
+            },
+            savanna: {
+                fill: {h: 80, s: 80, l: 45},
+                stroke: {h: 85, s: 80, l: 35}
+            },
+            tundra: {
+                fill: {h: 200, s: 50, l: 80},
+                stroke: {h: 200, s: 50, l: 60}
+            },
+            desert: {
+                fill: {h: 45, s: 50, l: 70},
+                stroke: {h: 45, s: 50, l: 50}
             },
             water: {
                 fill: {h: 190, s: 90, l: 50},
@@ -73,6 +85,21 @@ export default class HexMapSettingsClass {
         this.MAX_ELEVATION = 12;
 
         this.ELEVATION_MULTIPLIER = 48;
+        
+        this.SEED_MULTIPLIER = 10;
+
+        this.NOISE_FLUCTUATION = {
+            small: 6,
+            medium: 7,
+            large: 8
+        }
+
+        this.TEMP_RANGES = {
+            tundra: 0.13,
+            woodlands: 0.28,
+            savanna: 0.36,
+            desert: 1
+        }
 
     }
 

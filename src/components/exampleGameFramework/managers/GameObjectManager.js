@@ -54,7 +54,7 @@ export default class GameObjectManagerClass {
 
 
         //build game objects
-        this.objectMap.get('hexMap').object.builder.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, 0, true);
+        this.objectMap.get('hexMap').object.builder.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size, true);
         
     }
 

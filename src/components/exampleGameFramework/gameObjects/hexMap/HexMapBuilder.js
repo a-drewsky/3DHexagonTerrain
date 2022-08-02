@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -11,6 +11,9 @@ export default class HexMapBuilderClass {
       this.lowTerrainGenerationRanges = lowTerrainGenerationRanges
       this.maxElevation = maxElevation
       this.elevationMultiplier = elevationMultiplier
+      this.seedMultiplier = seedMultiplier
+      this.noiseFluctuation = noiseFluctuation
+      this.tempRanges = tempRanges
 
    }
 
@@ -25,32 +28,39 @@ export default class HexMapBuilderClass {
       }
    }
 
-   generateBiomes = (noiseFluctuation, noiseSeedMultiplier) => {
+   generateBiomes = (noiseFluctuation) => {
 
-      let seed = Math.random() * noiseSeedMultiplier;
-
-      let seed2 = Math.random() * noiseSeedMultiplier
+      let elevationSeed1 = Math.random() * this.seedMultiplier
+      let elevationSeed2 = Math.random() * this.seedMultiplier
+      let tempSeed1 = Math.random() * this.seedMultiplier
+      let tempSeed2 = Math.random() * this.seedMultiplier
+      let drySeed1 = Math.random() * this.seedMultiplier
+      let drySeed2 = Math.random() * this.seedMultiplier
 
       for (let [key, value] of this.hexMapData.getMap()) {
 
          let keyObj = this.hexMapData.split(key);
 
-         let tileHeightNoise = noise(seed+keyObj.q/noiseFluctuation, seed+keyObj.r/noiseFluctuation) * noise(seed2+keyObj.q/noiseFluctuation, seed2+keyObj.r/noiseFluctuation);
+         //elevation generation
+         let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
 
-         let tileHeight = Math.ceil(tileHeightNoise * this.elevationMultiplier);
+         let tileHeight = Math.ceil(tileHeightNoise * this.elevationMultiplier)
 
-         //set height
          let heightSet = false;
-         for(let i in this.lowTerrainGenerationRanges){
-            if(tileHeight <= this.lowTerrainGenerationRanges[i]){
+         for (let i in this.lowTerrainGenerationRanges) {
+            if (tileHeight <= this.lowTerrainGenerationRanges[i]) {
                tileHeight = parseInt(i);
                heightSet = true;
                break;
-            } 
+            }
          }
-         if(!heightSet) tileHeight -= this.lowTerrainGenerationRanges[4]-4;
-         
+         if (!heightSet) tileHeight -= this.lowTerrainGenerationRanges[4] - 4;
+
          tileHeight = Math.min(tileHeight, this.maxElevation)
+
+
+         //temp generation
+         let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
 
          //set biome
          let tileBiome = null
@@ -60,28 +70,45 @@ export default class HexMapBuilderClass {
          let tileHighBiome = null
          let tileVeryhighBiome = null
 
-         if(tileHeight >= this.elevationRanges['verylow']){
+         if (tileHeight >= this.elevationRanges['verylow']) {
             let biome = 'water'
 
             tileBiome = biome
             tileVerylowBiome = biome
          }
-         if(tileHeight >= this.elevationRanges['low']){
-            let biome = 'woodlands'
+         if (tileHeight >= this.elevationRanges['low']) {
+            let biome
+
+            // if (tileTemp > this.tempBarrier) {
+            //    if (tileDryness > dryBarrier) biome = 'savanna'
+            //    else biome = 'desert'
+            // } else {
+            //    if (tileDryness > dryBarrier) biome = 'woodlands'
+            //    else biome = 'tundra'
+            // }
+
+            for(let range in this.tempRanges){
+               if(tileTemp < this.tempRanges[range]){
+                  biome = range
+                  break;
+               } 
+            }
+            console.log(biome)
+
             tileBiome = biome
             tileLowBiome = biome
          }
-         if(tileHeight >= this.elevationRanges['mid']){
+         if (tileHeight >= this.elevationRanges['mid']) {
             let biome = 'grasshill'
             tileBiome = biome
             tileMidBiome = biome
          }
-         if(tileHeight >= this.elevationRanges['high']){
+         if (tileHeight >= this.elevationRanges['high']) {
             let biome = 'rockmountain'
             tileBiome = biome
             tileHighBiome = biome
          }
-         if(tileHeight >= this.elevationRanges['veryhigh']){
+         if (tileHeight >= this.elevationRanges['veryhigh']) {
             let biome = 'snowmountain'
             tileBiome = biome
             tileVeryhighBiome = biome
@@ -102,18 +129,17 @@ export default class HexMapBuilderClass {
       this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
    }
 
-   
+
    build = (q, r, mapSize, mapGeneration) => {
 
       //make a settings variable or some shit
-      let noiseFluctuation = (mapSize == "small" ? 3 : mapSize == "medium" ? 5 : 8)
-      let noiseSeedMultiplier = 10
+      let noiseFluctuation = this.noiseFluctuation[mapSize]
 
       if (mapGeneration == true) {
-            this.generateMap(q, r);
-            this.generateBiomes(noiseFluctuation, noiseSeedMultiplier);
+         this.generateMap(q, r);
+         this.generateBiomes(noiseFluctuation);
       } else {
-            this.generateMap(q, r);
+         this.generateMap(q, r);
       }
       this.hexMapView.initialize();
    }
