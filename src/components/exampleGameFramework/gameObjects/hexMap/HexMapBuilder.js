@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSizes) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -14,6 +14,9 @@ export default class HexMapBuilderClass {
       this.seedMultiplier = seedMultiplier
       this.noiseFluctuation = noiseFluctuation
       this.tempRanges = tempRanges
+      this.waterTempRanges = waterTempRanges
+      this.biomeGroups = biomeGroups
+      this.minBiomeSizes = minBiomeSizes
 
    }
 
@@ -34,8 +37,6 @@ export default class HexMapBuilderClass {
       let elevationSeed2 = Math.random() * this.seedMultiplier
       let tempSeed1 = Math.random() * this.seedMultiplier
       let tempSeed2 = Math.random() * this.seedMultiplier
-      let drySeed1 = Math.random() * this.seedMultiplier
-      let drySeed2 = Math.random() * this.seedMultiplier
 
       for (let [key, value] of this.hexMapData.getMap()) {
 
@@ -72,6 +73,8 @@ export default class HexMapBuilderClass {
 
          if (tileHeight >= this.elevationRanges['verylow']) {
             let biome = 'water'
+            if (tileTemp < this.waterTempRanges['frozenWater']) biome = 'frozenWater'
+            if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
 
             tileBiome = biome
             tileVerylowBiome = biome
@@ -79,37 +82,34 @@ export default class HexMapBuilderClass {
          if (tileHeight >= this.elevationRanges['low']) {
             let biome
 
-            // if (tileTemp > this.tempBarrier) {
-            //    if (tileDryness > dryBarrier) biome = 'savanna'
-            //    else biome = 'desert'
-            // } else {
-            //    if (tileDryness > dryBarrier) biome = 'woodlands'
-            //    else biome = 'tundra'
-            // }
-
-            for(let range in this.tempRanges){
-               if(tileTemp < this.tempRanges[range]){
+            for (let range in this.tempRanges) {
+               if (tileTemp < this.tempRanges[range]) {
                   biome = range
                   break;
-               } 
+               }
             }
-            console.log(biome)
 
             tileBiome = biome
             tileLowBiome = biome
          }
          if (tileHeight >= this.elevationRanges['mid']) {
             let biome = 'grasshill'
+            if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
+            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+
             tileBiome = biome
             tileMidBiome = biome
          }
          if (tileHeight >= this.elevationRanges['high']) {
             let biome = 'rockmountain'
+            if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
+            if (tileTemp > this.tempRanges['savanna']) biome = 'rockhill'
             tileBiome = biome
             tileHighBiome = biome
          }
          if (tileHeight >= this.elevationRanges['veryhigh']) {
             let biome = 'snowmountain'
+            if (tileTemp > this.tempRanges['savanna']) biome = 'mesa'
             tileBiome = biome
             tileVeryhighBiome = biome
          }
@@ -129,6 +129,55 @@ export default class HexMapBuilderClass {
       this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
    }
 
+   smoothBiomes = () => {
+
+      let keyStrings = this.hexMapData.getKeyStrings();
+
+      let getBiomeSet = (keyString, keyStrSet) => {
+
+         keyStrSet.add(keyString)
+
+         //get tile biome
+         let keyObj = this.hexMapData.split(keyString);
+         let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
+
+         let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
+         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome)
+         neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.hexMapData.join(neighborKey.q, neighborKey.r)))
+
+
+         if (neighborKeys.length == 0) return keyStrSet
+
+         for (let i = 0; i < neighborKeys.length; i++) {
+            //recursion
+            let keyStr = this.hexMapData.join(neighborKeys[i].q, neighborKeys[i].r)
+            keyStrSet = getBiomeSet(keyStr, keyStrSet)
+         }
+
+         return keyStrSet
+
+      }
+
+      while (keyStrings.length > 0) {
+
+         //get biome set
+         let keyStrSet = new Set()
+         keyStrSet = getBiomeSet(keyStrings[0], keyStrSet);
+
+         //remove set from keyStrings
+         let keyStrArr = Array.from(keyStrSet)
+         console.log(keyStrArr.length)
+         for (let i = 0; i < keyStrArr.length; i++) {
+            let keyIndex = keyStrings.indexOf(keyStrArr[i]);
+            if (keyIndex != -1) keyStrings.splice(keyIndex, 1);
+         }
+
+         //Check size of biome set and fix tiles if neccessary
+
+      }
+
+   }
+
 
    build = (q, r, mapSize, mapGeneration) => {
 
@@ -136,12 +185,13 @@ export default class HexMapBuilderClass {
       let noiseFluctuation = this.noiseFluctuation[mapSize]
 
       if (mapGeneration == true) {
-         this.generateMap(q, r);
-         this.generateBiomes(noiseFluctuation);
+         this.generateMap(q, r)
+         this.generateBiomes(noiseFluctuation)
+         this.smoothBiomes()
       } else {
-         this.generateMap(q, r);
+         this.generateMap(q, r)
       }
-      this.hexMapView.initialize();
+      this.hexMapView.initialize()
    }
 
 }

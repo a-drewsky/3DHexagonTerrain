@@ -2,6 +2,8 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
+        this.DEBUG = false;
+
         this.TABLE_HEIGHT = 50;
 
         this.HEXMAP_LINE_WIDTH = 3; //to be removed
@@ -38,12 +40,24 @@ export default class HexMapSettingsClass {
                 stroke: {h: 210, s: 20, l: 80}
             },
             rockmountain: {
+                fill: {h: 240, s: 10, l: 70},
+                stroke: {h: 240, s: 10, l: 60}
+            },
+            rockhill: {
                 fill: {h: 30, s: 60, l: 50},
                 stroke: {h: 30, s: 60, l: 40}
             },
             grasshill: {
                 fill: {h: 120, s: 100, l: 28},
                 stroke: {h: 120, s: 100, l: 23}
+            },
+            sandhill: {
+                fill: {h: 45, s: 60, l: 60},
+                stroke: {h: 45, s: 60, l: 45}
+            },
+            mesa: {
+                fill: {h: 20, s: 60, l: 50},
+                stroke: {h: 20, s: 60, l: 40}
             },
             woodlands: {
                 fill: {h: 120, s: 90, l: 35},
@@ -64,7 +78,45 @@ export default class HexMapSettingsClass {
             water: {
                 fill: {h: 190, s: 90, l: 50},
                 stroke: {h: 190, s: 90, l: 70}
+            },
+            frozenWater: {
+                fill: {h: 190, s: 80, l: 80},
+                stroke: {h: 190, s: 80, l: 90}
+            },
+            playa: {
+                fill: {h: 45, s: 30, l: 80},
+                stroke: {h: 45, s: 30, l: 90}
             }
+        }
+
+        // this.BIOME_GROUPSXXX = [
+        //     ['rockhill', 'sandhill', 'desert', 'mesa'],
+        //     ['snowmountain', 'tundra'],
+        //     ['grasshill', 'rockmountain'],
+        //     ['woodlands'],
+        //     ['savanna'],
+        //     ['water', 'frozenWater', 'playa']
+        // ]
+
+        this.BIOME_GROUPS = {
+            snowmountain: ['tundra', 'rockmountain'],
+            rockmountain: ['grasshill', 'snowmountain'],
+            rockhill: ['mesa', 'sandhill', 'desert'],
+            grasshill: ['rockmountain', 'woodlands', 'savanna'],
+            sandhill: ['desert', 'mesa', 'rockhill'],
+            mesa: ['rockhill', 'sandhill', 'desert'],
+            woodlands: ['grasshill'],
+            savanna: ['grasshill'],
+            tundra: ['snowmountain', 'frozenWater'],
+            desert: ['mesa', 'rockhill', 'sandhill'],
+            water: ['frozenWater', 'playa'],
+            frozenWater: ['water'],
+            playa: ['water']
+        }
+
+        this.MINIMUM_BIOME_SIZES = {
+            single: 3,
+            group: 7
         }
 
         this.HEXMAP_ELEVATION_RANGES = {
@@ -95,10 +147,16 @@ export default class HexMapSettingsClass {
         }
 
         this.TEMP_RANGES = {
-            tundra: 0.13,
+            tundra: 0.15,
             woodlands: 0.28,
             savanna: 0.36,
             desert: 1
+        }
+
+        this.WATER_TEMP_RANGES = {
+            frozenWater: 0.12,
+            water: 0.42,
+            playa: 1
         }
 
     }

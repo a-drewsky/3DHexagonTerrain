@@ -33,7 +33,8 @@ export default class HexMapClass {
             this.settings.HEXMAP_COLORS, 
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER, 
             zoomMultiplier, 
-            this.settings.HEXMAP_ELEVATION_RANGES
+            this.settings.HEXMAP_ELEVATION_RANGES,
+            this.settings.DEBUG
             );
 
         this.builder = new HexMapBuilderClass(
@@ -45,7 +46,10 @@ export default class HexMapClass {
             this.settings.ELEVATION_MULTIPLIER,
             this.settings.SEED_MULTIPLIER,
             this.settings.NOISE_FLUCTUATION,
-            this.settings.TEMP_RANGES
+            this.settings.TEMP_RANGES,
+            this.settings.WATER_TEMP_RANGES,
+            this.settings.BIOME_GROUPS,
+            this.settings.MINIMUM_BIOME_SIZES
             );
 
         this.controller = new HexMapControllerClass(this.data);

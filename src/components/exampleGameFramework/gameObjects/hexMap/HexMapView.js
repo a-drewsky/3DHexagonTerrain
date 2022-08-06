@@ -1,6 +1,6 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges) {
+   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug) {
       this.ctx = ctx;
       this.camera = camera;
       this.hexMapData = hexMapData;
@@ -23,7 +23,7 @@ export default class HexMapViewClass {
       this.renderTileHeight = null;
       this.elevationRanges = elevationRanges
 
-      console.log("shadow size: " + shadowSize)
+      this.debug = debug
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
@@ -403,14 +403,16 @@ export default class HexMapViewClass {
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
                   `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`
+                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
+                  ''+keyObj.q+','+keyObj.r
                );
             } else {
                this.drawPointyHexagon(
                   this.hexMapData.x + xOffset,
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
                   `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`
+                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
+                  ''+keyObj.q+','+keyObj.r
                );
             }
 
@@ -721,7 +723,7 @@ export default class HexMapViewClass {
 
    }
 
-   drawPointyHexagon = (x, y, fillColor, lineColor) => {
+   drawPointyHexagon = (x, y, fillColor, lineColor, tileGroup) => {
       this.renderctx.fillStyle = fillColor;
       this.renderctx.strokeStyle = lineColor;
 
@@ -735,9 +737,16 @@ export default class HexMapViewClass {
       this.renderctx.lineTo(x + Math.sin(this.sideLength * 6) * this.hexMapData.size, y + Math.cos(this.sideLength * 6) * (this.hexMapData.size * this.hexMapData.squish));
       this.renderctx.fill();
       if (lineColor) this.renderctx.stroke();
+      if (lineColor) this.renderctx.stroke();
+
+      if(this.debug){
+         this.renderctx.font = '18px serif';
+         this.renderctx.fillStyle = 'black';
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+10, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-20)
+      }
    }
 
-   drawFlatHexagon = (x, y, fillColor, lineColor) => {
+   drawFlatHexagon = (x, y, fillColor, lineColor, tileGroup) => {
       this.renderctx.fillStyle = fillColor;
       this.renderctx.strokeStyle = lineColor;
 
@@ -751,6 +760,12 @@ export default class HexMapViewClass {
       this.renderctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
       this.renderctx.fill();
       if (lineColor) this.renderctx.stroke();
+
+      if(this.debug){
+         this.renderctx.font = '18px serif';
+         this.renderctx.fillStyle = 'black';
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+10, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-20)
+      }
    }
 
    clipHexagonShadowPath = (x, y, shadowX, shadowY, rotation, orientation) => {
