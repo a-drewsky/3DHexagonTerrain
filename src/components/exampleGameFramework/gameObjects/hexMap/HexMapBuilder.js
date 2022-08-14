@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSizes) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -16,7 +16,7 @@ export default class HexMapBuilderClass {
       this.tempRanges = tempRanges
       this.waterTempRanges = waterTempRanges
       this.biomeGroups = biomeGroups
-      this.minBiomeSizes = minBiomeSizes
+      this.minBiomeSmoothing = minBiomeSmoothing
 
    }
 
@@ -142,7 +142,7 @@ export default class HexMapBuilderClass {
          let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
          let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
-         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome)
+         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGroups[tileBiome].includes(this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome))
          neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.hexMapData.join(neighborKey.q, neighborKey.r)))
 
 
@@ -158,21 +158,87 @@ export default class HexMapBuilderClass {
 
       }
 
+      let smoothTile = (keyString) => {
+         let keyObj = this.hexMapData.split(keyString);
+         let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
+
+         console.log(tileBiome)
+
+         //check if tile has non-similar biome neighbors
+         let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
+         let tempMap = neighborKeys.map(key => this.hexMapData.getEntry(key.q, key.r).biome)
+         console.log(tempMap)
+         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
+         if (neighborKeys.length == 0) return false
+
+         //get array of neighbor biomes
+         let biomeArr = neighborKeys.map(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome)
+
+         //find the most common neighbor biome
+         let modeMap = {};
+         let maxBiome = biomeArr[0]
+         if (biomeArr.length > 1) {
+            let maxCount = 1;
+            for (let i = 0; i < biomeArr.length; i++) {
+               let biome = biomeArr[i];
+               if (modeMap[biome] == null) modeMap[biome] = 1;
+               else modeMap[biome]++;
+
+               if (modeMap[biome] > maxCount) {
+                  maxBiome = biome;
+                  maxCount = modeMap[biome];
+               }
+            }
+         }
+
+         //clone a tile with most common biome
+         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
+         let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
+         let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, tileToClone)
+
+         return true
+      }
+
       while (keyStrings.length > 0) {
 
-         //get biome set
+         //get biome
+         let keyObj = this.hexMapData.split(keyStrings[0])
+         let biome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
+
+         //get tile set
          let keyStrSet = new Set()
          keyStrSet = getBiomeSet(keyStrings[0], keyStrSet);
+         let keyStrArr = Array.from(keyStrSet)
 
          //remove set from keyStrings
-         let keyStrArr = Array.from(keyStrSet)
-         console.log(keyStrArr.length)
          for (let i = 0; i < keyStrArr.length; i++) {
-            let keyIndex = keyStrings.indexOf(keyStrArr[i]);
-            if (keyIndex != -1) keyStrings.splice(keyIndex, 1);
+            let keyStrArrObj = this.hexMapData.split(keyStrArr[i])
+            let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+
+            if(keyStrArrObjBiome == biome){
+               let keyIndex = keyStrings.indexOf(keyStrArr[i]);
+               if (keyIndex != -1) keyStrings.splice(keyIndex, 1);
+            }
          }
 
          //Check size of biome set and fix tiles if neccessary
+         if (keyStrArr.length < this.minBiomeSmoothing[biome]) {
+            console.log("SMOOTHING")
+            console.log(keyStrArr)
+            while (keyStrArr.length > 0) {
+            let keyStrArrObj = this.hexMapData.split(keyStrArr[0])
+            let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+
+            
+               if(keyStrArrObjBiome != biome) keyStrArr.shift()
+               else if (smoothTile(keyStrArr[0])) keyStrArr.shift()
+               else{
+                  keyStrArr.push(keyStrArr.shift());
+                  console.log("SHIFT")
+               } 
+            }
+         }
 
       }
 
@@ -187,10 +253,30 @@ export default class HexMapBuilderClass {
       if (mapGeneration == true) {
          this.generateMap(q, r)
          this.generateBiomes(noiseFluctuation)
+
+         if (this.hexMapData2 !== undefined) {
+            this.hexMapData2.hexMap = new Map(this.hexMapData.hexMap)
+            this.hexMapData2.maxHeight = this.hexMapData.maxHeight
+            this.hexMapView2.hexMapData = this.hexMapData2
+            console.log(this.hexMapData, this.hexMapData2)
+         }
+
          this.smoothBiomes()
+
+         if (this.hexMapData2 !== undefined) {
+            for (let [key, value] of this.hexMapData.getMap()) {
+               let keyObj = this.hexMapData.split(key)
+               let value2 = this.hexMapData2.getEntry(keyObj.q, keyObj.r)
+
+               console.log(value.biome, value2.biome)
+               if (value.biome != value2.biome) console.log("SUCCESS")
+            }
+         }
+
       } else {
          this.generateMap(q, r)
       }
+      if (this.hexMapData2 !== undefined) this.hexMapView2.initialize()
       this.hexMapView.initialize()
    }
 

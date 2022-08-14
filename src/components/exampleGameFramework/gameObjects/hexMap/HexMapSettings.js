@@ -2,7 +2,7 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.TABLE_HEIGHT = 50;
 
@@ -89,20 +89,11 @@ export default class HexMapSettingsClass {
             }
         }
 
-        // this.BIOME_GROUPSXXX = [
-        //     ['rockhill', 'sandhill', 'desert', 'mesa'],
-        //     ['snowmountain', 'tundra'],
-        //     ['grasshill', 'rockmountain'],
-        //     ['woodlands'],
-        //     ['savanna'],
-        //     ['water', 'frozenWater', 'playa']
-        // ]
-
         this.BIOME_GROUPS = {
             snowmountain: ['tundra', 'rockmountain'],
             rockmountain: ['grasshill', 'snowmountain'],
             rockhill: ['mesa', 'sandhill', 'desert'],
-            grasshill: ['rockmountain', 'woodlands', 'savanna'],
+            grasshill: ['rockmountain', 'snowmountain'],
             sandhill: ['desert', 'mesa', 'rockhill'],
             mesa: ['rockhill', 'sandhill', 'desert'],
             woodlands: ['grasshill'],
@@ -110,13 +101,24 @@ export default class HexMapSettingsClass {
             tundra: ['snowmountain', 'frozenWater'],
             desert: ['mesa', 'rockhill', 'sandhill'],
             water: ['frozenWater', 'playa'],
-            frozenWater: ['water'],
-            playa: ['water']
+            frozenWater: ['tundra', 'snowmountain'],
+            playa: ['desert', 'sandhill']
         }
 
-        this.MINIMUM_BIOME_SIZES = {
-            single: 3,
-            group: 7
+        this.MIN_BIOME_SMOOTHING = {
+            snowmountain: 6,
+            rockmountain: 6,
+            rockhill: 8,
+            grasshill: 10,
+            sandhill: 8,
+            mesa: 8,
+            woodlands: 12,
+            savanna: 10,
+            tundra: 10,
+            desert: 10,
+            water: 10,
+            frozenWater: 10,
+            playa: 10
         }
 
         this.HEXMAP_ELEVATION_RANGES = {

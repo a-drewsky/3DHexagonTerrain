@@ -128,6 +128,10 @@ export default class ShowHexMapStateControllerClass {
             }
 
         }
+
+        if (key == 's'){
+            this.gameManager.objects.objectMap.get('hexMap').object.switchView()
+        }
     }
 
     getCenterHexPos = () => {

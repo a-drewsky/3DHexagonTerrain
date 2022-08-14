@@ -740,9 +740,9 @@ export default class HexMapViewClass {
       if (lineColor) this.renderctx.stroke();
 
       if(this.debug){
-         this.renderctx.font = '18px serif';
+         this.renderctx.font = '10px serif';
          this.renderctx.fillStyle = 'black';
-         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+10, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-20)
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-18)
       }
    }
 
@@ -762,9 +762,9 @@ export default class HexMapViewClass {
       if (lineColor) this.renderctx.stroke();
 
       if(this.debug){
-         this.renderctx.font = '18px serif';
+         this.renderctx.font = '10px serif';
          this.renderctx.fillStyle = 'black';
-         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+10, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-20)
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-18)
       }
    }
 
