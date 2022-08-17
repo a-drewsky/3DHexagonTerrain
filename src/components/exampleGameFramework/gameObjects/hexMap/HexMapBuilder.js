@@ -167,7 +167,6 @@ export default class HexMapBuilderClass {
          //check if tile has non-similar biome neighbors
          let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
          let tempMap = neighborKeys.map(key => this.hexMapData.getEntry(key.q, key.r).biome)
-         console.log(tempMap)
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
          if (neighborKeys.length == 0) return false
 
@@ -224,8 +223,6 @@ export default class HexMapBuilderClass {
 
          //Check size of biome set and fix tiles if neccessary
          if (keyStrArr.length < this.minBiomeSmoothing[biome]) {
-            console.log("SMOOTHING")
-            console.log(keyStrArr)
             while (keyStrArr.length > 0) {
             let keyStrArrObj = this.hexMapData.split(keyStrArr[0])
             let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome

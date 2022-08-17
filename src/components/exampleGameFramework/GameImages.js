@@ -1,5 +1,5 @@
 
-import exampleImage from './images/exampleImage.png'
+import exampleImage from './images/example_hex_500.png'
 
 export default class ImagesClass {
 

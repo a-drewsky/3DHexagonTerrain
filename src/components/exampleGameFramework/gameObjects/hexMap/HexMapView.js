@@ -1,7 +1,8 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug) {
+   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug, exampleImage) {
       this.ctx = ctx;
+      this.canvas = canvas;
       this.camera = camera;
       this.hexMapData = hexMapData;
 
@@ -24,6 +25,8 @@ export default class HexMapViewClass {
       this.elevationRanges = elevationRanges
 
       this.debug = debug
+
+      this.exampleImage = exampleImage
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
@@ -52,7 +55,10 @@ export default class HexMapViewClass {
 
    draw = () => {
 
-      this.ctx.drawImage(this.getRender(this.camera.rotation, this.camera.zoom), -this.camera.position.x, -this.camera.position.y)
+      let render = this.getRender(this.camera.rotation, this.camera.zoom)
+
+      //this.ctx.drawImage(render, -this.camera.position.x, -this.camera.position.y)
+      this.ctx.drawImage(render, this.camera.position.x, this.camera.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
    }
 
    initialize = () => {
@@ -81,6 +87,8 @@ export default class HexMapViewClass {
          width: mapHyp * 2 / this.hexMapData.squish + 100,
          height: mapHyp * 2 + 100
       }
+
+      console.log(this.renderCanvasDims)
 
       //Set the hexmap position to the center of the canvas
       this.hexMapData.setDimensions(this.renderCanvasDims.width / 2, this.renderCanvasDims.height / 2); //causing zooming issue
@@ -153,6 +161,8 @@ export default class HexMapViewClass {
       this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
       this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
       this.renderTileHeight = this.hexMapData.tileHeight * (1 - this.camera.zoom / this.hexMapData.tileHeight)
+
+      this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
 
       //set size based on zoom level
       let newSize = this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier;

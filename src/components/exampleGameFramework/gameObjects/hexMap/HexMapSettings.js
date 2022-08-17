@@ -2,9 +2,9 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = true;
+        this.DEBUG = false;
 
-        this.TABLE_HEIGHT = 50;
+        this.TABLE_HEIGHT = 40;
 
         this.HEXMAP_LINE_WIDTH = 3; //to be removed
 
@@ -12,11 +12,11 @@ export default class HexMapSettingsClass {
 
         this.SHADOW_SIZE = 1;
 
-        this.TILE_HEIGHT = 10;
+        this.TILE_HEIGHT = 5;
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 
-        this.BASE_ZOOM_LEVEL = 30;
+        this.BASE_ZOOM_LEVEL = 25;
 
         this.INIT_CAMERA_ROTATION = 2;
 
@@ -108,10 +108,10 @@ export default class HexMapSettingsClass {
         this.MIN_BIOME_SMOOTHING = {
             snowmountain: 6,
             rockmountain: 6,
-            rockhill: 8,
+            rockhill: 10,
             grasshill: 10,
-            sandhill: 8,
-            mesa: 8,
+            sandhill: 10,
+            mesa: 10,
             woodlands: 12,
             savanna: 10,
             tundra: 10,

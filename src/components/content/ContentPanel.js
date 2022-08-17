@@ -25,7 +25,7 @@ const ContentPanel = () => {
       if(gameClass && !gameClass.loaded) return;
 
       if (gameClass) gameClass.clear();
-      setGameClass(null);
+      setGameClass(undefined);
       let newGameClass = new GameMainClass(
          canvas.current,
          setWinCondition,
@@ -120,8 +120,8 @@ const ContentPanel = () => {
             <Row className='py-2'>
                <canvas
                   ref={canvas}
-                  width={window.innerWidth / 3}
-                  height={window.innerWidth / 3}
+                  width={window.innerWidth / 2}
+                  height={window.innerHeight / 2}
                   onMouseDown={mouseDown}
                   onMouseUp={mouseUp}
                   onMouseMove={mouseMove}

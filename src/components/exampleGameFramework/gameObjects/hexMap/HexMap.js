@@ -8,8 +8,10 @@ export default class HexMapClass {
 
     constructor(
         ctx,
+        canvas,
         camera,
-        zoomMultiplier
+        zoomMultiplier,
+        exampleImage
     ) {
         this.settings = new HexMapSettingsClass()
 
@@ -26,6 +28,7 @@ export default class HexMapClass {
 
         this.view1 = new HexMapViewClass(
             ctx,
+            canvas,
             camera,
             this.data1,
             this.settings.HEXMAP_LINE_WIDTH,
@@ -37,7 +40,8 @@ export default class HexMapClass {
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
             zoomMultiplier,
             this.settings.HEXMAP_ELEVATION_RANGES,
-            this.settings.DEBUG
+            this.settings.DEBUG,
+            exampleImage
         );
         
         this.view = this.view1
@@ -69,6 +73,7 @@ export default class HexMapClass {
     
             this.view2 = new HexMapViewClass(
                 ctx,
+                canvas,
                 camera,
                 this.data2,
                 this.settings.HEXMAP_LINE_WIDTH,
@@ -80,7 +85,8 @@ export default class HexMapClass {
                 this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
                 zoomMultiplier,
                 this.settings.HEXMAP_ELEVATION_RANGES,
-                this.settings.DEBUG
+                this.settings.DEBUG,
+                exampleImage
             );
 
             this.builder.hexMapData2 = this.data2
