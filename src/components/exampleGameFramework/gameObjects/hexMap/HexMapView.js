@@ -86,14 +86,14 @@ export default class HexMapViewClass {
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
       this.renderCanvasDims = {
-         width: mapHyp * 2 / this.hexMapData.squish + 100,
-         height: mapHyp * 2 + 100
+         width: mapHyp / this.hexMapData.squish + 500,
+         height: mapHyp + 500
       }
 
       console.log(this.renderCanvasDims)
 
       //Set the hexmap position to the center of the canvas
-      this.hexMapData.setDimensions(this.renderCanvasDims.width / 2, this.renderCanvasDims.height / 2); //causing zooming issue
+      this.hexMapData.setDimensions((this.renderCanvasDims.width - mapWidth) / 2 + 50, (this.renderCanvasDims.height - mapHeight) / 2 + 50); //causing zooming issue
 
       //reset hexmap size
       newSize = this.hexMapData.baseSize;
@@ -164,7 +164,7 @@ export default class HexMapViewClass {
       this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
       this.renderTileHeight = this.hexMapData.tileHeight * (1 - this.camera.zoom / this.hexMapData.tileHeight)
 
-      this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
+      if (this.debug) this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
 
       //set size based on zoom level
       let newSize = this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier;
@@ -191,6 +191,94 @@ export default class HexMapViewClass {
       for (let i = 0; i < sortedArr.length; i++) {
          this.rotatedMap.set(this.hexMapData.join(sortedArr[i].position.q, sortedArr[i].position.r), sortedArr[i].value);
       }
+
+
+
+      //Set render canvas size
+      let keys = [...this.rotatedMap.keys()].map(key => this.hexMapData.split(key))
+
+      let mapWidthMax = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
+      let mapHeightMax = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r)));
+      let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish)));
+
+      let mapWidth = Math.max(mapWidthMax, mapWidthMin)
+      let mapHeight = Math.max(mapHeightMax, mapHeightMin)
+
+      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+
+      // this.renderCanvasDims = {
+      //    width: mapHyp / this.hexMapData.squish + 100,
+      //    height: mapHyp + 100
+      // }
+
+      console.log(this.camera.rotation)
+
+      //Set the hexmap position to the center of the canvas
+
+      let renderHexMapPos = {
+         x: 0,
+         y: 0
+      }
+
+      switch (this.camera.rotation) {
+         case 0:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+            break;
+         case 1:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+            break;
+         case 2:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+            break;
+         case 3:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+            break;
+         case 4:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+            break;
+         case 5:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+            break;
+         case 6:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+            break;
+         case 7:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+            break;
+         case 8:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+            break;
+         case 9:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+            break;
+         case 10:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+            break;
+         case 11:
+            renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+            renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+            break;
+      }
+
+
+      this.hexMapData.setDimensions(renderHexMapPos.x, renderHexMapPos.y);
+      this.hexMapData.posMap.set(this.camera.rotation + ',' + this.camera.zoom, {
+         x: renderHexMapPos.x,
+         y: renderHexMapPos.y
+      })
+
 
 
       //Draw the table
@@ -390,13 +478,15 @@ export default class HexMapViewClass {
 
       if (shadowRotation > 11) shadowRotation -= 12;
 
-      this.renderctx.drawImage(
-         this.exampleImage,
-         0,
-         0,
-         100,
-         100
-      )
+      if (this.debug) {
+         this.renderctx.drawImage(
+            this.exampleImage,
+            0,
+            0,
+            100,
+            100
+         )
+      }
 
 
       for (let [key, value] of this.rotatedMap) {
@@ -438,7 +528,7 @@ export default class HexMapViewClass {
                   this.hexMapData.y + yOffset - height * this.renderTileHeight,
                   `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
                   `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
-                  ''+keyObj.q+','+keyObj.r
+                  '' + keyObj.q + ',' + keyObj.r
                );
             }
 
@@ -449,16 +539,16 @@ export default class HexMapViewClass {
 
             let tileBiome = value.verylowBiome;
 
-            if(height >= this.elevationRanges['low']){
+            if (height >= this.elevationRanges['low']) {
                tileBiome = value.lowBiome
             }
-            if(height >= this.elevationRanges['mid']){
+            if (height >= this.elevationRanges['mid']) {
                tileBiome = value.midBiome
             }
-            if(height >= this.elevationRanges['high']){
+            if (height >= this.elevationRanges['high']) {
                tileBiome = value.highBiome
             }
-            if(height >= this.elevationRanges['veryhigh']){
+            if (height >= this.elevationRanges['veryhigh']) {
                tileBiome = value.veryhighBiome
             }
 
@@ -773,10 +863,10 @@ export default class HexMapViewClass {
       if (lineColor) this.renderctx.stroke();
       if (lineColor) this.renderctx.stroke();
 
-      if(this.debug){
+      if (this.debug) {
          this.renderctx.font = '10px serif';
          this.renderctx.fillStyle = 'black';
-         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-18)
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
       }
    }
 
@@ -795,10 +885,10 @@ export default class HexMapViewClass {
       this.renderctx.fill();
       if (lineColor) this.renderctx.stroke();
 
-      if(this.debug){
+      if (this.debug) {
          this.renderctx.font = '10px serif';
          this.renderctx.fillStyle = 'black';
-         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size+12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish)-18)
+         this.renderctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
       }
    }
 

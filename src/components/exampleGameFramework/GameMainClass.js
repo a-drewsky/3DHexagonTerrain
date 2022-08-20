@@ -106,8 +106,6 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
 
-      console.log(this.gameManager.objects.objectMap.get('hexMap').object)
-
       this.gameManager.objects.objectMap.get('hexMap').object.view.exampleImage = this.images.exampleImage
       this.gameManager.objects.objectMap.get('hexMap').object.view.initialize()
 
@@ -160,6 +158,11 @@ export default class GameMainClass {
       //draw UI
       for (let [key, value] of this.gameManager.ui.elementMap) {
          if (value.state != 'disabled') value.element.view.draw(value.state);
+      }
+
+      if(this.gameManager.objects.objectMap.get('hexMap').object.settings.DEBUG){
+         this.ctx.fillStyle = 'black'
+         this.ctx.fillRect(this.canvas.width/2-1, this.canvas.height/2-1, 2, 2)
       }
 
    }

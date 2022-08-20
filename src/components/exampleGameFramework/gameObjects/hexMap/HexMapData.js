@@ -5,6 +5,9 @@ export default class HexMapDataClass {
 
       this.x = x;
       this.y = y;
+
+      this.posMap = new Map();
+
       this.size = size;
       this.baseSize = size;
       this.squish = squish;

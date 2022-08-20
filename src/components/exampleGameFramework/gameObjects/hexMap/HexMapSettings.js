@@ -2,7 +2,7 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.TABLE_HEIGHT = 40;
 
@@ -18,7 +18,7 @@ export default class HexMapSettingsClass {
 
         this.BASE_ZOOM_LEVEL = 25;
 
-        this.INIT_CAMERA_ROTATION = 2;
+        this.INIT_CAMERA_ROTATION = 0;
 
         this.INIT_SHADOW_ROTATION = 11;
 
