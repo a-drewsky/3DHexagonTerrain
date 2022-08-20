@@ -273,8 +273,8 @@ export default class HexMapBuilderClass {
       } else {
          this.generateMap(q, r)
       }
-      if (this.hexMapData2 !== undefined) this.hexMapView2.initialize()
-      this.hexMapView.initialize()
+      // if (this.hexMapData2 !== undefined) this.hexMapView2.initialize()
+      // this.hexMapView.initialize()
    }
 
 }

@@ -46,7 +46,7 @@ export default class GameMainClass {
       }
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings, this.images);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.globalSettings);
@@ -105,6 +105,13 @@ export default class GameMainClass {
 
    //SETUP FUNCTIONS
    startGame = () => {
+
+      console.log(this.gameManager.objects.objectMap.get('hexMap').object)
+
+      this.gameManager.objects.objectMap.get('hexMap').object.view.exampleImage = this.images.exampleImage
+      this.gameManager.objects.objectMap.get('hexMap').object.view.initialize()
+
+      console.log("start")
       this.gameManager.state.setShowHexMapState();
       this.drawInterval = setInterval(this.draw, 1000 / 60);
       this.loaded = true;

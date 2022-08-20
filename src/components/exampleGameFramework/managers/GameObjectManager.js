@@ -5,11 +5,10 @@ import CameraClass from "../gameObjects/camera/Camera";
 
 export default class GameObjectManagerClass {
 
-    constructor(ctx, canvas, settings, images) {
+    constructor(ctx, canvas, settings) {
         this.ctx = ctx;
         this.canvas = canvas;
         this.settings = settings;
-        this.images = images;
 
         this.objectMap = new Map();
 
@@ -49,8 +48,7 @@ export default class GameObjectManagerClass {
                 this.ctx, 
                 this.canvas,
                 this.objectMap.get("camera").object.data,
-                this.settings.ZOOM_MULTIPLIER,
-                this.images.exampleImage
+                this.settings.ZOOM_MULTIPLIER
                 ),
             state: this.objectStates.active
         });
