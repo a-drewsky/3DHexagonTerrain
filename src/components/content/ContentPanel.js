@@ -3,6 +3,8 @@ import { Row, Form, Button } from 'react-bootstrap'
 
 import GameMainClass from '../exampleGameFramework/GameMainClass';
 
+import ImagesClass from '../exampleGameFramework/GameImages';
+
 const ContentPanel = () => {
 
    //SETUP
@@ -10,7 +12,11 @@ const ContentPanel = () => {
 
    const [gameClass, setGameClass] = useState(null);
 
+   const [gameImages, setGameImages] = useState(new ImagesClass());
+
    const [winCondition, setWinCondition] = useState(null);
+
+   const [imagesLoaded, setImagesLoaded] = useState(false);
    //END SETUP
 
 
@@ -28,6 +34,7 @@ const ContentPanel = () => {
       setGameClass(undefined);
       let newGameClass = new GameMainClass(
          canvas.current,
+         gameImages,
          setWinCondition,
          {
             mapSize: sizeSetting
@@ -41,6 +48,15 @@ const ContentPanel = () => {
    }
    //END CREATE NEW GAME METHOD
 
+   const log = () => {
+      console.log("loaded")
+      setImagesLoaded(true)
+   }
+
+
+   useEffect(() => {
+      gameImages.loadImages(log);
+   }, [gameImages])
 
    useEffect(() => {
       document.addEventListener('keypress', e => keyPress(e))
@@ -114,9 +130,19 @@ const ContentPanel = () => {
          }
          {/*END WIN CONDITION TEXT*/}
 
+         {/*LOADING TEXT*/}
+         {
+            (imagesLoaded == false)
+            &&
+            <>
+               <h1>Loading Images...</h1>
+            </>
+         }
+         {/*END LOADING TEXT*/}
+
 
          {/*CANVAS*/}
-         <div className={(winCondition != null || gameClass == null) && 'd-none'}>
+         <div className={(winCondition != null || gameClass == null || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
                <canvas
                   ref={canvas}
