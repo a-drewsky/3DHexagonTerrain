@@ -2,7 +2,7 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = true;
+        this.DEBUG = false;
 
         this.TABLE_HEIGHT = 40;
 
@@ -143,9 +143,11 @@ export default class HexMapSettingsClass {
         this.SEED_MULTIPLIER = 10;
 
         this.NOISE_FLUCTUATION = {
-            small: 6,
-            medium: 7,
-            large: 8
+            small: 5,
+            medium: 6,
+            large: 7,
+            extralarge: 8,
+            massive: 9
         }
 
         this.TEMP_RANGES = {

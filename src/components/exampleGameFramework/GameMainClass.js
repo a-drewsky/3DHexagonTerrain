@@ -64,12 +64,12 @@ export default class GameMainClass {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       for (let [key, value] of this.gameManager.objects.objectMap) {
-         if(value.state != 'disabled' && value.object.view.renderMap) value.object.view.renderMap.clear();
-         if(value.state != 'disabled' && value.object.view.rotatedMap) value.object.view.rotatedMap.clear();
-         if(value.state != 'disabled' && value.object.view1 && value.object.view1.renderMap) value.object.view1.renderMap.clear();
-         if(value.state != 'disabled' && value.object.view2 && value.object.view2.renderMap) value.object.view2.renderMap.clear();
-         if(value.state != 'disabled' && value.object.view1 && value.object.view1.rotatedMap) value.object.view1.rotatedMap.clear();
-         if(value.state != 'disabled' && value.object.view2 && value.object.view2.rotatedMap) value.object.view2.rotatedMap.clear();
+         if (value.state != 'disabled' && value.object.view.renderMap) value.object.view.renderMap.clear();
+         if (value.state != 'disabled' && value.object.view.rotatedMap) value.object.view.rotatedMap.clear();
+         if (value.state != 'disabled' && value.object.view1 && value.object.view1.renderMap) value.object.view1.renderMap.clear();
+         if (value.state != 'disabled' && value.object.view2 && value.object.view2.renderMap) value.object.view2.renderMap.clear();
+         if (value.state != 'disabled' && value.object.view1 && value.object.view1.rotatedMap) value.object.view1.rotatedMap.clear();
+         if (value.state != 'disabled' && value.object.view2 && value.object.view2.rotatedMap) value.object.view2.rotatedMap.clear();
       }
    }
 
@@ -106,8 +106,13 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
 
-      this.gameManager.objects.objectMap.get('hexMap').object.view.exampleImage = this.images.exampleImage
-      this.gameManager.objects.objectMap.get('hexMap').object.view.initialize()
+      this.gameManager.objects.objectMap.get('hexMap').object.view1.exampleImage = this.images.exampleImage
+      this.gameManager.objects.objectMap.get('hexMap').object.view1.initialize()
+      
+      if (this.gameManager.objects.objectMap.get('hexMap').object.data2 !== undefined) {
+         this.gameManager.objects.objectMap.get('hexMap').object.view2.exampleImage = this.images.exampleImage
+         this.gameManager.objects.objectMap.get('hexMap').object.view2.initialize()
+      }
 
       console.log("start")
       this.gameManager.state.setShowHexMapState();
@@ -160,9 +165,9 @@ export default class GameMainClass {
          if (value.state != 'disabled') value.element.view.draw(value.state);
       }
 
-      if(this.gameManager.objects.objectMap.get('hexMap').object.settings.DEBUG){
+      if (this.gameManager.objects.objectMap.get('hexMap').object.settings.DEBUG) {
          this.ctx.fillStyle = 'black'
-         this.ctx.fillRect(this.canvas.width/2-1, this.canvas.height/2-1, 2, 2)
+         this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
       }
 
    }
