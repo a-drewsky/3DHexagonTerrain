@@ -1,11 +1,24 @@
-
-import exampleImage from './images/example_hex_500.png'
+import woodlands_hex from './images/woodlands_hex.png'
+import water_hex from './images/water_hex.png'
+import desert_hex from './images/desert_hex.png'
 
 export default class ImagesClass {
 
     constructor() {
         this.images = {
-            exampleImage: new Image()
+            snowmountainHex: new Image(),
+            rockmountainHex: new Image(),
+            rockhillHex: new Image(),
+            grasshillHex: new Image(),
+            sandhillHex: new Image(),
+            mesaHex: new Image(),
+            woodlandsHex: new Image(),
+            savannaHex: new Image(),
+            tundraHex: new Image(),
+            desertHex: new Image(),
+            waterHex:new Image(),
+            frozenWaterHex: new Image(),
+            playaHex: new Image()
         }
     }
 
@@ -24,7 +37,21 @@ export default class ImagesClass {
         }
 
         //Assign images
-        this.exampleImage.src = exampleImage;
+
+        this.snowmountainHex.src = woodlands_hex;
+        this.rockmountainHex.src = woodlands_hex;
+        this.rockhillHex.src = woodlands_hex;
+        this.grasshillHex.src = woodlands_hex;
+        this.sandhillHex.src = woodlands_hex;
+        this.mesaHex.src = woodlands_hex;
+        this.woodlandsHex.src = woodlands_hex;
+        this.savannaHex.src = woodlands_hex;
+        this.tundraHex.src = woodlands_hex;
+        this.desertHex.src = desert_hex;
+        this.waterHex.src = water_hex;
+        this.frozenWaterHex.src = woodlands_hex;
+        this.playaHex.src = woodlands_hex;
+
 
     }
 

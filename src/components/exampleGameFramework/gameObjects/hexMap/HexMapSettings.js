@@ -12,7 +12,7 @@ export default class HexMapSettingsClass {
 
         this.SHADOW_SIZE = 1;
 
-        this.TILE_HEIGHT = 6;
+        this.TILE_HEIGHT = 8;
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 

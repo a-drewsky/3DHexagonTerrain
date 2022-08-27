@@ -43,7 +43,7 @@ export default class GameMainClass {
       }
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings, this.images);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.globalSettings);
@@ -103,13 +103,7 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
 
-      this.gameManager.objects.objectMap.get('hexMap').object.view1.exampleImage = this.images.exampleImage
-      this.gameManager.objects.objectMap.get('hexMap').object.view1.initialize()
-      
-      if (this.gameManager.objects.objectMap.get('hexMap').object.data2 !== undefined) {
-         this.gameManager.objects.objectMap.get('hexMap').object.view2.exampleImage = this.images.exampleImage
-         this.gameManager.objects.objectMap.get('hexMap').object.view2.initialize()
-      }
+
 
       console.log("start")
       this.gameManager.state.setShowHexMapState();
@@ -135,6 +129,12 @@ export default class GameMainClass {
 
       //Create game objects
       this.gameManager.objects.createObjects();
+
+      this.gameManager.objects.objectMap.get('hexMap').object.view1.initialize()
+      
+      if (this.gameManager.objects.objectMap.get('hexMap').object.data2 !== undefined) {
+         this.gameManager.objects.objectMap.get('hexMap').object.view2.initialize()
+      }
 
       //Create ui elements
       this.gameManager.ui.createElements();
