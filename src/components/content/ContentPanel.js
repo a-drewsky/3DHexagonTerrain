@@ -28,7 +28,7 @@ const ContentPanel = () => {
    //CREATE NEW GAME METHOD
    const startNewGame = (e) => {
       e.preventDefault();
-      if(gameClass && !gameClass.loaded) return;
+      if (gameClass && !gameClass.loaded) return;
 
       if (gameClass) gameClass.clear();
       setGameClass(undefined);
@@ -59,8 +59,9 @@ const ContentPanel = () => {
    }, [gameImages])
 
    useEffect(() => {
-      document.addEventListener('keypress', e => keyPress(e))
-  }, [gameClass])
+      document.addEventListener('keydown', e => keyDown(e))
+      document.addEventListener('keyup', e => keyUp(e))
+   }, [gameClass])
 
 
    //INPUTS
@@ -68,7 +69,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
 
    }
 
@@ -76,7 +77,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
 
    }
 
@@ -84,7 +85,7 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
 
    }
 
@@ -93,7 +94,7 @@ const ContentPanel = () => {
 
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
 
    }
 
@@ -101,19 +102,25 @@ const ContentPanel = () => {
       nativeEvent.preventDefault();
       const { offsetX, offsetY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
 
    }
 
    const mouseWheel = ({ nativeEvent }) => {
       const { deltaY } = nativeEvent;
 
-      if(gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY);
+      if (gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY);
    }
 
-   const keyPress = (nativeEvent) => {
+   const keyDown = (nativeEvent) => {
       nativeEvent.preventDefault();
-      if(gameClass && gameClass.loaded) gameClass.keyPress(nativeEvent.key)
+      if(nativeEvent.repeat) return;
+      if (gameClass && gameClass.loaded) gameClass.keyDown(nativeEvent.key)
+   }
+
+   const keyUp = (nativeEvent) => {
+      nativeEvent.preventDefault();
+      if (gameClass && gameClass.loaded) gameClass.keyUp(nativeEvent.key)
    }
    //END INPUTS
 

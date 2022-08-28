@@ -94,8 +94,12 @@ export default class GameMainClass {
       this.inputController.mouseWheel(deltaY);
    }
 
-   keyPress = (key) => {
-      this.inputController.keyPress(key);
+   keyDown = (key) => {
+      this.inputController.keyDown(key);
+   }
+
+   keyUp = (key) => {
+      this.inputController.keyUp(key);
    }
    //END TOP LEVEL CONTROLLERS
 
@@ -131,7 +135,7 @@ export default class GameMainClass {
       this.gameManager.objects.createObjects();
 
       this.gameManager.objects.objectMap.get('hexMap').object.view1.initialize()
-      
+
       if (this.gameManager.objects.objectMap.get('hexMap').object.data2 !== undefined) {
          this.gameManager.objects.objectMap.get('hexMap').object.view2.initialize()
       }

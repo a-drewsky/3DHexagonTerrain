@@ -87,14 +87,13 @@ export default class ShowHexMapStateControllerClass {
         //this.gameManager.objects.objectMap.get('hexMap').object.view.render();
     }
 
-    keyPress = (key) => {
+    keyDown = (key) => {
 
-        if (key == 'r') {
+        if (key == 'e') {
 
             let centerHexPos = this.getCenterHexPos();
 
-
-            this.gameManager.objects.objectMap.get('camera').object.controller.keyPress(key);
+            this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
 
             //Set camera position
             let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
@@ -108,6 +107,7 @@ export default class ShowHexMapStateControllerClass {
                     vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
                     vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
                 );
+
             } else {
     
                 centerHexPos.s = -centerHexPos.q - centerHexPos.r
@@ -129,9 +129,57 @@ export default class ShowHexMapStateControllerClass {
 
         }
 
-        if (key == 's'){
+        if (key == 'q') {
+
+            let centerHexPos = this.getCenterHexPos();
+
+            this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
+
+            //Set camera position
+            let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
+        
+            if (this.gameManager.objects.objectMap.get('camera').object.data.rotation % 2 == 0) {
+    
+                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ;
+                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.VecR;
+    
+                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                );
+
+            } else {
+    
+                centerHexPos.s = -centerHexPos.r-centerHexPos.q 
+                let newQ = centerHexPos.q;
+                let newS = centerHexPos.s;
+    
+                centerHexPos.r = -newQ;
+                centerHexPos.q = -newS;
+    
+                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ;
+                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR;
+    
+                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                );
+    
+            }
+
+        }
+
+        if (key == 'w' || key == 'a' || key == 's' || key == 'd'){
+            this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
+        }
+
+        if (key == 'v'){
             this.gameManager.objects.objectMap.get('hexMap').object.switchView()
         }
+    }
+
+    keyUp = (key) => {
+
     }
 
     getCenterHexPos = () => {

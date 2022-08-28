@@ -1,6 +1,8 @@
 import woodlands_hex from './images/woodlands_hex.png'
 import water_hex from './images/water_hex.png'
 import desert_hex from './images/desert_hex.png'
+import tundra_hex from './images/tundra_hex.png'
+import frozen_water_hex from './images/frozen_water_hex.png'
 
 export default class ImagesClass {
 
@@ -46,10 +48,10 @@ export default class ImagesClass {
         this.mesaHex.src = woodlands_hex;
         this.woodlandsHex.src = woodlands_hex;
         this.savannaHex.src = woodlands_hex;
-        this.tundraHex.src = woodlands_hex;
+        this.tundraHex.src = tundra_hex;
         this.desertHex.src = desert_hex;
         this.waterHex.src = water_hex;
-        this.frozenWaterHex.src = woodlands_hex;
+        this.frozenWaterHex.src = frozen_water_hex;
         this.playaHex.src = woodlands_hex;
 
 

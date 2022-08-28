@@ -85,10 +85,20 @@ export default class InputControllerClass {
       }
    }
 
-   keyPress = (key) => {
+   keyDown = (key) => {
       switch (this.gameManager.state.gameStates.current.stateName) {
          case 'showHexMapState':
-            this.showHexMapStateController.keyPress(key.toLowerCase());
+            this.showHexMapStateController.keyDown(key.toLowerCase());
+            break;
+         default:
+            break;
+      }
+   }
+
+   keyUp = (key) => {
+      switch (this.gameManager.state.gameStates.current.stateName) {
+         case 'showHexMapState':
+            this.showHexMapStateController.keyUp(key.toLowerCase());
             break;
          default:
             break;
