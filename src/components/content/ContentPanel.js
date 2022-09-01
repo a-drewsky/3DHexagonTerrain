@@ -3,7 +3,7 @@ import { Row, Form, Button } from 'react-bootstrap'
 
 import GameMainClass from '../exampleGameFramework/GameMainClass';
 
-import ImagesClass from '../exampleGameFramework/GameImages';
+import ImagesClass from '../exampleGameFramework/utilities/gameImages';
 
 const ContentPanel = () => {
 

@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -17,6 +17,7 @@ export default class HexMapBuilderClass {
       this.waterTempRanges = waterTempRanges
       this.biomeGroups = biomeGroups
       this.minBiomeSmoothing = minBiomeSmoothing
+      this.sandHillElevationDivisor = sandHillElevationDivisor
 
    }
 
@@ -91,11 +92,15 @@ export default class HexMapBuilderClass {
 
             tileBiome = biome
             tileLowBiome = biome
+            tileVerylowBiome = biome
          }
          if (tileHeight >= this.elevationRanges['mid']) {
             let biome = 'grasshill'
-            if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
-            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+            if (tileTemp < this.tempRanges['tundra']) biome = 'snowhill'
+            if (tileTemp > this.tempRanges['savanna']){
+               biome = 'sandhill'
+               tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid'])/this.sandHillElevationDivisor) //set sand hill elevation
+            }
 
             tileBiome = biome
             tileMidBiome = biome
@@ -103,13 +108,13 @@ export default class HexMapBuilderClass {
          if (tileHeight >= this.elevationRanges['high']) {
             let biome = 'rockmountain'
             if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
-            if (tileTemp > this.tempRanges['savanna']) biome = 'rockhill'
+            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
             tileBiome = biome
             tileHighBiome = biome
          }
          if (tileHeight >= this.elevationRanges['veryhigh']) {
             let biome = 'snowmountain'
-            if (tileTemp > this.tempRanges['savanna']) biome = 'mesa'
+            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
             tileBiome = biome
             tileVeryhighBiome = biome
          }

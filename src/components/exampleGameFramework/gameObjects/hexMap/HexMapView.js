@@ -1,6 +1,6 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug, images) {
+   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug, geometricTilesDebug, images) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -22,9 +22,11 @@ export default class HexMapViewClass {
       this.sideColorMultiplier = sideColorMultiplier;
       this.zoomMultiplier = zoomMultiplier;
       this.renderTileHeight = null;
-      this.elevationRanges = elevationRanges
+      this.elevationRanges = elevationRanges;
 
-      this.debug = debug
+      //Debug Settings
+      this.debug = debug;
+      this.geometricTilesDebug = geometricTilesDebug;
 
       this.images = images;
 
@@ -59,6 +61,11 @@ export default class HexMapViewClass {
 
       //this.ctx.drawImage(render, -this.camera.position.x, -this.camera.position.y)
       this.ctx.drawImage(render, this.camera.position.x, this.camera.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+   
+      if (this.debug) {
+         this.ctx.fillStyle = 'black'
+         this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
+      }
    }
 
    initialize = () => {
@@ -499,13 +506,15 @@ export default class HexMapViewClass {
          if (value.height == height) {
 
             if (this.camera.rotation % 2 == 1) {
-               // this.drawFlatHexagon(
-               //    this.hexMapData.x + xOffset,
-               //    this.hexMapData.y + yOffset - height * this.renderTileHeight,
-               //    `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-               //    `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
-               //    ''+keyObj.q+','+keyObj.r
-               // );
+               if (this.geometricTilesDebug) {
+                  this.drawFlatHexagon(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
+                     `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
+                     '' + keyObj.q + ',' + keyObj.r
+                  );
+               }
             } else {
                this.drawPointyHexagon(
                   this.hexMapData.x + xOffset,
@@ -538,24 +547,39 @@ export default class HexMapViewClass {
 
             if (this.camera.rotation % 2 == 1) {
 
-               this.renderctx.drawImage(
-                  this.images[tileBiome + 'Hex'],
-                  this.hexMapData.x + xOffset - this.hexMapData.size,
-                  this.hexMapData.y + yOffset - (height * this.renderTileHeight) - Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish),
-                  this.hexMapData.size * 2,
-                  this.hexMapData.size * 2
-               )
+               if (this.geometricTilesDebug) {
+                  this.drawFlatHexagonWall(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                     `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                     `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                     `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                     `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
+                     `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
+                  );
+               } else {
+                  this.renderctx.drawImage(
+                     this.images[tileBiome + 'Hex'],
+                     this.hexMapData.x + xOffset - this.hexMapData.size,
+                     this.hexMapData.y + yOffset - (height * this.renderTileHeight) - Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish),
+                     this.hexMapData.size * 2,
+                     this.hexMapData.size * 2
+                  )
 
-               this.drawFlatHexagonWall(
-                  this.hexMapData.x + xOffset,
-                  this.hexMapData.y + yOffset - height * this.renderTileHeight,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
-                  `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
-               );
+                  this.drawFlatHexagonWall(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
+                  );
+               }
+
+
 
             } else {
                this.drawPointyHexagonWall(

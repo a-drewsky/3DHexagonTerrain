@@ -41,6 +41,7 @@ export default class HexMapClass {
             zoomMultiplier,
             this.settings.HEXMAP_ELEVATION_RANGES,
             this.settings.DEBUG,
+            this.settings.GEOMTRIC_TILES_DEBUG,
             images
         );
         
@@ -58,7 +59,8 @@ export default class HexMapClass {
             this.settings.TEMP_RANGES,
             this.settings.WATER_TEMP_RANGES,
             this.settings.BIOME_GROUPS,
-            this.settings.MIN_BIOME_SMOOTHING
+            this.settings.MIN_BIOME_SMOOTHING,
+            this.settings.SAND_HILL_ELVATION_DIVISOR
         );
 
         if(this.settings.DEBUG){
@@ -86,6 +88,7 @@ export default class HexMapClass {
                 zoomMultiplier,
                 this.settings.HEXMAP_ELEVATION_RANGES,
                 this.settings.DEBUG,
+                this.settings.GEOMTRIC_TILES_DEBUG,
                 images
             );
 
@@ -96,6 +99,14 @@ export default class HexMapClass {
 
 
         this.controller = new HexMapControllerClass(this.data);
+    }
+
+    update = (switchView) => {
+
+    }
+
+    draw = () => {
+        this.view.draw();
     }
 
     switchView = () => {

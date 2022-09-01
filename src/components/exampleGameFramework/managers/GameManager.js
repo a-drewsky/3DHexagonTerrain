@@ -4,10 +4,10 @@ import GameObjectManagerClass from './GameObjectManager';
 
 export default class GameManagerClass {
 
-    constructor(ctx, canvas, drawMethod, intervalList, settings, images) {
+    constructor(ctx, canvas, settings, images) {
         this.objects = new GameObjectManagerClass(ctx, canvas, settings, images);
         this.ui = new UIElementManagerClass(ctx, canvas);
-        this.state = new StateManagerClass(drawMethod, intervalList, this.objects, this.ui);
+        this.state = new StateManagerClass(this.objects, this.ui);
     }
 
 }

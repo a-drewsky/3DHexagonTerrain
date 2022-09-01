@@ -179,7 +179,9 @@ export default class ShowHexMapStateControllerClass {
     }
 
     keyUp = (key) => {
-
+        if (key == 'w' || key == 'a' || key == 's' || key == 'd'){
+            this.gameManager.objects.objectMap.get('camera').object.controller.keyUp(key);
+        }
     }
 
     getCenterHexPos = () => {

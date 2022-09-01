@@ -10,4 +10,8 @@ export default class PixelButtonElement {
         this.view = new PixelButtonViewClass(ctx, this.data);
     }
 
+    update = () => {
+        
+    }
+
 }

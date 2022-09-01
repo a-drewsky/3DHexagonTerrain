@@ -4,6 +4,8 @@ export default class HexMapSettingsClass {
 
         this.DEBUG = false;
 
+        this.GEOMTRIC_TILES_DEBUG = false;
+
         this.TABLE_HEIGHT = 40;
 
         this.HEXMAP_LINE_WIDTH = 3; //to be removed
@@ -43,9 +45,9 @@ export default class HexMapSettingsClass {
                 fill: {h: 240, s: 10, l: 70},
                 stroke: {h: 240, s: 10, l: 60}
             },
-            rockhill: {
-                fill: {h: 30, s: 60, l: 50},
-                stroke: {h: 30, s: 60, l: 40}
+            snowhill: {
+                fill: {h: 210, s: 20, l: 90},
+                stroke: {h: 210, s: 20, l: 80}
             },
             grasshill: {
                 fill: {h: 120, s: 100, l: 28},
@@ -54,10 +56,6 @@ export default class HexMapSettingsClass {
             sandhill: {
                 fill: {h: 45, s: 60, l: 60},
                 stroke: {h: 45, s: 60, l: 45}
-            },
-            mesa: {
-                fill: {h: 20, s: 60, l: 50},
-                stroke: {h: 20, s: 60, l: 40}
             },
             woodlands: {
                 fill: {h: 120, s: 90, l: 35},
@@ -90,12 +88,11 @@ export default class HexMapSettingsClass {
         }
 
         this.BIOME_GROUPS = {
-            snowmountain: ['tundra', 'rockmountain'],
+            snowmountain: ['tundra', 'rockmountain', 'snowhill'],
             rockmountain: ['grasshill', 'snowmountain'],
-            rockhill: ['mesa', 'sandhill', 'desert'],
+            snowhill: ['tundra', 'rockmountain', 'snowmountain'],
             grasshill: ['rockmountain', 'snowmountain'],
             sandhill: ['desert', 'mesa', 'rockhill'],
-            mesa: ['rockhill', 'sandhill', 'desert'],
             woodlands: ['grasshill'],
             savanna: ['grasshill'],
             tundra: ['snowmountain', 'frozenWater'],
@@ -108,10 +105,9 @@ export default class HexMapSettingsClass {
         this.MIN_BIOME_SMOOTHING = {
             snowmountain: 6,
             rockmountain: 6,
-            rockhill: 10,
+            snowhill: 10,
             grasshill: 10,
             sandhill: 10,
-            mesa: 10,
             woodlands: 12,
             savanna: 10,
             tundra: 10,
@@ -137,6 +133,8 @@ export default class HexMapSettingsClass {
         }
 
         this.MAX_ELEVATION = 12;
+
+        this.SAND_HILL_ELVATION_DIVISOR = 1.75;
 
         this.ELEVATION_MULTIPLIER = 48;
         

@@ -42,23 +42,29 @@ export default class GameObjectManagerClass {
         //Initialize game objects
         this.objectMap.set("camera", {
             object: new CameraClass(this.canvas, this.settings.MAX_ZOOM),
-            state: this.objectStates.disabled
+            state: this.objectStates.active
         });
         this.objectMap.set("hexMap", {
             object: new HexMapClass(
-                this.ctx, 
+                this.ctx,
                 this.canvas,
                 this.objectMap.get("camera").object.data,
                 this.settings.ZOOM_MULTIPLIER,
                 this.images
-                ),
+            ),
             state: this.objectStates.active
         });
 
 
         //build game objects
         this.objectMap.get('hexMap').object.builder.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size, true);
-        
+
+        this.objectMap.get('hexMap').object.view1.initialize()
+
+        if (this.objectMap.get('hexMap').object.data2 !== undefined) {
+            this.objectMap.get('hexMap').object.view2.initialize()
+        }
+
     }
 
 }

@@ -7,6 +7,18 @@ export default class CameraDataClass {
             y: 0
         }
 
+        this.movement = {
+            up: false,
+            left: false,
+            down: false,
+            right: false
+        }
+
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+
         this.rotation = initRotation;
         this.zoom = 0;
 
@@ -14,6 +26,7 @@ export default class CameraDataClass {
         this.mouseAnchorPoint = null;
 
         this.maxZoom = maxZoom;
+
 
     }
 

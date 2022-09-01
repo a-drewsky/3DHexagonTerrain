@@ -9,7 +9,7 @@ import InputControllerClass from './controllers/InputController';
 import LoadingViewClass from './uiElements/LoadingElement/LoadingView';
 
 //Import Settings Class
-import SettingsClass from './GlobalSettings';
+import SettingsClass from './utilities/gameSettings';
 
 export default class GameMainClass {
 
@@ -36,28 +36,21 @@ export default class GameMainClass {
       //Images
       this.images = images;
 
-      //intervalsList
-      this.intervalsList = {
-         state1Interval: this.state1Interval,
-         state2Interval: this.state2Interval
-      }
-
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.draw, this.intervalsList, this.globalSettings, this.images);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.globalSettings);
 
       //Draw interval that is activated when the game finishes loading
-      this.drawInterval = null;
+      this.updateInterval = null;
 
    }
 
 
    //TOP LEVEL CONTROLLERS
    clear = () => {
-      clearInterval(this.gameManager.state.interval);
-      clearInterval(this.drawInterval);
+      clearInterval(this.updateInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       for (let [key, value] of this.gameManager.objects.objectMap) {
@@ -106,12 +99,12 @@ export default class GameMainClass {
 
    //SETUP FUNCTIONS
    startGame = () => {
-
-
-
       console.log("start")
       this.gameManager.state.setShowHexMapState();
-      this.drawInterval = setInterval(this.draw, 1000 / 60);
+      this.updateInterval = setInterval(() => {
+         this.update()
+         this.draw()
+      }, 1000 / 60);
       this.loaded = true;
    }
 
@@ -134,12 +127,6 @@ export default class GameMainClass {
       //Create game objects
       this.gameManager.objects.createObjects();
 
-      this.gameManager.objects.objectMap.get('hexMap').object.view1.initialize()
-
-      if (this.gameManager.objects.objectMap.get('hexMap').object.data2 !== undefined) {
-         this.gameManager.objects.objectMap.get('hexMap').object.view2.initialize()
-      }
-
       //Create ui elements
       this.gameManager.ui.createElements();
 
@@ -147,6 +134,21 @@ export default class GameMainClass {
 
    }
    //END SETUP FUNCTIONS
+
+
+   //UPDATE FUNCTION
+   update = () => {
+      //update game objects
+      for (let [key, value] of this.gameManager.objects.objectMap) {
+         if (value.state != 'disabled') value.object.update(value.state);
+      }
+
+      //update UI
+      for (let [key, value] of this.gameManager.ui.elementMap) {
+         if (value.state != 'disabled') value.element.update(value.state);
+      }
+   }
+   //UPDATE FUNCTION
 
 
    //DRAW FUNCTION
@@ -157,35 +159,15 @@ export default class GameMainClass {
 
       //draw game objects
       for (let [key, value] of this.gameManager.objects.objectMap) {
-         if (value.state != 'disabled') value.object.view.draw(value.state);
+         if (value.state != 'disabled') value.object.draw(value.state);
       }
 
       //draw UI
       for (let [key, value] of this.gameManager.ui.elementMap) {
-         if (value.state != 'disabled') value.element.view.draw(value.state);
-      }
-
-      if (this.gameManager.objects.objectMap.get('hexMap').object.settings.DEBUG) {
-         this.ctx.fillStyle = 'black'
-         this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
+         if (value.state != 'disabled') value.element.draw(value.state);
       }
 
    }
    //END DRAW FUNCTION
-
-
-
-
-   //INTERVAL FUNCTIONS
-   state1Interval = () => {
-
-
-   }
-
-   state2Interval = () => {
-
-
-   }
-   //END INTERVAL FUNCTIONS
 
 }

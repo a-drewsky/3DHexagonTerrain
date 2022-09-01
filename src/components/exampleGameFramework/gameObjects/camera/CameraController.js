@@ -37,22 +37,69 @@ export default class CameraControllerClass {
 
     keyDown = (key) => {
         this.cameraData.clearAnchorPoint();
-        if (key == 'e') {
-            this.cameraData.rotation++;
+
+        switch(key){
+            case 'e':
+                this.cameraData.rotation++;
+                break;
+            case 'q':
+                this.cameraData.rotation--;
+                break;
+            case 'w':
+                this.cameraData.movement.up = true;
+                break;
+            case 'a':
+                this.cameraData.movement.left = true;
+                break;
+            case 's':
+                this.cameraData.movement.down = true;
+                break;
+            case 'd':
+                this.cameraData.movement.right = true;
+                break;
         }
-        if (key == 'q') {
-            this.cameraData.rotation--;
-        }
+
         if (this.cameraData.rotation == 12) this.cameraData.rotation = 0;
         if (this.cameraData.rotation == -1) this.cameraData.rotation = 11;
 
-        if (key == 'w') {
-            //set a state to true and use update interval to move the camera
-        }
+        this.setVelocity();
     }
 
     keyUp = (key) => {
+        this.cameraData.clearAnchorPoint();
+
+        switch(key){
+            case 'w':
+                this.cameraData.movement.up = false;
+                break;
+            case 'a':
+                this.cameraData.movement.left = false;
+                break;
+            case 's':
+                this.cameraData.movement.down = false;
+                break;
+            case 'd':
+                this.cameraData.movement.right = false;
+                break;
+        }
         
+        this.setVelocity();
+    }
+
+    setVelocity = () => {
+        let movement = {
+            up : this.cameraData.movement.up == true ? 1 : 0,
+            left : this.cameraData.movement.left == true ? 1 : 0,
+            down : this.cameraData.movement.down == true ? 1 : 0,
+            right : this.cameraData.movement.right == true ? 1 : 0,
+        }
+        this.cameraData.velocity.x = movement.right - movement.left;
+        this.cameraData.velocity.y = movement.down - movement.up;
+        if(Math.abs(this.cameraData.velocity.x) == 1 && Math.abs(this.cameraData.velocity.y) == 1){
+            this.cameraData.velocity.x *= Math.sqrt(2)/2
+            this.cameraData.velocity.y *= Math.sqrt(2)/2
+        }
+        console.log(this.cameraData.velocity)
     }
 
     //change to setPosition
