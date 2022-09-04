@@ -1,31 +1,40 @@
-import woodlands_hex from '../images/woodlands_hex.png'
-import water_hex from '../images/water_hex.png'
-import desert_hex from '../images/desert_hex.png'
-import tundra_hex from '../images/tundra_hex.png'
-import frozen_water_hex from '../images/frozen_water_hex.png'
-import savanna_hex from '../images/savanna_hex.png'
-import playa_hex from '../images/playa_hex.png'
-import sand_hill_hex from '../images/sand_hill_hex.png'
-import grass_hill_hex from '../images/grass_hill_hex.png'
-import rock_hill_hex from '../images/rock_hill_hex.png'
-import snow_hill_hex from '../images/snow_hill_hex.png'
+import pointy_example_hex from '../images/pointy_example_hex.png'
+import flat_example_hex from '../images/flat_example_hex.png'
+
+import flat_woodlands_hex from '../images/flat_woodlands_hex.png'
+import flat_desert_hex from '../images/flat_desert_hex.png'
 
 export default class ImagesClass {
 
     constructor() {
         this.images = {
-            snowmountainHex: new Image(),
-            rockmountainHex: new Image(),
-            snowhillHex: new Image(),
-            grasshillHex: new Image(),
-            sandhillHex: new Image(),
-            woodlandsHex: new Image(),
-            savannaHex: new Image(),
-            tundraHex: new Image(),
-            desertHex: new Image(),
-            waterHex:new Image(),
-            frozenWaterHex: new Image(),
-            playaHex: new Image()
+            flat_example_hex: new Image(),
+            flat_snowmountain_hex: new Image(),
+            flat_rockmountain_hex: new Image(),
+            flat_snowhill_hex: new Image(),
+            flat_grasshill_hex: new Image(),
+            flat_sandhill_hex: new Image(),
+            flat_woodlands_hex: new Image(),
+            flat_savanna_hex: new Image(),
+            flat_tundra_hex: new Image(),
+            flat_desert_hex: new Image(),
+            flat_water_hex:new Image(),
+            flat_frozenWater_hex: new Image(),
+            flat_playa_hex: new Image(),
+
+            pointy_example_hex: new Image(),
+            pointy_snowmountain_hex: new Image(),
+            pointy_rockmountain_hex: new Image(),
+            pointy_snowhill_hex: new Image(),
+            pointy_grasshill_hex: new Image(),
+            pointy_sandhill_hex: new Image(),
+            pointy_woodlands_hex: new Image(),
+            pointy_savanna_hex: new Image(),
+            pointy_tundra_hex: new Image(),
+            pointy_desert_hex: new Image(),
+            pointy_water_hex:new Image(),
+            pointy_frozenWater_hex: new Image(),
+            pointy_playa_hex: new Image(),
         }
     }
 
@@ -45,19 +54,33 @@ export default class ImagesClass {
 
         //Assign images
 
-        this.snowmountainHex.src = snow_hill_hex;
-        this.rockmountainHex.src = rock_hill_hex;
-        this.snowhillHex.src = snow_hill_hex;
-        this.grasshillHex.src = grass_hill_hex;
-        this.sandhillHex.src = sand_hill_hex;
-        this.woodlandsHex.src = woodlands_hex;
-        this.savannaHex.src = savanna_hex;
-        this.tundraHex.src = tundra_hex;
-        this.desertHex.src = desert_hex;
-        this.waterHex.src = water_hex;
-        this.frozenWaterHex.src = frozen_water_hex;
-        this.playaHex.src = playa_hex;
+        this.flat_example_hex.src = flat_example_hex;
+        this.flat_snowmountain_hex.src = flat_example_hex;
+        this.flat_rockmountain_hex.src = flat_example_hex;
+        this.flat_snowhill_hex.src = flat_example_hex;
+        this.flat_grasshill_hex.src = flat_example_hex;
+        this.flat_sandhill_hex.src = flat_example_hex;
+        this.flat_woodlands_hex.src = flat_woodlands_hex;
+        this.flat_savanna_hex.src = flat_example_hex;
+        this.flat_tundra_hex.src = flat_example_hex;
+        this.flat_desert_hex.src = flat_desert_hex;
+        this.flat_water_hex.src = flat_example_hex;
+        this.flat_frozenWater_hex.src = flat_example_hex;
+        this.flat_playa_hex.src = flat_example_hex;
 
+        this.pointy_example_hex.src = pointy_example_hex;
+        this.pointy_snowmountain_hex.src = pointy_example_hex;
+        this.pointy_rockmountain_hex.src = pointy_example_hex;
+        this.pointy_snowhill_hex.src = pointy_example_hex;
+        this.pointy_grasshill_hex.src = pointy_example_hex;
+        this.pointy_sandhill_hex.src = pointy_example_hex;
+        this.pointy_woodlands_hex.src = pointy_example_hex;
+        this.pointy_savanna_hex.src = pointy_example_hex;
+        this.pointy_tundra_hex.src = pointy_example_hex;
+        this.pointy_desert_hex.src = pointy_example_hex;
+        this.pointy_water_hex.src = pointy_example_hex;
+        this.pointy_frozenWater_hex.src = pointy_example_hex;
+        this.pointy_playa_hex.src = pointy_example_hex;
 
     }
 

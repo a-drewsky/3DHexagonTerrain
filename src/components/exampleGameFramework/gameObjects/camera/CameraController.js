@@ -1,10 +1,12 @@
 export default class CameraControllerClass {
 
-    constructor(cameraData, canvas) {
+    constructor(cameraData, canvas, rotationPattern) {
 
         this.cameraData = cameraData;
 
         this.canvas = canvas;
+
+        this.rotationPattern = rotationPattern
 
     }
 
@@ -59,8 +61,8 @@ export default class CameraControllerClass {
                 break;
         }
 
-        if (this.cameraData.rotation == 12) this.cameraData.rotation = 0;
-        if (this.cameraData.rotation == -1) this.cameraData.rotation = 11;
+        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0;
+        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11;
 
         this.setVelocity();
     }

@@ -54,12 +54,7 @@ export default class GameMainClass {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       for (let [key, value] of this.gameManager.objects.objectMap) {
-         if (value.state != 'disabled' && value.object.view.renderMap) value.object.view.renderMap.clear();
-         if (value.state != 'disabled' && value.object.view.rotatedMap) value.object.view.rotatedMap.clear();
-         if (value.state != 'disabled' && value.object.view1 && value.object.view1.renderMap) value.object.view1.renderMap.clear();
-         if (value.state != 'disabled' && value.object.view2 && value.object.view2.renderMap) value.object.view2.renderMap.clear();
-         if (value.state != 'disabled' && value.object.view1 && value.object.view1.rotatedMap) value.object.view1.rotatedMap.clear();
-         if (value.state != 'disabled' && value.object.view2 && value.object.view2.rotatedMap) value.object.view2.rotatedMap.clear();
+         if(value.clear) value.clear();
       }
    }
 

@@ -1,6 +1,6 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, debug, geometricTilesDebug, images) {
+   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, rotationPattern, debug, geometricTilesDebug, images) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -23,6 +23,7 @@ export default class HexMapViewClass {
       this.zoomMultiplier = zoomMultiplier;
       this.renderTileHeight = null;
       this.elevationRanges = elevationRanges;
+      this.rotationPattern = rotationPattern
 
       //Debug Settings
       this.debug = debug;
@@ -61,7 +62,7 @@ export default class HexMapViewClass {
 
       //this.ctx.drawImage(render, -this.camera.position.x, -this.camera.position.y)
       this.ctx.drawImage(render, this.camera.position.x, this.camera.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
-   
+
       if (this.debug) {
          this.ctx.fillStyle = 'black'
          this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
@@ -141,7 +142,7 @@ export default class HexMapViewClass {
 
       //set the camera position (move to camera init function)
       this.camera.setPosition(this.renderCanvasDims.width * this.initCameraPosition.x, this.renderCanvasDims.height * this.initCameraPosition.y)
-      this.camera.rotation = this.initCameraRotation;
+      this.camera.rotation = this.initCameraRotation[this.rotationPattern];
       this.camera.zoom = 0;
 
       //reset hexmap size
@@ -157,22 +158,26 @@ export default class HexMapViewClass {
 
    render = () => {
 
-      this.setRender(this.camera.rotation, this.camera.zoom, document.createElement('canvas'));
-      this.getRender(this.camera.rotation, this.camera.zoom).width = this.renderCanvasDims.width;
-      this.getRender(this.camera.rotation, this.camera.zoom).height = this.renderCanvasDims.height;
-      this.renderctx = this.getRender(this.camera.rotation, this.camera.zoom).getContext("2d");
+      if (this.rotationPattern == 'all' || (this.camera.rotation%2==0 && this.rotationPattern == 'pointy') || (this.camera.rotation%2==1 && this.rotationPattern == 'flat')) {
+         this.setRender(this.camera.rotation, this.camera.zoom, document.createElement('canvas'));
+         this.getRender(this.camera.rotation, this.camera.zoom).width = this.renderCanvasDims.width;
+         this.getRender(this.camera.rotation, this.camera.zoom).height = this.renderCanvasDims.height;
+         this.renderctx = this.getRender(this.camera.rotation, this.camera.zoom).getContext("2d");
+   
+         //set renderctx properties
+         this.renderctx.lineJoin = 'round';
+         this.renderctx.lineCap = 'round';
+         this.renderctx.textAlign = 'center';
+         this.renderctx.textBaseline = 'middle'
+         this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
+         this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
+   
+         this.renderTileHeight = this.hexMapData.tileHeight * ((this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier) / this.hexMapData.baseSize)
+   
+         if (this.debug) this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
+      }
 
-      //set renderctx properties
-      this.renderctx.lineJoin = 'round';
-      this.renderctx.lineCap = 'round';
-      this.renderctx.textAlign = 'center';
-      this.renderctx.textBaseline = 'middle'
-      this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
-      this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
-      this.renderTileHeight = this.hexMapData.tileHeight * ((this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier) / this.hexMapData.baseSize)
-
-      if (this.debug) this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
 
       //set size based on zoom level
       let newSize = this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier;
@@ -287,22 +292,23 @@ export default class HexMapViewClass {
          y: renderHexMapPos.y
       })
 
+      if (this.rotationPattern == 'all' || (this.camera.rotation%2==0 && this.rotationPattern == 'pointy') || (this.camera.rotation%2==1 && this.rotationPattern == 'flat')) {
+         //Draw the table
+         this.drawTable();
 
 
-      //Draw the table
-      this.drawTable();
+         //draw the hex map
 
+         this.drawGroundShadowLayer();
 
-      //draw the hex map
+         for (let i = 1; i <= this.hexMapData.maxHeight; i++) {
+            this.drawTileLayer(i);
 
-      this.drawGroundShadowLayer();
+            if (i < this.hexMapData.maxHeight) this.drawShadowLayer(i);
 
-      for (let i = 1; i <= this.hexMapData.maxHeight; i++) {
-         this.drawTileLayer(i);
-
-         if (i < this.hexMapData.maxHeight) this.drawShadowLayer(i);
-
+         }
       }
+
       console.log("render")
 
    }
@@ -516,13 +522,15 @@ export default class HexMapViewClass {
                   );
                }
             } else {
-               this.drawPointyHexagon(
-                  this.hexMapData.x + xOffset,
-                  this.hexMapData.y + yOffset - height * this.renderTileHeight,
-                  `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-                  `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
-                  '' + keyObj.q + ',' + keyObj.r
-               );
+               if (this.geometricTilesDebug) {
+                  this.drawPointyHexagon(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
+                     `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
+                     '' + keyObj.q + ',' + keyObj.r
+                  );
+               }
             }
 
          }
@@ -560,9 +568,9 @@ export default class HexMapViewClass {
                   );
                } else {
                   this.renderctx.drawImage(
-                     this.images[tileBiome + 'Hex'],
+                     this.images['flat_' + tileBiome + '_hex'],
                      this.hexMapData.x + xOffset - this.hexMapData.size,
-                     this.hexMapData.y + yOffset - (height * this.renderTileHeight) - Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish),
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight - (this.hexMapData.size * this.hexMapData.squish),
                      this.hexMapData.size * 2,
                      this.hexMapData.size * 2
                   )
@@ -582,14 +590,35 @@ export default class HexMapViewClass {
 
 
             } else {
-               this.drawPointyHexagonWall(
-                  this.hexMapData.x + xOffset,
-                  this.hexMapData.y + yOffset - height * this.renderTileHeight,
-                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                  `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-                  `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-               );
+
+               if (this.geometricTilesDebug) {
+                  this.drawPointyHexagonWall(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                     `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
+                     `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
+                     `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
+                  );
+               } else {
+                  this.renderctx.drawImage(
+                     this.images['pointy_' + tileBiome + '_hex'],
+                     this.hexMapData.x + xOffset - this.hexMapData.size,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight - (this.hexMapData.size * this.hexMapData.squish),
+                     this.hexMapData.size * 2,
+                     this.hexMapData.size * 2
+                  )
+
+                  this.drawPointyHexagonWall(
+                     this.hexMapData.x + xOffset,
+                     this.hexMapData.y + yOffset - height * this.renderTileHeight,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                     `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                  );
+               }
+
             }
 
 

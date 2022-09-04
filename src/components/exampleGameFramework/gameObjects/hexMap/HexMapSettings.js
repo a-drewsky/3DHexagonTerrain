@@ -4,7 +4,9 @@ export default class HexMapSettingsClass {
 
         this.DEBUG = false;
 
-        this.GEOMTRIC_TILES_DEBUG = false;
+        this.GEOMTRIC_TILES_DEBUG = true;
+
+        this.MIRROR_MAP = true;
 
         this.TABLE_HEIGHT = 40;
 
@@ -20,7 +22,11 @@ export default class HexMapSettingsClass {
 
         this.BASE_ZOOM_LEVEL = 25;
 
-        this.INIT_CAMERA_ROTATION = 6;
+        this.INIT_CAMERA_ROTATION = {
+            pointy: 0,
+            flat: 1,
+            all: 0
+        };
 
         this.INIT_SHADOW_ROTATION = 11;
 

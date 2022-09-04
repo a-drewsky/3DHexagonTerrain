@@ -11,6 +11,7 @@ export default class HexMapClass {
         canvas,
         camera,
         zoomMultiplier,
+        rotationPattern,
         images
     ) {
         this.settings = new HexMapSettingsClass()
@@ -40,13 +41,14 @@ export default class HexMapClass {
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
             zoomMultiplier,
             this.settings.HEXMAP_ELEVATION_RANGES,
+            rotationPattern,
             this.settings.DEBUG,
             this.settings.GEOMTRIC_TILES_DEBUG,
             images
         );
-        
+
         this.view = this.view1
-        
+
         this.builder = new HexMapBuilderClass(
             this.data1,
             this.view1,
@@ -60,10 +62,11 @@ export default class HexMapClass {
             this.settings.WATER_TEMP_RANGES,
             this.settings.BIOME_GROUPS,
             this.settings.MIN_BIOME_SMOOTHING,
-            this.settings.SAND_HILL_ELVATION_DIVISOR
+            this.settings.SAND_HILL_ELVATION_DIVISOR,
+            this.settings.MIRROR_MAP
         );
 
-        if(this.settings.DEBUG){
+        if (this.settings.DEBUG) {
             this.data2 = new HexMapDataClass(
                 0,
                 0,
@@ -72,7 +75,7 @@ export default class HexMapClass {
                 this.settings.TILE_HEIGHT,
                 this.settings.INIT_SHADOW_ROTATION
             );
-    
+
             this.view2 = new HexMapViewClass(
                 ctx,
                 canvas,
@@ -87,6 +90,7 @@ export default class HexMapClass {
                 this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
                 zoomMultiplier,
                 this.settings.HEXMAP_ELEVATION_RANGES,
+                rotationPattern,
                 this.settings.DEBUG,
                 this.settings.GEOMTRIC_TILES_DEBUG,
                 images
@@ -109,10 +113,17 @@ export default class HexMapClass {
         this.view.draw();
     }
 
-    switchView = () => {
-        if(!this.settings.DEBUG) return
+    clear = () => {
+        this.view1.renderMap.clear();
+        this.view2.renderMap.clear();
+        this.view1.rotatedMap.clear();
+        this.view2.rotatedMap.clear();
+    }
 
-        if(this.viewNum == 1){
+    switchView = () => {
+        if (!this.settings.DEBUG) return
+
+        if (this.viewNum == 1) {
             this.viewNum = 2
             this.view = this.view2
             this.data = this.data2

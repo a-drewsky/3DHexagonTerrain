@@ -45,7 +45,7 @@ export default class ShowHexMapStateControllerClass {
 
 
         this.gameManager.objects.objectMap.get('camera').object.controller.mouseWheel(deltaY);
-        
+
         let newSize = this.gameManager.objects.objectMap.get('hexMap').object.data.baseSize - this.gameManager.objects.objectMap.get('camera').object.data.zoom * this.settings.ZOOM_MULTIPLIER;
         this.gameManager.objects.objectMap.get('hexMap').object.data.size = newSize;
         this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
@@ -91,95 +91,103 @@ export default class ShowHexMapStateControllerClass {
 
         if (key == 'e') {
 
-            let centerHexPos = this.getCenterHexPos();
+            let loop = this.settings.ROTATION_PATTERN == 'all' ? 1 : 2
 
-            this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
+            for (let i = 0; i < loop; i++) {
+                let centerHexPos = this.getCenterHexPos();
 
-            //Set camera position
-            let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
-        
-            if (this.gameManager.objects.objectMap.get('camera').object.data.rotation % 2 == 1) {
-    
-                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ;
-                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR;
-    
-                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
-                );
+                this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
 
-            } else {
-    
-                centerHexPos.s = -centerHexPos.q - centerHexPos.r
-                let newR = centerHexPos.r;
-                let newS = centerHexPos.s;
-    
-                centerHexPos.q = -newR;
-                centerHexPos.r = -newS;
-    
-                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ;
-                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.VecR;
-    
-                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
-                );
-    
+                //Set camera position
+                let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
+
+                if (this.gameManager.objects.objectMap.get('camera').object.data.rotation % 2 == 1) {
+
+                    let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ;
+                    let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR;
+
+                    this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                        vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                    );
+
+                } else {
+
+                    centerHexPos.s = -centerHexPos.q - centerHexPos.r
+                    let newR = centerHexPos.r;
+                    let newS = centerHexPos.s;
+
+                    centerHexPos.q = -newR;
+                    centerHexPos.r = -newS;
+
+                    let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ;
+                    let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.VecR;
+
+                    this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                        vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                    );
+
+                }
             }
 
         }
 
         if (key == 'q') {
 
-            let centerHexPos = this.getCenterHexPos();
+            let loop = this.settings.ROTATION_PATTERN == 'all' ? 1 : 2
 
-            this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
+            for (let i = 0; i < loop; i++) {
+                let centerHexPos = this.getCenterHexPos();
 
-            //Set camera position
-            let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
-        
-            if (this.gameManager.objects.objectMap.get('camera').object.data.rotation % 2 == 0) {
+                this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
     
-                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ;
-                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.VecR;
+                //Set camera position
+                let squish = this.gameManager.objects.objectMap.get('hexMap').object.data.squish;
     
-                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
-                );
-
-            } else {
+                if (this.gameManager.objects.objectMap.get('camera').object.data.rotation % 2 == 0) {
     
-                centerHexPos.s = -centerHexPos.r-centerHexPos.q 
-                let newQ = centerHexPos.q;
-                let newS = centerHexPos.s;
+                    let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.VecQ;
+                    let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.VecR;
     
-                centerHexPos.r = -newQ;
-                centerHexPos.q = -newS;
+                    this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                        vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                    );
     
-                let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ;
-                let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR;
+                } else {
     
-                this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
-                );
+                    centerHexPos.s = -centerHexPos.r - centerHexPos.q
+                    let newQ = centerHexPos.q;
+                    let newS = centerHexPos.s;
     
+                    centerHexPos.r = -newQ;
+                    centerHexPos.q = -newS;
+    
+                    let vecQ = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecQ;
+                    let vecR = this.gameManager.objects.objectMap.get('hexMap').object.data.flatTopVecR;
+    
+                    this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
+                        vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).x,
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation + ',' + this.gameManager.objects.objectMap.get('camera').object.data.zoom).y
+                    );
+    
+                }
             }
-
+            
         }
 
-        if (key == 'w' || key == 'a' || key == 's' || key == 'd'){
+        if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
             this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
         }
 
-        if (key == 'v'){
+        if (key == 'v') {
             this.gameManager.objects.objectMap.get('hexMap').object.switchView()
         }
     }
 
     keyUp = (key) => {
-        if (key == 'w' || key == 'a' || key == 's' || key == 'd'){
+        if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
             this.gameManager.objects.objectMap.get('camera').object.controller.keyUp(key);
         }
     }

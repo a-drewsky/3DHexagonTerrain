@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirrorMap) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -18,16 +18,53 @@ export default class HexMapBuilderClass {
       this.biomeGroups = biomeGroups
       this.minBiomeSmoothing = minBiomeSmoothing
       this.sandHillElevationDivisor = sandHillElevationDivisor
+      this.mirrorMap = mirrorMap
 
    }
 
    generateMap = (Qgen, Rgen) => {
 
-      for (let r = 0; r < Rgen; r++) {
-         for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-            this.hexMapData.setEntry(q, r, {
-               height: 0
-            });
+      if (this.mirrorMap) {
+         for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
+            for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
+               console.log(q, r)
+               this.hexMapData.setEntry(q, r, {
+                  height: 0
+               });
+            }
+         }
+      } else {
+         for (let r = 0; r < Rgen; r++) {
+            for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
+               this.hexMapData.setEntry(q, r, {
+                  height: 0
+               });
+            }
+         }
+      }
+
+   }
+
+   mirrorMapFunc = (Qgen, Rgen) => {
+      for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
+         let dist = 0;
+         for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
+            console.log(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))
+            console.log(-1 * Math.floor(r / 2) + dist, r)
+            this.hexMapData.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
+            dist++;
+         }
+      }
+   }
+
+   mirrorMap2Func = (Qgen, Rgen) => {
+      for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
+         let dist = 0;
+         for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
+            console.log(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))
+            console.log(-1 * Math.floor(r / 2) + dist, r)
+            this.hexMapData2.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData2.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
+            dist++;
          }
       }
    }
@@ -97,9 +134,9 @@ export default class HexMapBuilderClass {
          if (tileHeight >= this.elevationRanges['mid']) {
             let biome = 'grasshill'
             if (tileTemp < this.tempRanges['tundra']) biome = 'snowhill'
-            if (tileTemp > this.tempRanges['savanna']){
+            if (tileTemp > this.tempRanges['savanna']) {
                biome = 'sandhill'
-               tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid'])/this.sandHillElevationDivisor) //set sand hill elevation
+               tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
             }
 
             tileBiome = biome
@@ -220,7 +257,7 @@ export default class HexMapBuilderClass {
             let keyStrArrObj = this.hexMapData.split(keyStrArr[i])
             let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
-            if(keyStrArrObjBiome == biome){
+            if (keyStrArrObjBiome == biome) {
                let keyIndex = keyStrings.indexOf(keyStrArr[i]);
                if (keyIndex != -1) keyStrings.splice(keyIndex, 1);
             }
@@ -229,16 +266,16 @@ export default class HexMapBuilderClass {
          //Check size of biome set and fix tiles if neccessary
          if (keyStrArr.length < this.minBiomeSmoothing[biome]) {
             while (keyStrArr.length > 0) {
-            let keyStrArrObj = this.hexMapData.split(keyStrArr[0])
-            let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+               let keyStrArrObj = this.hexMapData.split(keyStrArr[0])
+               let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
-            
-               if(keyStrArrObjBiome != biome) keyStrArr.shift()
+
+               if (keyStrArrObjBiome != biome) keyStrArr.shift()
                else if (smoothTile(keyStrArr[0])) keyStrArr.shift()
-               else{
+               else {
                   keyStrArr.push(keyStrArr.shift());
                   console.log("SHIFT")
-               } 
+               }
             }
          }
 
@@ -264,6 +301,11 @@ export default class HexMapBuilderClass {
          }
 
          this.smoothBiomes()
+
+         if (this.mirrorMap) {
+            this.mirrorMapFunc(q, r)
+            if (this.hexMapData2 !== undefined) this.mirrorMap2Func(q, r)
+         }
 
          if (this.hexMapData2 !== undefined) {
             for (let [key, value] of this.hexMapData.getMap()) {
