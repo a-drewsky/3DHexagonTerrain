@@ -105,8 +105,14 @@ export default class HexMapClass {
         this.controller = new HexMapControllerClass(this.data);
     }
 
-    update = (switchView) => {
+    update = (state) => {
+        this.view.camera.position.x += this.view.camera.velocity.x * this.settings.CAMERA_SPEED
+        this.view.camera.position.y += this.view.camera.velocity.y * this.settings.CAMERA_SPEED
 
+        if(this.view.camera.position.x < 0 - this.view.canvas.width/2) this.view.camera.position.x = 0 - this.view.canvas.width/2
+        if(this.view.camera.position.x > this.view.renderCanvasDims.width - this.view.canvas.width/2) this.view.camera.position.x = this.view.renderCanvasDims.width - this.view.canvas.width/2
+        if(this.view.camera.position.y < 0 - this.view.canvas.height/2) this.view.camera.position.y = 0 - this.view.canvas.height/2
+        if(this.view.camera.position.y > this.view.renderCanvasDims.height - this.view.canvas.height/2) this.view.camera.position.y = this.view.renderCanvasDims.height - this.view.canvas.height/2
     }
 
     draw = () => {

@@ -140,8 +140,7 @@ export default class HexMapViewClass {
       renderCameraRotations();
       console.log(this.count)
 
-      //set the camera position (move to camera init function)
-      this.camera.setPosition(this.renderCanvasDims.width * this.initCameraPosition.x, this.renderCanvasDims.height * this.initCameraPosition.y)
+      //reset
       this.camera.rotation = this.initCameraRotation[this.rotationPattern];
       this.camera.zoom = 0;
 
@@ -154,6 +153,57 @@ export default class HexMapViewClass {
 
       this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
       this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
+
+
+      //set camera
+
+      let maxQ = Math.max(...keys.map(key => key.q))
+      let minQ = Math.min(...keys.map(key => key.q))
+      let medQ = (maxQ + minQ)/2
+
+      let maxR = Math.max(...keys.map(key => key.r))
+      let minR = Math.min(...keys.map(key => key.r))
+      let medR = (maxR + minR)/2
+
+      let scalar = maxR/4
+
+      let camQ
+      let camR
+
+      switch(this.initCameraPosition){
+         case 'top':
+            camQ = medQ + scalar/2
+            camR = medR - scalar
+            break;
+         case 'middle':
+            camQ = medQ
+            camR = medR
+            break;
+         case 'bottom':
+            camQ = medQ - scalar/2
+            camR = medR + scalar
+            break;
+      }
+
+      let camPos = this.rotateTile(camQ, camR, this.camera.rotation)
+
+      console.log(camPos)
+      
+      let mappos = this.hexMapData.posMap.get(this.hexMapData.join(this.camera.rotation,this.camera.zoom))
+
+      //set the camera position (create tile to pos function and vice versa)
+      let vecQ, vecR
+      if(this.camera.rotation%2==0){
+         vecQ = this.hexMapData.VecQ
+         vecR = this.hexMapData.VecR
+      } else {
+         vecQ = this.hexMapData.flatTopVecQ
+         vecR = this.hexMapData.flatTopVecR
+      }
+      this.camera.setPosition(
+         mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width/2, 
+         mappos.y + (camPos.q * vecQ.y * this.hexMapData.squish + camPos.r * vecR.y * this.hexMapData.squish) - this.canvas.height/2
+         )
    }
 
    render = () => {

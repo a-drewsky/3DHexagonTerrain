@@ -2,11 +2,11 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.GEOMTRIC_TILES_DEBUG = true;
 
-        this.MIRROR_MAP = true;
+        this.MIRROR_MAP = false;
 
         this.TABLE_HEIGHT = 40;
 
@@ -28,12 +28,11 @@ export default class HexMapSettingsClass {
             all: 0
         };
 
+        this.CAMERA_SPEED = 5;
+
         this.INIT_SHADOW_ROTATION = 11;
 
-        this.INIT_CAMERA_POSITION = {
-            x: 0.25,
-            y: 0.5
-        };
+        this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
 
 
         //BIOME GENERATION
