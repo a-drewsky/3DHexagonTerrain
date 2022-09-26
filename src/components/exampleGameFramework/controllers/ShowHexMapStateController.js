@@ -91,9 +91,7 @@ export default class ShowHexMapStateControllerClass {
 
         if (key == 'e') {
 
-            let loop = this.settings.ROTATION_PATTERN == 'all' ? 1 : 2
-
-            for (let i = 0; i < loop; i++) {
+            for (let i = 0; i < this.settings.ROTATION_AMOUNT; i++) {
                 let centerHexPos = this.getCenterHexPos();
 
                 this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
@@ -135,9 +133,7 @@ export default class ShowHexMapStateControllerClass {
 
         if (key == 'q') {
 
-            let loop = this.settings.ROTATION_PATTERN == 'all' ? 1 : 2
-
-            for (let i = 0; i < loop; i++) {
+            for (let i = 0; i < this.settings.ROTATION_AMOUNT; i++) {
                 let centerHexPos = this.getCenterHexPos();
 
                 this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);

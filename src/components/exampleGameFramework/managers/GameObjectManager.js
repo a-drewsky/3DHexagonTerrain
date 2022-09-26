@@ -43,8 +43,7 @@ export default class GameObjectManagerClass {
         this.objectMap.set("camera", {
             object: new CameraClass(
                 this.canvas, 
-                this.settings.MAX_ZOOM,
-                this.settings.ROTATION_PATTERN
+                this.settings.MAX_ZOOM
                 ),
             state: this.objectStates.active
         });
@@ -54,7 +53,7 @@ export default class GameObjectManagerClass {
                 this.canvas,
                 this.objectMap.get("camera").object.data,
                 this.settings.ZOOM_MULTIPLIER,
-                this.settings.ROTATION_PATTERN,
+                this.settings.ROTATION_AMOUNT,
                 this.images
             ),
             state: this.objectStates.active

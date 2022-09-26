@@ -69,6 +69,35 @@ export default class HexMapBuilderClass {
       }
    }
 
+   generateFeatures = (noiseFluctuation) => {
+
+      let featureSeed1 = Math.random() * this.seedMultiplier
+      let featureSeed2 = Math.random() * this.seedMultiplier
+
+      for (let [key, value] of this.hexMapData.getMap()) {
+         let keyObj = this.hexMapData.split(key);
+
+         //elevation generation
+         let tileFeatureNoise = noise(featureSeed1 + keyObj.q / noiseFluctuation, featureSeed1 + keyObj.r / noiseFluctuation) * noise(featureSeed2 + keyObj.q / noiseFluctuation, featureSeed2 + keyObj.r / noiseFluctuation)
+
+         console.log(tileFeatureNoise)
+
+         if(tileFeatureNoise > 0.4 && value.biome=='woodlands'){
+            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+               height: value.height,
+               biome: 'woodlands_trees',
+               verylowBiome: value.verylowBiome,
+               lowBiome: value.lowBiome,
+               midBiome: value.midBiome,
+               highBiome: value.highBiome,
+               veryhighBiome: value.veryhighBiome
+            })
+            console.log(this.hexMapData.getEntry(keyObj.q, keyObj.r))
+         }
+      }
+
+   }
+
    generateBiomes = (noiseFluctuation) => {
 
       let elevationSeed1 = Math.random() * this.seedMultiplier
@@ -132,8 +161,9 @@ export default class HexMapBuilderClass {
             tileVerylowBiome = biome
          }
          if (tileHeight >= this.elevationRanges['mid']) {
-            let biome = 'grasshill'
-            if (tileTemp < this.tempRanges['tundra']) biome = 'snowhill'
+            let biome = 'snowhill'
+            if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
+            if(tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
             if (tileTemp > this.tempRanges['savanna']) {
                biome = 'sandhill'
                tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
@@ -301,6 +331,8 @@ export default class HexMapBuilderClass {
          }
 
          this.smoothBiomes()
+
+         this.generateFeatures(noiseFluctuation)
 
          if (this.mirrorMap) {
             this.mirrorMapFunc(q, r)

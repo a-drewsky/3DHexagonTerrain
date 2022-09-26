@@ -3,9 +3,9 @@ import CameraDataClass from "./CameraData";
 
 export default class CameraClass {
 
-    constructor(canvas, maxZoom, initRotation, rotationPattern){
+    constructor(canvas, maxZoom, initRotation){
         this.data = new CameraDataClass(maxZoom, initRotation);
-        this.controller = new CameraControllerClass(this.data, canvas, rotationPattern);
+        this.controller = new CameraControllerClass(this.data, canvas);
     }
 
     update = (state) => {

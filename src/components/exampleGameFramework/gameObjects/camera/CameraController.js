@@ -1,12 +1,10 @@
 export default class CameraControllerClass {
 
-    constructor(cameraData, canvas, rotationPattern) {
+    constructor(cameraData, canvas) {
 
         this.cameraData = cameraData;
 
         this.canvas = canvas;
-
-        this.rotationPattern = rotationPattern
 
     }
 

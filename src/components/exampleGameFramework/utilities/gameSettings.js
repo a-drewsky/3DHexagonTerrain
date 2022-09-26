@@ -6,7 +6,7 @@ export default class SettingsClass {
 
         this.MAX_ZOOM = 1;
         
-        this.ROTATION_PATTERN = 'flat' //flat, pointy or all
+        this.ROTATION_AMOUNT = 0 //flat, pointy or all
         
         this.MAP_SIZE = externalSettings.mapSize == 'small' ? {size: 'small', q: 15, r: 31} 
             : externalSettings.mapSize == 'medium' ? {size: 'medium', q: 20, r: 41} 

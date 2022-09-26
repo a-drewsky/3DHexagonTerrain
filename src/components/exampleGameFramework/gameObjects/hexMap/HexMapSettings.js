@@ -2,15 +2,15 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = true;
+        this.DEBUG = false;
 
-        this.GEOMTRIC_TILES_DEBUG = true;
+        this.GEOMTRIC_TILES_DEBUG = false;
 
         this.MIRROR_MAP = false;
 
         this.TABLE_HEIGHT = 40;
 
-        this.HEXMAP_LINE_WIDTH = 3; //to be removed
+        this.HEXMAP_LINE_WIDTH = 3;
 
         this.HEXMAP_SQUISH = 2/3;
 
@@ -22,11 +22,7 @@ export default class HexMapSettingsClass {
 
         this.BASE_ZOOM_LEVEL = 25;
 
-        this.INIT_CAMERA_ROTATION = {
-            pointy: 0,
-            flat: 1,
-            all: 0
-        };
+        this.INIT_CAMERA_ROTATION = 1 //0 is pointy
 
         this.CAMERA_SPEED = 5;
 
@@ -57,6 +53,10 @@ export default class HexMapSettingsClass {
             grasshill: {
                 fill: {h: 120, s: 100, l: 28},
                 stroke: {h: 120, s: 100, l: 23}
+            },
+            savannahill: {
+                fill: {h: 80, s: 80, l: 45},
+                stroke: {h: 85, s: 80, l: 35}
             },
             sandhill: {
                 fill: {h: 45, s: 60, l: 60},
@@ -97,6 +97,7 @@ export default class HexMapSettingsClass {
             rockmountain: ['grasshill', 'snowmountain'],
             snowhill: ['tundra', 'rockmountain', 'snowmountain'],
             grasshill: ['rockmountain', 'snowmountain'],
+            savannahill: ['rockmountain', 'snowmountain'],
             sandhill: ['desert', 'mesa', 'rockhill'],
             woodlands: ['grasshill'],
             savanna: ['grasshill'],
@@ -112,6 +113,7 @@ export default class HexMapSettingsClass {
             rockmountain: 6,
             snowhill: 10,
             grasshill: 10,
+            savannahill: 10,
             sandhill: 10,
             woodlands: 12,
             savanna: 10,
