@@ -207,7 +207,7 @@ export default class HexMapViewClass {
       )
    }
 
-   setMapPos = (rotation, zoomLevel) => {
+   setMapPos = (zoomLevel, rotation) => {
 
       this.camera.zoom = zoomLevel;
       this.camera.rotation = rotation;
@@ -706,6 +706,8 @@ export default class HexMapViewClass {
 
 
             let height = Math.min(...neightborHeights)
+
+            console.log("min height: " + height)
 
             tempctx.beginPath();
 

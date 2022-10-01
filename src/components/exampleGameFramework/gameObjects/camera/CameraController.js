@@ -59,8 +59,10 @@ export default class CameraControllerClass {
                 break;
         }
 
-        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0;
-        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11;
+        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
+        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
+
+        console.log(this.cameraData.rotation)
 
         this.setVelocity();
     }
