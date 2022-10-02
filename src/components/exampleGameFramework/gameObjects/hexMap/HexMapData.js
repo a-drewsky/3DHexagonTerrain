@@ -9,7 +9,6 @@ export default class HexMapDataClass {
       this.posMap = new Map();
 
       this.size = size;
-      this.baseSize = size;
       this.squish = squish;
 
       this.VecQ = { x: Math.sqrt(3) * size, y: 0 }

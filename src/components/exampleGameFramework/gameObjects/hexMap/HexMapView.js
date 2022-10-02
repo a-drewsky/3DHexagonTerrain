@@ -1,6 +1,6 @@
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomMultiplier, elevationRanges, rotationAmount, debug, geometricTilesDebug, images) {
+   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, zoomAmount, elevationRanges, rotationAmount, debug, geometricTilesDebug, images) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -20,7 +20,7 @@ export default class HexMapViewClass {
       this.initCameraRotation = initCameraRotation;
       this.colors = colors;
       this.sideColorMultiplier = sideColorMultiplier;
-      this.zoomMultiplier = zoomMultiplier;
+      this.zoomAmount = zoomAmount;
       this.renderTileHeight = null;
       this.elevationRanges = elevationRanges;
       this.rotationAmount = rotationAmount
@@ -48,12 +48,12 @@ export default class HexMapViewClass {
       }
    }
 
-   setRender = (cameraRotation, zoomLevel, canvas) => {
-      this.renderMap.set(cameraRotation + ',' + zoomLevel, canvas);
+   setRender = (cameraRotation, canvas) => {
+      this.renderMap.set(cameraRotation, canvas);
    }
 
-   getRender = (cameraRotation, zoomLevel) => {
-      return this.renderMap.get(cameraRotation + ',' + zoomLevel);
+   getRender = (cameraRotation) => {
+      return this.renderMap.get(cameraRotation);
    }
 
    draw = () => {
@@ -61,7 +61,7 @@ export default class HexMapViewClass {
       let render = this.getRender(this.camera.rotation, this.camera.zoom)
 
       //this.ctx.drawImage(render, -this.camera.position.x, -this.camera.position.y)
-      this.ctx.drawImage(render, this.camera.position.x, this.camera.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(render, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom*this.zoomAmount, this.canvas.height + this.camera.zoom*this.zoomAmount * this.hexMapData.squish, 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
          this.ctx.fillStyle = 'black'
@@ -72,19 +72,6 @@ export default class HexMapViewClass {
    initialize = () => {
 
       console.log('initiate')
-
-      //set hexmap size to highest zoom level to calculate render size
-      let newSize = this.hexMapData.baseSize + this.zoomMultiplier * this.camera.maxZoom;
-
-      console.log(this.hexMapData)
-
-      this.hexMapData.size = newSize;
-
-      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
-      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-
-      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
-      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
 
       //Set render canvas size
       let keys = this.hexMapData.getKeys();
@@ -98,65 +85,34 @@ export default class HexMapViewClass {
          height: mapHyp + 200
       }
 
-      console.log(this.renderCanvasDims)
-
       //Set the hexmap position to the center of the canvas
       this.hexMapData.setDimensions((this.renderCanvasDims.width - mapWidth) / 2 + 50, (this.renderCanvasDims.height - mapHeight) / 2 + 50); //causing zooming issue
 
-      //reset hexmap size
-      newSize = this.hexMapData.baseSize;
-      this.hexMapData.size = newSize;
-
-      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
-      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-
-      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
-      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
-
       //render all configs
-      let renderConfig = (zoomLevel, cameraRotation) => {
-         this.camera.zoom = zoomLevel;
+      let renderConfig = (cameraRotation) => {
          this.camera.rotation = cameraRotation;
-
          this.render();
       }
 
-      let renderZoomLevels = (cameraRotation) => {
-         for (let i = -1 * this.camera.maxZoom; i <= this.camera.maxZoom; i++) {
-            renderConfig(i, cameraRotation);
-         }
-      }
 
-      let setMapPosZoom = (cameraRotation) => {
-         for (let i = -1 * this.camera.maxZoom; i <= this.camera.maxZoom; i++) {
-            this.setMapPos(i, cameraRotation);
-         }
+      let mapPosConfig = (cameraRotation) => {
+            this.camera.rotation = cameraRotation;
+            this.setMapPos();
       }
 
       let renderCameraRotations = () => {
          for (let i = 0; i < 12; i++) {
-            if (this.camera.rotation % (this.rotationAmount - this.initCameraRotation) == 0) renderZoomLevels(i);
-            else setMapPosZoom(i);
+            if ((i - this.initCameraRotation) % this.rotationAmount == 0) renderConfig(i);
+            else mapPosConfig(i);
          }
       }
       renderCameraRotations();
 
       //reset
       this.camera.rotation = this.initCameraRotation;
-      this.camera.zoom = 0;
-
-      //reset hexmap size
-      newSize = this.hexMapData.baseSize;
-      this.hexMapData.size = newSize;
-
-      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
-      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-
-      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
-      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
 
 
-      //set camera
+      //set camera position (top, middle or bottom)
 
       let maxQ = Math.max(...keys.map(key => key.q))
       let minQ = Math.min(...keys.map(key => key.q))
@@ -190,9 +146,9 @@ export default class HexMapViewClass {
 
       console.log(camPos)
 
-      let mappos = this.hexMapData.posMap.get(this.hexMapData.join(this.camera.rotation, this.camera.zoom))
+      let mappos = this.hexMapData.posMap.get(this.camera.rotation)
 
-      //set the camera position (create tile to pos function and vice versa)
+      //set the camera position
       let vecQ, vecR
       if (this.camera.rotation % 2 == 0) {
          vecQ = this.hexMapData.VecQ
@@ -207,18 +163,7 @@ export default class HexMapViewClass {
       )
    }
 
-   setMapPos = (zoomLevel, rotation) => {
-
-      this.camera.zoom = zoomLevel;
-      this.camera.rotation = rotation;
-
-      //set size based on zoom level
-      let newSize = this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier;
-      this.hexMapData.size = newSize;
-      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
-      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
-      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
+   setMapPos = () => {
 
       //Rotate the hexmap and set the rotatedMap object
       let sortedArr = this.hexMapData.getKeys();
@@ -240,7 +185,7 @@ export default class HexMapViewClass {
 
 
 
-      //Set render canvas size
+      //Set map hyp
       let keys = [...this.rotatedMap.keys()].map(key => this.hexMapData.split(key))
 
       let mapWidthMax = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
@@ -253,12 +198,6 @@ export default class HexMapViewClass {
 
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      // this.renderCanvasDims = {
-      //    width: mapHyp / this.hexMapData.squish + 100,
-      //    height: mapHyp + 100
-      // }
-
-      console.log(this.camera.rotation)
 
       //Set the hexmap position to the center of the canvas
 
@@ -319,8 +258,7 @@ export default class HexMapViewClass {
       }
 
 
-      this.hexMapData.setDimensions(renderHexMapPos.x, renderHexMapPos.y);
-      this.hexMapData.posMap.set(this.camera.rotation + ',' + this.camera.zoom, {
+      this.hexMapData.posMap.set(this.camera.rotation, {
          x: renderHexMapPos.x,
          y: renderHexMapPos.y
       })
@@ -328,7 +266,7 @@ export default class HexMapViewClass {
 
    render = () => {
 
-      this.setRender(this.camera.rotation, this.camera.zoom, document.createElement('canvas'));
+      this.setRender(this.camera.rotation, document.createElement('canvas'));
       this.getRender(this.camera.rotation, this.camera.zoom).width = this.renderCanvasDims.width;
       this.getRender(this.camera.rotation, this.camera.zoom).height = this.renderCanvasDims.height;
       this.renderctx = this.getRender(this.camera.rotation, this.camera.zoom).getContext("2d");
@@ -341,19 +279,10 @@ export default class HexMapViewClass {
       this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
       this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
-      this.renderTileHeight = this.hexMapData.tileHeight * ((this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier) / this.hexMapData.baseSize)
+      this.renderTileHeight = this.hexMapData.tileHeight
 
       if (this.debug) this.renderctx.strokeRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height)
 
-
-
-      //set size based on zoom level
-      let newSize = this.hexMapData.baseSize - this.camera.zoom * this.zoomMultiplier;
-      this.hexMapData.size = newSize;
-      this.hexMapData.VecQ = { x: Math.sqrt(3) * newSize, y: 0 }
-      this.hexMapData.VecR = { x: Math.sqrt(3) / 2 * newSize, y: 3 / 2 * newSize }
-      this.hexMapData.flatTopVecQ = { x: 3 / 2 * newSize, y: Math.sqrt(3) / 2 * newSize }
-      this.hexMapData.flatTopVecR = { x: 0, y: Math.sqrt(3) * newSize }
 
       //Rotate the hexmap and set the rotatedMap object
       let sortedArr = this.hexMapData.getKeys();
@@ -375,7 +304,7 @@ export default class HexMapViewClass {
 
 
 
-      //Set render canvas size
+      //Set map hyp
       let keys = [...this.rotatedMap.keys()].map(key => this.hexMapData.split(key))
 
       let mapWidthMax = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
@@ -388,12 +317,6 @@ export default class HexMapViewClass {
 
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      // this.renderCanvasDims = {
-      //    width: mapHyp / this.hexMapData.squish + 100,
-      //    height: mapHyp + 100
-      // }
-
-      console.log(this.camera.rotation)
 
       //Set the hexmap position to the center of the canvas
 
@@ -455,7 +378,7 @@ export default class HexMapViewClass {
 
 
       this.hexMapData.setDimensions(renderHexMapPos.x, renderHexMapPos.y);
-      this.hexMapData.posMap.set(this.camera.rotation + ',' + this.camera.zoom, {
+      this.hexMapData.posMap.set(this.camera.rotation, {
          x: renderHexMapPos.x,
          y: renderHexMapPos.y
       })
@@ -692,20 +615,30 @@ export default class HexMapViewClass {
                clipYOffset = this.hexMapData.VecQ.y * (keyObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.VecR.y * (keyObj.r + cropList[i].r) * this.hexMapData.squish;
             }
 
-            let neightborHeights = []
+            let neighborHeights = []
 
             if (this.rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1))) {
-               neightborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+               neighborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1)).height)
             }
             if (this.rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1))) {
-               neightborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+               neighborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1)).height)
             }
             if (this.rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r))) {
-               neightborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r)).height)
+               neighborHeights.push(this.rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r)).height)
             }
 
 
-            let height = Math.min(...neightborHeights)
+            let height
+
+            if(neighborHeights.length < 3){
+               height = this.rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height
+            } else {
+               height = this.rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height - Math.min(...neighborHeights)
+            }
+
+            if(height < 0) height = 0;
+
+            height +=1;
 
             console.log("min height: " + height)
 

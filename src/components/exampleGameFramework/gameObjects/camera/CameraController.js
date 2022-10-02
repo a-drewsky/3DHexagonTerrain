@@ -28,10 +28,18 @@ export default class CameraControllerClass {
     mouseWheel = (deltaY) => {
         this.cameraData.clearAnchorPoint();
         if (deltaY > 0) {
-            if (this.cameraData.zoom < this.cameraData.maxZoom) this.cameraData.zoom++;
+            if (this.cameraData.zoom < this.cameraData.maxZoom){
+                this.cameraData.zoom++;
+                return true;
+            } 
         } else {
-            if (this.cameraData.zoom > -this.cameraData.maxZoom) this.cameraData.zoom--;
+            if (this.cameraData.zoom > 0){
+                this.cameraData.zoom--;
+                return true;
+            } 
         }
+
+        return false;
 
     }
 
@@ -101,7 +109,6 @@ export default class CameraControllerClass {
             this.cameraData.velocity.x *= Math.sqrt(2)/2
             this.cameraData.velocity.y *= Math.sqrt(2)/2
         }
-        console.log(this.cameraData.velocity)
     }
 
     //change to setPosition

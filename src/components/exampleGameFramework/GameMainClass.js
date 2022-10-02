@@ -40,7 +40,7 @@ export default class GameMainClass {
       this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images);
 
       //Input controller
-      this.inputController = new InputControllerClass(this.gameManager, this.canvas, this.globalSettings);
+      this.inputController = new InputControllerClass(this.gameManager, this.canvas);
 
       //Draw interval that is activated when the game finishes loading
       this.updateInterval = null;

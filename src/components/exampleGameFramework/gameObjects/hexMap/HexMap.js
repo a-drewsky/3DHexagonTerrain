@@ -10,8 +10,6 @@ export default class HexMapClass {
         ctx,
         canvas,
         camera,
-        zoomMultiplier,
-        rotationAmount,
         images
     ) {
         this.settings = new HexMapSettingsClass()
@@ -39,9 +37,9 @@ export default class HexMapClass {
             this.settings.INIT_CAMERA_ROTATION,
             this.settings.HEXMAP_COLORS,
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
-            zoomMultiplier,
+            this.settings.ZOOM_AMOUNT,
             this.settings.HEXMAP_ELEVATION_RANGES,
-            rotationAmount,
+            this.settings.ROTATION_AMOUNT,
             this.settings.DEBUG,
             this.settings.GEOMTRIC_TILES_DEBUG,
             images
@@ -88,9 +86,9 @@ export default class HexMapClass {
                 this.settings.INIT_CAMERA_ROTATION,
                 this.settings.HEXMAP_COLORS,
                 this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
-                zoomMultiplier,
+                this.settings.ZOOM_AMOUNT,
                 this.settings.HEXMAP_ELEVATION_RANGES,
-                rotationAmount,
+                this.settings.ROTATION_AMOUNT,
                 this.settings.DEBUG,
                 this.settings.GEOMTRIC_TILES_DEBUG,
                 images

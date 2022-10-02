@@ -2,7 +2,7 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.GEOMTRIC_TILES_DEBUG = false;
 
@@ -20,7 +20,11 @@ export default class HexMapSettingsClass {
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 
-        this.BASE_ZOOM_LEVEL = 25;
+        this.BASE_ZOOM_LEVEL = 30;
+
+        this.ZOOM_AMOUNT = 50;
+
+        this.ROTATION_AMOUNT = 2
 
         this.INIT_CAMERA_ROTATION = 1 //0 is pointy
 

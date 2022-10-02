@@ -2,11 +2,6 @@ export default class SettingsClass {
 
     constructor(externalSettings){
 
-        this.ZOOM_MULTIPLIER = 10;
-
-        this.MAX_ZOOM = 1;
-        
-        this.ROTATION_AMOUNT = 2
         
         this.MAP_SIZE = externalSettings.mapSize == 'small' ? {size: 'small', q: 15, r: 31} 
             : externalSettings.mapSize == 'medium' ? {size: 'medium', q: 20, r: 41} 
