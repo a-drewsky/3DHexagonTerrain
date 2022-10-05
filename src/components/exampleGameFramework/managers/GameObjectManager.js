@@ -56,15 +56,8 @@ export default class GameObjectManagerClass {
             state: this.objectStates.active
         });
 
-
-        //build game objects
-        this.objectMap.get('hexMap').object.builder.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size, true);
-
-        this.objectMap.get('hexMap').object.view1.initialize()
-
-        if (this.objectMap.get('hexMap').object.data2 !== undefined) {
-            this.objectMap.get('hexMap').object.view2.initialize()
-        }
+        this.objectMap.get('hexMap').object.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size);
+        this.objectMap.get('hexMap').object.prerender();
 
     }
 
