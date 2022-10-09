@@ -1,14 +1,16 @@
 export default class HexMapViewUtilsClass {
 
-    constructor(hexMapData, camera, sideLength) {
+    constructor(hexMapData, camera, zoomAmount) {
 
         this.hexMapData = hexMapData
         this.camera = camera
-        this.sideLength = sideLength
+
+        this.zoomAmount = zoomAmount
 
     }
 
     getTablePosition = () => {
+
         let keys = this.hexMapData.getKeys();
 
         let minR = Math.min(...keys.map(key => key.r));
@@ -32,28 +34,28 @@ export default class HexMapViewUtilsClass {
             r4: this.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).r
         }
 
-        let hexVecQ = this.camera.rotation % 2 == 0 ? this.hexMapData.VecQ : this.hexMapData.flatTopVecQ
-        let hexVecR = this.camera.rotation % 2 == 0 ? this.hexMapData.VecR : this.hexMapData.flatTopVecR
+        let hexVecQ = this.camera.rotation % 2 == 0 ? { ...this.hexMapData.VecQ } : { ...this.hexMapData.flatTopVecQ }
+        let hexVecR = this.camera.rotation % 2 == 0 ? { ...this.hexMapData.VecR } : { ...this.hexMapData.flatTopVecR }
 
         let tablePosition = [
             {
-                x: this.hexMapData.x + hexVecQ.x * tableDims.q1 + hexVecR.x * tableDims.r1,
-                y: this.hexMapData.y + hexVecQ.y * tableDims.q1 * this.hexMapData.squish + hexVecR.y * tableDims.r1 * this.hexMapData.squish
+                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q1 + hexVecR.x * tableDims.r1,
+                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q1 * this.hexMapData.squish + hexVecR.y * tableDims.r1 * this.hexMapData.squish
             },
 
             {
-                x: this.hexMapData.x + hexVecQ.x * tableDims.q2 + hexVecR.x * tableDims.r2,
-                y: this.hexMapData.y + hexVecQ.y * tableDims.q2 * this.hexMapData.squish + hexVecR.y * tableDims.r2 * this.hexMapData.squish
+                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q2 + hexVecR.x * tableDims.r2,
+                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q2 * this.hexMapData.squish + hexVecR.y * tableDims.r2 * this.hexMapData.squish
             },
 
             {
-                x: this.hexMapData.x + hexVecQ.x * tableDims.q3 + hexVecR.x * tableDims.r3,
-                y: this.hexMapData.y + hexVecQ.y * tableDims.q3 * this.hexMapData.squish + hexVecR.y * tableDims.r3 * this.hexMapData.squish
+                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q3 + hexVecR.x * tableDims.r3,
+                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q3 * this.hexMapData.squish + hexVecR.y * tableDims.r3 * this.hexMapData.squish
             },
 
             {
-                x: this.hexMapData.x + hexVecQ.x * tableDims.q4 + hexVecR.x * tableDims.r4,
-                y: this.hexMapData.y + hexVecQ.y * tableDims.q4 * this.hexMapData.squish + hexVecR.y * tableDims.r4 * this.hexMapData.squish
+                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q4 + hexVecR.x * tableDims.r4,
+                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q4 * this.hexMapData.squish + hexVecR.y * tableDims.r4 * this.hexMapData.squish
             }
         ]
 
@@ -113,17 +115,17 @@ export default class HexMapViewUtilsClass {
     cropOutTiles = (image, keyObj, rotatedMap) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
-            ctx.moveTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
 
-            ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
-            ctx.lineTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
-            ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
-            ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
 
-            ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-            ctx.lineTo(x + Math.sin(this.sideLength * 3 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 3 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-            ctx.lineTo(x + Math.sin(this.sideLength * 4 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 4 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-            ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
         }
 
         let xOffset;
@@ -147,8 +149,8 @@ export default class HexMapViewUtilsClass {
         tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
 
         let zeroPoint = {
-            x: -1 * (this.hexMapData.x + xOffset - this.hexMapData.size),
-            y: -1 * (this.hexMapData.y + yOffset - height * this.hexMapData.tileHeight - (this.hexMapData.size * this.hexMapData.squish) - this.hexMapData.size)
+            x: -1 * (this.hexMapData.posMap.get(this.camera.rotation).x + xOffset - this.hexMapData.size),
+            y: -1 * (this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight - (this.hexMapData.size * this.hexMapData.squish) - this.hexMapData.size)
         }
 
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }]
@@ -192,13 +194,11 @@ export default class HexMapViewUtilsClass {
 
                 height += 1;
 
-                console.log("min height: " + height)
-
                 tempctx.beginPath();
 
                 clipFlatHexagonPathForImage(tempctx,
-                    zeroPoint.x + this.hexMapData.x + clipXOffset,
-                    zeroPoint.y + this.hexMapData.y + clipYOffset - rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
+                    zeroPoint.x + this.hexMapData.posMap.get(this.camera.rotation).x + clipXOffset,
+                    zeroPoint.y + this.hexMapData.posMap.get(this.camera.rotation).y + clipYOffset - rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
                     height
                 );
 
@@ -219,66 +219,66 @@ export default class HexMapViewUtilsClass {
     }
 
     clipPointyHexagonPath = (ctx, x, y) => {
-        ctx.moveTo(x + Math.sin(this.sideLength * 0) * this.hexMapData.size, y + Math.cos(this.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 3) * this.hexMapData.size, y + Math.cos(this.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 4) * this.hexMapData.size, y + Math.cos(this.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 6) * this.hexMapData.size, y + Math.cos(this.sideLength * 6) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6) * (this.hexMapData.size * this.hexMapData.squish));
     }
 
     clipFlatHexagonPath = (ctx, x, y) => {
-        ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 3 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 3 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 4 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 4 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
     }
 
     clipHexagonShadowPath = (ctx, x, y, shadowX, shadowY, rotation, orientation) => {
 
         if (orientation == 'pointy') {
             if (rotation % 2 == 0) {
-                ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 2 - this.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 2 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 3 - this.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 3 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 4 - this.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 4 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * rotation) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * rotation) * (this.hexMapData.size * this.hexMapData.squish));
             } else {
-                ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 2 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 2 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 3 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 3 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * (rotation - 1)) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * (rotation - 1)) * (this.hexMapData.size * this.hexMapData.squish));
             }
         } else {
             if (rotation % 2 == 0) {
-                ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 2 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 2 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 3 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 3 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 4 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 4 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2 * rotation - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2 * rotation - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * rotation - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
             } else {
-                ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 1 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 2 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 2 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 3 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 3 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 4 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-                ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2 * (rotation - 1) - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(shadowX + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, shadowY + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+                ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2 * (rotation - 1) - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
             }
         }
 
@@ -289,20 +289,20 @@ export default class HexMapViewUtilsClass {
         ctx.strokeStyle = lineColor;
 
         ctx.beginPath();
-        ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 3 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 3 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 4 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 4 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 6 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 6 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.fill();
         if (lineColor) ctx.stroke();
 
         if (this.debug) {
             ctx.font = '10px serif';
             ctx.fillStyle = 'black';
-            ctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
+            ctx.fillText(tileGroup, x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
         }
     }
 
@@ -312,12 +312,12 @@ export default class HexMapViewUtilsClass {
 
         ctx.beginPath();
         ctx.moveTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 3) * this.hexMapData.size, y + Math.cos(this.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 4) * this.hexMapData.size, y + Math.cos(this.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 6) * this.hexMapData.size, y + Math.cos(this.sideLength * 6) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.fill();
         if (lineColor) ctx.stroke();
         if (lineColor) ctx.stroke();
@@ -325,7 +325,7 @@ export default class HexMapViewUtilsClass {
         if (this.debug) {
             ctx.font = '10px serif';
             ctx.fillStyle = 'black';
-            ctx.fillText(tileGroup, x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
+            ctx.fillText(tileGroup, x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size + 12, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) - 18)
         }
     }
 
@@ -333,11 +333,11 @@ export default class HexMapViewUtilsClass {
 
         //draw left side
         ctx.beginPath();
-        ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 5 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 5 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
 
         ctx.fillStyle = leftFillColor;
         ctx.strokeStyle = leftLineColor;
@@ -346,11 +346,11 @@ export default class HexMapViewUtilsClass {
 
         //draw center side
         ctx.beginPath();
-        ctx.moveTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 0 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 0 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
 
         ctx.fillStyle = centerFillColor;
         ctx.strokeStyle = centerLineColor;
@@ -359,11 +359,11 @@ export default class HexMapViewUtilsClass {
 
         //draw right side
         ctx.beginPath();
-        ctx.moveTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.lineTo(x + Math.sin(this.sideLength * 2 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 2 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 1 - this.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.sideLength * 1 - this.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
 
         ctx.fillStyle = rightFillColor;
         ctx.strokeStyle = rightLineColor;
@@ -378,8 +378,8 @@ export default class HexMapViewUtilsClass {
         ctx.beginPath();
         ctx.moveTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish));
 
         ctx.fillStyle = leftFillColor;
@@ -391,8 +391,8 @@ export default class HexMapViewUtilsClass {
         ctx.beginPath();
         ctx.moveTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
-        ctx.lineTo(x + Math.sin(this.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.tileHeight);
+        ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(0) * this.hexMapData.size, y + Math.cos(0) * (this.hexMapData.size * this.hexMapData.squish));
 
         ctx.fillStyle = rightFillColor;

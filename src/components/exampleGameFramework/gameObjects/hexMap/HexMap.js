@@ -15,8 +15,6 @@ export default class HexMapClass {
         this.settings = new HexMapSettingsClass()
 
         this.data1 = new HexMapDataClass(
-            0,
-            0,
             this.settings.BASE_ZOOM_LEVEL,
             this.settings.HEXMAP_SQUISH,
             this.settings.TILE_HEIGHT,
@@ -66,8 +64,6 @@ export default class HexMapClass {
 
         if (this.settings.DEBUG) {
             this.data2 = new HexMapDataClass(
-                0,
-                0,
                 this.settings.BASE_ZOOM_LEVEL,
                 this.settings.HEXMAP_SQUISH,
                 this.settings.TILE_HEIGHT,

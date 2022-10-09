@@ -1,10 +1,7 @@
 export default class HexMapDataClass {
 
-   constructor(x, y, size, squish, tileHeight, initShadowRotation) {
+   constructor(size, squish, tileHeight, initShadowRotation) {
       this.hexMap = new Map();
-
-      this.x = x;
-      this.y = y;
 
       this.posMap = new Map();
 
@@ -17,6 +14,8 @@ export default class HexMapDataClass {
       this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
 
+      this.sideLength = Math.PI / 3;
+      
       this.rotation = initShadowRotation;
 
       this.tileHeight = tileHeight;
