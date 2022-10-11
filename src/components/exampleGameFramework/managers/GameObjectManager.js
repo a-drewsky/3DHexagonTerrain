@@ -41,9 +41,7 @@ export default class GameObjectManagerClass {
 
         //Initialize game objects
         this.objectMap.set("camera", {
-            object: new CameraClass(
-                this.canvas
-                ),
+            object: new CameraClass(),
             state: this.objectStates.active
         });
         this.objectMap.set("hexMap", {

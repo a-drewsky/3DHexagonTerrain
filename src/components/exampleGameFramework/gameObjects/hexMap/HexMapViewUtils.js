@@ -1,11 +1,9 @@
 export default class HexMapViewUtilsClass {
 
-    constructor(hexMapData, camera, zoomAmount) {
+    constructor(hexMapData, camera) {
 
         this.hexMapData = hexMapData
         this.camera = camera
-
-        this.zoomAmount = zoomAmount
 
     }
 

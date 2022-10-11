@@ -103,6 +103,10 @@ export default class ImagesClass {
         this.pointy_playa_hex.src = pointy_example_hex;
 
         this.woodlands_trees.src = woodlands_trees;
+        this.woodlands_trees.size = {
+            width: 1,
+            height: 1.5
+        }
 
     }
 

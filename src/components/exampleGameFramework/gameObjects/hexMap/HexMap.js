@@ -15,10 +15,10 @@ export default class HexMapClass {
         this.settings = new HexMapSettingsClass()
 
         this.data1 = new HexMapDataClass(
-            this.settings.BASE_ZOOM_LEVEL,
+            this.settings.TILE_SIZE,
             this.settings.HEXMAP_SQUISH,
             this.settings.TILE_HEIGHT,
-            this.settings.INIT_SHADOW_ROTATION
+            this.settings.SHADOW_ROTATION
         );
 
         this.data = this.data1
@@ -32,12 +32,9 @@ export default class HexMapClass {
             this.settings.SHADOW_SIZE,
             this.settings.TABLE_HEIGHT,
             this.settings.INIT_CAMERA_POSITION,
-            this.settings.INIT_CAMERA_ROTATION,
             this.settings.HEXMAP_COLORS,
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
-            this.settings.ZOOM_AMOUNT,
             this.settings.HEXMAP_ELEVATION_RANGES,
-            this.settings.ROTATION_AMOUNT,
             this.settings.DEBUG,
             this.settings.GEOMTRIC_TILES_DEBUG,
             images
@@ -59,15 +56,16 @@ export default class HexMapClass {
             this.settings.BIOME_GROUPS,
             this.settings.MIN_BIOME_SMOOTHING,
             this.settings.SAND_HILL_ELVATION_DIVISOR,
-            this.settings.MIRROR_MAP
+            this.settings.MIRROR_MAP,
+            this.settings.TERRAIN_GENERATION_THERSHOLD
         );
 
         if (this.settings.DEBUG) {
             this.data2 = new HexMapDataClass(
-                this.settings.BASE_ZOOM_LEVEL,
+                this.settings.TILE_SIZE,
                 this.settings.HEXMAP_SQUISH,
                 this.settings.TILE_HEIGHT,
-                this.settings.INIT_SHADOW_ROTATION
+                this.settings.SHADOW_ROTATION
             );
 
             this.view2 = new HexMapViewClass(
@@ -79,12 +77,9 @@ export default class HexMapClass {
                 this.settings.SHADOW_SIZE,
                 this.settings.TABLE_HEIGHT,
                 this.settings.INIT_CAMERA_POSITION,
-                this.settings.INIT_CAMERA_ROTATION,
                 this.settings.HEXMAP_COLORS,
                 this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
-                this.settings.ZOOM_AMOUNT,
                 this.settings.HEXMAP_ELEVATION_RANGES,
-                this.settings.ROTATION_AMOUNT,
                 this.settings.DEBUG,
                 this.settings.GEOMTRIC_TILES_DEBUG,
                 images
@@ -115,13 +110,11 @@ export default class HexMapClass {
     }
 
     update = (state) => {
-        this.view.camera.position.x += this.view.camera.velocity.x * this.settings.CAMERA_SPEED
-        this.view.camera.position.y += this.view.camera.velocity.y * this.settings.CAMERA_SPEED
-
-        if (this.view.camera.position.x < 0 - this.view.canvas.width / 2) this.view.camera.position.x = 0 - this.view.canvas.width / 2
-        if (this.view.camera.position.x > this.view.renderCanvasDims.width - this.view.canvas.width / 2) this.view.camera.position.x = this.view.renderCanvasDims.width - this.view.canvas.width / 2
-        if (this.view.camera.position.y < 0 - this.view.canvas.height / 2) this.view.camera.position.y = 0 - this.view.canvas.height / 2
-        if (this.view.camera.position.y > this.view.renderCanvasDims.height - this.view.canvas.height / 2) this.view.camera.position.y = this.view.renderCanvasDims.height - this.view.canvas.height / 2
+        let zoom = this.view.camera.zoom * this.view.camera.zoomAmount
+        if (this.view.camera.position.x + zoom/2 < 0 - this.view.canvas.width / 2) this.view.camera.position.x = 0 - this.view.canvas.width / 2 - zoom/2
+        if (this.view.camera.position.x + zoom/2 > this.view.drawCanvas.width - this.view.canvas.width / 2) this.view.camera.position.x = this.view.drawCanvas.width - this.view.canvas.width / 2  - zoom/2
+        if (this.view.camera.position.y + zoom/2*this.data.squish < 0 - this.view.canvas.height / 2) this.view.camera.position.y = 0 - this.view.canvas.height / 2 - zoom/2*this.data.squish
+        if (this.view.camera.position.y + zoom/2*this.data.squish > this.view.drawCanvas.height - this.view.canvas.height / 2) this.view.camera.position.y = this.view.drawCanvas.height - this.view.canvas.height / 2 - zoom/2*this.data.squish
     }
 
     draw = () => {

@@ -2,11 +2,12 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderTerrainClass {
 
-    constructor(hexMapData, seedMultiplier, noiseFluctuation){
+    constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds){
         this.hexMapData = hexMapData;
 
         this.seedMultiplier = seedMultiplier
         this.noiseFluctuation = noiseFluctuation
+        this.terrainGenThresholds = terrainGenThresholds
     }
 
     generateTerrain = (mapSize) => {
@@ -27,14 +28,30 @@ export default class HexMapBuilderTerrainClass {
   
            let terrain = {
               name: null,
-              type: null
+              type: null,
+              sprite: false
            }
   
-           if (tileFeatureNoise > 0.4/* needs setting */ && value.biome == 'woodlands') {
-              terrain = {
-                 name: 'Forest',
-                 type: 'trees'
-              }
+           if (tileFeatureNoise > this.terrainGenThresholds[value.biome]) {
+
+            switch(value.biome){
+               case 'woodlands':
+                  terrain = {
+                     name: 'Forest',
+                     type: 'trees',
+                     sprite: true
+                  }
+                  break;
+               case 'grasshill':
+                  terrain = {
+                     name: 'Forest',
+                     type: 'trees',
+                     sprite: true
+                  }
+                  break;
+            }
+
+
            }
   
            this.hexMapData.setEntry(keyObj.q, keyObj.r, {

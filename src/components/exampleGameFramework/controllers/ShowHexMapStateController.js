@@ -40,7 +40,7 @@ export default class ShowHexMapStateControllerClass {
 
     mouseWheel = (deltaY) => {
 
-        let zoomAmount = this.gameManager.objects.objectMap.get('hexMap').object.view.zoomAmount
+        let zoomAmount = this.gameManager.objects.objectMap.get('camera').object.data.zoomAmount
 
         let zoom = this.gameManager.objects.objectMap.get('camera').object.controller.mouseWheel(deltaY);
 
@@ -61,12 +61,12 @@ export default class ShowHexMapStateControllerClass {
 
         if (key == 'e') {
 
-            let zoomAmount = this.gameManager.objects.objectMap.get('hexMap').object.view.zoomAmount
+            let zoomAmount = this.gameManager.objects.objectMap.get('camera').object.data.zoomAmount
             let zoomLevel = this.gameManager.objects.objectMap.get('camera').object.data.zoom
 
             let zoom = zoomLevel * zoomAmount
 
-            for (let i = 0; i < this.gameManager.objects.objectMap.get('hexMap').object.view.rotationAmount; i++) {
+            for (let i = 0; i < this.gameManager.objects.objectMap.get('camera').object.data.rotationAmount; i++) {
                 let centerHexPos = this.getCenterHexPos();
 
                 //console.log(centerHexPos)
@@ -110,12 +110,12 @@ export default class ShowHexMapStateControllerClass {
 
         if (key == 'q') {
 
-            let zoomAmount = this.gameManager.objects.objectMap.get('hexMap').object.view.zoomAmount
+            let zoomAmount = this.gameManager.objects.objectMap.get('camera').object.data.zoomAmount
             let zoomLevel = this.gameManager.objects.objectMap.get('camera').object.data.zoom
 
             let zoom = zoomLevel * zoomAmount
 
-            for (let i = 0; i < this.gameManager.objects.objectMap.get('hexMap').object.view.rotationAmount; i++) {
+            for (let i = 0; i < this.gameManager.objects.objectMap.get('camera').object.data.rotationAmount; i++) {
                 let centerHexPos = this.getCenterHexPos();
 
                 this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
@@ -172,7 +172,7 @@ export default class ShowHexMapStateControllerClass {
 
     getCenterHexPos = () => {
 
-        let zoomAmount = this.gameManager.objects.objectMap.get('hexMap').object.view.zoomAmount
+        let zoomAmount = this.gameManager.objects.objectMap.get('camera').object.data.zoomAmount
         let zoomLevel = this.gameManager.objects.objectMap.get('camera').object.data.zoom
         
         let size = this.gameManager.objects.objectMap.get('hexMap').object.data.size;

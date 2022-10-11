@@ -14,23 +14,15 @@ export default class HexMapSettingsClass {
 
         this.HEXMAP_SQUISH = 2/3;
 
-        this.SHADOW_SIZE = 1;
+        this.SHADOW_SIZE = 0.8;
 
         this.TILE_HEIGHT = 8;
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 
-        this.BASE_ZOOM_LEVEL = 30;
+        this.TILE_SIZE = 30;
 
-        this.ZOOM_AMOUNT = 50;
-
-        this.ROTATION_AMOUNT = 2
-
-        this.INIT_CAMERA_ROTATION = 1 //0 is pointy
-
-        this.CAMERA_SPEED = 5;
-
-        this.INIT_SHADOW_ROTATION = 11;
+        this.SHADOW_ROTATION = 11;
 
         this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
 
@@ -126,6 +118,22 @@ export default class HexMapSettingsClass {
             water: 10,
             frozenWater: 10,
             playa: 10
+        }
+
+        this.TERRAIN_GENERATION_THERSHOLD = {
+            snowmountain: null,
+            rockmountain: null,
+            snowhill: 0.4,
+            grasshill: 0.4,
+            savannahill: 0.4,
+            sandhill: 0.4,
+            woodlands: 0.4,
+            savanna: 0.4,
+            tundra: 0.4,
+            desert: 0.4,
+            water: null,
+            frozenWater: null,
+            playa: null
         }
 
         this.HEXMAP_ELEVATION_RANGES = {

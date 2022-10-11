@@ -38,7 +38,7 @@ export default class HexMapViewTableClass {
       let tempTablePosition = [...tablePosition].sort((a, b) => a.y - b.y)
 
 
-      let shadowRotation = this.hexMapData.rotation + this.camera.rotation;
+      let shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
 
       if (shadowRotation > 11) shadowRotation -= 12;
 
@@ -48,8 +48,6 @@ export default class HexMapViewTableClass {
 
          tempTablePosition.shift();
          tempTablePosition.shift();
-
-         console.log("shadow rotation: " + this.hexMapData.rotation, this.camera.rotation)
 
          drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
          drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
@@ -72,7 +70,7 @@ export default class HexMapViewTableClass {
          tempTablePosition.sort((a, b) => a.x - b.x)
 
 
-         let shiftedShadowRotation = this.hexMapData.rotation + Math.floor(this.camera.rotation / 3) * 3;
+         let shiftedShadowRotation = this.hexMapData.shadowRotation + Math.floor(this.camera.rotation / 3) * 3;
 
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 

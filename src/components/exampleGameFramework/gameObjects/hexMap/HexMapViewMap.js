@@ -1,27 +1,26 @@
 export default class HexMapViewMapClass {
 
-    constructor(hexMapData, camera, lineWidth, initCameraPosition, initCameraRotation, colors, sideColorMultiplier, elevationRanges, rotationAmount, geometricTilesDebug, shadowRotationDims, images, utils) {
+    constructor(hexMapData, camera, lineWidth, colors, sideColorMultiplier, elevationRanges, geometricTilesDebug, shadowRotationDims, images, utils, canvas) {
 
         this.renderctx = null; //should be local
         this.renderMap = new Map();
-        
-        
-        this.renderCanvasDims = null
 
         this.hexMapData = hexMapData
         this.camera = camera
         this.lineWidth = lineWidth
-        this.initCameraPosition = initCameraPosition
-        this.initCameraRotation = initCameraRotation
         this.colors = colors
         this.sideColorMultiplier = sideColorMultiplier
         this.elevationRanges = elevationRanges
-        this.rotationAmount = rotationAmount
         this.geometricTilesDebug = geometricTilesDebug
         this.shadowRotationDims = shadowRotationDims
 
         this.images = images
         this.utils = utils
+
+        this.canvasDims = {
+            width: canvas.width,
+            height: canvas.height
+        }
 
     }
 
@@ -34,38 +33,46 @@ export default class HexMapViewMapClass {
     }
 
     draw = (drawctx) => {
+
+        let zoom = this.camera.zoomAmount * this.camera.zoom
+
+        let position = this.camera.position
+
+        let canvasDims = this.canvasDims
+
         let render = this.getRender(this.camera.rotation)
         
-        drawctx.drawImage(render, 0, 0, render.width, render.height)
+        //drawctx.drawImage(render, 0, 0, render.width, render.height)
+
+        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * this.hexMapData.squish, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * this.hexMapData.squish)
+
     }
 
-    prerender = () => {
+    prerender = (renderCanvasDims) => {
 
         //render all configs
         let renderConfig = (cameraRotation) => {
             this.camera.rotation = cameraRotation;
             let rotatedMap = this.utils.rotateMap();
-            this.render(rotatedMap);
+            this.render(rotatedMap, renderCanvasDims);
         }
 
 
         let mapPosConfig = (cameraRotation) => {
             this.camera.rotation = cameraRotation;
             let rotatedMap = this.utils.rotateMap();
-            this.setMapPos(rotatedMap);
+            this.setMapPos(rotatedMap, renderCanvasDims);
         }
-
-        console.log(this.initCameraRotation, this.rotationAmount)
 
         //render camera rotations
         for (let i = 0; i < 12; i++) {
-            if ((i - this.initCameraRotation) % this.rotationAmount == 0) renderConfig(i);
+            if ((i - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) renderConfig(i);
             else mapPosConfig(i);
         }
 
     }
 
-    setMapPos = (rotatedMap) => {
+    setMapPos = (rotatedMap, renderCanvasDims) => {
 
         //Set map hyp
         let keys = [...rotatedMap.keys()].map(key => this.hexMapData.split(key))
@@ -90,52 +97,52 @@ export default class HexMapViewMapClass {
 
         switch (this.camera.rotation) {
             case 0:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
                 break;
             case 1:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
                 break;
             case 2:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
                 break;
             case 3:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
                 break;
             case 4:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
                 break;
             case 5:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
                 break;
             case 6:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
                 break;
             case 7:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
                 break;
             case 8:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
                 break;
             case 9:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
                 break;
             case 10:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
                 break;
             case 11:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
                 break;
         }
 
@@ -146,11 +153,11 @@ export default class HexMapViewMapClass {
         })
     }
 
-    render = (rotatedMap) => {
+    render = (rotatedMap, renderCanvasDims) => {
         console.log('ACT')
         this.setRender(this.camera.rotation, document.createElement('canvas'));
-        this.getRender(this.camera.rotation).width = this.renderCanvasDims.width;
-        this.getRender(this.camera.rotation).height = this.renderCanvasDims.height;
+        this.getRender(this.camera.rotation).width = renderCanvasDims.width;
+        this.getRender(this.camera.rotation).height = renderCanvasDims.height;
         this.renderctx = this.getRender(this.camera.rotation).getContext("2d");
 
         //set renderctx properties
@@ -158,7 +165,7 @@ export default class HexMapViewMapClass {
         this.renderctx.lineCap = 'round';
         this.renderctx.textAlign = 'center';
         this.renderctx.textBaseline = 'middle'
-        this.renderctx.clearRect(0, 0, this.renderCanvasDims.width, this.renderCanvasDims.height);
+        this.renderctx.clearRect(0, 0, renderCanvasDims.width, renderCanvasDims.height);
         this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
 
@@ -185,52 +192,52 @@ export default class HexMapViewMapClass {
 
         switch (this.camera.rotation) {
             case 0:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
                 break;
             case 1:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
                 break;
             case 2:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
                 break;
             case 3:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
                 break;
             case 4:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
                 break;
             case 5:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
                 break;
             case 6:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
                 break;
             case 7:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
                 break;
             case 8:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
                 break;
             case 9:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
                 break;
             case 10:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
                 break;
             case 11:
-                renderHexMapPos.x = this.renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-                renderHexMapPos.y = this.renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
                 break;
         }
 
@@ -264,9 +271,9 @@ export default class HexMapViewMapClass {
         let shadowRotation;
 
         if (this.camera.rotation % 2 == 0) {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
         } else {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation - 1;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation - 1;
         }
 
         if (shadowRotation > 11) shadowRotation -= 12;
@@ -421,9 +428,9 @@ export default class HexMapViewMapClass {
         let shadowRotation;
 
         if (this.camera.rotation % 2 == 0) {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
         } else {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation - 1;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation - 1;
         }
 
         if (shadowRotation > 11) shadowRotation -= 12;
@@ -532,9 +539,9 @@ export default class HexMapViewMapClass {
         let shadowRotation;
 
         if (this.camera.rotation % 2 == 0) {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
         } else {
-            shadowRotation = this.hexMapData.rotation + this.camera.rotation - 1;
+            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation - 1;
         }
 
         if (shadowRotation > 11) shadowRotation -= 12;

@@ -45,6 +45,9 @@ export default class GameMainClass {
       //Draw interval that is activated when the game finishes loading
       this.updateInterval = null;
 
+      this.fps = 0;
+      this.fpsTime = Date.now();
+
    }
 
 
@@ -135,12 +138,12 @@ export default class GameMainClass {
    update = () => {
       //update game objects
       for (let [key, value] of this.gameManager.objects.objectMap) {
-         if (value.state != 'disabled') value.object.update(value.state);
+         value.object.update(value.state);
       }
 
       //update UI
       for (let [key, value] of this.gameManager.ui.elementMap) {
-         if (value.state != 'disabled') value.element.update(value.state);
+         value.element.update(value.state);
       }
    }
    //UPDATE FUNCTION
@@ -148,6 +151,13 @@ export default class GameMainClass {
 
    //DRAW FUNCTION
    draw = () => {
+
+      this.fps++
+      if(Date.now() - this.fpsTime >= 1000){
+         console.log(this.fps)
+         this.fpsTime = Date.now()
+         this.fps = 0
+      }
 
       //clear the canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

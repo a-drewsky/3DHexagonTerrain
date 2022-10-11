@@ -1,6 +1,6 @@
 export default class CameraDataClass {
 
-    constructor(maxZoom) {
+    constructor(maxZoom, zoomAmount, rotationAmount, initCameraRotation, cameraSpeed) {
 
         this.position = {
             x: 0,
@@ -26,7 +26,10 @@ export default class CameraDataClass {
         this.mouseAnchorPoint = null;
 
         this.maxZoom = maxZoom;
-
+        this.zoomAmount = zoomAmount;
+        this.rotationAmount = rotationAmount;
+        this.initCameraRotation = initCameraRotation;
+        this.cameraSpeed = cameraSpeed;
 
     }
 
