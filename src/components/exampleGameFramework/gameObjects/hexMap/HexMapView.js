@@ -44,10 +44,11 @@ export default class HexMapViewClass {
          11: { q: 0 * shadowSize, r: -0.5 * shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
 
+      //take out unneccessary this.
       this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
       this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, this.colors.table, this.sideColorMultiplier, this.tableHeight, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, this.lineWidth, this.colors, this.sideColorMultiplier, this.elevationRanges, this.geometricTilesDebug, this.shadowRotationDims, this.images, this.utils, this.canvas);
-      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas);
+      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, shadowSize);
 
    }
 
@@ -62,7 +63,7 @@ export default class HexMapViewClass {
       this.spriteView.draw(this.drawctx)
 
       if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
-      this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * this.hexMapData.squish, 0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height/this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
          this.ctx.fillStyle = 'black'

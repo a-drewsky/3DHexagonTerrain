@@ -5,6 +5,8 @@ export default class HexMapDataClass {
 
       this.posMap = new Map();
 
+      this.terrainList = [];
+
       this.size = size;
       this.squish = squish;
 

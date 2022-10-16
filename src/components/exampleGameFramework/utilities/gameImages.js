@@ -51,7 +51,7 @@ export default class ImagesClass {
             pointy_frozenWater_hex: new Image(),
             pointy_playa_hex: new Image(),
 
-            woodlands_trees: new Image()
+            oaktree_sprite: new Image()
         }
     }
 
@@ -102,8 +102,8 @@ export default class ImagesClass {
         this.pointy_frozenWater_hex.src = pointy_example_hex;
         this.pointy_playa_hex.src = pointy_example_hex;
 
-        this.woodlands_trees.src = woodlands_trees;
-        this.woodlands_trees.size = {
+        this.oaktree_sprite.src = woodlands_trees;
+        this.oaktree_sprite.size = {
             width: 1,
             height: 1.5
         }

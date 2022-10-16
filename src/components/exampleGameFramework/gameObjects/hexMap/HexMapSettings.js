@@ -22,7 +22,7 @@ export default class HexMapSettingsClass {
 
         this.TILE_SIZE = 30;
 
-        this.SHADOW_ROTATION = 11;
+        this.SHADOW_ROTATION = 0;
 
         this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
 

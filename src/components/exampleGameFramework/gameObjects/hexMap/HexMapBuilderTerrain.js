@@ -2,71 +2,76 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderTerrainClass {
 
-    constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds){
-        this.hexMapData = hexMapData;
+   constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds) {
+      this.hexMapData = hexMapData;
 
-        this.seedMultiplier = seedMultiplier
-        this.noiseFluctuation = noiseFluctuation
-        this.terrainGenThresholds = terrainGenThresholds
-    }
+      this.seedMultiplier = seedMultiplier
+      this.noiseFluctuation = noiseFluctuation
+      this.terrainGenThresholds = terrainGenThresholds
+   }
 
-    generateTerrain = (mapSize) => {
-        let noiseFluctuation = this.noiseFluctuation[mapSize]
-        this.generateTrees(noiseFluctuation)
-     }
+   generateTerrain = (mapSize) => {
+      let noiseFluctuation = this.noiseFluctuation[mapSize]
+      this.generateTrees(noiseFluctuation)
+   }
 
-    generateTrees = (noiseFluctuation) => {
+   generateTrees = (noiseFluctuation) => {
 
-        let featureSeed1 = Math.random() * this.seedMultiplier
-        let featureSeed2 = Math.random() * this.seedMultiplier
-  
-        for (let [key, value] of this.hexMapData.getMap()) {
-           let keyObj = this.hexMapData.split(key);
-  
-           //feature generation
-           let tileFeatureNoise = noise(featureSeed1 + keyObj.q / noiseFluctuation, featureSeed1 + keyObj.r / noiseFluctuation) * noise(featureSeed2 + keyObj.q / noiseFluctuation, featureSeed2 + keyObj.r / noiseFluctuation)
-  
-           let terrain = {
-              name: null,
-              type: null,
-              sprite: false
-           }
-  
-           if (tileFeatureNoise > this.terrainGenThresholds[value.biome]) {
+      let treeSeed1 = Math.random() * this.seedMultiplier
+      let treeSeed2 = Math.random() * this.seedMultiplier
 
-            switch(value.biome){
-               case 'woodlands':
-                  terrain = {
-                     name: 'Forest',
-                     type: 'trees',
-                     sprite: true
-                  }
-                  break;
-               case 'grasshill':
-                  terrain = {
-                     name: 'Forest',
-                     type: 'trees',
-                     sprite: true
-                  }
-                  break;
+      for (let [key, value] of this.hexMapData.getMap()) {
+         let keyObj = this.hexMapData.split(key);
+
+         //feature generation
+         let tileTreeNoise = noise(treeSeed1 + keyObj.q / noiseFluctuation, treeSeed1 + keyObj.r / noiseFluctuation) * noise(treeSeed2 + keyObj.q / noiseFluctuation, treeSeed2 + keyObj.r / noiseFluctuation)
+
+         if (tileTreeNoise > this.terrainGenThresholds[value.biome]) {
+
+            let terrain = {
+               position: {
+                  q: keyObj.q,
+                  r: keyObj.r
+               },
+               height: value.height
             }
 
+            switch (value.biome) {
+               case 'woodlands':
+                  terrain.name = 'Forest'
+                  terrain.type = 'trees'
+                  terrain.image = 'oaktree_sprite'
+                  terrain.tileHeight = 2
+                  break;
+               case 'grasshill':
+                  terrain.name = 'Forest'
+                  terrain.type = 'trees'
+                  terrain.image = 'oaktree_sprite'
+                  terrain.tileHeight = 2
+                  break;
+               default:
+                  continue;
+            }
 
-           }
-  
-           this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-              height: value.height,
-              biome: value.biome,
-              verylowBiome: value.verylowBiome,
-              lowBiome: value.lowBiome,
-              midBiome: value.midBiome,
-              highBiome: value.highBiome,
-              veryhighBiome: value.veryhighBiome,
-              terrain: terrain
-           })
-  
-        }
-  
-     }
+            this.hexMapData.terrainList.push(terrain)
+
+            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+               height: value.height,
+               biome: value.biome,
+               verylowBiome: value.verylowBiome,
+               lowBiome: value.lowBiome,
+               midBiome: value.midBiome,
+               highBiome: value.highBiome,
+               veryhighBiome: value.veryhighBiome,
+               terrain: this.hexMapData.terrainList.length - 1
+            })
+
+         }
+
+
+
+      }
+
+   }
 
 }

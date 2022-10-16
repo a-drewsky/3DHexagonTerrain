@@ -48,7 +48,7 @@ export default class ShowHexMapStateControllerClass {
             //Set camera position
             this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
                 this.gameManager.objects.objectMap.get('camera').object.data.position.x - zoomAmount * deltaY / 200,
-                this.gameManager.objects.objectMap.get('camera').object.data.position.y - zoomAmount * deltaY / 200
+                this.gameManager.objects.objectMap.get('camera').object.data.position.y - zoomAmount * deltaY / 200 * (this.canvas.height/this.canvas.width)
             );
 
             console.log("camera pos: " + this.gameManager.objects.objectMap.get('camera').object.data.position.x + ',' + this.gameManager.objects.objectMap.get('camera').object.data.position.y)
@@ -83,7 +83,7 @@ export default class ShowHexMapStateControllerClass {
 
                     this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
                         vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).x - zoom/2,
-                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * squish
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * (this.canvas.height/this.canvas.width)
                     );
 
                 } else {
@@ -100,7 +100,7 @@ export default class ShowHexMapStateControllerClass {
 
                     this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
                         vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).x - zoom/2,
-                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * squish
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * (this.canvas.height/this.canvas.width)
                     );
 
                 }
@@ -130,7 +130,7 @@ export default class ShowHexMapStateControllerClass {
 
                     this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
                         vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).x - zoom/2,
-                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * squish
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * (this.canvas.height/this.canvas.width)
                     );
 
                 } else {
@@ -147,7 +147,7 @@ export default class ShowHexMapStateControllerClass {
 
                     this.gameManager.objects.objectMap.get('camera').object.controller.rotateCamera(
                         vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).x - zoom/2,
-                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * squish
+                        vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y - zoom/2 * (this.canvas.height/this.canvas.width)
                     );
 
                 }
@@ -182,7 +182,7 @@ export default class ShowHexMapStateControllerClass {
 
         let centerPos = {
             x: this.gameManager.objects.objectMap.get('camera').object.data.position.x + zoom/2 + this.canvas.width / 2 - this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).x,
-            y: this.gameManager.objects.objectMap.get('camera').object.data.position.y + zoom/2 * squish + this.canvas.height / 2 - this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y
+            y: this.gameManager.objects.objectMap.get('camera').object.data.position.y + zoom/2 * (this.canvas.height/this.canvas.width) + this.canvas.height / 2 - this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y
         }
 
         //console.log('center pos: ' + centerPos.x + ',' + centerPos.y)

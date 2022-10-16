@@ -174,10 +174,7 @@ export default class HexMapBuilderClass {
             midBiome: tileMidBiome,
             highBiome: tileHighBiome,
             veryhighBiome: tileVeryhighBiome,
-            terrain: {
-               name: null,
-               type: null
-            }
+            terrain: null
          })
 
       }

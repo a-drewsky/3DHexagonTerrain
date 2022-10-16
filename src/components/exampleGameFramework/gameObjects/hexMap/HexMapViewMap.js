@@ -41,10 +41,8 @@ export default class HexMapViewMapClass {
         let canvasDims = this.canvasDims
 
         let render = this.getRender(this.camera.rotation)
-        
-        //drawctx.drawImage(render, 0, 0, render.width, render.height)
 
-        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * this.hexMapData.squish, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * this.hexMapData.squish)
+        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height/canvasDims.width), position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height/canvasDims.width))
 
     }
 
@@ -283,16 +281,7 @@ export default class HexMapViewMapClass {
 
             let keyObj = this.hexMapData.split(key);
 
-            let xOffset;
-            let yOffset;
-
-            if (this.camera.rotation % 2 == 1) {
-                xOffset = this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r;
-                yOffset = this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish;
-            } else {
-                xOffset = this.hexMapData.VecQ.x * keyObj.q + this.hexMapData.VecR.x * keyObj.r;
-                yOffset = this.hexMapData.VecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.VecR.y * keyObj.r * this.hexMapData.squish;
-            }
+            let tilePos = this.utils.hexPositionToXYPosition(keyObj, height)
 
             //draw hexagon if at height
             if (value.height == height) {
@@ -301,8 +290,8 @@ export default class HexMapViewMapClass {
                     if (this.geometricTilesDebug) {
                         this.utils.drawFlatHexagon(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
                             `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
                             '' + keyObj.q + ',' + keyObj.r
@@ -312,8 +301,8 @@ export default class HexMapViewMapClass {
                     if (this.geometricTilesDebug) {
                         this.utils.drawPointyHexagon(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
                             `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
                             '' + keyObj.q + ',' + keyObj.r
@@ -346,8 +335,8 @@ export default class HexMapViewMapClass {
                     if (this.geometricTilesDebug) {
                         this.utils.drawFlatHexagonWall(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
                             `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
                             `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
@@ -358,8 +347,8 @@ export default class HexMapViewMapClass {
                     } else {
                         this.renderctx.drawImage(
                             this.images['flat_' + tileBiome + '_hex'],
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset - this.hexMapData.size,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight - (this.hexMapData.size * this.hexMapData.squish),
+                            tilePos.x - this.hexMapData.size,
+                            tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,
                             this.hexMapData.size * 2
                         )
@@ -367,8 +356,8 @@ export default class HexMapViewMapClass {
                         //shadow
                         this.utils.drawFlatHexagonWall(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
@@ -385,8 +374,8 @@ export default class HexMapViewMapClass {
                     if (this.geometricTilesDebug) {
                         this.utils.drawPointyHexagonWall(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
                             `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
                             `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
@@ -395,8 +384,8 @@ export default class HexMapViewMapClass {
                     } else {
                         this.renderctx.drawImage(
                             this.images['pointy_' + tileBiome + '_hex'],
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset - this.hexMapData.size,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight - (this.hexMapData.size * this.hexMapData.squish),
+                            tilePos.x - this.hexMapData.size,
+                            tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,
                             this.hexMapData.size * 2
                         )
@@ -404,8 +393,8 @@ export default class HexMapViewMapClass {
                         //shadow
                         this.utils.drawPointyHexagonWall(
                             this.renderctx,
-                            this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                            this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
+                            tilePos.x,
+                            tilePos.y,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
@@ -458,30 +447,20 @@ export default class HexMapViewMapClass {
 
                 let keyObj = this.hexMapData.split(key);
 
-                let xOffset;
-                let yOffset;
-
-                if (this.camera.rotation % 2 == 1) {
-                    xOffset = this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r;
-                    yOffset = this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish;
-
-                } else {
-                    xOffset = this.hexMapData.VecQ.x * keyObj.q + this.hexMapData.VecR.x * keyObj.r;
-                    yOffset = this.hexMapData.VecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.VecR.y * keyObj.r * this.hexMapData.squish;
-                }
+                let tilePos = this.utils.hexPositionToXYPosition(keyObj, height)
 
 
                 if (this.camera.rotation % 2 == 1) {
                     this.utils.clipFlatHexagonPath(
                         this.renderctx,
-                        this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                        this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight
+                        tilePos.x,
+                        tilePos.y
                     );
                 } else {
                     this.utils.clipPointyHexagonPath(
                         this.renderctx,
-                        this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-                        this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight
+                        tilePos.x,
+                        tilePos.y
                     );
                 }
 
