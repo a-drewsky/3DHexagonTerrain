@@ -130,7 +130,7 @@ export default class HexMapViewUtilsClass {
    
       }
 
-    cropOutTiles = (image, keyObj, rotatedMap) => {
+    cropOutTiles = (image, imageSize, keyObj, rotatedMap) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -155,8 +155,8 @@ export default class HexMapViewUtilsClass {
 
 
         let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * image.size.width
-        tempCanvas.height = this.hexMapData.size * 2 * image.size.height
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
         let tempctx = tempCanvas.getContext('2d')
 
         tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)

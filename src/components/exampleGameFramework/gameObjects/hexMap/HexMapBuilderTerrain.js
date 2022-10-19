@@ -40,13 +40,15 @@ export default class HexMapBuilderTerrainClass {
                case 'woodlands':
                   terrain.name = 'Forest'
                   terrain.type = 'trees'
-                  terrain.image = 'oaktree_sprite'
+                  terrain.sprite = 'oaktree_sprite'
+                  terrain.state = Math.floor(Math.random()*64)
                   terrain.tileHeight = 2
                   break;
                case 'grasshill':
                   terrain.name = 'Forest'
                   terrain.type = 'trees'
-                  terrain.image = 'oaktree_sprite'
+                  terrain.sprite = 'oaktree_sprite'
+                  terrain.state = Math.floor(Math.random()*64)
                   terrain.tileHeight = 2
                   break;
                default:

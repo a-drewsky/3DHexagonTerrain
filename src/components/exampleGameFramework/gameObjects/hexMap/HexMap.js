@@ -35,6 +35,8 @@ export default class HexMapClass {
             this.settings.HEXMAP_COLORS,
             this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
             this.settings.HEXMAP_ELEVATION_RANGES,
+            this.settings.TREE_SPRITE_CHANCE,
+            this.settings.TREE_SPRITE_CHANCE_INCREMENT,
             this.settings.DEBUG,
             this.settings.GEOMTRIC_TILES_DEBUG,
             images
@@ -80,6 +82,8 @@ export default class HexMapClass {
                 this.settings.HEXMAP_COLORS,
                 this.settings.HEXMAP_SIDE_COLOR_MULTIPLIER,
                 this.settings.HEXMAP_ELEVATION_RANGES,
+                this.settings.TREE_SPRITE_CHANCE,
+                this.settings.TREE_SPRITE_CHANCE_INCREMENT,
                 this.settings.DEBUG,
                 this.settings.GEOMTRIC_TILES_DEBUG,
                 images

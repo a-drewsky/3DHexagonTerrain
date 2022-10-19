@@ -22,7 +22,7 @@ export default class HexMapSettingsClass {
 
         this.TILE_SIZE = 30;
 
-        this.SHADOW_ROTATION = 0;
+        this.SHADOW_ROTATION = 1;
 
         this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
 
@@ -179,6 +179,11 @@ export default class HexMapSettingsClass {
             water: 0.42,
             playa: 1
         }
+
+
+        this.TREE_SPRITE_CHANCE = 0.4
+
+        this.TREE_SPRITE_CHANCE_INCREMENT = 0.2
 
     }
 

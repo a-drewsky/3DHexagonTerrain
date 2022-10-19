@@ -1,6 +1,6 @@
 export default class HexMapViewSpritesClass {
 
-   constructor(hexMapData, camera, images, utils, canvas, shadowSize) {
+   constructor(hexMapData, camera, images, utils, canvas, shadowSize, treeSpriteChance, treeSpriteChanceIncrement) {
 
       this.hexMapData = hexMapData
       this.camera = camera
@@ -8,6 +8,8 @@ export default class HexMapViewSpritesClass {
       this.utils = utils
 
       this.shadowSize = shadowSize
+      this.treeSpriteChance = treeSpriteChance
+      this.treeSpriteChanceIncrement = treeSpriteChanceIncrement
 
       this.canvasDims = {
          width: canvas.width,
@@ -97,22 +99,23 @@ export default class HexMapViewSpritesClass {
             q: terrainList[i].q,
             r: terrainList[i].r
          }
-         let image = this.images[terrainObject.image]
-
+         let sprite = this.images[terrainObject.sprite]
 
          let spritePos = this.utils.hexPositionToXYPosition(keyObj, terrainObject.height)
          spritePos.x -= this.hexMapData.size
          spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size
 
          let spriteSize = {
-            width: this.hexMapData.size * 2 * image.size.width,
-            height: this.hexMapData.size * 2 * image.size.height
+            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * sprite.spriteSize.height
          }
 
          if (this.onScreenCheck(spritePos, spriteSize) == false) continue
 
+
          //crop image
-         let croppedImage = this.utils.cropOutTiles(image, keyObj, rotatedMap)
+         let croppedImage = this.utils.cropOutTiles(sprite.images[terrainObject.state][this.camera.rotation], sprite.spriteSize, keyObj, rotatedMap)
+
 
          //darken image
          let shadowHeight = terrainObject.tileHeight + 1
@@ -127,20 +130,10 @@ export default class HexMapViewSpritesClass {
             for (let i = 0; i < shadowPosition.startingPoints.length; i++) {
                let startingPoint = shadowPosition.startingPoints[i]
 
-               //console.log(this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3), this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight)
-
                if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
                   if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
                      && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
-                     console.log(
-                        "A ACT",
-                        "distance: " + distance,
-                        "tile pos: q:" + terrainObject.position.q + " r:" + terrainObject.position.r,
-                        "compare pos: q:" + (terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance) + " r:" + (terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance),
-                        "tile height: " + this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height,
-                        "shadow height: " + (this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)),
-                        "compare height: " + this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height
-                     )
+
                      croppedImage = this.utils.darkenSprite(croppedImage)
                      cropped = true
                      break;
@@ -148,15 +141,7 @@ export default class HexMapViewSpritesClass {
                } else {
                   if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
                      && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight) {
-                        console.log(
-                           "B ACT",
-                           "distance: " + distance,
-                           "tile pos: q:" + terrainObject.position.q + " r:" + terrainObject.position.r,
-                           "compare pos: q:" + (terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance) + " r:" + (terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance),
-                           "tile height: " + this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height,
-                           "shadow height: " + (this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight),
-                           "compare height: " + this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height
-                        )
+
                      croppedImage = this.utils.darkenSprite(croppedImage)
                      cropped = true
                      break;
@@ -185,6 +170,119 @@ export default class HexMapViewSpritesClass {
             spriteSize.height
          )
       }
+   }
+
+   prerender = () => {
+
+      let sprites = this.images["oaktree_sprite"]
+
+      //set canvas size
+      let canvasSize = {
+         width: this.hexMapData.size * 2,
+         height: this.hexMapData.size * 2 * 1.5
+      }
+
+
+      let imageDistnceDivisor = 2;
+
+      //need setting for loops
+      for (let i = 0; i < 64; i++) {
+
+         //set positions
+         let positionsList = [
+            {
+               listPos: 5,
+               x: Math.sin(this.hexMapData.sideLength * 0) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+            {
+               listPos: 3,
+               x: Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+            {
+               listPos: 1,
+               x: Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+            {
+               listPos: 0,
+               x: Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+            {
+               listPos: 2,
+               x: Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+            {
+               listPos: 4,
+               x: Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size / imageDistnceDivisor,
+               y: Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
+            },
+         ]
+
+         let positions = [0, 1, 2, 3, 4, 5]
+
+         //create pos list
+         let filteredPositions = []
+
+         let currentIndex = Math.floor(Math.random() * positions.length)
+         filteredPositions.push(positions[currentIndex])
+         positions.splice(currentIndex, 1)
+
+         let chance = this.treeSpriteChance
+         let roll = Math.random()
+         while (roll > chance && positions.length > 0) {
+            currentIndex = Math.floor(Math.random() * positions.length)
+            filteredPositions.push(positions[currentIndex])
+            positions.splice(currentIndex, 1)
+
+            chance += this.treeSpriteChanceIncrement
+            roll = Math.random()
+         }
+
+         let imageList = []
+
+         for (let rotation = 0; rotation < 12; rotation++) {
+
+            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+               let filteredPositionsList = []
+               for (let j = 0; j < filteredPositions.length; j++) {
+
+                  let index = filteredPositions[j] - Math.floor(rotation / 2);
+                  if (index < 0) index += 6
+
+                  filteredPositionsList.push((positionsList[index]))
+
+               }
+
+               //sort pos list
+               filteredPositionsList.sort((a, b) => a.listPos - b.listPos)
+
+               //create canvas
+               let tempCanvas = document.createElement('canvas')
+               tempCanvas.width = canvasSize.width
+               tempCanvas.height = canvasSize.height
+               let tempctx = tempCanvas.getContext('2d')
+
+               for (let i = 0; i < filteredPositions.length; i++) {
+                  tempctx.drawImage(sprites.treeImages[0], canvasSize.width / 2 - this.hexMapData.size * 2 * sprites.spriteSize.width / 2 + filteredPositionsList[i].x, canvasSize.height - this.hexMapData.size * 2 * sprites.spriteSize.height + filteredPositionsList[i].y, this.hexMapData.size * 2 * sprites.spriteSize.width, this.hexMapData.size * 2 * sprites.spriteSize.height)
+               }
+
+               imageList[rotation] = tempCanvas
+
+            } else {
+               imageList[rotation] = null
+            }
+
+
+            sprites.images[i] = imageList
+         }
+
+      }
+
+
    }
 
    onScreenCheck = (spritePos, spriteSize) => {

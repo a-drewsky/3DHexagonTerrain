@@ -14,7 +14,7 @@ import flat_snowhill_hex from '../images/flat_snowhill_hex.png'
 import flat_rockhill_hex from '../images/flat_rockhill_hex.png'
 import flat_savannahill_hex from '../images/flat_savannahill_hex.png'
 
-import woodlands_trees from '../images/woodland_trees.png'
+import woodlands_tree from '../images/woodland_tree.png'
 
 export default class ImagesClass {
 
@@ -32,7 +32,7 @@ export default class ImagesClass {
             flat_savanna_hex: new Image(),
             flat_tundra_hex: new Image(),
             flat_desert_hex: new Image(),
-            flat_water_hex:new Image(),
+            flat_water_hex: new Image(),
             flat_frozenWater_hex: new Image(),
             flat_playa_hex: new Image(),
 
@@ -47,11 +47,11 @@ export default class ImagesClass {
             pointy_savanna_hex: new Image(),
             pointy_tundra_hex: new Image(),
             pointy_desert_hex: new Image(),
-            pointy_water_hex:new Image(),
+            pointy_water_hex: new Image(),
             pointy_frozenWater_hex: new Image(),
             pointy_playa_hex: new Image(),
 
-            oaktree_sprite: new Image()
+            oaktree_sprite_1: new Image()
         }
     }
 
@@ -102,12 +102,22 @@ export default class ImagesClass {
         this.pointy_frozenWater_hex.src = pointy_example_hex;
         this.pointy_playa_hex.src = pointy_example_hex;
 
-        this.oaktree_sprite.src = woodlands_trees;
-        this.oaktree_sprite.size = {
-            width: 1,
-            height: 1.5
+
+        this.oaktree_sprite_1.src = woodlands_tree;
+
+
+        //Create Image objects
+
+        this.oaktree_sprite = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            treeImages: [
+                this.oaktree_sprite_1
+            ],
+            images: []
         }
 
     }
-
 }

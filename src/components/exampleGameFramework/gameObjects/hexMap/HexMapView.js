@@ -5,7 +5,7 @@ import HexMapViewTableClass from "./HexMapViewTable";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, colors, sideColorMultiplier, elevationRanges, debug, geometricTilesDebug, images) {
+   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, colors, sideColorMultiplier, elevationRanges, treeSpriteChance, treeSpriteChanceIncrement, debug, geometricTilesDebug, images) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -48,7 +48,7 @@ export default class HexMapViewClass {
       this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
       this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, this.colors.table, this.sideColorMultiplier, this.tableHeight, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, this.lineWidth, this.colors, this.sideColorMultiplier, this.elevationRanges, this.geometricTilesDebug, this.shadowRotationDims, this.images, this.utils, this.canvas);
-      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, shadowSize);
+      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, shadowSize, treeSpriteChance, treeSpriteChanceIncrement);
 
    }
 
@@ -94,6 +94,9 @@ export default class HexMapViewClass {
 
       //render map
       this.mapView.prerender(renderCanvasDims);
+
+      //render trees
+      this.spriteView.prerender();
 
    
       //set camera rotation
