@@ -3,7 +3,7 @@ import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -21,12 +21,16 @@ export default class HexMapBuilderClass {
       this.sandHillElevationDivisor = sandHillElevationDivisor
       this.mirror = mirror
       this.terrainGenThresholds = terrainGenThresholds
+      this.terrainGenMaxNeighbors = terrainGenMaxNeighbors
+      this.rockGenThreshold = rockGenThreshold
 
       this.builderTerrain = new HexMapBuilderTerrainClass(
          this.hexMapData,
          this.seedMultiplier,
          this.noiseFluctuation,
-         this.terrainGenThresholds
+         this.terrainGenThresholds,
+         this.terrainGenMaxNeighbors,
+         this.rockGenThreshold
      );
 
    }

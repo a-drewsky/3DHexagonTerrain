@@ -14,7 +14,19 @@ import flat_snowhill_hex from '../images/flat_snowhill_hex.png'
 import flat_rockhill_hex from '../images/flat_rockhill_hex.png'
 import flat_savannahill_hex from '../images/flat_savannahill_hex.png'
 
-import woodlands_tree from '../images/woodland_tree.png'
+import woodlands_tree_1 from '../images/woodland_tree_01.png'
+import woodlands_tree_2 from '../images/woodland_tree_02.png'
+
+import savanna_tree from '../images/savanna_tree.png'
+
+import tundra_tree_1 from '../images/tundra_tree_01.png'
+import tundra_tree_2 from '../images/tundra_tree_02.png'
+
+import desert_tree_1 from '../images/desert_tree_01.png'
+import desert_tree_2 from '../images/desert_tree_02.png'
+
+import rock_1 from '../images/rock_01.png'
+import rock_2 from '../images/rock_02.png'
 
 export default class ImagesClass {
 
@@ -51,7 +63,20 @@ export default class ImagesClass {
             pointy_frozenWater_hex: new Image(),
             pointy_playa_hex: new Image(),
 
-            oaktree_sprite_1: new Image()
+            oaktree_sprite_1: new Image(),
+            oaktree_sprite_2: new Image(),
+
+            savannatree_sprite: new Image(),
+
+            tundratree_sprite_1: new Image(),
+            tundratree_sprite_2: new Image(),
+
+            deserttree_sprite_1: new Image(),
+            deserttree_sprite_2: new Image(),
+
+            rock_sprite_1: new Image(),
+            rock_sprite_2: new Image()
+
         }
     }
 
@@ -103,20 +128,77 @@ export default class ImagesClass {
         this.pointy_playa_hex.src = pointy_example_hex;
 
 
-        this.oaktree_sprite_1.src = woodlands_tree;
+        this.oaktree_sprite_1.src = woodlands_tree_1;
+        this.oaktree_sprite_2.src = woodlands_tree_2;
 
+        this.savannatree_sprite.src = savanna_tree
+
+        this.tundratree_sprite_1.src = tundra_tree_1
+        this.tundratree_sprite_2.src = tundra_tree_2
+
+        this.deserttree_sprite_1.src = desert_tree_1
+        this.deserttree_sprite_2.src = desert_tree_2
+
+        this.rock_sprite_1.src = rock_1
+        this.rock_sprite_2.src = rock_2
 
         //Create Image objects
 
-        this.oaktree_sprite = {
+        this.modifiers = {
+            size: {
+                width: 1,
+                height: 2
+            },
+            modifierSize: {
+                width: 1,
+                height: 1.5
+            },
+            offset: {
+                x: 0,
+                y: 1
+            },
+            oaktree: {
+                modifierImages: [
+                    this.oaktree_sprite_1,
+                    this.oaktree_sprite_2
+                ],
+                images: []
+            },
+            tundratree: {
+                modifierImages: [
+                    this.tundratree_sprite_1,
+                    this.tundratree_sprite_2
+                ],
+                images: []
+            },
+            deserttree: {
+                modifierImages: [
+                    this.deserttree_sprite_1,
+                    this.deserttree_sprite_2
+                ],
+                images: []
+            },
+            rocks: {
+                modifierImages: [
+                    this.rock_sprite_1,
+                    this.rock_sprite_2
+                ],
+                images: []
+            }
+        }
+
+        this.savannatree = {
             spriteSize: {
                 width: 1,
                 height: 1.5
             },
-            treeImages: [
-                this.oaktree_sprite_1
-            ],
-            images: []
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            images: [
+                [null, this.savannatree_sprite, null, this.savannatree_sprite, null, this.savannatree_sprite, null, this.savannatree_sprite, null, this.savannatree_sprite, null, this.savannatree_sprite]
+            ]
         }
 
     }

@@ -125,12 +125,44 @@ export default class HexMapSettingsClass {
             rockmountain: null,
             snowhill: 0.4,
             grasshill: 0.4,
-            savannahill: 0.4,
-            sandhill: 0.4,
-            woodlands: 0.4,
-            savanna: 0.4,
+            savannahill: 0.5,
+            sandhill: 0.5,
+            woodlands: 0.35,
+            savanna: 0.45,
             tundra: 0.4,
-            desert: 0.4,
+            desert: 0.45,
+            water: null,
+            frozenWater: null,
+            playa: null
+        }
+
+        this.TERRAIN_GENERATION_MAX_NEIGHBORS = {
+            snowmountain: null,
+            rockmountain: null,
+            snowhill: 6,
+            grasshill: 6,
+            savannahill: 0,
+            sandhill: 0,
+            woodlands: 6,
+            savanna: 0,
+            tundra: 6,
+            desert: 1,
+            water: null,
+            frozenWater: null,
+            playa: null
+        }
+
+        this.TERRAIN_ROCK_GEN_THRESHOLD = {
+            snowmountain: 0.4,
+            rockmountain: 0.4,
+            snowhill: 0.45,
+            grasshill: 0.5,
+            savannahill: 0.5,
+            sandhill: 0.45,
+            woodlands: 0.5,
+            savanna: 0.5,
+            tundra: 0.45,
+            desert: 0.45,
             water: null,
             frozenWater: null,
             playa: null
@@ -181,9 +213,19 @@ export default class HexMapSettingsClass {
         }
 
 
-        this.TREE_SPRITE_CHANCE = 0.4
+        this.MODIFIER_SECOND_SPRITE_CHANCE = {
+            oaktree: 0.4,
+            tundratree: 0.6,
+            deserttree: 0.6,
+            rocks: 0.4
+        }
 
-        this.TREE_SPRITE_CHANCE_INCREMENT = 0.2
+        this.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT = {
+            oaktree: 0.2,
+            tundratree: 0.2,
+            deserttree: 0.3,
+            rocks: 0.2
+        }
 
     }
 
