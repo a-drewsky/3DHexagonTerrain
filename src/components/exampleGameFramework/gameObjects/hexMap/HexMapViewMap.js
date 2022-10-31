@@ -346,7 +346,7 @@ export default class HexMapViewMapClass {
                         );
                     } else {
                         this.renderctx.drawImage(
-                            this.images['flat_' + tileBiome + '_hex'],
+                            this.images.tiles[tileBiome].flat[this.camera.rotation],
                             tilePos.x - this.hexMapData.size,
                             tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,
@@ -383,7 +383,7 @@ export default class HexMapViewMapClass {
                         );
                     } else {
                         this.renderctx.drawImage(
-                            this.images['pointy_' + tileBiome + '_hex'],
+                            this.images.tiles[tileBiome].pointy[this.camera.rotation],
                             tilePos.x - this.hexMapData.size,
                             tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,

@@ -78,7 +78,7 @@ export default class HexMapSettingsClass {
                 fill: {h: 190, s: 90, l: 50},
                 stroke: {h: 190, s: 90, l: 70}
             },
-            frozenWater: {
+            frozenwater: {
                 fill: {h: 190, s: 80, l: 80},
                 stroke: {h: 190, s: 80, l: 90}
             },
@@ -97,10 +97,10 @@ export default class HexMapSettingsClass {
             sandhill: ['desert', 'mesa', 'rockhill'],
             woodlands: ['grasshill'],
             savanna: ['grasshill'],
-            tundra: ['snowmountain', 'frozenWater'],
+            tundra: ['snowmountain', 'frozenwater'],
             desert: ['mesa', 'rockhill', 'sandhill'],
-            water: ['frozenWater', 'playa'],
-            frozenWater: ['tundra', 'snowmountain'],
+            water: ['frozenwater', 'playa'],
+            frozenwater: ['tundra', 'snowmountain'],
             playa: ['desert', 'sandhill']
         }
 
@@ -116,7 +116,7 @@ export default class HexMapSettingsClass {
             tundra: 10,
             desert: 10,
             water: 10,
-            frozenWater: 10,
+            frozenwater: 10,
             playa: 10
         }
 
@@ -132,7 +132,7 @@ export default class HexMapSettingsClass {
             tundra: 0.4,
             desert: 0.45,
             water: null,
-            frozenWater: null,
+            frozenwater: null,
             playa: null
         }
 
@@ -148,7 +148,7 @@ export default class HexMapSettingsClass {
             tundra: 6,
             desert: 1,
             water: null,
-            frozenWater: null,
+            frozenwater: null,
             playa: null
         }
 
@@ -164,7 +164,7 @@ export default class HexMapSettingsClass {
             tundra: 0.45,
             desert: 0.45,
             water: null,
-            frozenWater: null,
+            frozenwater: null,
             playa: null
         }
 
@@ -207,7 +207,7 @@ export default class HexMapSettingsClass {
         }
 
         this.WATER_TEMP_RANGES = {
-            frozenWater: 0.12,
+            frozenwater: 0.12,
             water: 0.42,
             playa: 1
         }

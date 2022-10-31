@@ -62,8 +62,6 @@ export default class HexMapBuilderClass {
       for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
          let dist = 0;
          for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
-            console.log(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))
-            console.log(-1 * Math.floor(r / 2) + dist, r)
             this.hexMapData.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
             dist++;
          }
@@ -74,8 +72,6 @@ export default class HexMapBuilderClass {
       for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
          let dist = 0;
          for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
-            console.log(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))
-            console.log(-1 * Math.floor(r / 2) + dist, r)
             this.hexMapData2.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData2.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
             dist++;
          }
@@ -124,7 +120,7 @@ export default class HexMapBuilderClass {
 
          if (tileHeight >= this.elevationRanges['verylow']) {
             let biome = 'water'
-            if (tileTemp < this.waterTempRanges['frozenWater']) biome = 'frozenWater'
+            if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
             if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
 
             tileBiome = biome

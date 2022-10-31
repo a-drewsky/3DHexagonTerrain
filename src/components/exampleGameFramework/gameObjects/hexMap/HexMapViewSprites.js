@@ -71,8 +71,6 @@ export default class HexMapViewSpritesClass {
 
    draw = (drawctx) => {
 
-      let rotatedMap = this.utils.rotateMap()
-
       let terrainList = []
 
       //rotate terrain objects
@@ -102,19 +100,18 @@ export default class HexMapViewSpritesClass {
 
          let sprite
 
-         if(terrainObject.type == 'modifier') {
+         if (terrainObject.type == 'modifier') {
             sprite = this.images.modifiers[terrainObject.sprite]
-         }  else if(terrainObject.type == 'structure') {
+         } else if (terrainObject.type == 'structure') {
             sprite = this.images[terrainObject.sprite]
          }
 
-         
 
          let spriteSize
-         
+
          let spritePos = this.utils.hexPositionToXYPosition(keyObj, terrainObject.height)
 
-         if(terrainObject.type == 'modifier') {
+         if (terrainObject.type == 'modifier') {
 
             spriteSize = {
                width: this.hexMapData.size * 2 * this.images.modifiers.size.width,
@@ -124,7 +121,7 @@ export default class HexMapViewSpritesClass {
             spritePos.x -= this.hexMapData.size + this.images.modifiers.offset.x * this.hexMapData.size * 2
             spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.images.modifiers.offset.y * this.hexMapData.size * 2
 
-         } else if(terrainObject.type == 'structure') {
+         } else if (terrainObject.type == 'structure') {
 
             spriteSize = {
                width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -133,26 +130,14 @@ export default class HexMapViewSpritesClass {
 
             spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
             spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
-            
+
          }
 
          if (this.onScreenCheck(spritePos, spriteSize) == false) continue
 
-         let croppedImage
-
-         if(terrainObject.type == 'modifier') {
-            croppedImage = this.utils.cropOutTiles(sprite.images[terrainObject.state][this.camera.rotation], this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap)
-         } else if(terrainObject.type == 'structure') {
-            croppedImage = this.utils.cropOutTiles(sprite.images[terrainObject.state][this.camera.rotation], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
-
-         }
-
-         //crop image
-         croppedImage = this.darkenSprite(croppedImage, terrainObject)
-
 
          drawctx.drawImage(
-            croppedImage,
+            terrainObject.images[terrainObject.state][this.camera.rotation],
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -209,123 +194,183 @@ export default class HexMapViewSpritesClass {
       return croppedImage;
    }
 
-   prerender = () => {
+   renderModifier = (terrainObject) => {
 
-      for(let modifier in  this.images.modifiers){
+      let sprites = this.images.modifiers[terrainObject.sprite]
 
-         if(modifier == 'size' || modifier == 'modifierSize' || modifier == 'offset') continue;
+      //set canvas size
+      let canvasSize = {
+         width: this.hexMapData.size * 2 * this.images.modifiers.size.width,
+         height: this.hexMapData.size * 2 * this.images.modifiers.size.height
+      }
 
-         let sprites = this.images.modifiers[modifier]
+      //set positions
+      let positionsList = [
+         {
+            listPos: 5,
+            x: Math.sin(this.hexMapData.sideLength * 0) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+         {
+            listPos: 3,
+            x: Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+         {
+            listPos: 1,
+            x: Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+         {
+            listPos: 0,
+            x: Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+         {
+            listPos: 2,
+            x: Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+         {
+            listPos: 4,
+            x: Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size / 2,
+            y: Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) / 2
+         },
+      ]
 
-         //set canvas size
-         let canvasSize = {
-            width: this.hexMapData.size * 2 * this.images.modifiers.size.width,
-            height: this.hexMapData.size * 2 * this.images.modifiers.size.height
-         }
-   
-   
-         let imageDistnceDivisor = 2;
-   
-         //need setting for loops
-         for (let i = 0; i < 64; i++) {
-   
-            //set positions
-            let positionsList = [
-               {
-                  listPos: 5,
-                  x: Math.sin(this.hexMapData.sideLength * 0) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-               {
-                  listPos: 3,
-                  x: Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-               {
-                  listPos: 1,
-                  x: Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-               {
-                  listPos: 0,
-                  x: Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-               {
-                  listPos: 2,
-                  x: Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-               {
-                  listPos: 4,
-                  x: Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size / imageDistnceDivisor,
-                  y: Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) / imageDistnceDivisor
-               },
-            ]
-   
-            let positions = [0, 1, 2, 3, 4, 5]
-   
-            //create pos list
-            let filteredPositions = []
-   
-            let currentIndex = Math.floor(Math.random() * positions.length)
-            filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
-            positions.splice(currentIndex, 1)
-   
-            let chance = this.treeSpriteChance[modifier]
-            let roll = Math.random()
-            while (roll > chance && positions.length > 0) {
-               currentIndex = Math.floor(Math.random() * positions.length)
-               filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
-               positions.splice(currentIndex, 1)
-   
-               chance += this.treeSpriteChanceIncrement[modifier]
-               roll = Math.random()
+      let positions = [0, 1, 2, 3, 4, 5]
+
+      //create pos list
+      let filteredPositions = []
+
+      let currentIndex = Math.floor(Math.random() * positions.length)
+      filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
+      positions.splice(currentIndex, 1)
+
+      let chance = this.treeSpriteChance[terrainObject.sprite]
+      let roll = Math.random()
+      while (roll > chance && positions.length > 0) {
+         currentIndex = Math.floor(Math.random() * positions.length)
+         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
+         positions.splice(currentIndex, 1)
+
+         chance += this.treeSpriteChanceIncrement[terrainObject.sprite]
+         roll = Math.random()
+      }
+
+      let imageList = []
+
+      for (let rotation = 0; rotation < 12; rotation++) {
+
+         if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+            let filteredPositionsList = []
+            for (let j = 0; j < filteredPositions.length; j++) {
+
+               let index = filteredPositions[j].position - Math.floor(rotation / 2);
+               if (index < 0) index += 6
+
+               filteredPositionsList.push({ ...positionsList[index], imageNum: filteredPositions[j].imageNum })
             }
-   
-            let imageList = []
-   
-            for (let rotation = 0; rotation < 12; rotation++) {
-   
-               if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
-                  let filteredPositionsList = []
-                  for (let j = 0; j < filteredPositions.length; j++) {
-   
-                     let index = filteredPositions[j].position - Math.floor(rotation / 2);
-                     if (index < 0) index += 6
-   
-                     filteredPositionsList.push({ ...positionsList[index], imageNum: filteredPositions[j].imageNum })
-   
-                  }
-   
-                  //sort pos list
-                  filteredPositionsList.sort((a, b) => a.listPos - b.listPos)
-   
-                  //create canvas
-                  let tempCanvas = document.createElement('canvas')
-                  tempCanvas.width = canvasSize.width
-                  tempCanvas.height = canvasSize.height
-                  let tempctx = tempCanvas.getContext('2d')
-   
-                  for (let i = 0; i < filteredPositionsList.length; i++) {
-                     console.log(filteredPositionsList[i].imageNum)
-                     tempctx.drawImage(sprites.modifierImages[filteredPositionsList[i].imageNum], canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width / 2 + filteredPositionsList[i].x, canvasSize.height - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height + filteredPositionsList[i].y, this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width, this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height)
-                  }
-   
-                  imageList[rotation] = tempCanvas
-   
-               } else {
-                  imageList[rotation] = null
-               }
-   
-   
-               sprites.images[i] = imageList
+
+            //sort pos list
+            filteredPositionsList.sort((a, b) => a.listPos - b.listPos)
+
+            //create canvas
+            let tempCanvas = document.createElement('canvas')
+            tempCanvas.width = canvasSize.width
+            tempCanvas.height = canvasSize.height
+            let tempctx = tempCanvas.getContext('2d')
+
+            for (let i = 0; i < filteredPositionsList.length; i++) {
+               tempctx.drawImage(sprites.modifierImages[filteredPositionsList[i].imageNum], canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width / 2 + filteredPositionsList[i].x, canvasSize.height - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height + filteredPositionsList[i].y, this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width, this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height)
             }
-   
+
+            imageList[rotation] = tempCanvas
+
+         } else {
+            imageList[rotation] = null
          }
 
       }
 
+      terrainObject.images[0] = imageList
+
+
+      //crop and darken
+      for (let i = 0; i < terrainObject.images[0].length; i++) {
+         if (terrainObject.images[0][i] == null) continue
+
+         this.camera.rotation = i;
+         let rotatedMap = this.utils.rotateMap()
+         let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+
+         let croppedImage = this.utils.cropOutTiles(terrainObject.images[0][this.camera.rotation], this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap)
+         let darkenedImage = this.darkenSprite(croppedImage, terrainObject)
+         terrainObject.images[0][i] = darkenedImage
+      }
+   }
+
+   renderStructure = (terrainObject) => {
+
+      let sprite = this.images[terrainObject.sprite]
+
+      let imageList = []
+
+      let canvasSize = {
+         width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+         height: this.hexMapData.size * 2 * sprite.spriteSize.height
+      }
+
+
+      for (let i=0; i<sprite.images.length; i++){
+         for (let rotation = 0; rotation < 12; rotation++) {
+            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+   
+               //create canvas
+               let tempCanvas = document.createElement('canvas')
+               tempCanvas.width = canvasSize.width
+               tempCanvas.height = canvasSize.height
+               let tempctx = tempCanvas.getContext('2d')
+   
+               tempctx.drawImage(sprite.images[i][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
+   
+               imageList[rotation] = tempCanvas
+   
+            } else {
+               imageList[rotation] = null
+            }
+         }
+   
+         terrainObject.images[i] = imageList
+      }
+
+      //crop and darken
+      for (let i = 0; i < terrainObject.images[0].length; i++) {
+         if (terrainObject.images[0][i] == null) continue
+
+         this.camera.rotation = i;
+         let rotatedMap = this.utils.rotateMap()
+         let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+
+         for (let j=0; j<sprite.images.length; j++){
+            let croppedImage = this.utils.cropOutTiles(terrainObject.images[j][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
+            let darkenedImage = this.darkenSprite(croppedImage, terrainObject)
+            terrainObject.images[j][i] = darkenedImage
+         }
+
+      }
+   }
+
+   prerender = () => {
+
+      for (let i = 0; i < this.hexMapData.terrainList.length; i++) {
+
+         let terrainObject = this.hexMapData.terrainList[i]
+
+         if (terrainObject.type == 'modifier') this.renderModifier(terrainObject)
+         if (terrainObject.type == 'structure') this.renderStructure(terrainObject)
+
+      }
 
    }
 
