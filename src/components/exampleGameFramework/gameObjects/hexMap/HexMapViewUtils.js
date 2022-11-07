@@ -128,7 +128,61 @@ export default class HexMapViewUtilsClass {
    
          return tempCanvas
    
-      }
+    }
+
+    cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+        let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        let cropList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
+
+        tempctx.beginPath();
+
+        for (let i = 0; i < cropList.length; i++) {
+            if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height == tileHeight) {
+
+                let tilePos = {
+                    x: this.hexMapData.size * 2,
+                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size
+                }
+
+                if (this.camera.rotation % 2 == 1) {
+                    tilePos.x += this.hexMapData.flatTopVecQ.x * cropList[i].q + this.hexMapData.flatTopVecR.x * cropList[i].r
+                    tilePos.y += this.hexMapData.flatTopVecQ.y * cropList[i].q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * cropList[i].r * this.hexMapData.squish
+
+                    this.clipFlatHexagonPath(
+                        tempctx,
+                        tilePos.x,
+                        tilePos.y
+                    );
+                } else {
+                    tilePos.x += this.hexMapData.VecQ.x * cropList[i].q + this.hexMapData.VecR.x * cropList[i].r
+                    tilePos.y += this.hexMapData.VecQ.y * cropList[i].q * this.hexMapData.squish + this.hexMapData.VecR.y * cropList[i].r * this.hexMapData.squish
+
+                    this.clipPointyHexagonPath(
+                        tempctx,
+                        tilePos.x,
+                        tilePos.y
+                    );
+                }
+            }
+        }
+
+        tempctx.save();
+        tempctx.clip();
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        tempctx.restore();
+
+        tempCanvas = this.cropOutTiles(tempCanvas, imageSize, imageOffset, keyObj, rotatedMap)
+
+        return tempCanvas
+    }
 
     cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
 

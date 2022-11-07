@@ -3,7 +3,7 @@ import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -23,6 +23,8 @@ export default class HexMapBuilderClass {
       this.terrainGenThresholds = terrainGenThresholds
       this.terrainGenMaxNeighbors = terrainGenMaxNeighbors
       this.rockGenThreshold = rockGenThreshold
+      this.cellSize = cellSize
+      this.bufferSizes = bufferSizes
 
       this.builderTerrain = new HexMapBuilderTerrainClass(
          this.hexMapData,
@@ -30,7 +32,9 @@ export default class HexMapBuilderClass {
          this.noiseFluctuation,
          this.terrainGenThresholds,
          this.terrainGenMaxNeighbors,
-         this.rockGenThreshold
+         this.rockGenThreshold,
+         this.cellSize,
+         this.bufferSizes
      );
 
    }
@@ -247,7 +251,7 @@ export default class HexMapBuilderClass {
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
          let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
-         this.hexMapData.setEntry(keyObj.q, keyObj.r, tileToClone)
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, {...tileToClone})
 
          return true
       }
@@ -300,7 +304,7 @@ export default class HexMapBuilderClass {
       //make a settings variable or some shit
       let noiseFluctuation = this.noiseFluctuation[mapSize]
 
-      this.generateMap(q, r)
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize]*2)
       this.generateBiomes(noiseFluctuation)
 
       if (this.hexMapData2 !== undefined) {
@@ -312,18 +316,18 @@ export default class HexMapBuilderClass {
       this.smoothBiomes()
 
       //mirror the map if selected
-      if (this.mirror) this.mirrorMap(q, r)
+      //if (this.mirror) this.mirrorMap(q, r)
 
       //add terrain features
       if (this.hexMapData2 === undefined) {
-          this.builderTerrain.generateTerrain(mapSize)
+          this.builderTerrain.generateTerrain(q, r, mapSize)
       }
 
    }
 
-   mirrorMap = (q, r) => {
-      this.mirrorMapFunc(q, r)
-      if (this.hexMapData2 !== undefined) this.mirrorMap2Func(q, r)
-   }
+   // mirrorMap = (q, r) => {
+   //    this.mirrorMapFunc(q, r)
+   //    if (this.hexMapData2 !== undefined) this.mirrorMap2Func(q, r)
+   // }
 
 }

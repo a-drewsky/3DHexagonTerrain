@@ -135,6 +135,15 @@ export default class HexMapViewSpritesClass {
 
          if (this.onScreenCheck(spritePos, spriteSize) == false) continue
 
+         if(terrainObject.shadowImage){
+            drawctx.drawImage(
+               terrainObject.shadowImage,
+               spritePos.x - 0.5 * this.hexMapData.size * 2,
+               spritePos.y,
+               spriteSize.width * 2,
+               spriteSize.height
+            )
+         }
 
          drawctx.drawImage(
             terrainObject.images[terrainObject.state][this.camera.rotation],
@@ -314,8 +323,6 @@ export default class HexMapViewSpritesClass {
 
       let sprite = this.images[terrainObject.sprite]
 
-      let imageList = []
-
       let canvasSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
          height: this.hexMapData.size * 2 * sprite.spriteSize.height
@@ -323,6 +330,7 @@ export default class HexMapViewSpritesClass {
 
 
       for (let i=0; i<sprite.images.length; i++){
+         let imageList = []
          for (let rotation = 0; rotation < 12; rotation++) {
             if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
    
@@ -343,6 +351,11 @@ export default class HexMapViewSpritesClass {
    
          terrainObject.images[i] = imageList
       }
+
+      this.camera.rotation = 1
+      let tempKeyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+
+      if(sprite.shadow) terrainObject.shadowImage = this.utils.cropStructureShadow(sprite.shadow, { width: 2, height: 1.5 }, { x: 0.5, y: 0.5 } ,tempKeyObj, this.utils.rotateMap())
 
       //crop and darken
       for (let i = 0; i < terrainObject.images[0].length; i++) {

@@ -365,6 +365,14 @@ export default class HexMapViewMapClass {
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
                         );
+
+                        
+
+                if(value.test){
+                    this.renderctx.fillStyle = 'black'
+                    this.renderctx.fillRect(tilePos.x - 5, tilePos.y - 5, 10, 10)
+                    console.log("TEST")
+                } 
                     }
 
 

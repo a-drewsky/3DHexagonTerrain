@@ -61,7 +61,9 @@ export default class HexMapClass {
             this.settings.MIRROR_MAP,
             this.settings.TERRAIN_GENERATION_THERSHOLD,
             this.settings.TERRAIN_GENERATION_MAX_NEIGHBORS,
-            this.settings.TERRAIN_ROCK_GEN_THRESHOLD
+            this.settings.TERRAIN_ROCK_GEN_THRESHOLD,
+            this.settings.CELL_SIZE,
+            this.settings.BUFFER_SIZES
         );
 
         if (this.settings.DEBUG) {

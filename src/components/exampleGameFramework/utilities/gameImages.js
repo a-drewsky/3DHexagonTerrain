@@ -60,6 +60,15 @@ import amethyst_mine_3 from '../images/amethyst_mine_3.png'
 import amethyst_mine_4 from '../images/amethyst_mine_4.png'
 import amethyst_mine_5 from '../images/amethyst_mine_5.png'
 
+import base_1 from '../images/base_1.png'
+import base_3 from '../images/base_3.png'
+import base_5 from '../images/base_5.png'
+import base_7 from '../images/base_7.png'
+import base_9 from '../images/base_9.png'
+import base_11 from '../images/base_11.png'
+
+import test_shadow from '../images/test_shadow.png'
+
 export default class ImagesClass {
 
     constructor() {
@@ -139,6 +148,15 @@ export default class ImagesClass {
             amethystmine_sprite_3: new Image(),
             amethystmine_sprite_4: new Image(),
             amethystmine_sprite_5: new Image(),
+
+            base_sprite_1: new Image(),
+            base_sprite_3: new Image(),
+            base_sprite_5: new Image(),
+            base_sprite_7: new Image(),
+            base_sprite_9: new Image(),
+            base_sprite_11: new Image(),
+
+            testShadow_sprite: new Image(),
 
         }
     }
@@ -235,6 +253,15 @@ export default class ImagesClass {
         this.amethystmine_sprite_3.src = amethyst_mine_3
         this.amethystmine_sprite_4.src = amethyst_mine_4
         this.amethystmine_sprite_5.src = amethyst_mine_5
+
+        this.base_sprite_1.src = base_1
+        this.base_sprite_3.src = base_3
+        this.base_sprite_5.src = base_5
+        this.base_sprite_7.src = base_7
+        this.base_sprite_9.src = base_9
+        this.base_sprite_11.src = base_11
+
+        this.testShadow_sprite.src = test_shadow
 
         //Create Image objects
 
@@ -360,6 +387,20 @@ export default class ImagesClass {
             ]
         }
 
+        this.base = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            images: [
+                [null, this.base_sprite_1, null, this.base_sprite_3, null, this.base_sprite_5, null, this.base_sprite_7, null, this.base_sprite_9, null, this.base_sprite_11]
+            ]
+        }
+
         this.coppermine = {
             spriteSize: {
                 width: 1,
@@ -375,7 +416,8 @@ export default class ImagesClass {
                 [this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3],
                 [this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4],
                 [this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5],
-            ]
+            ],
+            shadow: this.testShadow_sprite
         }
 
         this.goldmine = {

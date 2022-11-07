@@ -3,11 +3,11 @@ export default class SettingsClass {
     constructor(externalSettings){
 
         
-        this.MAP_SIZE = externalSettings.mapSize == 'small' ? {size: 'small', q: 15, r: 31} 
-            : externalSettings.mapSize == 'medium' ? {size: 'medium', q: 20, r: 41} 
-            : externalSettings.mapSize == 'large' ? {size: 'large', q: 25, r: 51} 
-            : externalSettings.mapSize == 'extralarge' ? {size: 'extralarge', q: 35, r: 71}
-            : {size: 'extralarge', q: 50, r: 101}
+        this.MAP_SIZE = externalSettings.mapSize == 'small' ? {size: 'small', q: 2, r: 3} 
+            : externalSettings.mapSize == 'medium' ? {size: 'medium', q: 3, r: 4} 
+            : externalSettings.mapSize == 'large' ? {size: 'large', q: 4, r: 5} 
+            : externalSettings.mapSize == 'extralarge' ? {size: 'extralarge', q: 6, r: 7}
+            : {size: 'massive', q: 9, r: 10}
             //r must be odd for mirrored map to work
 
 

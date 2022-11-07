@@ -2,7 +2,7 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold) {
+   constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes) {
       this.hexMapData = hexMapData;
 
       this.seedMultiplier = seedMultiplier
@@ -10,13 +10,151 @@ export default class HexMapBuilderTerrainClass {
       this.terrainGenThresholds = terrainGenThresholds
       this.terrainGenMaxNeighbors = terrainGenMaxNeighbors
       this.rockGenThreshold = rockGenThreshold
+      this.cellSize = cellSize
+      this.bufferSizes = bufferSizes
    }
 
-   generateTerrain = (mapSize) => {
+   generateTerrain = (q, r, mapSize) => {
       let noiseFluctuation = this.noiseFluctuation[mapSize]
       this.generateModifiers(noiseFluctuation)
       this.generateSavannaTrees()
       this.generateLargeRocks()
+      this.generateMines(q, r, mapSize)
+      this.generateStrongholds(q, r, mapSize)
+   }
+
+   setStructure = (q, r, terrain, tile) => {
+      if (this.hexMapData.getEntry(q, r).terrain) {
+         this.hexMapData.terrainList[tile.terrain] = terrain
+
+         this.hexMapData.setEntry(q, r, {
+            height: tile.height,
+            biome: tile.biome,
+            verylowBiome: tile.verylowBiome,
+            lowBiome: tile.lowBiome,
+            midBiome: tile.midBiome,
+            highBiome: tile.highBiome,
+            veryhighBiome: tile.veryhighBiome,
+            terrain: tile.terrain
+         })
+      } else {
+         this.hexMapData.terrainList.push(terrain)
+
+         this.hexMapData.setEntry(q, r, {
+            height: tile.height,
+            biome: tile.biome,
+            verylowBiome: tile.verylowBiome,
+            lowBiome: tile.lowBiome,
+            midBiome: tile.midBiome,
+            highBiome: tile.highBiome,
+            veryhighBiome: tile.veryhighBiome,
+            terrain: this.hexMapData.terrainList.length - 1
+         })
+      }
+   }
+
+   generateStrongholds = (q, r, mapSize) => {
+
+      let bufferSize = this.bufferSizes[mapSize]
+
+      for (let rGen = 0; rGen < r; rGen++) {
+         for (let qGen = 0; qGen < q; qGen++) {
+            let cellTiles = []
+
+            for (let rPos = bufferSize + this.cellSize.r * rGen; rPos < bufferSize + this.cellSize.r * (rGen + 1); rPos++) {
+               for (let qPos = -1 * Math.floor(rPos / 2) + this.cellSize.q * qGen; qPos < this.cellSize.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
+                  cellTiles.push({
+                     q: qPos,
+                     r: rPos
+                  })
+               }
+            }
+
+            let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
+            let selectedTilePos = cellTiles[selectedTileIndex]
+            let selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+
+            let maxLoops = cellTiles.length
+            let loops = 0
+
+            while(selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater' || (selectedTile.terrain && selectedTile.terrain.name == 'Mine')){
+               if(loops >= maxLoops) break;
+               selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
+               selectedTilePos = cellTiles[selectedTileIndex]
+               selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               loops++
+            }
+
+            let terrain = {
+               position: {
+                  q: selectedTilePos.q,
+                  r: selectedTilePos.r
+               },
+               height: selectedTile.height,
+               name: 'base',
+               type: 'structure',
+               sprite: 'base',
+               state: 0,
+               tileHeight: 3,
+               images: []
+            }
+
+            this.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
+         }
+      }
+
+   }
+
+   generateMines = (q, r, mapSize) => {
+
+      let bufferSize = this.bufferSizes[mapSize]
+
+      for (let rGen = 0; rGen < r; rGen++) {
+         for (let qGen = 0; qGen < q; qGen++) {
+            let cellTiles = []
+
+            for (let rPos = bufferSize + this.cellSize.r * rGen; rPos < bufferSize + this.cellSize.r * (rGen + 1); rPos++) {
+               for (let qPos = -1 * Math.floor(rPos / 2) + this.cellSize.q * qGen; qPos < this.cellSize.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
+                  cellTiles.push({
+                     q: qPos,
+                     r: rPos
+                  })
+               }
+            }
+
+            let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
+            let selectedTilePos = cellTiles[selectedTileIndex]
+            let selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+
+            let maxLoops = cellTiles.length
+            let loops = 0
+
+            while(selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater'){
+               if(loops >= maxLoops) break;
+               selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
+               selectedTilePos = cellTiles[selectedTileIndex]
+               selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               loops++
+            }
+
+            let terrain = {
+               position: {
+                  q: selectedTilePos.q,
+                  r: selectedTilePos.r
+               },
+               height: selectedTile.height,
+               name: 'Mine',
+               type: 'structure',
+               sprite: 'coppermine',
+               state: 0,
+               tileHeight: 2,
+               images: []
+            }
+
+            this.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
+         }
+      }
+
    }
 
    generateSavannaTrees = () => {
@@ -43,18 +181,7 @@ export default class HexMapBuilderTerrainClass {
                images: []
             }
 
-            this.hexMapData.terrainList.push(terrain)
-
-            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-               height: value.height,
-               biome: value.biome,
-               verylowBiome: value.verylowBiome,
-               lowBiome: value.lowBiome,
-               midBiome: value.midBiome,
-               highBiome: value.highBiome,
-               veryhighBiome: value.veryhighBiome,
-               terrain: this.hexMapData.terrainList.length - 1
-            })
+            this.setStructure(keyObj.q, keyObj.r, terrain, value)
 
          }
 
@@ -70,8 +197,6 @@ export default class HexMapBuilderTerrainClass {
          let spawnChance = Math.random();
 
          if (value.terrain && this.hexMapData.terrainList[value.terrain].name == 'Rocks' && spawnChance > replacesmallRockThreshold) {
-
-            console.log("ROCKS")
 
             let terrain = {
                position: {

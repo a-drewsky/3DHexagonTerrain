@@ -26,6 +26,11 @@ export default class HexMapSettingsClass {
 
         this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
 
+        this.CELL_SIZE = {
+            q: 7,
+            r: 10
+        }
+
 
         //BIOME GENERATION
 
@@ -197,6 +202,14 @@ export default class HexMapSettingsClass {
             large: 7,
             extralarge: 8,
             massive: 9
+        }
+        
+        this.BUFFER_SIZES = {
+            small: 3,
+            medium: 4,
+            large: 5,
+            extralarge: 7,
+            massive: 10
         }
 
         this.TEMP_RANGES = {
