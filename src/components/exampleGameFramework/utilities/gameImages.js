@@ -67,7 +67,12 @@ import base_7 from '../images/base_7.png'
 import base_9 from '../images/base_9.png'
 import base_11 from '../images/base_11.png'
 
-import test_shadow from '../images/test_shadow.png'
+import large_rock_shadow_1 from '../images/mine_shadow_1.png'
+import large_rock_shadow_3 from '../images/mine_shadow_3.png'
+import large_rock_shadow_5 from '../images/mine_shadow_5.png'
+import large_rock_shadow_7 from '../images/mine_shadow_7.png'
+import large_rock_shadow_9 from '../images/mine_shadow_9.png'
+import large_rock_shadow_11 from '../images/mine_shadow_11.png'
 
 export default class ImagesClass {
 
@@ -156,7 +161,12 @@ export default class ImagesClass {
             base_sprite_9: new Image(),
             base_sprite_11: new Image(),
 
-            testShadow_sprite: new Image(),
+            large_rock_shadow_1: new Image(),
+            large_rock_shadow_3: new Image(),
+            large_rock_shadow_5: new Image(),
+            large_rock_shadow_7: new Image(),
+            large_rock_shadow_9: new Image(),
+            large_rock_shadow_11: new Image(),
 
         }
     }
@@ -261,7 +271,12 @@ export default class ImagesClass {
         this.base_sprite_9.src = base_9
         this.base_sprite_11.src = base_11
 
-        this.testShadow_sprite.src = test_shadow
+        this.large_rock_shadow_1.src = large_rock_shadow_1
+        this.large_rock_shadow_3.src = large_rock_shadow_3
+        this.large_rock_shadow_5.src = large_rock_shadow_5
+        this.large_rock_shadow_7.src = large_rock_shadow_7
+        this.large_rock_shadow_9.src = large_rock_shadow_9
+        this.large_rock_shadow_11.src = large_rock_shadow_11
 
         //Create Image objects
 
@@ -410,14 +425,29 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
-                [this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1, this.coppermine_sprite_1],
-                [this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2, this.coppermine_sprite_2],
-                [this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3, this.coppermine_sprite_3],
-                [this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4, this.coppermine_sprite_4],
-                [this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5, this.coppermine_sprite_5],
+                [null, this.coppermine_sprite_1, null, this.coppermine_sprite_1, null, this.coppermine_sprite_1, null, this.coppermine_sprite_1, null, this.coppermine_sprite_1, null, this.coppermine_sprite_1],
+                [null, this.coppermine_sprite_2, null, this.coppermine_sprite_2, null, this.coppermine_sprite_2, null, this.coppermine_sprite_2, null, this.coppermine_sprite_2, null, this.coppermine_sprite_2],
+                [null, this.coppermine_sprite_3, null, this.coppermine_sprite_3, null, this.coppermine_sprite_3, null, this.coppermine_sprite_3, null, this.coppermine_sprite_3, null, this.coppermine_sprite_3],
+                [null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4],
+                [null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5]
             ],
-            shadow: this.testShadow_sprite
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+            
         }
 
         this.goldmine = {

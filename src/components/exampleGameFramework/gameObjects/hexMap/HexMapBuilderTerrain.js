@@ -148,7 +148,8 @@ export default class HexMapBuilderTerrainClass {
                sprite: 'coppermine',
                state: 0,
                tileHeight: 2,
-               images: []
+               images: [],
+               shadowImages: []
             }
 
             this.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)

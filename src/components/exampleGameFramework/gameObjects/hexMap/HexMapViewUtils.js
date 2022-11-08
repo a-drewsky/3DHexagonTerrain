@@ -146,8 +146,8 @@ export default class HexMapViewUtilsClass {
             if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height == tileHeight) {
 
                 let tilePos = {
-                    x: this.hexMapData.size * 2,
-                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size
+                    x: this.hexMapData.size + this.hexMapData.size * 2 * imageOffset.x,
+                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y
                 }
 
                 if (this.camera.rotation % 2 == 1) {

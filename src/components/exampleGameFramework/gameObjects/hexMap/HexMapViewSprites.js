@@ -135,9 +135,9 @@ export default class HexMapViewSpritesClass {
 
          if (this.onScreenCheck(spritePos, spriteSize) == false) continue
 
-         if(terrainObject.shadowImage){
+         if(terrainObject.shadowImages){
             drawctx.drawImage(
-               terrainObject.shadowImage,
+               terrainObject.shadowImages[terrainObject.state][this.camera.rotation],
                spritePos.x - 0.5 * this.hexMapData.size * 2,
                spritePos.y,
                spriteSize.width * 2,
@@ -352,10 +352,31 @@ export default class HexMapViewSpritesClass {
          terrainObject.images[i] = imageList
       }
 
-      this.camera.rotation = 1
-      let tempKeyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+      //prerender shadow images
+      if(sprite.shadowImages){
+         for(let i=0; i<sprite.shadowImages.length; i++){
+            let imageList = []
+            for (let rotation = 0; rotation < 12; rotation++) {
+               if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+      
+                  this.camera.rotation = rotation;
+                  let rotatedMap = this.utils.rotateMap()
+                  let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
-      if(sprite.shadow) terrainObject.shadowImage = this.utils.cropStructureShadow(sprite.shadow, { width: 2, height: 1.5 }, { x: 0.5, y: 0.5 } ,tempKeyObj, this.utils.rotateMap())
+                  let shadowImage = this.utils.cropStructureShadow(sprite.shadowImages[i][rotation], sprite.shadowSize, sprite.shadowOffset, keyObj, rotatedMap)
+      
+                  imageList[rotation] = shadowImage
+      
+               } else {
+                  imageList[rotation] = null
+               }
+            }
+      
+            terrainObject.shadowImages[i] = imageList
+         }
+
+      } 
+
 
       //crop and darken
       for (let i = 0; i < terrainObject.images[0].length; i++) {
