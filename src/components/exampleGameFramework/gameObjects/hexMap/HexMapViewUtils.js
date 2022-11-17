@@ -130,7 +130,7 @@ export default class HexMapViewUtilsClass {
    
     }
 
-    cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+    cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
         let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
 
         let tempCanvas = document.createElement('canvas')
@@ -149,6 +149,9 @@ export default class HexMapViewUtilsClass {
                     x: this.hexMapData.size + this.hexMapData.size * 2 * imageOffset.x,
                     y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y
                 }
+                
+                // tempctx.fillStyle = 'red'
+                // tempctx.fillRect(tilePos.x-2,tilePos.y-2,4,4)
 
                 if (this.camera.rotation % 2 == 1) {
                     tilePos.x += this.hexMapData.flatTopVecQ.x * cropList[i].q + this.hexMapData.flatTopVecR.x * cropList[i].r
@@ -184,7 +187,65 @@ export default class HexMapViewUtilsClass {
         return tempCanvas
     }
 
-    cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+    cropStructureShadowLarge = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
+        let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        let cropList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }, 
+            { q: 0, r: -2 }, { q: 1, r: -2 }, { q: 2, r: -2 }, { q: 2, r: -1 }, { q: 2, r: 0 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -2, r: 1 }, { q: -2, r: 0 }, { q: -1, r: -1 }]
+
+        tempctx.beginPath();
+
+        for (let i = 0; i < cropList.length; i++) {
+            if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height == tileHeight) {
+
+                let tilePos = {
+                    x: this.hexMapData.size + this.hexMapData.size * 2 * imageOffset.x,
+                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y
+                }
+                
+                // tempctx.fillStyle = 'red'
+                // tempctx.fillRect(tilePos.x-2,tilePos.y-2,4,4)
+
+                if (this.camera.rotation % 2 == 1) {
+                    tilePos.x += this.hexMapData.flatTopVecQ.x * cropList[i].q + this.hexMapData.flatTopVecR.x * cropList[i].r
+                    tilePos.y += this.hexMapData.flatTopVecQ.y * cropList[i].q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * cropList[i].r * this.hexMapData.squish
+
+                    this.clipFlatHexagonPath(
+                        tempctx,
+                        tilePos.x,
+                        tilePos.y
+                    );
+                } else {
+                    tilePos.x += this.hexMapData.VecQ.x * cropList[i].q + this.hexMapData.VecR.x * cropList[i].r
+                    tilePos.y += this.hexMapData.VecQ.y * cropList[i].q * this.hexMapData.squish + this.hexMapData.VecR.y * cropList[i].r * this.hexMapData.squish
+
+                    this.clipPointyHexagonPath(
+                        tempctx,
+                        tilePos.x,
+                        tilePos.y
+                    );
+                }
+            }
+        }
+
+        tempctx.save();
+        tempctx.clip();
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        tempctx.restore();
+
+        tempCanvas = this.cropOutTilesLarge(tempCanvas, imageSize, imageOffset, keyObj, rotatedMap)
+
+        return tempCanvas
+    }
+
+    cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -208,6 +269,7 @@ export default class HexMapViewUtilsClass {
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
 
 
+
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
         tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
@@ -215,8 +277,104 @@ export default class HexMapViewUtilsClass {
 
         tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
 
-
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
+
+        for (let i = 0; i < cropList.length; i++) {
+            if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height > tileHeight) {
+                //clip the hexagons in front of image
+                let clipXOffset;
+                let clipYOffset;
+
+                if (this.camera.rotation % 2 == 1) {
+                    clipXOffset = this.hexMapData.flatTopVecQ.x * (keyObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (keyObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.flatTopVecQ.y * (keyObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (keyObj.r + cropList[i].r) * this.hexMapData.squish;
+                } else {
+                    clipXOffset = this.hexMapData.VecQ.x * (keyObj.q + cropList[i].q) + this.hexMapData.VecR.x * (keyObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.VecQ.y * (keyObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.VecR.y * (keyObj.r + cropList[i].r) * this.hexMapData.squish;
+                }
+
+                let neighborHeights = []
+
+                if (rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+                }
+                if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+                }
+                if (rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r))) {
+                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r)).height)
+                }
+
+
+                let height
+
+                if (neighborHeights.length < 3) {
+                    height = rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height
+                } else {
+                    height = rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height - Math.min(...neighborHeights)
+                }
+
+                if (height < 0) height = 0;
+
+                height += 1;
+
+                tempctx.beginPath();
+
+                clipFlatHexagonPathForImage(tempctx,
+                    zeroPoint.x + this.hexMapData.posMap.get(this.camera.rotation).x + clipXOffset,
+                    zeroPoint.y + this.hexMapData.posMap.get(this.camera.rotation).y + clipYOffset - rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
+                    height
+                );
+
+
+                //clear the canvas in that area
+
+                tempctx.save();
+                tempctx.clip();
+
+                //tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+
+                tempctx.restore();
+            }
+        }
+
+        return tempCanvas
+    }
+
+    cropOutTilesLarge = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
+
+        let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
+            ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        }
+
+
+        let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
+
+        let zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
+        zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
+        zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
+
+
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        let cropList = [{ q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -2, r: 2 }, { q: 2, r: 0 },   { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -2, r: 3 }, { q: 2, r: 1 },   { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }, { q: -2, r: 4 }, { q: 2, r: 2 }, { q: -2, r: 1 }, { q: 2, r: -1 }]
 
         for (let i = 0; i < cropList.length; i++) {
             if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height > tileHeight) {

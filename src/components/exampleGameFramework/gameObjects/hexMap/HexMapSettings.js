@@ -20,7 +20,7 @@ export default class HexMapSettingsClass {
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 
-        this.TILE_SIZE = 30;
+        this.TILE_SIZE = 40;
 
         this.SHADOW_ROTATION = 1;
 

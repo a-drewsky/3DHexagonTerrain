@@ -370,7 +370,7 @@ export default class HexMapViewMapClass {
 
                 if(value.test){
                     this.renderctx.fillStyle = 'black'
-                    this.renderctx.fillRect(tilePos.x - 5, tilePos.y - 5, 10, 10)
+                    this.renderctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
                     console.log("TEST")
                 } 
                     }

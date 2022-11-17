@@ -74,6 +74,48 @@ import large_rock_shadow_7 from '../images/mine_shadow_7.png'
 import large_rock_shadow_9 from '../images/mine_shadow_9.png'
 import large_rock_shadow_11 from '../images/mine_shadow_11.png'
 
+import base_shadow_1 from '../images/base_shadow_1.png'
+import base_shadow_3 from '../images/base_shadow_3.png'
+import base_shadow_5 from '../images/base_shadow_5.png'
+import base_shadow_7 from '../images/base_shadow_7.png'
+import base_shadow_9 from '../images/base_shadow_9.png'
+import base_shadow_11 from '../images/base_shadow_11.png'
+
+import savanna_tree_shadow_1 from '../images/savanna_tree_shadow_1.png'
+import savanna_tree_shadow_3 from '../images/savanna_tree_shadow_3.png'
+import savanna_tree_shadow_5 from '../images/savanna_tree_shadow_5.png'
+import savanna_tree_shadow_7 from '../images/savanna_tree_shadow_7.png'
+import savanna_tree_shadow_9 from '../images/savanna_tree_shadow_9.png'
+import savanna_tree_shadow_11 from '../images/savanna_tree_shadow_11.png'
+
+import modifier_shadow_large_1 from '../images/modifier_shadow_large_1.png'
+import modifier_shadow_large_3 from '../images/modifier_shadow_large_3.png'
+import modifier_shadow_large_5 from '../images/modifier_shadow_large_5.png'
+import modifier_shadow_large_7 from '../images/modifier_shadow_large_7.png'
+import modifier_shadow_large_9 from '../images/modifier_shadow_large_9.png'
+import modifier_shadow_large_11 from '../images/modifier_shadow_large_11.png'
+
+import modifier_shadow_small_1 from '../images/modifier_shadow_small_1.png'
+import modifier_shadow_small_3 from '../images/modifier_shadow_small_3.png'
+import modifier_shadow_small_5 from '../images/modifier_shadow_small_5.png'
+import modifier_shadow_small_7 from '../images/modifier_shadow_small_7.png'
+import modifier_shadow_small_9 from '../images/modifier_shadow_small_9.png'
+import modifier_shadow_small_11 from '../images/modifier_shadow_small_11.png'
+
+import large_base_1 from '../images/large_base_1.png'
+import large_base_3 from '../images/large_base_3.png'
+import large_base_5 from '../images/large_base_5.png'
+import large_base_7 from '../images/large_base_7.png'
+import large_base_9 from '../images/large_base_9.png'
+import large_base_11 from '../images/large_base_11.png'
+
+import large_base_shadow_1 from '../images/large_base_shadow_1.png'
+import large_base_shadow_3 from '../images/large_base_shadow_3.png'
+import large_base_shadow_5 from '../images/large_base_shadow_5.png'
+import large_base_shadow_7 from '../images/large_base_shadow_7.png'
+import large_base_shadow_9 from '../images/large_base_shadow_9.png'
+import large_base_shadow_11 from '../images/large_base_shadow_11.png'
+
 export default class ImagesClass {
 
     constructor() {
@@ -167,6 +209,48 @@ export default class ImagesClass {
             large_rock_shadow_7: new Image(),
             large_rock_shadow_9: new Image(),
             large_rock_shadow_11: new Image(),
+
+            base_shadow_1: new Image(),
+            base_shadow_3: new Image(),
+            base_shadow_5: new Image(),
+            base_shadow_7: new Image(),
+            base_shadow_9: new Image(),
+            base_shadow_11: new Image(),
+
+            savanna_tree_shadow_1: new Image(),
+            savanna_tree_shadow_3: new Image(),
+            savanna_tree_shadow_5: new Image(),
+            savanna_tree_shadow_7: new Image(),
+            savanna_tree_shadow_9: new Image(),
+            savanna_tree_shadow_11: new Image(),
+
+            modifier_shadow_large_1: new Image(),
+            modifier_shadow_large_3: new Image(),
+            modifier_shadow_large_5: new Image(),
+            modifier_shadow_large_7: new Image(),
+            modifier_shadow_large_9: new Image(),
+            modifier_shadow_large_11: new Image(),
+
+            modifier_shadow_small_1: new Image(),
+            modifier_shadow_small_3: new Image(),
+            modifier_shadow_small_5: new Image(),
+            modifier_shadow_small_7: new Image(),
+            modifier_shadow_small_9: new Image(),
+            modifier_shadow_small_11: new Image(),
+
+            large_base_1: new Image(),
+            large_base_3: new Image(),
+            large_base_5: new Image(),
+            large_base_7: new Image(),
+            large_base_9: new Image(),
+            large_base_11: new Image(),
+
+            large_base_shadow_1: new Image(),
+            large_base_shadow_3: new Image(),
+            large_base_shadow_5: new Image(),
+            large_base_shadow_7: new Image(),
+            large_base_shadow_9: new Image(),
+            large_base_shadow_11: new Image(),
 
         }
     }
@@ -278,6 +362,48 @@ export default class ImagesClass {
         this.large_rock_shadow_9.src = large_rock_shadow_9
         this.large_rock_shadow_11.src = large_rock_shadow_11
 
+        this.base_shadow_1.src = base_shadow_1
+        this.base_shadow_3.src = base_shadow_3
+        this.base_shadow_5.src = base_shadow_5
+        this.base_shadow_7.src = base_shadow_7
+        this.base_shadow_9.src = base_shadow_9
+        this.base_shadow_11.src = base_shadow_11
+
+        this.savanna_tree_shadow_1.src = savanna_tree_shadow_1
+        this.savanna_tree_shadow_3.src = savanna_tree_shadow_3
+        this.savanna_tree_shadow_5.src = savanna_tree_shadow_5
+        this.savanna_tree_shadow_7.src = savanna_tree_shadow_7
+        this.savanna_tree_shadow_9.src = savanna_tree_shadow_9
+        this.savanna_tree_shadow_11.src = savanna_tree_shadow_11
+
+        this.modifier_shadow_large_1.src = modifier_shadow_large_1
+        this.modifier_shadow_large_3.src = modifier_shadow_large_3
+        this.modifier_shadow_large_5.src = modifier_shadow_large_5
+        this.modifier_shadow_large_7.src = modifier_shadow_large_7
+        this.modifier_shadow_large_9.src = modifier_shadow_large_9
+        this.modifier_shadow_large_11.src = modifier_shadow_large_11
+
+        this.modifier_shadow_small_1.src = modifier_shadow_small_1
+        this.modifier_shadow_small_3.src = modifier_shadow_small_3
+        this.modifier_shadow_small_5.src = modifier_shadow_small_5
+        this.modifier_shadow_small_7.src = modifier_shadow_small_7
+        this.modifier_shadow_small_9.src = modifier_shadow_small_9
+        this.modifier_shadow_small_11.src = modifier_shadow_small_11
+
+        this.large_base_1.src = large_base_1
+        this.large_base_3.src = large_base_3
+        this.large_base_5.src = large_base_5
+        this.large_base_7.src = large_base_7
+        this.large_base_9.src = large_base_9
+        this.large_base_11.src = large_base_11
+
+        this.large_base_shadow_1.src = large_base_shadow_1
+        this.large_base_shadow_3.src = large_base_shadow_3
+        this.large_base_shadow_5.src = large_base_shadow_5
+        this.large_base_shadow_7.src = large_base_shadow_7
+        this.large_base_shadow_9.src = large_base_shadow_9
+        this.large_base_shadow_11.src = large_base_shadow_11
+
         //Create Image objects
 
         this.tiles = {
@@ -340,38 +466,115 @@ export default class ImagesClass {
                 width: 1,
                 height: 2
             },
+            offset: {
+                x: 0,
+                y: 1
+            },
             modifierSize: {
                 width: 1,
                 height: 1.5
             },
-            offset: {
-                x: 0,
-                y: 1
+            shadowSpriteSize: {
+                width: 1,
+                height: 1.5
             },
             oaktree: {
                 modifierImages: [
                     this.oaktree_sprite_1,
                     this.oaktree_sprite_2
-                ]
+                ],
+                shadowImages: [
+                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+                ],
+                shadowSize: {
+                    width: 2,
+                    height: 2
+                },
+                shadowOffset: {
+                    x: 0.5,
+                    y: 1
+                }
             },
             tundratree: {
                 modifierImages: [
                     this.tundratree_sprite_1,
                     this.tundratree_sprite_2
-                ]
+                ],
+                shadowImages: [
+                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11]
+                ],
+                shadowSize: {
+                    width: 2,
+                    height: 2
+                },
+                shadowOffset: {
+                    x: 0.5,
+                    y: 1
+                }
             },
             deserttree: {
                 modifierImages: [
                     this.deserttree_sprite_1,
                     this.deserttree_sprite_2
-                ]
+                ],
+                shadowImages: [
+                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+                ],
+                shadowSize: {
+                    width: 2,
+                    height: 2
+                },
+                shadowOffset: {
+                    x: 0.5,
+                    y: 1
+                }
             },
             rocks: {
                 modifierImages: [
                     this.rock_sprite_1,
                     this.rock_sprite_2
-                ]
+                ],
+                shadowImages: [
+                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11],
+                    [null, null, null, null, null, null, null, null, null, null, null, null]
+                ],
+                shadowSize: {
+                    width: 2,
+                    height: 2
+                },
+                shadowOffset: {
+                    x: 0.5,
+                    y: 1
+                }
             }
+        }
+
+        this.mainbase = {
+            spriteSize: {
+                width: 3,
+                height: 2.5
+            },
+            spriteOffset: {
+                x: 1,
+                y: 1
+            },
+            shadowSize: {
+                width: 4,
+                height: 3
+            },
+            shadowOffset: {
+                x: 1.5,
+                y: 1
+            },
+            images: [
+                [null, this.large_base_1, null, this.large_base_3, null, this.large_base_5, null, this.large_base_7, null, this.large_base_9, null, this.large_base_11]
+            ],
+            shadowImages: [
+                [null, this.large_base_shadow_1, null, this.large_base_shadow_3, null, this.large_base_shadow_5, null, this.large_base_shadow_7, null, this.large_base_shadow_9, null, this.large_base_shadow_11]
+            ]
         }
 
         this.savannatree = {
@@ -383,8 +586,19 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite]
+            ],
+            shadowImages: [
+                [null, this.savanna_tree_shadow_1, null, this.savanna_tree_shadow_3, null, this.savanna_tree_shadow_5, null, this.savanna_tree_shadow_7, null, this.savanna_tree_shadow_9, null, this.savanna_tree_shadow_11]
             ]
         }
 
@@ -397,8 +611,19 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 
@@ -411,8 +636,19 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [null, this.base_sprite_1, null, this.base_sprite_3, null, this.base_sprite_5, null, this.base_sprite_7, null, this.base_sprite_9, null, this.base_sprite_11]
+            ],
+            shadowImages: [
+                [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11]
             ]
         }
 
