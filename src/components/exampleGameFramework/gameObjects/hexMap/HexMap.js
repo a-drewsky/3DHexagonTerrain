@@ -63,7 +63,9 @@ export default class HexMapClass {
             this.settings.TERRAIN_GENERATION_MAX_NEIGHBORS,
             this.settings.TERRAIN_ROCK_GEN_THRESHOLD,
             this.settings.CELL_SIZE,
-            this.settings.BUFFER_SIZES
+            this.settings.BUFFER_SIZES,
+            this.settings.SECOND_MINE_CHANCE,
+            this.settings.THIRD_MINE_CHACE
         );
 
         if (this.settings.DEBUG) {
@@ -99,7 +101,7 @@ export default class HexMapClass {
         }
 
 
-        this.controller = new HexMapControllerClass(this.data);
+        this.controller = new HexMapControllerClass(this.data, camera);
     }
 
     build = (q, r, size) => {

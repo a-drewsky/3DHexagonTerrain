@@ -116,6 +116,22 @@ import large_base_shadow_7 from '../images/large_base_shadow_7.png'
 import large_base_shadow_9 from '../images/large_base_shadow_9.png'
 import large_base_shadow_11 from '../images/large_base_shadow_11.png'
 
+import large_base_test_0_0 from '../images/large_base_test_0_0.png'
+import large_base_test_0_m1 from '../images/large_base_test_0_-1.png'
+import large_base_test_1_m1 from '../images/large_base_test_1_-1.png'
+import large_base_test_1_0 from '../images/large_base_test_1_0.png'
+import large_base_test_0_1 from '../images/large_base_test_0_1.png'
+import large_base_test_m1_1 from '../images/large_base_test_-1_1.png'
+import large_base_test_m1_0 from '../images/large_base_test_-1_0.png'
+
+import main_base_q0r0 from '../images/main_base_q0r0.png'
+import main_base_qm1r0 from '../images/main_base_q-1r0.png'
+import main_base_q0rm1 from '../images/main_base_q0r-1.png'
+import main_base_q1rm1 from '../images/main_base_q1r-1.png'
+import main_base_q1r0 from '../images/main_base_q1r0.png'
+import main_base_q0r1 from '../images/main_base_q0r1.png'
+import main_base_qm1r1 from '../images/main_base_q-1r1.png'
+
 export default class ImagesClass {
 
     constructor() {
@@ -251,6 +267,22 @@ export default class ImagesClass {
             large_base_shadow_7: new Image(),
             large_base_shadow_9: new Image(),
             large_base_shadow_11: new Image(),
+
+            large_base_test_0_0: new Image(),
+            large_base_test_0_m1: new Image(),
+            large_base_test_1_m1: new Image(),
+            large_base_test_1_0: new Image(),
+            large_base_test_0_1: new Image(),
+            large_base_test_m1_1: new Image(),
+            large_base_test_m1_0: new Image(),
+
+            main_base_q0r0: new Image(),
+            main_base_qm1r0: new Image(),
+            main_base_q0rm1: new Image(),
+            main_base_q1rm1: new Image(),
+            main_base_q1r0: new Image(),
+            main_base_q0r1: new Image(),
+            main_base_qm1r1: new Image(),
 
         }
     }
@@ -404,6 +436,24 @@ export default class ImagesClass {
         this.large_base_shadow_9.src = large_base_shadow_9
         this.large_base_shadow_11.src = large_base_shadow_11
 
+        this.large_base_test_0_0.src = large_base_test_0_0
+        this.large_base_test_0_m1.src = large_base_test_0_m1
+        this.large_base_test_1_m1.src = large_base_test_1_m1  
+        this.large_base_test_1_0.src = large_base_test_1_0
+        this.large_base_test_0_1.src = large_base_test_0_1
+        this.large_base_test_m1_1.src = large_base_test_m1_1
+        this.large_base_test_m1_0.src = large_base_test_m1_0
+
+        this.main_base_q0r0.src = main_base_q0r0
+        this.main_base_qm1r0.src = main_base_qm1r0
+        this.main_base_q0rm1.src = main_base_q0rm1
+        this.main_base_q1rm1.src = main_base_q1rm1
+        this.main_base_q1r0.src = main_base_q1r0
+        this.main_base_q0r1.src = main_base_q0r1
+        this.main_base_qm1r1.src = main_base_qm1r1
+
+        
+
         //Create Image objects
 
         this.tiles = {
@@ -552,28 +602,178 @@ export default class ImagesClass {
             }
         }
 
-        this.mainbase = {
+        this.mainbase_q0r0 = {
             spriteSize: {
-                width: 3,
-                height: 2.5
+                width: 1,
+                height: 1.5
             },
             spriteOffset: {
-                x: 1,
-                y: 1
+                x: 0,
+                y: 0.5
             },
             shadowSize: {
-                width: 4,
-                height: 3
+                width: 1,
+                height: 1.5
             },
             shadowOffset: {
-                x: 1.5,
-                y: 1
+                x: 0,
+                y: 0.5
             },
             images: [
-                [null, this.large_base_1, null, this.large_base_3, null, this.large_base_5, null, this.large_base_7, null, this.large_base_9, null, this.large_base_11]
+                [null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0]
             ],
             shadowImages: [
-                [null, this.large_base_shadow_1, null, this.large_base_shadow_3, null, this.large_base_shadow_5, null, this.large_base_shadow_7, null, this.large_base_shadow_9, null, this.large_base_shadow_11]
+                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+            ]
+        }
+
+        this.mainbase_qm1r0 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+        }
+
+        this.mainbase_q0rm1 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+        }
+
+        this.mainbase_q1rm1 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+        }
+
+        this.mainbase_q1r0 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+        }
+
+        this.mainbase_q0r1 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
+            ]
+        }
+
+        this.mainbase_qm1r1 = {
+            spriteSize: {
+                width: 1,
+                height: 1.5
+            },
+            spriteOffset: {
+                x: 0,
+                y: 0.5
+            },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
+            images: [
+                [null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1]
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 
@@ -695,12 +895,27 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1, this.goldmine_sprite_1],
                 [this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2, this.goldmine_sprite_2],
                 [this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3, this.goldmine_sprite_3],
                 [this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4],
                 [this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5],
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 
@@ -713,12 +928,27 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1, this.ironmine_sprite_1],
                 [this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2, this.ironmine_sprite_2],
                 [this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3, this.ironmine_sprite_3],
                 [this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4],
                 [this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5],
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 
@@ -731,12 +961,27 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1, this.rubymine_sprite_1],
                 [this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2, this.rubymine_sprite_2],
                 [this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3, this.rubymine_sprite_3],
                 [this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4],
                 [this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5],
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 
@@ -749,12 +994,27 @@ export default class ImagesClass {
                 x: 0,
                 y: 0.5
             },
+            shadowSize: {
+                width: 2,
+                height: 1.5
+            },
+            shadowOffset: {
+                x: 0.5,
+                y: 0.5
+            },
             images: [
                 [this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1, this.amethystmine_sprite_1],
                 [this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2, this.amethystmine_sprite_2],
                 [this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3, this.amethystmine_sprite_3],
                 [this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4],
                 [this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5],
+            ],
+            shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ]
         }
 

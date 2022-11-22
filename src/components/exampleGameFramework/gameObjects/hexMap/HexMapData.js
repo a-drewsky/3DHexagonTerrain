@@ -12,12 +12,12 @@ export default class HexMapDataClass {
 
       this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
       this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
-      
+
       this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
 
       this.sideLength = Math.PI / 3;
-      
+
       this.shadowRotation = shadowRotation;
 
       this.tileHeight = tileHeight;
@@ -47,7 +47,7 @@ export default class HexMapDataClass {
    }
    //END SET METHODS
 
-   
+
    //GET METHODS
    //get an entry in the hexmap (returns a hex tile object)
    getEntry = (q, r) => {
@@ -88,6 +88,33 @@ export default class HexMapDataClass {
       if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
       if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
       if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
+
+      return neighbors.map(key => this.split(key));
+   }
+
+   //returns keys of all neighbors adjacent to (q, r)
+   getDoubleNeighborKeys = (q, r) => {
+      let neighbors = [];
+
+      if (this.hasEntry(q, r - 1)) neighbors.push(this.join(q, r - 1));
+      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.join(q + 1, r - 1));
+      if (this.hasEntry(q + 1, r)) neighbors.push(this.join(q + 1, r));
+      if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
+      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
+      if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
+      
+      if (this.hasEntry(q, r-2)) neighbors.push(this.join(q, r-2));
+      if (this.hasEntry(q+1, r-2)) neighbors.push(this.join(q+1, r-2));
+      if (this.hasEntry(q+2, r-2)) neighbors.push(this.join(q+2, r-2));
+      if (this.hasEntry(q+2, r-1)) neighbors.push(this.join(q+2, r-1));
+      if (this.hasEntry(q+2, r)) neighbors.push(this.join(q+2, r));
+      if (this.hasEntry(q+1, r+1)) neighbors.push(this.join(q+1, r+1));
+      if (this.hasEntry(q, r+2)) neighbors.push(this.join(q, r+2));
+      if (this.hasEntry(q-1, r+2)) neighbors.push(this.join(q-1, r+2));
+      if (this.hasEntry(q-2, r+2)) neighbors.push(this.join(q-2, r+2));
+      if (this.hasEntry(q-2, r+1)) neighbors.push(this.join(q-2, r+1));
+      if (this.hasEntry(q-2, r)) neighbors.push(this.join(q-2, r));
+      if (this.hasEntry(q-1, r-1)) neighbors.push(this.join(q-1, r-1));
 
       return neighbors.map(key => this.split(key));
    }
@@ -184,7 +211,7 @@ export default class HexMapDataClass {
    join = (q, r) => {
       return [q, r].join(',')
    }
-   
+
    //round floating hex coords to nearest integer hex coords
    roundToNearestHex = (q, r) => {
       let fracQ = q;

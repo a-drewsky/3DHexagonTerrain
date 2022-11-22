@@ -60,10 +60,28 @@ export default class HexMapViewClass {
 
       this.mapView.draw(this.drawctx)
 
+
+      //draw highlight for selected tile
+      let rotatedMap = this.utils.rotateMap()
+      for (let [key, value] of rotatedMap) {
+         if (value.selected) {
+            let keyObj = this.hexMapData.split(key);
+
+            let tilePos = this.utils.hexPositionToXYPosition(keyObj, value.height)
+
+            this.drawctx.fillStyle = 'black'
+            this.drawctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
+            console.log("TEST")
+
+         }
+      }
+
+
       this.spriteView.draw(this.drawctx)
 
+
       if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
-      this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height/this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
          this.ctx.fillStyle = 'black'
@@ -98,7 +116,7 @@ export default class HexMapViewClass {
       //render trees
       this.spriteView.prerender();
 
-   
+
       //set camera rotation
       this.camera.rotation = this.camera.initCameraRotation;
 

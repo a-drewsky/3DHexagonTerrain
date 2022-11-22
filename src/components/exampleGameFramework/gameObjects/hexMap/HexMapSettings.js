@@ -240,6 +240,9 @@ export default class HexMapSettingsClass {
             rocks: 0.2
         }
 
+        this.SECOND_MINE_CHANCE = 0.4
+        this.THIRD_MINE_CHACE = 0.2
+
     }
 
 }

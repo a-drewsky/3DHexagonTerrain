@@ -3,7 +3,7 @@ import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes) {
+   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes, secondMineChance, thirdMineChance) {
 
       this.hexMapData = hexMapData;
       this.hexMapView = hexMapView;
@@ -26,6 +26,9 @@ export default class HexMapBuilderClass {
       this.cellSize = cellSize
       this.bufferSizes = bufferSizes
 
+      this.secondMineChance = secondMineChance
+      this.thirdMineChance = thirdMineChance
+
       this.builderTerrain = new HexMapBuilderTerrainClass(
          this.hexMapData,
          this.seedMultiplier,
@@ -34,7 +37,10 @@ export default class HexMapBuilderClass {
          this.terrainGenMaxNeighbors,
          this.rockGenThreshold,
          this.cellSize,
-         this.bufferSizes
+         this.bufferSizes,
+         this.elevationRanges,
+         this.secondMineChance,
+         this.thirdMineChance
      );
 
    }
@@ -122,53 +128,48 @@ export default class HexMapBuilderClass {
          let tileHighBiome = null
          let tileVeryhighBiome = null
 
-         if (tileHeight >= this.elevationRanges['verylow']) {
-            let biome = 'water'
-            if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
-            if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
+         let biome
 
-            tileBiome = biome
-            tileVerylowBiome = biome
-         }
-         if (tileHeight >= this.elevationRanges['low']) {
-            let biome
+         
+         biome = 'water'
+         if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
+         if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
+         tileVerylowBiome = biome
 
-            for (let range in this.tempRanges) {
-               if (tileTemp < this.tempRanges[range]) {
-                  biome = range
-                  break;
-               }
+         for (let range in this.tempRanges) {
+            if (tileTemp < this.tempRanges[range]) {
+               biome = range
+               break;
             }
+         }
+         tileLowBiome = biome
+         if (tileHeight >= this.elevationRanges['low']) tileVerylowBiome = biome
+         
+         biome = 'snowhill'
+         if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
+         if (tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
+         if (tileTemp > this.tempRanges['savanna']) {
+            biome = 'sandhill'
+            if(tileHeight >= this.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
+         }
+         tileMidBiome = biome
 
-            tileBiome = biome
-            tileLowBiome = biome
-            tileVerylowBiome = biome
-         }
-         if (tileHeight >= this.elevationRanges['mid']) {
-            let biome = 'snowhill'
-            if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
-            if (tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
-            if (tileTemp > this.tempRanges['savanna']) {
-               biome = 'sandhill'
-               tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
-            }
+         biome = 'rockmountain'
+         if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
+         if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+         tileHighBiome = biome
 
-            tileBiome = biome
-            tileMidBiome = biome
-         }
-         if (tileHeight >= this.elevationRanges['high']) {
-            let biome = 'rockmountain'
-            if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
-            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
-            tileBiome = biome
-            tileHighBiome = biome
-         }
-         if (tileHeight >= this.elevationRanges['veryhigh']) {
-            let biome = 'snowmountain'
-            if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
-            tileBiome = biome
-            tileVeryhighBiome = biome
-         }
+         biome = 'snowmountain'
+         if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+         tileVeryhighBiome = biome
+
+
+         if (tileHeight >= this.elevationRanges['verylow']) tileBiome = tileVerylowBiome
+         if (tileHeight >= this.elevationRanges['low']) tileBiome = tileLowBiome
+         if (tileHeight >= this.elevationRanges['mid']) tileBiome = tileMidBiome
+         if (tileHeight >= this.elevationRanges['high']) tileBiome = tileHighBiome      
+         if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
+         
 
          this.hexMapData.setEntry(keyObj.q, keyObj.r, {
             height: tileHeight,
@@ -178,7 +179,8 @@ export default class HexMapBuilderClass {
             midBiome: tileMidBiome,
             highBiome: tileHighBiome,
             veryhighBiome: tileVeryhighBiome,
-            terrain: null
+            terrain: null,
+            selected: false
          })
 
       }

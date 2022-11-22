@@ -13,6 +13,7 @@ export default class ShowHexMapStateControllerClass {
         //   this.gameManager.state.draw();
 
         this.gameManager.objects.objectMap.get('camera').object.controller.mouseDown(x, y);
+        this.gameManager.objects.objectMap.get('hexMap').object.controller.click(x, y);
 
         //this.gameManager.state.draw();
 

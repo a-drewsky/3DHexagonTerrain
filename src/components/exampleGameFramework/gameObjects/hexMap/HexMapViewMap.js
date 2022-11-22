@@ -42,7 +42,7 @@ export default class HexMapViewMapClass {
 
         let render = this.getRender(this.camera.rotation)
 
-        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height/canvasDims.width), position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height/canvasDims.width))
+        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height / canvasDims.width), position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height / canvasDims.width))
 
     }
 
@@ -366,13 +366,6 @@ export default class HexMapViewMapClass {
                             `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
                         );
 
-                        
-
-                if(value.test){
-                    this.renderctx.fillStyle = 'black'
-                    this.renderctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
-                    console.log("TEST")
-                } 
                     }
 
 
