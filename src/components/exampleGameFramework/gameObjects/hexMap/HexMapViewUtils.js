@@ -484,9 +484,7 @@ export default class HexMapViewUtilsClass {
            x: this.hexMapData.posMap.get(this.camera.rotation).x + this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r,
            y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
         }
-
-        let x = this.hexMapData.posMap.get(this.camera.rotation).x + this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r
-        let y = this.hexMapData.posMap.get(this.camera.rotation).y + this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish - tileHeight * this.hexMapData.tileHeight
+        
     }
 
     XYPositionTohexPosition = (x, y) => {

@@ -4,11 +4,13 @@ import CollisionClass from '../../utilities/collision';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera) {
+    constructor(hexMapData, camera, canvas) {
 
         this.hexMapData = hexMapData;
 
         this.camera = camera;
+
+        this.canvas = canvas
 
 
         this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
@@ -19,6 +21,10 @@ export default class HexMapControllerClass {
 
     click = (x, y) => {
 
+        x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
+        y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
+
+        
         let ogPos = {
             x: x,
             y: y
@@ -31,10 +37,8 @@ export default class HexMapControllerClass {
 
         y -= this.hexMapData.posMap.get(this.camera.rotation).y
 
-        // let hexClicked = {
-        //     q: ((Math.sqrt(3) / 3) * x - (1 / 3) * ((y - this.hexMapData.posMap.get(this.camera.rotation).y) * (1 / this.hexMapData.squish))) / this.hexMapData.size,
-        //     r: (y * (1/this.hexMapData.squish) * (2 / 3)) / this.hexMapData.size
-        // }
+        console.log(x, y)
+
 
         let hexClicked = {
             q: ( (2/3 * x )                       ) / this.hexMapData.size,
@@ -42,6 +46,8 @@ export default class HexMapControllerClass {
         }
 
         hexClicked = this.hexMapData.roundToNearestHex(hexClicked.q, hexClicked.r)
+
+        console.log(hexClicked)
 
         let testList = [{ q: 0, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
@@ -63,7 +69,7 @@ export default class HexMapControllerClass {
 
 
             if(this.collision.pointHex(ogPos.x, ogPos.y, hexPos.x, hexPos.y, this.hexMapData.size, this.hexMapData.squish)){
-
+                console.log(hexPos.x, hexPos.y)
                 tileClicked = testTile
             }
 

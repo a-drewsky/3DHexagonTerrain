@@ -2,7 +2,7 @@ export default class HexMapSettingsClass {
 
     constructor(){
 
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.GEOMTRIC_TILES_DEBUG = false;
 

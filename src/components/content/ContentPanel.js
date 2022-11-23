@@ -155,11 +155,11 @@ const ContentPanel = () => {
                   ref={canvas}
                   width={window.innerWidth / 2}
                   height={window.innerHeight / 2}
-                  onMouseDown={mouseDown}
-                  onMouseUp={mouseUp}
-                  onMouseMove={mouseMove}
-                  onMouseLeave={mouseLeave}
-                  onMouseEnter={mouseEnter}
+                  onPointerDown={mouseDown}
+                  onPointerUp={mouseUp}
+                  onPointerMove={mouseMove}
+                  onPointerLeave={mouseLeave}
+                  onPointerEnter={mouseEnter}
                   onWheel={mouseWheel}
                   style={
                      { imageRendering: 'crisp-edges' }

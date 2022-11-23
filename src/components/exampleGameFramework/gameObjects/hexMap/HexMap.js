@@ -101,7 +101,7 @@ export default class HexMapClass {
         }
 
 
-        this.controller = new HexMapControllerClass(this.data, camera);
+        this.controller = new HexMapControllerClass(this.data, camera, canvas);
     }
 
     build = (q, r, size) => {

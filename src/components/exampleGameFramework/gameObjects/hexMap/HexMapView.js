@@ -71,7 +71,6 @@ export default class HexMapViewClass {
 
             this.drawctx.fillStyle = 'black'
             this.drawctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
-            console.log("TEST")
 
          }
       }
@@ -81,6 +80,7 @@ export default class HexMapViewClass {
 
 
       if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
+
       this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
