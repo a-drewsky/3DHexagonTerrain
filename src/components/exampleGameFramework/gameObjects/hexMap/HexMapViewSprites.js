@@ -1,15 +1,15 @@
 export default class HexMapViewSpritesClass {
 
-   constructor(hexMapData, camera, images, utils, canvas, shadowSize, treeSpriteChance, treeSpriteChanceIncrement) {
+   constructor(hexMapData, camera, images, utils, canvas, settings) {
 
       this.hexMapData = hexMapData
       this.camera = camera
       this.images = images
       this.utils = utils
 
-      this.shadowSize = shadowSize
-      this.treeSpriteChance = treeSpriteChance
-      this.treeSpriteChanceIncrement = treeSpriteChanceIncrement
+      this.shadowSize = settings.SHADOW_SIZE
+      this.treeSpriteChance = settings.MODIFIER_SECOND_SPRITE_CHANCE
+      this.treeSpriteChanceIncrement = settings.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT
 
       this.canvasDims = {
          width: canvas.width,
@@ -113,7 +113,7 @@ export default class HexMapViewSpritesClass {
          if (terrainObject.type == 'modifier') {
             sprite = this.images.modifiers[terrainObject.sprite]
          } else {
-            sprite = this.images[terrainObject.sprite]
+            sprite = this.images.structures[terrainObject.sprite]
          }
 
 
@@ -166,7 +166,7 @@ export default class HexMapViewSpritesClass {
          if (terrainObject.type == 'modifier') {
             sprite = this.images.modifiers[terrainObject.sprite]
          } else {
-            sprite = this.images[terrainObject.sprite]
+            sprite = this.images.structures[terrainObject.sprite]
          }
 
 
@@ -430,6 +430,8 @@ export default class HexMapViewSpritesClass {
          let rotatedMap = this.utils.rotateMap()
          let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
+         console.log(terrainObject.shadowImages[0][i])
+
          let shadowImage = this.utils.cropStructureShadow(terrainObject.shadowImages[0][i], sprites.shadowSize, sprites.shadowOffset, keyObj, rotatedMap, true)
          terrainObject.shadowImages[0][i] = shadowImage
       }
@@ -469,6 +471,8 @@ export default class HexMapViewSpritesClass {
          let rotatedMap = this.utils.rotateMap()
          let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
+         console.log(terrainObject)
+
          let croppedImage = this.utils.cropOutTiles(terrainObject.images[0][i], this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap, true)
          let darkenedImage = this.darkenSprite(croppedImage, terrainObject)
          terrainObject.images[0][i] = darkenedImage
@@ -477,7 +481,7 @@ export default class HexMapViewSpritesClass {
 
    renderStructure = (terrainObject) => {
 
-      let sprite = this.images[terrainObject.sprite]
+      let sprite = this.images.structures[terrainObject.sprite]
 
       let canvasSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -532,6 +536,8 @@ export default class HexMapViewSpritesClass {
                   this.camera.rotation = rotation;
                   let rotatedMap = this.utils.rotateMap()
                   let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+                  
+                  console.log(terrainObject, sprite)
 
                   let shadowImage = this.utils.cropStructureShadow(sprite.shadowImages[i][rotation], sprite.shadowSize, sprite.shadowOffset, keyObj, rotatedMap)
 

@@ -3,7 +3,7 @@ import { Row, Form, Button } from 'react-bootstrap'
 
 import GameMainClass from '../exampleGameFramework/GameMainClass';
 
-import ImagesClass from '../exampleGameFramework/utilities/gameImages';
+import GameImagesClass from '../exampleGameFramework/imageLoaders/gameImages';
 
 const ContentPanel = () => {
 
@@ -12,7 +12,7 @@ const ContentPanel = () => {
 
    const [gameClass, setGameClass] = useState(null);
 
-   const [gameImages, setGameImages] = useState(new ImagesClass());
+   const [gameImages, setGameImages] = useState(new GameImagesClass());
 
    const [winCondition, setWinCondition] = useState(null);
 

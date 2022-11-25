@@ -1,17 +1,17 @@
 export default class HexMapViewMapClass {
 
-    constructor(hexMapData, camera, lineWidth, colors, sideColorMultiplier, elevationRanges, geometricTilesDebug, shadowRotationDims, images, utils, canvas) {
+    constructor(hexMapData, camera, settings, shadowRotationDims, images, utils, canvas) {
 
         this.renderctx = null; //should be local
         this.renderMap = new Map();
 
         this.hexMapData = hexMapData
         this.camera = camera
-        this.lineWidth = lineWidth
-        this.colors = colors
-        this.sideColorMultiplier = sideColorMultiplier
-        this.elevationRanges = elevationRanges
-        this.geometricTilesDebug = geometricTilesDebug
+        this.lineWidth = settings.HEXMAP_LINE_WIDTH
+        this.colors = settings.HEXMAP_COLORS
+        this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
+        this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
+        this.geometricTilesDebug = settings.GEOMTRIC_TILES_DEBUG
         this.shadowRotationDims = shadowRotationDims
 
         this.images = images
@@ -346,7 +346,7 @@ export default class HexMapViewMapClass {
                         );
                     } else {
                         this.renderctx.drawImage(
-                            this.images.tiles[tileBiome].flat[this.camera.rotation],
+                            this.images.tiles[tileBiome][this.camera.rotation],
                             tilePos.x - this.hexMapData.size,
                             tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,
@@ -384,7 +384,7 @@ export default class HexMapViewMapClass {
                         );
                     } else {
                         this.renderctx.drawImage(
-                            this.images.tiles[tileBiome].pointy[this.camera.rotation],
+                            this.images.tiles[tileBiome][this.camera.rotation],
                             tilePos.x - this.hexMapData.size,
                             tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
                             this.hexMapData.size * 2,

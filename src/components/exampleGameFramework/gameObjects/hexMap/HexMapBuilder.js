@@ -3,45 +3,26 @@ import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, hexMapView, elevationRanges, lowTerrainGenerationRanges, maxElevation, elevationMultiplier, seedMultiplier, noiseFluctuation, tempRanges, waterTempRanges, biomeGroups, minBiomeSmoothing, sandHillElevationDivisor, mirror, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes, secondMineChance, thirdMineChance) {
+   constructor(hexMapData, settings) {
 
       this.hexMapData = hexMapData;
-      this.hexMapView = hexMapView;
 
-      this.elevationRanges = elevationRanges
-      this.lowTerrainGenerationRanges = lowTerrainGenerationRanges
-      this.maxElevation = maxElevation
-      this.elevationMultiplier = elevationMultiplier
-      this.seedMultiplier = seedMultiplier
-      this.noiseFluctuation = noiseFluctuation
-      this.tempRanges = tempRanges
-      this.waterTempRanges = waterTempRanges
-      this.biomeGroups = biomeGroups
-      this.minBiomeSmoothing = minBiomeSmoothing
-      this.sandHillElevationDivisor = sandHillElevationDivisor
-      this.mirror = mirror
-      this.terrainGenThresholds = terrainGenThresholds
-      this.terrainGenMaxNeighbors = terrainGenMaxNeighbors
-      this.rockGenThreshold = rockGenThreshold
-      this.cellSize = cellSize
-      this.bufferSizes = bufferSizes
+      this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
+      this.lowTerrainGenerationRanges = settings.LOW_TERRAIN_GENERATION_RANGES
+      this.maxElevation = settings.MAX_ELEVATION
+      this.elevationMultiplier = settings.ELEVATION_MULTIPLIER
+      this.seedMultiplier = settings.SEED_MULTIPLIER
+      this.noiseFluctuation = settings.NOISE_FLUCTUATION
+      this.tempRanges = settings.TEMP_RANGES
+      this.waterTempRanges = settings.WATER_TEMP_RANGES
+      this.biomeGroups = settings.BIOME_GROUPS
+      this.minBiomeSmoothing = settings.MIN_BIOME_SMOOTHING
+      this.sandHillElevationDivisor = settings.SAND_HILL_ELVATION_DIVISOR
+      this.mirror = settings.MIRROR_MAP
+      this.cellSize = settings.CELL_SIZE
+      this.bufferSizes = settings.BUFFER_SIZES
 
-      this.secondMineChance = secondMineChance
-      this.thirdMineChance = thirdMineChance
-
-      this.builderTerrain = new HexMapBuilderTerrainClass(
-         this.hexMapData,
-         this.seedMultiplier,
-         this.noiseFluctuation,
-         this.terrainGenThresholds,
-         this.terrainGenMaxNeighbors,
-         this.rockGenThreshold,
-         this.cellSize,
-         this.bufferSizes,
-         this.elevationRanges,
-         this.secondMineChance,
-         this.thirdMineChance
-     );
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings);
 
    }
 
@@ -172,6 +153,10 @@ export default class HexMapBuilderClass {
          
 
          this.hexMapData.setEntry(keyObj.q, keyObj.r, {
+            originalPos: {
+               q: keyObj.q,
+               r: keyObj.r
+            },
             height: tileHeight,
             biome: tileBiome,
             verylowBiome: tileVerylowBiome,
@@ -253,7 +238,12 @@ export default class HexMapBuilderClass {
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
          let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
-         this.hexMapData.setEntry(keyObj.q, keyObj.r, {...tileToClone})
+         let clonedTile = {...tileToClone}
+         clonedTile.originalPos = {
+            q: keyObj.q,
+            r: keyObj.r
+         }
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, clonedTile)
 
          return true
       }
@@ -312,7 +302,6 @@ export default class HexMapBuilderClass {
       if (this.hexMapData2 !== undefined) {
          this.hexMapData2.hexMap = new Map(this.hexMapData.hexMap)
          this.hexMapData2.maxHeight = this.hexMapData.maxHeight
-         this.hexMapView2.hexMapData = this.hexMapData2
       }
 
       this.smoothBiomes()

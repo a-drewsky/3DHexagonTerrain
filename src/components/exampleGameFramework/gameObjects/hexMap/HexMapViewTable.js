@@ -1,15 +1,13 @@
-import HexMapViewUtilsClass from "./HexMapViewUtils";
-
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, camera, tableColors, sideColorMultiplier, tableHeight, shadowRotationDims, utils) {
+   constructor(hexMapData, camera, settings, shadowRotationDims, utils) {
 
       this.hexMapData = hexMapData;
       this.camera = camera;
 
-      this.tableColors = tableColors;
-      this.sideColorMultiplier = sideColorMultiplier
-      this.tableHeight = tableHeight
+      this.tableColors = settings.HEXMAP_COLORS.table;
+      this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
+      this.tableHeight = settings.TABLE_HEIGHT
       this.shadowRotationDims = shadowRotationDims
 
       this.utils = utils

@@ -2,19 +2,19 @@ import noise from "../../utilities/perlin";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, seedMultiplier, noiseFluctuation, terrainGenThresholds, terrainGenMaxNeighbors, rockGenThreshold, cellSize, bufferSizes, elevationRanges, secondMineChance, thirdMineChace) {
+   constructor(hexMapData, settings) {
       this.hexMapData = hexMapData;
 
-      this.seedMultiplier = seedMultiplier
-      this.noiseFluctuation = noiseFluctuation
-      this.terrainGenThresholds = terrainGenThresholds
-      this.terrainGenMaxNeighbors = terrainGenMaxNeighbors
-      this.rockGenThreshold = rockGenThreshold
-      this.cellSize = cellSize
-      this.bufferSizes = bufferSizes
-      this.elevationRanges = elevationRanges
-      this.secondMineChance = secondMineChance
-      this.thirdMineChace = thirdMineChace
+      this.seedMultiplier = settings.SEED_MULTIPLIER
+      this.noiseFluctuation = settings.NOISE_FLUCTUATION
+      this.terrainGenThresholds = settings.TERRAIN_GENERATION_THERSHOLD
+      this.terrainGenMaxNeighbors = settings.TERRAIN_GENERATION_MAX_NEIGHBORS
+      this.rockGenThreshold = settings.TERRAIN_ROCK_GEN_THRESHOLD
+      this.cellSize = settings.CELL_SIZE
+      this.bufferSizes = settings.BUFFER_SIZES
+      this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
+      this.secondMineChance = settings.SECOND_MINE_CHANCE
+      this.thirdMineChace = settings.THIRD_MINE_CHACE
    }
 
    generateTerrain = (q, r, mapSize) => {
@@ -30,30 +30,12 @@ export default class HexMapBuilderTerrainClass {
    setStructure = (q, r, terrain, tile) => {
       if (this.hexMapData.getEntry(q, r).terrain) {
          this.hexMapData.terrainList[tile.terrain] = terrain
-
-         this.hexMapData.setEntry(q, r, {
-            height: tile.height,
-            biome: tile.biome,
-            verylowBiome: tile.verylowBiome,
-            lowBiome: tile.lowBiome,
-            midBiome: tile.midBiome,
-            highBiome: tile.highBiome,
-            veryhighBiome: tile.veryhighBiome,
-            terrain: tile.terrain
-         })
       } else {
          this.hexMapData.terrainList.push(terrain)
 
-         this.hexMapData.setEntry(q, r, {
-            height: tile.height,
-            biome: tile.biome,
-            verylowBiome: tile.verylowBiome,
-            lowBiome: tile.lowBiome,
-            midBiome: tile.midBiome,
-            highBiome: tile.highBiome,
-            veryhighBiome: tile.veryhighBiome,
-            terrain: this.hexMapData.terrainList.length - 1
-         })
+         tile.terrain = this.hexMapData.terrainList.length - 1
+
+         this.hexMapData.setEntry(q, r, tile)
       }
    }
 
@@ -124,16 +106,11 @@ export default class HexMapBuilderTerrainClass {
          if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
          if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-         this.hexMapData.setEntry(tileToSetKey.q, tileToSetKey.r, {
-            height: terrainHeight,
-            biome: tileBiome,
-            verylowBiome: tileToSet.verylowBiome,
-            lowBiome: tileToSet.lowBiome,
-            midBiome: tileToSet.midBiome,
-            highBiome: tileToSet.highBiome,
-            veryhighBiome: tileToSet.veryhighBiome,
-            terrain: terrainNum
-         })
+         tileToSet.height = terrainHeight
+         tileToSet.biome = tileBiome
+         tileToSet.terrain = terrainNum
+
+         this.hexMapData.setEntry(tileToSetKey.q, tileToSetKey.r, tileToSet)
       }
 
       for (let i = 0; i < flatList.length; i++) {
@@ -153,16 +130,10 @@ export default class HexMapBuilderTerrainClass {
          if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
          if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-         this.hexMapData.setEntry(tileToSetKey.q, tileToSetKey.r, {
-            height: terrainHeight,
-            biome: tileBiome,
-            verylowBiome: tileToSet.verylowBiome,
-            lowBiome: tileToSet.lowBiome,
-            midBiome: tileToSet.midBiome,
-            highBiome: tileToSet.highBiome,
-            veryhighBiome: tileToSet.veryhighBiome,
-            terrain: tileToSet.terrain
-         })
+         tileToSet.height = terrainHeight
+         tileToSet.biome = tileBiome
+
+         this.hexMapData.setEntry(tileToSetKey.q, tileToSetKey.r, tileToSet)
 
       }
    }
@@ -239,16 +210,10 @@ export default class HexMapBuilderTerrainClass {
             if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
             if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-            this.hexMapData.setEntry(selectedTilePos.q, selectedTilePos.r, {
-               height: terrainHeight,
-               biome: tileBiome,
-               verylowBiome: tileToSet.verylowBiome,
-               lowBiome: tileToSet.lowBiome,
-               midBiome: tileToSet.midBiome,
-               highBiome: tileToSet.highBiome,
-               veryhighBiome: tileToSet.veryhighBiome,
-               terrain: tileToSet.terrain
-            })
+            tileToSet.height = terrainHeight
+            tileToSet.biome = tileBiome
+
+            this.hexMapData.setEntry(selectedTilePos.q, selectedTilePos.r, tileToSet)
 
             for (let i = 0; i < tileNeighbors.length; i++) {
                let tileToSet = this.hexMapData.getEntry(tileNeighbors[i].q, tileNeighbors[i].r)
@@ -261,16 +226,10 @@ export default class HexMapBuilderTerrainClass {
                if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
                if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-               this.hexMapData.setEntry(tileNeighbors[i].q, tileNeighbors[i].r, {
-                  height: terrainHeight,
-                  biome: tileBiome,
-                  verylowBiome: tileToSet.verylowBiome,
-                  lowBiome: tileToSet.lowBiome,
-                  midBiome: tileToSet.midBiome,
-                  highBiome: tileToSet.highBiome,
-                  veryhighBiome: tileToSet.veryhighBiome,
-                  terrain: tileToSet.terrain
-               })
+               tileToSet.height = terrainHeight
+               tileToSet.biome = tileBiome
+
+               this.hexMapData.setEntry(tileNeighbors[i].q, tileNeighbors[i].r, tileToSet)
             }
 
 
@@ -398,16 +357,10 @@ export default class HexMapBuilderTerrainClass {
                if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
                if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-               this.hexMapData.setEntry(selectedTilePos.q, selectedTilePos.r, {
-                  height: terrainHeight,
-                  biome: tileBiome,
-                  verylowBiome: tileToSet.verylowBiome,
-                  lowBiome: tileToSet.lowBiome,
-                  midBiome: tileToSet.midBiome,
-                  highBiome: tileToSet.highBiome,
-                  veryhighBiome: tileToSet.veryhighBiome,
-                  terrain: tileToSet.terrain
-               })
+               tileToSet.height = terrainHeight
+               tileToSet.biome = tileBiome
+
+               this.hexMapData.setEntry(selectedTilePos.q, selectedTilePos.r, tileToSet)
 
                for (let i = 0; i < tileNeighbors.length; i++) {
                   let tileToSet = this.hexMapData.getEntry(tileNeighbors[i].q, tileNeighbors[i].r)
@@ -420,16 +373,10 @@ export default class HexMapBuilderTerrainClass {
                   if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
                   if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
-                  this.hexMapData.setEntry(tileNeighbors[i].q, tileNeighbors[i].r, {
-                     height: terrainHeight,
-                     biome: tileBiome,
-                     verylowBiome: tileToSet.verylowBiome,
-                     lowBiome: tileToSet.lowBiome,
-                     midBiome: tileToSet.midBiome,
-                     highBiome: tileToSet.highBiome,
-                     veryhighBiome: tileToSet.veryhighBiome,
-                     terrain: tileToSet.terrain
-                  })
+                  tileToSet.height = terrainHeight
+                  tileToSet.biome = tileBiome
+
+                  this.hexMapData.setEntry(tileNeighbors[i].q, tileNeighbors[i].r, tileToSet)
                }
 
                let closeSection = false
@@ -524,17 +471,6 @@ export default class HexMapBuilderTerrainClass {
 
             this.hexMapData.terrainList[value.terrain] = terrain
 
-            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-               height: value.height,
-               biome: value.biome,
-               verylowBiome: value.verylowBiome,
-               lowBiome: value.lowBiome,
-               midBiome: value.midBiome,
-               highBiome: value.highBiome,
-               veryhighBiome: value.veryhighBiome,
-               terrain: value.terrain
-            })
-
          }
 
       }
@@ -614,16 +550,9 @@ export default class HexMapBuilderTerrainClass {
 
             this.hexMapData.terrainList.push(terrain)
 
-            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-               height: value.height,
-               biome: value.biome,
-               verylowBiome: value.verylowBiome,
-               lowBiome: value.lowBiome,
-               midBiome: value.midBiome,
-               highBiome: value.highBiome,
-               veryhighBiome: value.veryhighBiome,
-               terrain: this.hexMapData.terrainList.length - 1
-            })
+            value.terrain = this.hexMapData.terrainList.length - 1
+
+            this.hexMapData.setEntry(keyObj.q, keyObj.r, value)
 
          } else if (this.rockGenThreshold[value.biome] && tileRockNoise > this.rockGenThreshold[value.biome]) {
             let terrain = {
@@ -642,16 +571,9 @@ export default class HexMapBuilderTerrainClass {
 
             this.hexMapData.terrainList.push(terrain)
 
-            this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-               height: value.height,
-               biome: value.biome,
-               verylowBiome: value.verylowBiome,
-               lowBiome: value.lowBiome,
-               midBiome: value.midBiome,
-               highBiome: value.highBiome,
-               veryhighBiome: value.veryhighBiome,
-               terrain: this.hexMapData.terrainList.length - 1
-            })
+            value.terrain = this.hexMapData.terrainList.length - 1
+
+            this.hexMapData.setEntry(keyObj.q, keyObj.r, value)
          }
 
 

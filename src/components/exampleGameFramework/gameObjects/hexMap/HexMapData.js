@@ -1,26 +1,26 @@
 export default class HexMapDataClass {
 
-   constructor(size, squish, tileHeight, shadowRotation) {
+   constructor(settings) {
       this.hexMap = new Map();
 
       this.posMap = new Map();
 
       this.terrainList = [];
 
-      this.size = size;
-      this.squish = squish;
+      this.size = settings.TILE_SIZE;
+      this.squish = settings.HEXMAP_SQUISH;
 
-      this.VecQ = { x: Math.sqrt(3) * size, y: 0 }
-      this.VecR = { x: Math.sqrt(3) / 2 * size, y: 3 / 2 * size }
+      this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
+      this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
 
-      this.flatTopVecQ = { x: 3 / 2 * size, y: Math.sqrt(3) / 2 * size }
-      this.flatTopVecR = { x: 0, y: Math.sqrt(3) * size }
+      this.flatTopVecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
+      this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
 
       this.sideLength = Math.PI / 3;
 
-      this.shadowRotation = shadowRotation;
+      this.shadowRotation = settings.SHADOW_ROTATION;
 
-      this.tileHeight = tileHeight;
+      this.tileHeight = settings.TILE_HEIGHT;
 
       this.maxHeight = null;
    }

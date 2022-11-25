@@ -5,7 +5,7 @@ import HexMapViewTableClass from "./HexMapViewTable";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, lineWidth, shadowSize, tableHeight, initCameraPosition, colors, sideColorMultiplier, elevationRanges, treeSpriteChance, treeSpriteChanceIncrement, debug, geometricTilesDebug, images) {
+   constructor(ctx, canvas, camera, hexMapData, settings, images) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -15,40 +15,41 @@ export default class HexMapViewClass {
       this.drawctx = null;
 
       //Settings
-      this.lineWidth = lineWidth;
-      this.tableHeight = tableHeight;
-      this.initCameraPosition = initCameraPosition;
-      this.colors = colors;
-      this.sideColorMultiplier = sideColorMultiplier;
-      this.elevationRanges = elevationRanges;
+      this.lineWidth = settings.HEXMAP_LINE_WIDTH;
+      this.shadowSize = settings.SHADOW_SIZE
+      this.tableHeight = settings.TABLE_HEIGHT;
+      this.initCameraPosition = settings.INIT_CAMERA_POSITION;
+      this.colors = settings.HEXMAP_COLORS;
+      this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER;
+      this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES;
 
       //Debug Settings
-      this.debug = debug;
-      this.geometricTilesDebug = geometricTilesDebug;
+      this.debug = settings.DEBUG;
+      this.geometricTilesDebug = settings.GEOMTRIC_TILES_DEBUG;
 
       this.images = images;
 
       //starts at top position and rotates clockwise
       this.shadowRotationDims = {
-         0: { q: 0.25 * shadowSize, r: -0.5 * shadowSize, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
-         1: { q: 0.5 * shadowSize, r: -0.5 * shadowSize, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
-         2: { q: 0.5 * shadowSize, r: -0.25 * shadowSize, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
-         3: { q: 0.5 * shadowSize, r: 0 * shadowSize, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
-         4: { q: 0.25 * shadowSize, r: 0.25 * shadowSize, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
-         5: { q: 0 * shadowSize, r: 0.5 * shadowSize, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
-         6: { q: -0.25 * shadowSize, r: 0.5 * shadowSize, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
-         7: { q: -0.5 * shadowSize, r: 0.5 * shadowSize, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
-         8: { q: -0.5 * shadowSize, r: 0.25 * shadowSize, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
-         9: { q: -0.5 * shadowSize, r: 0 * shadowSize, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
-         10: { q: -0.25 * shadowSize, r: -0.25 * shadowSize, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
-         11: { q: 0 * shadowSize, r: -0.5 * shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
+         0: { q: 0.25 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
+         1: { q: 0.5 * this.shadowSize, r: -0.5 * this.shadowSize, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
+         2: { q: 0.5 * this.shadowSize, r: -0.25 * this.shadowSize, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
+         3: { q: 0.5 * this.shadowSize, r: 0 * this.shadowSize, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
+         4: { q: 0.25 * this.shadowSize, r: 0.25 * this.shadowSize, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
+         5: { q: 0 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
+         6: { q: -0.25 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
+         7: { q: -0.5 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
+         8: { q: -0.5 * this.shadowSize, r: 0.25 * this.shadowSize, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
+         9: { q: -0.5 * this.shadowSize, r: 0 * this.shadowSize, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
+         10: { q: -0.25 * this.shadowSize, r: -0.25 * this.shadowSize, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
+         11: { q: 0 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
 
       //take out unneccessary this.
       this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
-      this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, this.colors.table, this.sideColorMultiplier, this.tableHeight, this.shadowRotationDims, this.utils);
-      this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, this.lineWidth, this.colors, this.sideColorMultiplier, this.elevationRanges, this.geometricTilesDebug, this.shadowRotationDims, this.images, this.utils, this.canvas);
-      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, shadowSize, treeSpriteChance, treeSpriteChanceIncrement);
+      this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.utils);
+      this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.images, this.utils, this.canvas);
+      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, settings);
 
    }
 
