@@ -389,7 +389,6 @@ export default class HexMapBuilderTerrainClass {
                if (closeSection) mineType = closeSpriteList[Math.floor(Math.random() * closeSpriteList.length)]
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
-               console.log(mineType)
 
                let terrain = {
                   position: {

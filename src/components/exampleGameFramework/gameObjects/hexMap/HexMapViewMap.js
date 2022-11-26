@@ -152,7 +152,6 @@ export default class HexMapViewMapClass {
     }
 
     render = (rotatedMap, renderCanvasDims) => {
-        console.log('ACT')
         this.setRender(this.camera.rotation, document.createElement('canvas'));
         this.getRender(this.camera.rotation).width = renderCanvasDims.width;
         this.getRender(this.camera.rotation).height = renderCanvasDims.height;
@@ -245,10 +244,6 @@ export default class HexMapViewMapClass {
         })
 
         let tablePosition = this.utils.getTablePosition();
-
-        console.log(this.camera.rotation, tablePosition)
-        //Draw the table
-        //this.drawTable(tablePosition);
 
 
         //draw the hex map
@@ -512,8 +507,6 @@ export default class HexMapViewMapClass {
 
     drawGroundShadowLayer = (rotatedMap, tablePosition) => {
 
-        console.log(tablePosition)
-
         let shadowDims;
 
         let shadowRotation;
@@ -525,8 +518,6 @@ export default class HexMapViewMapClass {
         }
 
         if (shadowRotation > 11) shadowRotation -= 12;
-
-        console.log(shadowRotation)
 
         if (this.camera.rotation % 2 == 1) {
             shadowDims = {

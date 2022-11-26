@@ -17,7 +17,6 @@ export default class GameImagesClass {
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
-            console.log(totalLoaded)
             if(totalLoaded == 3) startGame()
         }
         this.tiles.loadImages(testLoaded)

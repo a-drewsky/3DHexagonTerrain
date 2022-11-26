@@ -5,9 +5,6 @@ import GameManagerClass from './managers/GameManager';
 //Import Input Controller
 import InputControllerClass from './controllers/InputController';
 
-//Import Loading View
-import LoadingViewClass from './uiElements/LoadingElement/LoadingView';
-
 //Import Settings Class
 import SettingsClass from './utilities/gameSettings';
 
@@ -46,6 +43,7 @@ export default class GameMainClass {
       this.updateInterval = null;
 
       this.fps = 0;
+      this.fpsCount = 0;
       this.fpsTime = Date.now();
 
    }
@@ -72,15 +70,7 @@ export default class GameMainClass {
    mouseMove = (x, y) => {
       this.inputController.mouseMove(x, y);
    }
-
-   mouseLeave = (x, y) => {
-      this.inputController.mouseLeave(x, y);
-   }
-
-   mouseEnter = (x, y) => {
-      this.inputController.mouseEnter(x, y);
-   }
-
+   
    mouseWheel = (deltaY) => {
       this.inputController.mouseWheel(deltaY);
    }
@@ -113,10 +103,6 @@ export default class GameMainClass {
          //Clear previous game
          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-         //Show loading screen
-         let loadingView = new LoadingViewClass(this.ctx);
-         loadingView.draw();
-
          setTimeout(() => resolve("done!"), 100)
       });
 
@@ -124,9 +110,6 @@ export default class GameMainClass {
 
       //Create game objects
       this.gameManager.objects.createObjects();
-
-      //Create ui elements
-      this.gameManager.ui.createElements();
 
       this.startGame();
 
@@ -140,13 +123,8 @@ export default class GameMainClass {
       for (let [key, value] of this.gameManager.objects.objectMap) {
          value.object.update(value.state);
       }
-
-      //update UI
-      for (let [key, value] of this.gameManager.ui.elementMap) {
-         value.element.update(value.state);
-      }
    }
-   //UPDATE FUNCTION
+   //END UPDATE FUNCTION
 
 
    //DRAW FUNCTION
@@ -154,7 +132,7 @@ export default class GameMainClass {
 
       this.fps++
       if(Date.now() - this.fpsTime >= 1000){
-         console.log(this.fps)
+         this.fpsCount = this.fps
          this.fpsTime = Date.now()
          this.fps = 0
       }
@@ -167,10 +145,10 @@ export default class GameMainClass {
          if (value.state != 'disabled') value.object.draw(value.state);
       }
 
-      //draw UI
-      for (let [key, value] of this.gameManager.ui.elementMap) {
-         if (value.state != 'disabled') value.element.draw(value.state);
-      }
+      //draw fps
+      this.ctx.font = '30px Arial'
+      this.ctx.fillStyle = 'yellow'
+      this.ctx.fillText(this.fpsCount, this.canvas.width - 100, 100)
 
    }
    //END DRAW FUNCTION

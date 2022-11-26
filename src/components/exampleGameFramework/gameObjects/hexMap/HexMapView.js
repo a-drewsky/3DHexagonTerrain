@@ -90,9 +90,17 @@ export default class HexMapViewClass {
       }
    }
 
+   update = () => {
+      let zoom = this.camera.zoom * this.camera.zoomAmount
+      if (this.camera.position.x + zoom/2 < 0 - this.canvas.width / 2) this.camera.position.x = 0 - this.canvas.width / 2 - zoom/2
+      if (this.camera.position.x + zoom/2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2  - zoom/2
+      if (this.camera.position.y + zoom/2*this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom/2*this.hexMapData.squish
+      if (this.camera.position.y + zoom/2*this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom/2*this.hexMapData.squish
+   }
+
    prerender = () => {
 
-      console.log('initiate')
+      console.log('prerender hexmap')
 
       //Set render canvas size
       let keys = this.hexMapData.getKeys();

@@ -65,8 +65,6 @@ export default class HexMapControllerClass {
 
             if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
 
-            console.log(testTile)
-
             let hexPos = this.utils.hexPositionToXYPosition(testTile, rotatedMap.get(testTile.q + ',' + testTile.r).height)
 
             hexPos.x -= this.camera.position.x
@@ -74,7 +72,6 @@ export default class HexMapControllerClass {
 
 
             if (this.collision.pointHex(ogPos.x, ogPos.y, hexPos.x, hexPos.y, this.hexMapData.size, this.hexMapData.squish)) {
-                console.log(hexPos.x, hexPos.y)
                 tileClicked = testTile
             }
 

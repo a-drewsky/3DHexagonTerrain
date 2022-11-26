@@ -1,11 +1,9 @@
-import UIControllerClass from './UIController';
 import ShowHexMapStateControllerClass from './ShowHexMapStateController';
 
 export default class InputControllerClass {
 
    constructor(gameManager, canvas) {
       this.gameManager = gameManager;
-      this.uiController = new UIControllerClass(this.gameManager);
 
       this.canvas = canvas;
 
@@ -16,9 +14,6 @@ export default class InputControllerClass {
 
 
    mouseDown = (x, y) => {
-
-      //check ui clicked
-      let uiElementClicked = this.uiController.click(x, y);
 
       //State controller functions
       switch (this.gameManager.state.gameState) {
@@ -42,24 +37,6 @@ export default class InputControllerClass {
       switch (this.gameManager.state.gameState) {
          case 'showHexMapState':
             this.showHexMapStateController.mouseMove(x, y);
-            break;
-      }
-   }
-
-   mouseLeave = (x, y) => {
-      //State controller functions
-      switch (this.gameManager.state.gameState) {
-         case 'showHexMapState':
-            this.showHexMapStateController.mouseLeave(x, y);
-            break;
-      }
-   }
-
-   mouseEnter = (x, y) => {
-      //State controller functions
-      switch (this.gameManager.state.gameState) {
-         case 'showHexMapState':
-            this.showHexMapStateController.mouseEnter(x, y);
             break;
       }
    }

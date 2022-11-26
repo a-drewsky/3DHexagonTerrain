@@ -31,7 +31,6 @@ export default class HexMapBuilderClass {
       if (this.mirror) {
          for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-               console.log(q, r)
                this.hexMapData.setEntry(q, r, {
                   height: 0
                });
@@ -69,8 +68,79 @@ export default class HexMapBuilderClass {
       }
    }
 
+   setTileBiome = (keyObj, tileHeight, tileTemp) => {
+
+      //set biome
+      let tileBiome = null
+      let tileVerylowBiome = null
+      let tileLowBiome = null
+      let tileMidBiome = null
+      let tileHighBiome = null
+      let tileVeryhighBiome = null
+
+      let biome = null
+
+
+      biome = 'water'
+      if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
+      if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
+      tileVerylowBiome = biome
+
+      for (let range in this.tempRanges) {
+         if (tileTemp < this.tempRanges[range]) {
+            biome = range
+            break;
+         }
+      }
+      tileLowBiome = biome
+      if (tileHeight >= this.elevationRanges['low']) tileVerylowBiome = biome
+
+      biome = 'snowhill'
+      if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
+      if (tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
+      if (tileTemp > this.tempRanges['savanna']) {
+         biome = 'sandhill'
+         if (tileHeight >= this.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
+      }
+      tileMidBiome = biome
+
+      biome = 'rockmountain'
+      if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
+      if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+      tileHighBiome = biome
+
+      biome = 'snowmountain'
+      if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+      tileVeryhighBiome = biome
+
+
+      if (tileHeight >= this.elevationRanges['verylow']) tileBiome = tileVerylowBiome
+      if (tileHeight >= this.elevationRanges['low']) tileBiome = tileLowBiome
+      if (tileHeight >= this.elevationRanges['mid']) tileBiome = tileMidBiome
+      if (tileHeight >= this.elevationRanges['high']) tileBiome = tileHighBiome
+      if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
+
+      return {
+         originalPos: {
+            q: keyObj.q,
+            r: keyObj.r
+         },
+         height: tileHeight,
+         biome: tileBiome,
+         verylowBiome: tileVerylowBiome,
+         lowBiome: tileLowBiome,
+         midBiome: tileMidBiome,
+         highBiome: tileHighBiome,
+         veryhighBiome: tileVeryhighBiome,
+         terrain: null,
+         selected: false
+      }
+
+   }
+
    generateBiomes = (noiseFluctuation) => {
 
+      //set generation seeds
       let elevationSeed1 = Math.random() * this.seedMultiplier
       let elevationSeed2 = Math.random() * this.seedMultiplier
       let tempSeed1 = Math.random() * this.seedMultiplier
@@ -101,72 +171,10 @@ export default class HexMapBuilderClass {
          //temp generation
          let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
 
-         //set biome
-         let tileBiome = null
-         let tileVerylowBiome = null
-         let tileLowBiome = null
-         let tileMidBiome = null
-         let tileHighBiome = null
-         let tileVeryhighBiome = null
-
-         let biome
-
-         
-         biome = 'water'
-         if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
-         if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
-         tileVerylowBiome = biome
-
-         for (let range in this.tempRanges) {
-            if (tileTemp < this.tempRanges[range]) {
-               biome = range
-               break;
-            }
-         }
-         tileLowBiome = biome
-         if (tileHeight >= this.elevationRanges['low']) tileVerylowBiome = biome
-         
-         biome = 'snowhill'
-         if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
-         if (tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
-         if (tileTemp > this.tempRanges['savanna']) {
-            biome = 'sandhill'
-            if(tileHeight >= this.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
-         }
-         tileMidBiome = biome
-
-         biome = 'rockmountain'
-         if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
-         if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
-         tileHighBiome = biome
-
-         biome = 'snowmountain'
-         if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
-         tileVeryhighBiome = biome
+         let tile = this.setTileBiome(keyObj, tileHeight, tileTemp)
 
 
-         if (tileHeight >= this.elevationRanges['verylow']) tileBiome = tileVerylowBiome
-         if (tileHeight >= this.elevationRanges['low']) tileBiome = tileLowBiome
-         if (tileHeight >= this.elevationRanges['mid']) tileBiome = tileMidBiome
-         if (tileHeight >= this.elevationRanges['high']) tileBiome = tileHighBiome      
-         if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
-         
-
-         this.hexMapData.setEntry(keyObj.q, keyObj.r, {
-            originalPos: {
-               q: keyObj.q,
-               r: keyObj.r
-            },
-            height: tileHeight,
-            biome: tileBiome,
-            verylowBiome: tileVerylowBiome,
-            lowBiome: tileLowBiome,
-            midBiome: tileMidBiome,
-            highBiome: tileHighBiome,
-            veryhighBiome: tileVeryhighBiome,
-            terrain: null,
-            selected: false
-         })
+         this.hexMapData.setEntry(keyObj.q, keyObj.r, tile)
 
       }
 
@@ -206,7 +214,6 @@ export default class HexMapBuilderClass {
          let keyObj = this.hexMapData.split(keyString);
          let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
-         console.log(tileBiome)
 
          //check if tile has non-similar biome neighbors
          let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
@@ -238,7 +245,7 @@ export default class HexMapBuilderClass {
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
          let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
-         let clonedTile = {...tileToClone}
+         let clonedTile = { ...tileToClone }
          clonedTile.originalPos = {
             q: keyObj.q,
             r: keyObj.r
@@ -281,7 +288,6 @@ export default class HexMapBuilderClass {
                else if (smoothTile(keyStrArr[0])) keyStrArr.shift()
                else {
                   keyStrArr.push(keyStrArr.shift());
-                  console.log("SHIFT")
                }
             }
          }
@@ -293,10 +299,9 @@ export default class HexMapBuilderClass {
 
    build = (q, r, mapSize) => {
 
-      //make a settings variable or some shit
       let noiseFluctuation = this.noiseFluctuation[mapSize]
 
-      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize]*2)
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize] * 2)
       this.generateBiomes(noiseFluctuation)
 
       if (this.hexMapData2 !== undefined) {
@@ -311,7 +316,7 @@ export default class HexMapBuilderClass {
 
       //add terrain features
       if (this.hexMapData2 === undefined) {
-          this.builderTerrain.generateTerrain(q, r, mapSize)
+         this.builderTerrain.generateTerrain(q, r, mapSize)
       }
 
    }

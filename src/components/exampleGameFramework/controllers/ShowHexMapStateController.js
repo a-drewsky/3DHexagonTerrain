@@ -31,14 +31,6 @@ export default class ShowHexMapStateControllerClass {
         //this.gameManager.state.draw();
     }
 
-    mouseLeave = (x, y) => {
-        this.gameManager.objects.objectMap.get('camera').object.controller.mouseUp();
-    }
-
-    mouseEnter = (x, y) => {
-
-    }
-
     mouseWheel = (deltaY) => {
 
         let zoomAmount = this.gameManager.objects.objectMap.get('camera').object.data.zoomAmount
@@ -51,8 +43,6 @@ export default class ShowHexMapStateControllerClass {
                 this.gameManager.objects.objectMap.get('camera').object.data.position.x - zoomAmount * deltaY / 200,
                 this.gameManager.objects.objectMap.get('camera').object.data.position.y - zoomAmount * deltaY / 200 * (this.canvas.height/this.canvas.width)
             );
-
-            console.log("camera pos: " + this.gameManager.objects.objectMap.get('camera').object.data.position.x + ',' + this.gameManager.objects.objectMap.get('camera').object.data.position.y)
         }
 
 
@@ -69,8 +59,6 @@ export default class ShowHexMapStateControllerClass {
 
             for (let i = 0; i < this.gameManager.objects.objectMap.get('camera').object.data.rotationAmount; i++) {
                 let centerHexPos = this.getCenterHexPos();
-
-                //console.log(centerHexPos)
 
                 this.gameManager.objects.objectMap.get('camera').object.controller.keyDown(key);
 
@@ -186,8 +174,6 @@ export default class ShowHexMapStateControllerClass {
             y: this.gameManager.objects.objectMap.get('camera').object.data.position.y + zoom/2 * (this.canvas.height/this.canvas.width) + this.canvas.height / 2 - this.gameManager.objects.objectMap.get('hexMap').object.data.posMap.get(this.gameManager.objects.objectMap.get('camera').object.data.rotation).y
         }
 
-        //console.log('center pos: ' + centerPos.x + ',' + centerPos.y)
-
 
         let centerHexPos;
 
@@ -203,8 +189,6 @@ export default class ShowHexMapStateControllerClass {
                 r: ((-1 / 3) * centerPos.x + Math.sqrt(3) / 3 * (centerPos.y * (1 / squish))) / size
             }
         }
-
-        console.log('center hex pos: ' + centerHexPos.q + ',' + centerHexPos.r)
 
         return centerHexPos;
     }

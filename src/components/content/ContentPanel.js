@@ -89,23 +89,6 @@ const ContentPanel = () => {
 
    }
 
-   const mouseLeave = ({ nativeEvent }) => {
-      nativeEvent.preventDefault();
-
-      const { offsetX, offsetY } = nativeEvent;
-
-      if (gameClass && gameClass.loaded) gameClass.mouseLeave(offsetX, offsetY);
-
-   }
-
-   const mouseEnter = ({ nativeEvent }) => {
-      nativeEvent.preventDefault();
-      const { offsetX, offsetY } = nativeEvent;
-
-      if (gameClass && gameClass.loaded) gameClass.mouseEnter(offsetX, offsetY);
-
-   }
-
    const mouseWheel = ({ nativeEvent }) => {
       const { deltaY } = nativeEvent;
 
@@ -153,16 +136,15 @@ const ContentPanel = () => {
             <Row className='py-2'>
                <canvas
                   ref={canvas}
-                  width={window.innerWidth / 2}
+                  width={Math.min(window.innerWidth, 1000)}
                   height={window.innerHeight / 2}
                   onPointerDown={mouseDown}
                   onPointerUp={mouseUp}
                   onPointerMove={mouseMove}
-                  onPointerLeave={mouseLeave}
-                  onPointerEnter={mouseEnter}
+                  
                   onWheel={mouseWheel}
                   style={
-                     { imageRendering: 'crisp-edges' }
+                     { imageRendering: 'crisp-edges', touchAction: 'none' }
                   }
                   className="mx-auto border"
                />

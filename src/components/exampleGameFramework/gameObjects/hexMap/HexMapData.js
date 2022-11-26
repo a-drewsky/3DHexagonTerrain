@@ -1,13 +1,13 @@
 export default class HexMapDataClass {
 
-   constructor(settings) {
+   constructor(settings, canvas) {
       this.hexMap = new Map();
 
       this.posMap = new Map();
 
       this.terrainList = [];
 
-      this.size = settings.TILE_SIZE;
+      this.size = canvas.width/25;
       this.squish = settings.HEXMAP_SQUISH;
 
       this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }

@@ -1,8 +1,9 @@
 export default class CameraControllerClass {
 
-    constructor(cameraData) {
+    constructor(cameraData, canvas) {
 
         this.cameraData = cameraData;
+        this.canvas = canvas;
 
     }
 
@@ -16,6 +17,11 @@ export default class CameraControllerClass {
 
     mouseMove = (x, y) => {
         if (this.cameraData.anchorPoint == null) return;
+
+        if(x < 0 || y < 0 || x > this.canvas.width || y > this.canvas.height){
+            this.mouseUp()
+            return;
+        }
 
         this.cameraData.setPosition(
             this.cameraData.anchorPoint.x - x + this.cameraData.mouseAnchorPoint.x,
