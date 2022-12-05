@@ -7,6 +7,8 @@ export default class HexMapDataClass {
 
       this.terrainList = [];
 
+      this.unitList = [];
+
       this.size = canvas.width/25;
       this.squish = settings.HEXMAP_SQUISH;
 

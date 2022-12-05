@@ -58,16 +58,6 @@ export default class HexMapBuilderClass {
       }
    }
 
-   mirrorMap2Func = (Qgen, Rgen) => {
-      for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
-         let dist = 0;
-         for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
-            this.hexMapData2.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData2.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
-            dist++;
-         }
-      }
-   }
-
    setTileBiome = (keyObj, tileHeight, tileTemp) => {
 
       //set biome
@@ -132,7 +122,6 @@ export default class HexMapBuilderClass {
          midBiome: tileMidBiome,
          highBiome: tileHighBiome,
          veryhighBiome: tileVeryhighBiome,
-         terrain: null,
          selected: false
       }
 
@@ -297,7 +286,53 @@ export default class HexMapBuilderClass {
    }
 
 
+   //temp function for engineering
+   addUnit = () => {
+      let unit = {
+         position: {
+            q: -7,
+            r: 28
+         },
+         name: 'Example Unit',
+         type: 'units',
+         sprite: 'exampleUnit',
+         state: 'idle',
+         frame: 0,
+         direction: 0,
+         tileHeight: 2,
+         images: []
+      }
+
+      this.hexMapData.unitList.push(unit)
+
+      let tile = this.hexMapData.getEntry('-7', '28')
+
+      tile.unit = this.hexMapData.unitList.length - 1
+
+      this.hexMapData.setEntry('-7', '28', tile)
+   }
+
+
    build = (q, r, mapSize) => {
+
+      let noiseFluctuation = this.noiseFluctuation[mapSize]
+
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize] * 2)
+      this.generateBiomes(noiseFluctuation)
+
+      this.smoothBiomes()
+
+      //mirror the map if selected
+      //if (this.mirror) this.mirrorMap(q, r)
+
+      //add terrain features
+      this.builderTerrain.generateTerrain(q, r, mapSize)
+      this.addUnit()
+
+
+   }
+
+   buildDebugSmoothing = (q, r, mapSize) => {
 
       let noiseFluctuation = this.noiseFluctuation[mapSize]
 
@@ -311,19 +346,11 @@ export default class HexMapBuilderClass {
 
       this.smoothBiomes()
 
-      //mirror the map if selected
-      //if (this.mirror) this.mirrorMap(q, r)
-
-      //add terrain features
-      if (this.hexMapData2 === undefined) {
-         this.builderTerrain.generateTerrain(q, r, mapSize)
-      }
 
    }
 
-   // mirrorMap = (q, r) => {
-   //    this.mirrorMapFunc(q, r)
-   //    if (this.hexMapData2 !== undefined) this.mirrorMap2Func(q, r)
-   // }
+   mirrorMap = (q, r) => {
+      this.mirrorMapFunc(q, r)
+   }
 
 }

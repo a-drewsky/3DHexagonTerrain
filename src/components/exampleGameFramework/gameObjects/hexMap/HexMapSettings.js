@@ -1,8 +1,8 @@
 export default class HexMapSettingsClass {
 
-    constructor(){
+    constructor(settings){
 
-        this.DEBUG = false;
+        this.DEBUG = settings.DEBUG
 
         this.GEOMTRIC_TILES_DEBUG = false;
 

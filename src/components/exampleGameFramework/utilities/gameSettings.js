@@ -10,6 +10,7 @@ export default class SettingsClass {
             : {size: 'massive', q: 9, r: 10}
             //r must be odd for mirrored map to work
 
+        this.DEBUG = false;
 
     }
 
