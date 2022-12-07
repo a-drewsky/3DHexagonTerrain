@@ -71,7 +71,14 @@ export default class HexMapViewClass {
             let tilePos = this.utils.hexPositionToXYPosition(keyObj, value.height)
 
             this.drawctx.fillStyle = 'black'
-            this.drawctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
+            this.drawctx.font = '20px arial'
+
+            if(value.test === undefined){
+               this.drawctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
+            } else {
+               this.drawctx.fillText(value.test, tilePos.x - 20, tilePos.y)
+            }
+
 
          }
       }

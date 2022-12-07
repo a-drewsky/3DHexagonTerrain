@@ -153,6 +153,10 @@ export default class ShowHexMapStateControllerClass {
                 this.gameManager.objects.objectMap.get('hexMap').object.switchView()
             }
         }
+
+        if (key == 'p') {
+            this.gameManager.objects.objectMap.get('hexMap').object.findPath()
+        }
     }
 
     keyUp = (key) => {

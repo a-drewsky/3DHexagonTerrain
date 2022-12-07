@@ -26,7 +26,7 @@ export default class HexMapViewSpritesClass {
 
       let spriteList = []
 
-      //rotate terrain objects
+      //terrain objects
       for (let i = 0; i < this.hexMapData.terrainList.length; i++) {
          let terrainObject = this.hexMapData.terrainList[i]
          if (terrainObject == null) continue
@@ -44,6 +44,7 @@ export default class HexMapViewSpritesClass {
          })
       }
 
+      //units
       for (let i = 0; i < this.hexMapData.unitList.length; i++) {
          let unitObject = this.hexMapData.unitList[i]
          if (unitObject == null) continue
@@ -91,8 +92,10 @@ export default class HexMapViewSpritesClass {
 
          let spriteObject
 
-         if (spriteList[i].type == 'unit') continue
+         if (spriteList[i].type == 'units') spriteObject = this.hexMapData.unitList[spriteList[i].id]
          else spriteObject = this.hexMapData.terrainList[spriteList[i].id]
+
+         if(!spriteObject.shadowImages) continue
 
          let keyObj = {
             q: spriteList[i].q,
