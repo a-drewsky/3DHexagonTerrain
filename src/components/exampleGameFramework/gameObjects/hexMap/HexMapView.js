@@ -46,7 +46,7 @@ export default class HexMapViewClass {
       }
 
       //take out unneccessary this.
-      this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
+      this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera, settings);
       this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.images, this.utils, this.canvas);
       this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, settings);

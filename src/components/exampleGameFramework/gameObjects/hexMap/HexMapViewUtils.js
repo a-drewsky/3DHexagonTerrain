@@ -1,9 +1,62 @@
 export default class HexMapViewUtilsClass {
 
-    constructor(hexMapData, camera) {
+    constructor(hexMapData, camera, settings) {
 
         this.hexMapData = hexMapData
         this.camera = camera
+
+        this.shadowSize = settings.SHADOW_SIZE
+
+        this.shadowPositions = {
+            0: {
+                distance: { q: -1, r: 2 },
+                startingPoints: [{ q: -1, r: 2 }, { q: -1, r: 1 }, { q: 0, r: 1 }]
+            },
+            1: {
+                distance: { q: -1, r: 1 },
+                startingPoints: [{ q: -1, r: 1 }]
+            },
+            2: {
+                distance: { q: -2, r: 1 },
+                startingPoints: [{ q: -2, r: 1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
+            },
+            3: {
+                distance: { q: -1, r: 0 },
+                startingPoints: [{ q: -1, r: 0 }]
+            },
+            4: {
+                distance: { q: -1, r: -1 },
+                startingPoints: [{ q: -1, r: -1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
+            },
+            5: {
+                distance: { q: 0, r: -1 },
+                startingPoints: [{ q: 0, r: -1 }]
+            },
+            6: {
+                distance: { q: 1, r: -2 },
+                startingPoints: [{ q: 1, r: -2 }, { q: 0, r: -1 }, { q: 1, r: -1 }]
+            },
+            7: {
+                distance: { q: 1, r: -1 },
+                startingPoints: [{ q: 1, r: -1 }]
+            },
+            8: {
+                distance: { q: 2, r: -1 },
+                startingPoints: [{ q: 2, r: -1 }, { q: 1, r: -1 }, { q: 1, r: 0 }]
+            },
+            9: {
+                distance: { q: 1, r: 0 },
+                startingPoints: [{ q: 1, r: 0 }]
+            },
+            10: {
+                distance: { q: 1, r: 1 },
+                startingPoints: [{ q: 1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }]
+            },
+            11: {
+                distance: { q: 0, r: 1 },
+                startingPoints: [{ q: 0, r: 1 }]
+            }
+        }
 
     }
 
@@ -110,28 +163,129 @@ export default class HexMapViewUtilsClass {
         return rotatedMap
     }
 
-    darkenSprite = (image) => {
-
-
+    darkenImage = (image) => {
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = image.width
         tempCanvas.height = image.height
         let tempctx = tempCanvas.getContext('2d')
-   
+
         tempctx.drawImage(image, 0, 0, image.width, image.height)
-   
-         tempctx.globalCompositeOperation  = 'source-atop'
-         tempctx.fillStyle = 'rgba(0,0,0,0.25)'
-   
-         tempctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
-         tempctx.globalCompositeOperation  = 'source-over'
-   
-         return tempCanvas
-   
+
+        tempctx.globalCompositeOperation = 'source-atop'
+        tempctx.fillStyle = 'rgba(0,0,0,0.25)'
+
+        tempctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
+        tempctx.globalCompositeOperation = 'source-over'
+
+        return tempCanvas
+    }
+
+    //move to utils
+    darkenSprite = (croppedImage, terrainObject) => {
+
+        let shadowHeight = terrainObject.tileHeight + 1
+
+        let distance = 0
+        let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
+
+        let cropped = false;
+        while (shadowHeight < this.hexMapData.maxHeight && cropped == false) {
+
+
+            for (let i = 0; i < shadowPosition.startingPoints.length; i++) {
+                let startingPoint = shadowPosition.startingPoints[i]
+
+                if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
+                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
+
+                        croppedImage = this.darkenImage(croppedImage)
+                        cropped = true
+                        break;
+                    }
+                } else {
+                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight) {
+
+                        croppedImage = this.darkenImage(croppedImage)
+                        cropped = true
+                        break;
+                    }
+                }
+
+
+            }
+
+            distance += 1;
+
+            if (this.hexMapData.shadowRotation % 2 == 0) {
+                shadowHeight += 1 / (this.shadowSize / 2) * Math.sqrt(3);
+            } else {
+                shadowHeight += 1 / (this.shadowSize / 2);
+            }
+
+        }
+
+        return croppedImage;
+    }
+
+    darkenSpriteJump = (croppedImage, terrainObject, closestTile, height) => {
+        let shadowHeight = terrainObject.tileHeight + 1
+
+        let distance = 0
+        let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
+
+        let cropped = false;
+        while (shadowHeight < this.hexMapData.maxHeight && cropped == false) {
+
+
+            for (let i = 0; i < shadowPosition.startingPoints.length; i++) {
+                let startingPoint = shadowPosition.startingPoints[i]
+
+                if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
+                    if (this.hexMapData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
+
+                        croppedImage = this.darkenImage(croppedImage)
+                        cropped = true
+                        break;
+                    }
+                } else {
+                    if (this.hexMapData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight) {
+
+                        croppedImage = this.darkenImage(croppedImage)
+                        cropped = true
+                        break;
+                    }
+                }
+
+
+            }
+
+            distance += 1;
+
+            if (this.hexMapData.shadowRotation % 2 == 0) {
+                shadowHeight += 1 / (this.shadowSize / 2) * Math.sqrt(3);
+            } else {
+                shadowHeight += 1 / (this.shadowSize / 2);
+            }
+
+        }
+
+        return croppedImage;
     }
 
     cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
-        let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
+        let tileObj = this.hexMapData.roundToNearestHex(keyObj.q, keyObj.r)
+        let tileHeight = rotatedMap.get(tileObj.q + ',' + tileObj.r).height
+        let ogPos = this.hexPositionToXYPosition(keyObj, tileHeight)
+        let newPos = this.hexPositionToXYPosition(tileObj, tileHeight)
+
+        let diff = {
+            x: newPos.x - ogPos.x,
+            y: newPos.y - ogPos.y
+        }
 
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
@@ -143,15 +297,12 @@ export default class HexMapViewUtilsClass {
         tempctx.beginPath();
 
         for (let i = 0; i < cropList.length; i++) {
-            if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height == tileHeight) {
+            if (rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)) && rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height == tileHeight) {
 
                 let tilePos = {
-                    x: this.hexMapData.size + this.hexMapData.size * 2 * imageOffset.x,
-                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y
+                    x: this.hexMapData.size + this.hexMapData.size * 2 * imageOffset.x + diff.x,
+                    y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y + diff.y
                 }
-                
-                // tempctx.fillStyle = 'red'
-                // tempctx.fillRect(tilePos.x-2,tilePos.y-2,4,4)
 
                 if (this.camera.rotation % 2 == 1) {
                     tilePos.x += this.hexMapData.flatTopVecQ.x * cropList[i].q + this.hexMapData.flatTopVecR.x * cropList[i].r
@@ -187,7 +338,7 @@ export default class HexMapViewUtilsClass {
         return tempCanvas
     }
 
-    cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
+    cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -203,12 +354,17 @@ export default class HexMapViewUtilsClass {
             ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
         }
 
+        let tileObj = this.hexMapData.roundToNearestHex(keyObj.q, keyObj.r)
 
-        let tileHeight = rotatedMap.get(keyObj.q + ',' + keyObj.r).height
+        let tileHeight = rotatedMap.get(tileObj.q + ',' + tileObj.r).height
 
-        let zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
+        let zeroPoint 
+
+        zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
+
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
+
 
 
 
@@ -222,38 +378,38 @@ export default class HexMapViewUtilsClass {
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
         for (let i = 0; i < cropList.length; i++) {
-            if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)) && rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height > tileHeight) {
+            if (rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)) && rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height > tileHeight) {
                 //clip the hexagons in front of image
                 let clipXOffset;
                 let clipYOffset;
 
                 if (this.camera.rotation % 2 == 1) {
-                    clipXOffset = this.hexMapData.flatTopVecQ.x * (keyObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (keyObj.r + cropList[i].r);
-                    clipYOffset = this.hexMapData.flatTopVecQ.y * (keyObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (keyObj.r + cropList[i].r) * this.hexMapData.squish;
+                    clipXOffset = this.hexMapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
                 } else {
-                    clipXOffset = this.hexMapData.VecQ.x * (keyObj.q + cropList[i].q) + this.hexMapData.VecR.x * (keyObj.r + cropList[i].r);
-                    clipYOffset = this.hexMapData.VecQ.y * (keyObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.VecR.y * (keyObj.r + cropList[i].r) * this.hexMapData.squish;
+                    clipXOffset = this.hexMapData.VecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.VecR.x * (tileObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.VecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.VecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
                 }
 
                 let neighborHeights = []
 
-                if (rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1))) {
-                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q - 1) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+                if (rotatedMap.get((tileObj.q + cropList[i].q - 1) + ',' + (tileObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q - 1) + ',' + (tileObj.r + cropList[i].r + 1)).height)
                 }
-                if (rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1))) {
-                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r + 1)).height)
+                if (rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r + 1)).height)
                 }
-                if (rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r))) {
-                    neighborHeights.push(rotatedMap.get((keyObj.q + cropList[i].q + 1) + ',' + (keyObj.r + cropList[i].r)).height)
+                if (rotatedMap.get((tileObj.q + cropList[i].q + 1) + ',' + (tileObj.r + cropList[i].r))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q + 1) + ',' + (tileObj.r + cropList[i].r)).height)
                 }
 
 
                 let height
 
                 if (neighborHeights.length < 3) {
-                    height = rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height
+                    height = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height
                 } else {
-                    height = rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height - Math.min(...neighborHeights)
+                    height = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height - Math.min(...neighborHeights)
                 }
 
                 if (height < 0) height = 0;
@@ -264,7 +420,108 @@ export default class HexMapViewUtilsClass {
 
                 clipFlatHexagonPathForImage(tempctx,
                     zeroPoint.x + this.hexMapData.posMap.get(this.camera.rotation).x + clipXOffset,
-                    zeroPoint.y + this.hexMapData.posMap.get(this.camera.rotation).y + clipYOffset - rotatedMap.get((keyObj.q + cropList[i].q) + ',' + (keyObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
+                    zeroPoint.y + this.hexMapData.posMap.get(this.camera.rotation).y + clipYOffset - rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
+                    height
+                );
+
+
+                //clear the canvas in that area
+
+                tempctx.save();
+                tempctx.clip();
+
+                //tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+
+                tempctx.restore();
+            }
+        }
+
+        return tempCanvas
+    }
+
+    cropOutTilesJump = (image, imageSize, imageOffset, keyObj, rotatedMap, height) => {
+
+        let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
+            ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 0 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 1 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish) + (this.hexMapData.tileHeight * height));
+
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 2 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 3 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+            ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
+        }
+
+        let tileObj = this.hexMapData.roundToNearestHex(keyObj.q, keyObj.r)
+
+        let tileHeight = height
+        let zeroPoint 
+
+        zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
+
+        zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
+        zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
+
+
+
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
+
+        for (let i = 0; i < cropList.length; i++) {
+            if (rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)) && rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height > tileHeight) {
+                //clip the hexagons in front of image
+                let clipXOffset;
+                let clipYOffset;
+
+                if (this.camera.rotation % 2 == 1) {
+                    clipXOffset = this.hexMapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
+                } else {
+                    clipXOffset = this.hexMapData.VecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.VecR.x * (tileObj.r + cropList[i].r);
+                    clipYOffset = this.hexMapData.VecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.VecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
+                }
+
+                let neighborHeights = []
+
+                if (rotatedMap.get((tileObj.q + cropList[i].q - 1) + ',' + (tileObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q - 1) + ',' + (tileObj.r + cropList[i].r + 1)).height)
+                }
+                if (rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r + 1))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r + 1)).height)
+                }
+                if (rotatedMap.get((tileObj.q + cropList[i].q + 1) + ',' + (tileObj.r + cropList[i].r))) {
+                    neighborHeights.push(rotatedMap.get((tileObj.q + cropList[i].q + 1) + ',' + (tileObj.r + cropList[i].r)).height)
+                }
+
+
+                let height
+
+                if (neighborHeights.length < 3) {
+                    height = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height
+                } else {
+                    height = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height - Math.min(...neighborHeights)
+                }
+
+                if (height < 0) height = 0;
+
+                height += 1;
+
+                tempctx.beginPath();
+
+                clipFlatHexagonPathForImage(tempctx,
+                    zeroPoint.x + this.hexMapData.posMap.get(this.camera.rotation).x + clipXOffset,
+                    zeroPoint.y + this.hexMapData.posMap.get(this.camera.rotation).y + clipYOffset - rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r)).height * this.hexMapData.tileHeight,
                     height
                 );
 
@@ -471,47 +728,47 @@ export default class HexMapViewUtilsClass {
     hexPositionToXYPosition = (keyObj, tileHeight) => {
         let xOffset;
         let yOffset;
-  
+
         if (this.camera.rotation % 2 == 1) {
-           xOffset = this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r;
-           yOffset = this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish;
+            xOffset = this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r;
+            yOffset = this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish;
         } else {
-           xOffset = this.hexMapData.VecQ.x * keyObj.q + this.hexMapData.VecR.x * keyObj.r;
-           yOffset = this.hexMapData.VecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.VecR.y * keyObj.r * this.hexMapData.squish;
+            xOffset = this.hexMapData.VecQ.x * keyObj.q + this.hexMapData.VecR.x * keyObj.r;
+            yOffset = this.hexMapData.VecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.VecR.y * keyObj.r * this.hexMapData.squish;
         }
-  
+
         return {
-           x: this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-           y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
+            x: this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
+            y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
         }
-        
+
     }
 
     XYPositionTohexPosition = (x, y) => {
 
-        let q = ((Math.sqrt(3)/3) * x - (1/3) * y) / this.hexMapData.size
-        let r = ((2/3) * y) / this.hexMapData.size
+        let q = ((Math.sqrt(3) / 3) * x - (1 / 3) * y) / this.hexMapData.size
+        let r = ((2 / 3) * y) / this.hexMapData.size
 
         return {
             q: q,
             r: r
         }
 
-    }    
+    }
 
-   onScreenCheck = (spritePos, spriteSize, canvasDims) => {
+    onScreenCheck = (spritePos, spriteSize, canvasDims) => {
 
-    let zoom = this.camera.zoomAmount * this.camera.zoom
+        let zoom = this.camera.zoomAmount * this.camera.zoom
 
-    let position = this.camera.position
+        let position = this.camera.position
 
-    //check if sprite is on screen
-    if (spritePos.x < position.x - spriteSize.width
-       || spritePos.y < position.y - spriteSize.height
-       || spritePos.x > position.x + canvasDims.width + zoom
-       || spritePos.y > position.y + canvasDims.height + zoom * (canvasDims.height / canvasDims.width)) return false;
+        //check if sprite is on screen
+        if (spritePos.x < position.x - spriteSize.width
+            || spritePos.y < position.y - spriteSize.height
+            || spritePos.x > position.x + canvasDims.width + zoom
+            || spritePos.y > position.y + canvasDims.height + zoom * (canvasDims.height / canvasDims.width)) return false;
 
-    return true
- }
+        return true
+    }
 
 }

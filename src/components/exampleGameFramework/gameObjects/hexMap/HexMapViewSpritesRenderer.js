@@ -9,57 +9,6 @@ export default class HexMapViewSpritesRendererClass {
         this.treeSpriteChance = settings.MODIFIER_SECOND_SPRITE_CHANCE
         this.treeSpriteChanceIncrement = settings.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT
 
-        this.shadowPositions = {
-            0: {
-                distance: { q: -1, r: 2 },
-                startingPoints: [{ q: -1, r: 2 }, { q: -1, r: 1 }, { q: 0, r: 1 }]
-            },
-            1: {
-                distance: { q: -1, r: 1 },
-                startingPoints: [{ q: -1, r: 1 }]
-            },
-            2: {
-                distance: { q: -2, r: 1 },
-                startingPoints: [{ q: -2, r: 1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
-            },
-            3: {
-                distance: { q: -1, r: 0 },
-                startingPoints: [{ q: -1, r: 0 }]
-            },
-            4: {
-                distance: { q: -1, r: -1 },
-                startingPoints: [{ q: -1, r: -1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
-            },
-            5: {
-                distance: { q: 0, r: -1 },
-                startingPoints: [{ q: 0, r: -1 }]
-            },
-            6: {
-                distance: { q: 1, r: -2 },
-                startingPoints: [{ q: 1, r: -2 }, { q: 0, r: -1 }, { q: 1, r: -1 }]
-            },
-            7: {
-                distance: { q: 1, r: -1 },
-                startingPoints: [{ q: 1, r: -1 }]
-            },
-            8: {
-                distance: { q: 2, r: -1 },
-                startingPoints: [{ q: 2, r: -1 }, { q: 1, r: -1 }, { q: 1, r: 0 }]
-            },
-            9: {
-                distance: { q: 1, r: 0 },
-                startingPoints: [{ q: 1, r: 0 }]
-            },
-            10: {
-                distance: { q: 1, r: 1 },
-                startingPoints: [{ q: 1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }]
-            },
-            11: {
-                distance: { q: 0, r: 1 },
-                startingPoints: [{ q: 0, r: 1 }]
-            }
-        }
-
     }
 
     //break this up
@@ -249,7 +198,7 @@ export default class HexMapViewSpritesRendererClass {
 
 
             let croppedImage = this.utils.cropOutTiles(terrainObject.images[0][i], this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap, true)
-            let darkenedImage = this.darkenSprite(croppedImage, terrainObject)
+            let darkenedImage = this.utils.darkenSprite(croppedImage, terrainObject)
             terrainObject.images[0][i] = darkenedImage
         }
     }
@@ -325,61 +274,11 @@ export default class HexMapViewSpritesRendererClass {
 
             for (let j = 0; j < sprite.images.length; j++) {
                 let croppedImage = this.utils.cropOutTiles(terrainObject.images[j][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
-                let darkenedImage = this.darkenSprite(croppedImage, terrainObject)
+                let darkenedImage = this.utils.darkenSprite(croppedImage, terrainObject)
                 terrainObject.images[j][i] = darkenedImage
             }
 
         }
-    }
-
-
-
-    darkenSprite = (croppedImage, terrainObject) => {
-        //darken image
-        let shadowHeight = terrainObject.tileHeight + 1
-
-        let distance = 0
-        let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
-
-        let cropped = false;
-        while (shadowHeight < this.hexMapData.maxHeight && cropped == false) {
-
-
-            for (let i = 0; i < shadowPosition.startingPoints.length; i++) {
-                let startingPoint = shadowPosition.startingPoints[i]
-
-                if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
-                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
-
-                        croppedImage = this.utils.darkenSprite(croppedImage)
-                        cropped = true
-                        break;
-                    }
-                } else {
-                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight) {
-
-                        croppedImage = this.utils.darkenSprite(croppedImage)
-                        cropped = true
-                        break;
-                    }
-                }
-
-
-            }
-
-            distance += 1;
-
-            if (this.hexMapData.shadowRotation % 2 == 0) {
-                shadowHeight += 1 / (this.shadowSize / 2) * Math.sqrt(3);
-            } else {
-                shadowHeight += 1 / (this.shadowSize / 2);
-            }
-
-        }
-
-        return croppedImage;
     }
 
 }

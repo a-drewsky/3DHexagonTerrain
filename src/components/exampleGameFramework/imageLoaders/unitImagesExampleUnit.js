@@ -52,6 +52,13 @@ import unit_1_0_action_1 from '../images/units/exampleUnit/q1r0/example_unit_q1r
 import unit_1_0_action_2 from '../images/units/exampleUnit/q1r0/example_unit_q1r0_7.png'
 import unit_1_0_action_3 from '../images/units/exampleUnit/q1r0/example_unit_q1r0_8.png'
 
+import shadow_1 from '../images/modifiers/shadows/modifier_shadow_large_1.png'
+import shadow_3 from '../images/modifiers/shadows/modifier_shadow_large_3.png'
+import shadow_5 from '../images/modifiers/shadows/modifier_shadow_large_5.png'
+import shadow_7 from '../images/modifiers/shadows/modifier_shadow_large_7.png'
+import shadow_9 from '../images/modifiers/shadows/modifier_shadow_large_9.png'
+import shadow_11 from '../images/modifiers/shadows/modifier_shadow_large_11.png'
+
 export default class UnitImagesExampleUnitClass {
 
     constructor() {
@@ -110,7 +117,14 @@ export default class UnitImagesExampleUnitClass {
             unit_1_0_jump_2: new Image(),
             unit_1_0_action_1: new Image(),
             unit_1_0_action_2: new Image(),
-            unit_1_0_action_3: new Image()
+            unit_1_0_action_3: new Image(),
+
+            shadow_1: new Image(),
+            shadow_3: new Image(),
+            shadow_5: new Image(),
+            shadow_7: new Image(),
+            shadow_9: new Image(),
+            shadow_11: new Image()
 
         }
 
@@ -185,6 +199,13 @@ export default class UnitImagesExampleUnitClass {
         this.unit_1_0_action_2.src = unit_1_0_action_2 
         this.unit_1_0_action_3.src = unit_1_0_action_3 
 
+        this.shadow_1.src = shadow_1
+        this.shadow_3.src = shadow_3
+        this.shadow_5.src = shadow_5
+        this.shadow_7.src = shadow_7
+        this.shadow_9.src = shadow_9
+        this.shadow_11.src = shadow_11
+
         
         this.spriteSize = {
             width: 1,
@@ -192,6 +213,16 @@ export default class UnitImagesExampleUnitClass {
         }
         
         this.spriteOffset = {
+            x: 0,
+            y: 0.5
+        }
+        
+        this.shadowSize = {
+            width: 1,
+            height: 1.5
+        }
+
+        this.shadowOffset = {
             x: 0,
             y: 0.5
         }
@@ -223,6 +254,8 @@ export default class UnitImagesExampleUnitClass {
                 [null, this.unit_0_m1_action_3, null, this.unit_1_m1_action_3, null, this.unit_1_0_action_3, null, this.unit_0_1_action_3, null, this.unit_m1_1_action_3, null, this.unit_m1_0_action_3]
             ],
         }
+
+        this.shadowImages = [null, this.shadow_1, null, this.shadow_3, null, this.shadow_5, null, this.shadow_7, null, this.shadow_9, null, this.shadow_11]
 
 
     }

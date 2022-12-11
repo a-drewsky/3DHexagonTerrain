@@ -293,13 +293,16 @@ export default class HexMapBuilderClass {
             q: -7,
             r: 28
          },
+         destination: null,
+         destinationStartTime: null,
+         destinationCurTime: null,
          name: 'Example Unit',
          type: 'units',
          sprite: 'exampleUnit',
          state: 'idle',
          frame: 0,
          direction: 0,
-         tileHeight: 2,
+         tileHeight: 3,
          images: []
       }
 

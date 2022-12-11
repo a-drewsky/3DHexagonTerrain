@@ -13,6 +13,9 @@ export default class HexMapViewSpritesClass {
       this.treeSpriteChance = settings.MODIFIER_SECOND_SPRITE_CHANCE
       this.treeSpriteChanceIncrement = settings.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT
 
+      this.travelTime = settings.TRAVEL_TIME
+      this.jumpAmount = settings.JUMP_AMOUNT
+
       this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, utils, settings);
 
       this.canvasDims = {
@@ -83,7 +86,7 @@ export default class HexMapViewSpritesClass {
                this.drawUnit(drawctx, spriteList[i])
                break
          }
-         
+
       }
    }
 
@@ -92,10 +95,13 @@ export default class HexMapViewSpritesClass {
 
          let spriteObject
 
-         if (spriteList[i].type == 'units') spriteObject = this.hexMapData.unitList[spriteList[i].id]
+         if (spriteList[i].type == 'units') {
+            this.drawUnitShadow(drawctx, spriteList[i])
+            continue
+         }
          else spriteObject = this.hexMapData.terrainList[spriteList[i].id]
 
-         if(!spriteObject.shadowImages) continue
+         if (!spriteObject.shadowImages) continue
 
          let keyObj = {
             q: spriteList[i].q,
@@ -201,20 +207,120 @@ export default class HexMapViewSpritesClass {
 
    }
 
+   drawUnitShadow = (drawctx, spriteReference) => {
+
+      let spriteObject = this.hexMapData.unitList[spriteReference.id]
+
+      let sprite = this.images[spriteObject.type][spriteObject.sprite]
+
+      if (!sprite.shadowImages) return
+
+      let pos = {
+         q: spriteReference.q,
+         r: spriteReference.r
+      }
+
+      let closestTile = {
+         q: spriteObject.position.q,
+         r: spriteObject.position.r
+      }
+
+      if (spriteObject.destination != null) {
+         let point1 = spriteObject.position
+         let point2 = spriteObject.destination
+         let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / this.travelTime
+         let lerpPos = {
+            q: point1.q + (point2.q - point1.q) * percent,
+            r: point1.r + (point2.r - point1.r) * percent
+         }
+         pos = this.utils.rotateTile(lerpPos.q, lerpPos.r, this.camera.rotation)
+         if(percent>0.5){
+            closestTile = {
+               q: spriteObject.destination.q,
+               r: spriteObject.destination.r
+            }
+         }
+      }
+
+      let shadowSize
+      console.log(spriteObject.position)
+      let tileHeight = this.hexMapData.getEntry(closestTile.q, closestTile.r).height
+
+      let shadowPos = this.utils.hexPositionToXYPosition(pos, tileHeight)
+
+      shadowSize = {
+         width: this.hexMapData.size * 2 * sprite.shadowSize.width,
+         height: this.hexMapData.size * 2 * sprite.shadowSize.height
+      }
+
+      shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
+      shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
+
+      if (this.utils.onScreenCheck(shadowPos, shadowSize, this.canvasDims) == false) return
+
+      let shadowImage = this.images.units[spriteObject.sprite].shadowImages[this.camera.rotation]
+
+      shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.utils.rotateMap())
+
+      drawctx.drawImage(
+         shadowImage,
+         shadowPos.x,
+         shadowPos.y,
+         shadowSize.width,
+         shadowSize.height
+      )
+
+   }
+
    drawUnit = (drawctx, spriteReference) => {
 
       let spriteObject = this.hexMapData.unitList[spriteReference.id]
 
-      let keyObj = {
+      let pos = {
          q: spriteReference.q,
          r: spriteReference.r
+      }
+
+      let closestTile = {
+         q: spriteObject.position.q,
+         r: spriteObject.position.r
+      }
+
+      let height = spriteReference.height
+
+      if (spriteObject.destination != null) {
+         //set pos
+         let point1 = spriteObject.position
+         let point2 = spriteObject.destination
+         let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / this.travelTime
+         let lerpPos = {
+            q: point1.q + (point2.q - point1.q) * percent,
+            r: point1.r + (point2.r - point1.r) * percent
+         }
+         pos = this.utils.rotateTile(lerpPos.q, lerpPos.r, this.camera.rotation)
+         if(percent>0.5){
+            closestTile = {
+               q: spriteObject.destination.q,
+               r: spriteObject.destination.r
+            }
+         }
+
+         //set height
+         let newHeight = this.hexMapData.getEntry(spriteObject.destination.q, spriteObject.destination.r).height
+
+         if (newHeight != height) {
+            let extraHeight = Math.sin(percent * Math.PI) * this.jumpAmount
+
+            height = height + (newHeight - height) * percent + extraHeight
+         }
+
       }
 
       let sprite = this.images[spriteObject.type][spriteObject.sprite]
 
       let spriteSize
 
-      let spritePos = this.utils.hexPositionToXYPosition(keyObj, spriteReference.height)
+      let spritePos = this.utils.hexPositionToXYPosition(pos, height)
 
       spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -226,8 +332,14 @@ export default class HexMapViewSpritesClass {
 
       if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
 
+      let spriteImage = this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][this.camera.rotation]
+
+
+      spriteImage = this.utils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.utils.rotateMap(), height)
+      spriteImage = this.utils.darkenSpriteJump(spriteImage, spriteObject, closestTile, height)
+
       drawctx.drawImage(
-         this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][this.camera.rotation],
+         spriteImage,
          spritePos.x,
          spritePos.y,
          spriteSize.width,

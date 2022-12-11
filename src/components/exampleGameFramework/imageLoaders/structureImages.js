@@ -154,7 +154,7 @@ export default class StructureImagesClass {
             flag_shadow_5: new Image(),
             flag_shadow_7: new Image(),
             flag_shadow_9: new Image(),
-            flag_shadow_11: new Image(),
+            flag_shadow_11: new Image()
         }
 
     }

@@ -4,6 +4,10 @@ export default class HexMapSettingsClass {
 
         this.DEBUG = settings.DEBUG
 
+        this.TRAVEL_TIME = 2000
+
+        this.JUMP_AMOUNT = 4
+
         this.GEOMTRIC_TILES_DEBUG = false;
 
         this.MIRROR_MAP = false;

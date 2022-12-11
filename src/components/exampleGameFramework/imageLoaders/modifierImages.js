@@ -116,24 +116,24 @@ export default class ModifierImagesClass {
         }
         this.shadowSpriteSize = {
             width: 1,
-                height: 1.5
+            height: 1.5
         }
         this.oaktree = {
             modifierImages: [
                 this.oaktree_sprite_1,
                 this.oaktree_sprite_2
             ],
-                shadowImages: [
-                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
-                ],
-                    shadowSize: {
+            shadowImages: [
+                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+            ],
+            shadowSize: {
                 width: 2,
-                    height: 2
+                height: 2
             },
             shadowOffset: {
                 x: 0.5,
-                    y: 1
+                y: 1
             }
         }
         this.tundratree = {
@@ -141,17 +141,17 @@ export default class ModifierImagesClass {
                 this.tundratree_sprite_1,
                 this.tundratree_sprite_2
             ],
-                shadowImages: [
-                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11]
-                ],
-                    shadowSize: {
+            shadowImages: [
+                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11]
+            ],
+            shadowSize: {
                 width: 2,
-                    height: 2
+                height: 2
             },
             shadowOffset: {
                 x: 0.5,
-                    y: 1
+                y: 1
             }
         }
         this.deserttree = {
@@ -159,17 +159,17 @@ export default class ModifierImagesClass {
                 this.deserttree_sprite_1,
                 this.deserttree_sprite_2
             ],
-                shadowImages: [
-                    [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
-                ],
-                    shadowSize: {
+            shadowImages: [
+                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
+                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+            ],
+            shadowSize: {
                 width: 2,
-                    height: 2
+                height: 2
             },
             shadowOffset: {
                 x: 0.5,
-                    y: 1
+                y: 1
             }
         }
         this.rocks = {
@@ -177,17 +177,17 @@ export default class ModifierImagesClass {
                 this.rock_sprite_1,
                 this.rock_sprite_2
             ],
-                shadowImages: [
-                    [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11],
-                    [null, null, null, null, null, null, null, null, null, null, null, null]
-                ],
-                    shadowSize: {
+            shadowImages: [
+                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11],
+                [null, null, null, null, null, null, null, null, null, null, null, null]
+            ],
+            shadowSize: {
                 width: 2,
-                    height: 2
+                height: 2
             },
             shadowOffset: {
                 x: 0.5,
-                    y: 1
+                y: 1
             }
         }
     }

@@ -155,7 +155,15 @@ export default class ShowHexMapStateControllerClass {
         }
 
         if (key == 'p') {
-            this.gameManager.objects.objectMap.get('hexMap').object.findPath()
+            this.gameManager.objects.objectMap.get('hexMap').object.controller.findPath()
+        }
+
+        if (key == 'o') {
+            this.gameManager.objects.objectMap.get('hexMap').object.controller.findMoveSet()
+        }
+
+        if (key == 'l') {
+            this.gameManager.objects.objectMap.get('hexMap').object.controller.lerp()
         }
     }
 

@@ -236,7 +236,7 @@ export default class HexMapBuilderTerrainClass {
 
          let spawnChance = Math.random();
          
-         let terrainIndex = this.utils.getTerrainIndex(keyObj.q, keyObj.r);
+         let terrainIndex = this.hexMapData.getTerrainIndex(keyObj.q, keyObj.r);
          
          if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].name == 'Rocks' && spawnChance > replacesmallRockThreshold) {
 

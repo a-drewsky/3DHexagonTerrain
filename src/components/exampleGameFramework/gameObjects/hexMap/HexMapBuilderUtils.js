@@ -7,10 +7,6 @@ export default class HexMapBuilderUtilsClass {
         this.terrainGenMaxNeighbors = settings.TERRAIN_GENERATION_MAX_NEIGHBORS
     }
 
-    getTerrainIndex = (q, r) => {
-        return this.hexMapData.terrainList.findIndex(terrain => terrain.position.q == q && terrain.position.r == r)
-    }
-
     flattenTerrain = (q, r, flatList, terrainHeight) => {
         for (let i = 0; i < flatList.length; i++) {
 
@@ -53,7 +49,7 @@ export default class HexMapBuilderUtilsClass {
     isValidStructureTile = (tilePosQ, tilePosR, selectedTile) => {
         if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
 
-        let terrainIndex = this.getTerrainIndex(tilePosQ, tilePosR)
+        let terrainIndex = this.hexMapData.getTerrainIndex(tilePosQ, tilePosR)
         if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type == 'structures') return false
 
         let doubleTileNeighbors = this.hexMapData.getDoubleNeighborKeys(tilePosQ, tilePosR)
@@ -64,7 +60,7 @@ export default class HexMapBuilderUtilsClass {
         if (tileNeighbors.length != 6) return false
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
-            let terrainIndex = this.getTerrainIndex(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
+            let terrainIndex = this.hexMapData.getTerrainIndex(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
             if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type == 'structures') return false
         }
 
@@ -72,7 +68,7 @@ export default class HexMapBuilderUtilsClass {
     }
 
     setStructure = (q, r, terrain) => {
-        let curTerrain = this.getTerrainIndex(q, r)
+        let curTerrain = this.hexMapData.getTerrainIndex(q, r)
         if (curTerrain != -1) {
             this.hexMapData.terrainList[curTerrain] = terrain
         } else {
@@ -121,7 +117,7 @@ export default class HexMapBuilderUtilsClass {
                 shadowImages: []
             }
 
-            let curTerrainIndex = this.getTerrainIndex(terrain.position.q, terrain.position.r)
+            let curTerrainIndex = this.hexMapData.getTerrainIndex(terrain.position.q, terrain.position.r)
 
             if (curTerrainIndex != -1) {
                 this.hexMapData.terrainList[curTerrainIndex] = terrain

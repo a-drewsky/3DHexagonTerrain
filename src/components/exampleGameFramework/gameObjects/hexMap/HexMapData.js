@@ -9,7 +9,7 @@ export default class HexMapDataClass {
 
       this.unitList = [];
 
-      this.size = canvas.width/25;
+      this.size = canvas.width / 25;
       this.squish = settings.HEXMAP_SQUISH;
 
       this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
@@ -80,6 +80,32 @@ export default class HexMapDataClass {
       return [...this.hexMap.keys()]
    }
 
+   //return index of terrain at tile (q, r) or -1 if the tile has no terrain
+   getTerrainIndex = (q, r) => {
+      return this.terrainList.findIndex(terrain => terrain.position.q == q && terrain.position.r == r)
+   }
+
+   //return terrain at tile (q, r) or null if the tile has no terrain
+   getTerrain = (q, r) => {
+      let index = this.terrainList.findIndex(terrain => terrain.position.q == q && terrain.position.r == r)
+      if (index == -1) return null
+      return this.terrainList[index]
+   }
+
+   //return terrain at tile (q, r) or null if the tile has no terrain
+   getUnit = (q, r) => {
+      let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
+      if (index == -1) return null
+      return this.unitList[index]
+   }
+
+   //return the selected tile or null
+   getSelected = () => {
+      let selected = this.getValues().find(tile => tile.selected == true)
+      if (selected === undefined) return null
+      return selected
+   }
+
    //returns keys of all neighbors adjacent to (q, r)
    getNeighborKeys = (q, r) => {
       let neighbors = [];
@@ -104,19 +130,19 @@ export default class HexMapDataClass {
       if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
       if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
       if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
-      
-      if (this.hasEntry(q, r-2)) neighbors.push(this.join(q, r-2));
-      if (this.hasEntry(q+1, r-2)) neighbors.push(this.join(q+1, r-2));
-      if (this.hasEntry(q+2, r-2)) neighbors.push(this.join(q+2, r-2));
-      if (this.hasEntry(q+2, r-1)) neighbors.push(this.join(q+2, r-1));
-      if (this.hasEntry(q+2, r)) neighbors.push(this.join(q+2, r));
-      if (this.hasEntry(q+1, r+1)) neighbors.push(this.join(q+1, r+1));
-      if (this.hasEntry(q, r+2)) neighbors.push(this.join(q, r+2));
-      if (this.hasEntry(q-1, r+2)) neighbors.push(this.join(q-1, r+2));
-      if (this.hasEntry(q-2, r+2)) neighbors.push(this.join(q-2, r+2));
-      if (this.hasEntry(q-2, r+1)) neighbors.push(this.join(q-2, r+1));
-      if (this.hasEntry(q-2, r)) neighbors.push(this.join(q-2, r));
-      if (this.hasEntry(q-1, r-1)) neighbors.push(this.join(q-1, r-1));
+
+      if (this.hasEntry(q, r - 2)) neighbors.push(this.join(q, r - 2));
+      if (this.hasEntry(q + 1, r - 2)) neighbors.push(this.join(q + 1, r - 2));
+      if (this.hasEntry(q + 2, r - 2)) neighbors.push(this.join(q + 2, r - 2));
+      if (this.hasEntry(q + 2, r - 1)) neighbors.push(this.join(q + 2, r - 1));
+      if (this.hasEntry(q + 2, r)) neighbors.push(this.join(q + 2, r));
+      if (this.hasEntry(q + 1, r + 1)) neighbors.push(this.join(q + 1, r + 1));
+      if (this.hasEntry(q, r + 2)) neighbors.push(this.join(q, r + 2));
+      if (this.hasEntry(q - 1, r + 2)) neighbors.push(this.join(q - 1, r + 2));
+      if (this.hasEntry(q - 2, r + 2)) neighbors.push(this.join(q - 2, r + 2));
+      if (this.hasEntry(q - 2, r + 1)) neighbors.push(this.join(q - 2, r + 1));
+      if (this.hasEntry(q - 2, r)) neighbors.push(this.join(q - 2, r));
+      if (this.hasEntry(q - 1, r - 1)) neighbors.push(this.join(q - 1, r - 1));
 
       return neighbors.map(key => this.split(key));
    }

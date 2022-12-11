@@ -1,6 +1,8 @@
 
-import HexMapViewUtilsClass from "./HexMapViewUtils";
+import HexMapControllerUtilsClass from './HexMapControllerUtils';
 import CollisionClass from '../../utilities/collision';
+
+import HexMapPathFinderClass from "./HexMapPathFinder"
 
 export default class HexMapControllerClass {
 
@@ -13,9 +15,74 @@ export default class HexMapControllerClass {
         this.canvas = canvas
 
 
-        this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera);
 
         this.collision = new CollisionClass();
+        
+        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, this.camera)
+
+    }
+
+    
+
+    findPath = () => {
+
+        let targetTile = this.hexMapData.getSelected()
+
+        if(targetTile == null) return
+        
+        let target = targetTile.originalPos
+        let start = {
+            q: -7,
+            r: 28
+        }
+
+        let path = this.pathFinder.findPath(start, target)
+
+        if(!path) return
+
+        for(let tileObj of path){
+            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            tile.selected = true
+            tile.test = tileObj.moveCost + ' : ' + tileObj.estimateCost
+            this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
+        }
+
+    }
+
+    findMoveSet = () => {
+        let moveAmount = 3
+        let start = {
+            q: -7,
+            r: 28
+        }
+
+        let moveSet = this.pathFinder.findMoveSet(start, moveAmount)
+
+        if(!moveSet) return
+
+        for(let tileObj of moveSet){
+            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            tile.selected = true
+            tile.test = tileObj.moveCost
+            this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
+        }
+    }
+
+    lerp = () => {
+
+        let unit = this.hexMapData.unitList[0]
+
+        if(unit == null) return
+
+        let targetPosition = this.hexMapData.getSelected()
+
+        if(targetPosition == null) return
+
+        unit.destination = targetPosition.originalPos
+
+        unit.destinationStartTime = Date.now()
+        unit.destinationCurTime = 0
 
     }
 
