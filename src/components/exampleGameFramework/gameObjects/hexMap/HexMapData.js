@@ -101,7 +101,14 @@ export default class HexMapDataClass {
 
    //return the selected tile or null
    getSelected = () => {
-      let selected = this.getValues().find(tile => tile.selected == true)
+      let selected = this.getValues().find(tile => tile.selected == 'general')
+      if (selected === undefined) return null
+      return selected
+   }
+
+   //return the selected unit tile or null
+   getSelectedUnit = () => {
+      let selected = this.getValues().find(tile => tile.selected == 'unit')
       if (selected === undefined) return null
       return selected
    }

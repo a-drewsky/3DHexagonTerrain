@@ -2,6 +2,7 @@ import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./HexMapViewSprites";
 import HexMapViewUtilsClass from "./HexMapViewUtils";
 import HexMapViewTableClass from "./HexMapViewTable";
+import HexMapViewSelectionClass from "./HexMapViewSelection";
 
 export default class HexMapViewClass {
 
@@ -45,11 +46,11 @@ export default class HexMapViewClass {
          11: { q: 0 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
 
-      //take out unneccessary this.
-      this.utils = new HexMapViewUtilsClass(this.hexMapData, this.camera, settings);
-      this.tableView = new HexMapViewTableClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.utils);
-      this.mapView = new HexMapViewMapClass(this.hexMapData, this.camera, settings, this.shadowRotationDims, this.images, this.utils, this.canvas);
-      this.spriteView = new HexMapViewSpritesClass(this.hexMapData, this.camera, this.images, this.utils, this.canvas, settings);
+      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings);
+      this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.shadowRotationDims, this.utils);
+      this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.shadowRotationDims, this.images, this.utils, canvas);
+      this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);
+      this.selectionView = new HexMapViewSelectionClass(hexMapData, this.utils, settings);
 
    }
 
@@ -61,28 +62,7 @@ export default class HexMapViewClass {
 
       this.mapView.draw(this.drawctx)
 
-
-      //draw highlight for selected tile
-      let rotatedMap = this.utils.rotateMap()
-      for (let [key, value] of rotatedMap) {
-         if (value.selected) {
-            let keyObj = this.hexMapData.split(key);
-
-            let tilePos = this.utils.hexPositionToXYPosition(keyObj, value.height)
-
-            this.drawctx.fillStyle = 'black'
-            this.drawctx.font = '20px arial'
-
-            if(value.test === undefined){
-               this.drawctx.fillRect(tilePos.x - 10, tilePos.y - 10, 20, 20)
-            } else {
-               this.drawctx.fillText(value.test, tilePos.x - 20, tilePos.y)
-            }
-
-
-         }
-      }
-
+      this.selectionView.draw(this.drawctx)
 
       this.spriteView.draw(this.drawctx)
 

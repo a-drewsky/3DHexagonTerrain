@@ -229,30 +229,35 @@ export default class UnitImagesExampleUnitClass {
 
         this.idle = {
             images: [
-                [null, this.unit_0_m1_idle_1, null, this.unit_1_m1_idle_1, null, this.unit_1_0_idle_1, null, this.unit_0_1_idle_1, null, this.unit_m1_1_idle_1, null, this.unit_m1_0_idle_1]
-            ],
+                [null, this.unit_1_m1_idle_1, null, this.unit_1_0_idle_1, null, this.unit_0_1_idle_1, null, this.unit_m1_1_idle_1, null, this.unit_m1_0_idle_1, null, this.unit_0_m1_idle_1]
+            ]
         }
 
         this.walk = {
             images: [
-                [null, this.unit_0_m1_walk_1, null, this.unit_1_m1_walk_1, null, this.unit_1_0_walk_1, null, this.unit_0_1_walk_1, null, this.unit_m1_1_walk_1, null, this.unit_m1_0_walk_1],
-                [null, this.unit_0_m1_walk_2, null, this.unit_1_m1_walk_2, null, this.unit_1_0_walk_2, null, this.unit_0_1_walk_2, null, this.unit_m1_1_walk_2, null, this.unit_m1_0_walk_2]
-            ],
+                [null, this.unit_1_m1_walk_1, null, this.unit_1_0_walk_1, null, this.unit_0_1_walk_1, null, this.unit_m1_1_walk_1, null, this.unit_m1_0_walk_1, null, this.unit_0_m1_walk_1],
+                [null, this.unit_1_m1_walk_2, null, this.unit_1_0_walk_2, null, this.unit_0_1_walk_2, null, this.unit_m1_1_walk_2, null, this.unit_m1_0_walk_2, null, this.unit_0_m1_walk_2]
+            ]
         }
 
-        this.jump = {
+        this.jumpUp = {
             images: [
-                [null, this.unit_0_m1_jump_1, null, this.unit_1_m1_jump_1, null, this.unit_1_0_jump_1, null, this.unit_0_1_jump_1, null, this.unit_m1_1_jump_1, null, this.unit_m1_0_jump_1],
-                [null, this.unit_0_m1_jump_2, null, this.unit_1_m1_jump_2, null, this.unit_1_0_jump_2, null, this.unit_0_1_jump_2, null, this.unit_m1_1_jump_2, null, this.unit_m1_0_jump_2]
-            ],
+                [null, this.unit_1_m1_jump_1, null, this.unit_1_0_jump_1, null, this.unit_0_1_jump_1, null, this.unit_m1_1_jump_1, null, this.unit_m1_0_jump_1, null, this.unit_0_m1_jump_1]
+            ]
+        }
+
+        this.jumpDown = {
+            images: [
+                [null, this.unit_1_m1_jump_2, null, this.unit_1_0_jump_2, null, this.unit_0_1_jump_2, null, this.unit_m1_1_jump_2, null, this.unit_m1_0_jump_2, null, this.unit_0_m1_jump_2]
+            ]
         }
 
         this.action = {
             images: [
-                [null, this.unit_0_m1_action_1, null, this.unit_1_m1_action_1, null, this.unit_1_0_action_1, null, this.unit_0_1_action_1, null, this.unit_m1_1_action_1, null, this.unit_m1_0_action_1],
-                [null, this.unit_0_m1_action_2, null, this.unit_1_m1_action_2, null, this.unit_1_0_action_2, null, this.unit_0_1_action_2, null, this.unit_m1_1_action_2, null, this.unit_m1_0_action_2],
-                [null, this.unit_0_m1_action_3, null, this.unit_1_m1_action_3, null, this.unit_1_0_action_3, null, this.unit_0_1_action_3, null, this.unit_m1_1_action_3, null, this.unit_m1_0_action_3]
-            ],
+                [null, this.unit_1_m1_action_1, null, this.unit_1_0_action_1, null, this.unit_0_1_action_1, null, this.unit_m1_1_action_1, null, this.unit_m1_0_action_1, null, this.unit_0_m1_action_1],
+                [null, this.unit_1_m1_action_2, null, this.unit_1_0_action_2, null, this.unit_0_1_action_2, null, this.unit_m1_1_action_2, null, this.unit_m1_0_action_2, null, this.unit_0_m1_action_2],
+                [null, this.unit_1_m1_action_3, null, this.unit_1_0_action_3, null, this.unit_0_1_action_3, null, this.unit_m1_1_action_3, null, this.unit_m1_0_action_3, null, this.unit_0_m1_action_3]
+            ]
         }
 
         this.shadowImages = [null, this.shadow_1, null, this.shadow_3, null, this.shadow_5, null, this.shadow_7, null, this.shadow_9, null, this.shadow_11]

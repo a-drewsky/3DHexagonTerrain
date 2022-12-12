@@ -243,7 +243,6 @@ export default class HexMapViewSpritesClass {
       }
 
       let shadowSize
-      console.log(spriteObject.position)
       let tileHeight = this.hexMapData.getEntry(closestTile.q, closestTile.r).height
 
       let shadowPos = this.utils.hexPositionToXYPosition(pos, tileHeight)
@@ -313,8 +312,8 @@ export default class HexMapViewSpritesClass {
 
             height = height + (newHeight - height) * percent + extraHeight
          }
-
       }
+
 
       let sprite = this.images[spriteObject.type][spriteObject.sprite]
 
@@ -332,7 +331,13 @@ export default class HexMapViewSpritesClass {
 
       if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
 
-      let spriteImage = this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][this.camera.rotation]
+      let spriteRotation = spriteObject.rotation + this.camera.rotation
+
+      if(this.camera.rotation % 2 == 1) spriteRotation--
+
+      if(spriteRotation > 11) spriteRotation -= 12
+
+      let spriteImage = this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][spriteRotation]
 
 
       spriteImage = this.utils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.utils.rotateMap(), height)

@@ -18,53 +18,47 @@ export default class HexMapControllerClass {
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera);
 
         this.collision = new CollisionClass();
-        
+
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, this.camera)
 
     }
 
-    
+
 
     findPath = () => {
 
         let targetTile = this.hexMapData.getSelected()
 
-        if(targetTile == null) return
-        
+        if (targetTile == null) return
+
+        let unit = this.hexMapData.unitList[0]
+
         let target = targetTile.originalPos
-        let start = {
-            q: -7,
-            r: 28
-        }
 
-        let path = this.pathFinder.findPath(start, target)
+        let path = this.pathFinder.findPath(unit.position, target)
 
-        if(!path) return
+        if (!path) return
 
-        for(let tileObj of path){
+        for (let tileObj of path) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            tile.selected = true
-            tile.test = tileObj.moveCost + ' : ' + tileObj.estimateCost
+            tile.selected = 'path'
             this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
         }
 
     }
 
     findMoveSet = () => {
-        let moveAmount = 3
-        let start = {
-            q: -7,
-            r: 28
-        }
 
-        let moveSet = this.pathFinder.findMoveSet(start, moveAmount)
+        let unit = this.hexMapData.unitList[0]
 
-        if(!moveSet) return
+        let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
-        for(let tileObj of moveSet){
+        if (!moveSet) return
+
+        for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            tile.selected = true
-            tile.test = tileObj.moveCost
+            tile.selected = 'move'
+            // tile.test = tileObj.moveCost
             this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
         }
     }
@@ -73,16 +67,47 @@ export default class HexMapControllerClass {
 
         let unit = this.hexMapData.unitList[0]
 
-        if(unit == null) return
+        if (unit == null) return
+
+        let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
         let targetPosition = this.hexMapData.getSelected()
 
-        if(targetPosition == null) return
+        if (targetPosition == null) return
 
-        unit.destination = targetPosition.originalPos
+        unit.path = this.utils.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
+
+        for (let tileObj of unit.path) {
+            let tile = this.hexMapData.getEntry(tileObj.q, tileObj.r)
+            tile.selected = 'path'
+            // tile.test = tileObj.moveCost
+            this.hexMapData.setEntry(tileObj.q, tileObj.r, tile)
+        }
+
+        let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
+
+        unit.destination = unit.path[0]
 
         unit.destinationStartTime = Date.now()
-        unit.destinationCurTime = 0
+        unit.destinationCurTime = Date.now()
+
+        //set rotation
+        let direction = {
+            q: unit.destination.q - unit.position.q,
+            r: unit.destination.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+        //make setState function (todo)
+        unit.state = 'walk'
+        unit.frame = 0
+
+        if (nextPosition.height != startPosition.height) {
+            unit.state = 'jumpUp'
+        }
 
     }
 
@@ -145,17 +170,18 @@ export default class HexMapControllerClass {
         }
 
 
-        //reset selected
-        for (let [key, value] of this.hexMapData.getMap()) {
-            if (value.selected == true) {
-                let keyObj = this.hexMapData.split(key)
-                value.selected = false
-                this.hexMapData.setEntry(keyObj.q, keyObj.r, value)
+        let resetSelected = () => {
+            for (let [key, value] of this.hexMapData.getMap()) {
+                if (value.selected != null) {
+                    let keyObj = this.hexMapData.split(key)
+                    value.selected = null
+                    this.hexMapData.setEntry(keyObj.q, keyObj.r, value)
+                }
             }
         }
 
 
-        if(!tileClicked) return
+        if (!tileClicked) return
 
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
 
@@ -168,7 +194,38 @@ export default class HexMapControllerClass {
 
 
         let tile = this.hexMapData.getEntry(tileClicked.q, tileClicked.r)
-        tile.selected = true
+
+        if (this.hexMapData.getSelectedUnit() != null) {
+
+
+            if (tile.selected == 'unit') return
+
+            resetSelected()
+
+            let unit = this.hexMapData.unitList[0]
+
+            let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
+
+            console.log()
+            console.log(moveSet)
+
+            if(moveSet.some(moveObj => moveObj.tile.q == tile.originalPos.q && moveObj.tile.r == tile.originalPos.r)){
+                tile.selected = 'general'
+                this.lerp()
+            } else {
+                tile.selected = 'general'
+            }
+
+            return
+        }
+
+        resetSelected()
+
+        if (this.hexMapData.getUnit(tileClicked.q, tileClicked.r) != null){
+            tile.selected = 'unit'
+            this.findMoveSet()
+        } 
+        else tile.selected = 'general'
         this.hexMapData.setEntry(tileClicked.q, tileClicked.r, tile)
     }
 

@@ -122,7 +122,7 @@ export default class HexMapBuilderClass {
          midBiome: tileMidBiome,
          highBiome: tileHighBiome,
          veryhighBiome: tileVeryhighBiome,
-         selected: false
+         selected: null
       }
 
    }
@@ -293,6 +293,7 @@ export default class HexMapBuilderClass {
             q: -7,
             r: 28
          },
+         path: [],
          destination: null,
          destinationStartTime: null,
          destinationCurTime: null,
@@ -301,8 +302,11 @@ export default class HexMapBuilderClass {
          sprite: 'exampleUnit',
          state: 'idle',
          frame: 0,
-         direction: 0,
+         frameStartTime: Date.now(),
+         frameCurTime: Date.now(),
+         rotation: 3,
          tileHeight: 3,
+         movementRange: 5,
          images: []
       }
 

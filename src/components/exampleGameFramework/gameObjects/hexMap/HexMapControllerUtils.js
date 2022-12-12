@@ -1,8 +1,13 @@
+
+import HexMapPathFinderClass from "./HexMapPathFinder"
+
 export default class HexMapControllerUtilsClass {
 
     constructor(hexMapData, camera) {
         this.hexMapData = hexMapData
         this.camera = camera
+
+        this.pathFinder = new HexMapPathFinderClass(hexMapData, camera)
     }
 
     rotateTile = (q, r, rotation) => {
@@ -31,6 +36,20 @@ export default class HexMapControllerUtilsClass {
             r: newR
         }
 
+    }
+
+    findPath = (startTile, targetTile) => {
+
+        if(targetTile == null || startTile == null) return
+        
+        let target = targetTile.originalPos
+        let start = startTile.originalPos
+
+        let path = this.pathFinder.findPath(start, target)
+
+        if(!path) return null
+
+        return path
     }
 
     rotateMap = () => {

@@ -358,7 +358,7 @@ export default class HexMapViewUtilsClass {
 
         let tileHeight = rotatedMap.get(tileObj.q + ',' + tileObj.r).height
 
-        let zeroPoint 
+        let zeroPoint
 
         zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
 
@@ -459,7 +459,7 @@ export default class HexMapViewUtilsClass {
         let tileObj = this.hexMapData.roundToNearestHex(keyObj.q, keyObj.r)
 
         let tileHeight = height
-        let zeroPoint 
+        let zeroPoint
 
         zeroPoint = this.hexPositionToXYPosition(keyObj, tileHeight)
 
@@ -619,7 +619,7 @@ export default class HexMapViewUtilsClass {
         ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 4 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
         ctx.lineTo(x + Math.sin(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 6 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
-        ctx.fill();
+        if (fillColor) ctx.fill();
         if (lineColor) ctx.stroke();
 
         if (this.debug) {

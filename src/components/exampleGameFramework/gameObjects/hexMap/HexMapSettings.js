@@ -4,9 +4,11 @@ export default class HexMapSettingsClass {
 
         this.DEBUG = settings.DEBUG
 
-        this.TRAVEL_TIME = 2000
+        this.TRAVEL_TIME = 500
 
         this.JUMP_AMOUNT = 4
+
+        this.AMIMATION_RATE = 1000/6
 
         this.GEOMTRIC_TILES_DEBUG = false;
 
@@ -33,6 +35,13 @@ export default class HexMapSettingsClass {
         this.CELL_SIZE = {
             q: 7,
             r: 10
+        }
+
+        this.HIGHLIGHT_COLORS = {
+            general: 'rgb(250, 235, 50)',
+            unit: 'rgb(50, 150, 225)',
+            move: 'rgb(50, 225, 75)',
+            path: 'rgb(50, 125, 250)'
         }
 
 

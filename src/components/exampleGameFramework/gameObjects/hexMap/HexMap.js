@@ -17,6 +17,8 @@ export default class HexMapClass {
         this.builder = new HexMapBuilderClass(this.data, this.settings);
 
         this.controller = new HexMapControllerClass(this.data, camera, canvas);
+
+        this.images = images
     }
 
     build = (q, r, size) => {
@@ -30,15 +32,80 @@ export default class HexMapClass {
 
     update = (state) => {
         this.view.update();
+
+        let unit = this.data.unitList[0]
+
+        //set frame
+        unit.frameCurTime = Date.now()
+        if(unit.frameCurTime - unit.frameStartTime > this.settings.AMIMATION_RATE){
+            unit.frameStartTime = Date.now()
+
+            unit.frame++
+
+            if(unit.frame >= this.images.units['exampleUnit'][unit.state].images.length) unit.frame = 0
+        }
         
-        if(this.data.unitList[0].destination == null) return
-        this.data.unitList[0].destinationCurTime = Date.now()
-        if(this.data.unitList[0].destinationCurTime - this.data.unitList[0].destinationStartTime >= this.settings.TRAVEL_TIME){
-            this.data.unitList[0].position = this.data.unitList[0].destination
-            this.data.unitList[0].destination = null
-            this.data.unitList[0].destinationCurTime = null
-            this.data.unitList[0].destinationStartTime = null
-            console.log('done')
+        if(unit.destination == null) return
+
+        if(unit.state == 'jumpUp'){
+            //make getPercent function
+            let percent = (unit.destinationCurTime - unit.destinationStartTime) / this.settings.TRAVEL_TIME
+
+            if(percent >= 0.5) unit.state = 'jumpDown'
+        }
+
+        unit.destinationCurTime = Date.now()
+        if(unit.destinationCurTime - unit.destinationStartTime >= this.settings.TRAVEL_TIME){
+
+            unit.position = unit.destination
+
+            unit.path.shift()
+
+            if(unit.path.length > 0) {
+                unit.destination = unit.path[0]
+                unit.destinationCurTime = Date.now()
+                unit.destinationStartTime = Date.now()
+
+                //set rotation
+                let direction = {
+                    q: unit.destination.q - unit.position.q,
+                    r: unit.destination.r - unit.position.r
+                }
+        
+                let directionMap = [null, {q: 1, r: -1}, null, {q: 1, r: 0}, null, {q: 0, r: 1}, null, {q: -1, r: 1}, null, {q: -1, r: 0}, null, {q: 0, r: -1}]
+        
+                unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+                if(unit.state != 'walk'){
+                    unit.state = 'walk'
+                    unit.frame = 0
+                }
+                let startPosition = this.data.getEntry(unit.position.q, unit.position.r)
+                let nextPosition = this.data.getEntry(unit.destination.q, unit.destination.r)
+                if(nextPosition.height != startPosition.height){
+                    unit.frame = 0
+                    unit.state = 'jumpUp'
+                }
+            } else {
+                unit.destination = null
+                unit.destinationCurTime = null
+                unit.destinationStartTime = null
+
+                //make some sort of setState function
+                unit.state = 'idle'
+                unit.frame = 0
+                console.log('done')
+
+                //reset selection (make common function)
+                for (let [key, value] of this.data.getMap()) {
+                    if (value.selected != null) {
+                        let keyObj = this.data.split(key)
+                        value.selected = null
+                        this.data.setEntry(keyObj.q, keyObj.r, value)
+                    }
+                }
+            }
+
         }
     }
 
