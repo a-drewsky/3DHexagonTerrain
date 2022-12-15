@@ -38,6 +38,15 @@ export default class HexMapControllerUtilsClass {
 
     }
 
+    resetSelected = () => {
+        for (let [key, value] of this.hexMapData.getMap()) {
+            if (value.selected != null) {
+                let keyObj = this.hexMapData.split(key)
+                value.selected = null
+            }
+        }
+    }
+
     findPath = (startTile, targetTile) => {
 
         if(targetTile == null || startTile == null) return

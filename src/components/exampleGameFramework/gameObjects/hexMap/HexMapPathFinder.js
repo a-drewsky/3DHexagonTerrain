@@ -39,11 +39,12 @@ export default class HexMapPathFinderClass {
         return Math.abs(this.hexMapData.getEntry(a.q, a.r).height - this.hexMapData.getEntry(b.q, b.r).height)
     }
 
-    isStructure = (q, r) => {
+    isValid = (q, r) => {
         let terrain = this.hexMapData.getTerrain(q, r)
-        if(terrain == null) return false
-        if(terrain.type == 'structures') return true
-        return false
+        if(terrain != null && terrain.type == 'structures') return false
+        let unit = this.hexMapData.getUnit(q, r)
+        if(unit != null) return false
+        return true
     }
 
     getTileCost = (tile) => {
@@ -84,7 +85,7 @@ export default class HexMapPathFinderClass {
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => this.isStructure(neighbor.tile.q, neighbor.tile.r) == false)
+            neighbors = neighbors.filter(neighbor => this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
 
 
@@ -141,7 +142,7 @@ export default class HexMapPathFinderClass {
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => this.isStructure(neighbor.tile.q, neighbor.tile.r) == false)
+            neighbors = neighbors.filter(neighbor => this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
 
 

@@ -304,19 +304,14 @@ export default class HexMapBuilderClass {
          frame: 0,
          frameStartTime: Date.now(),
          frameCurTime: Date.now(),
-         rotation: 3,
+         rotation: 5,
          tileHeight: 3,
          movementRange: 5,
-         images: []
+         renderImages: [],
+         renderShadowImages: []
       }
 
       this.hexMapData.unitList.push(unit)
-
-      let tile = this.hexMapData.getEntry('-7', '28')
-
-      tile.unit = this.hexMapData.unitList.length - 1
-
-      this.hexMapData.setEntry('-7', '28', tile)
    }
 
 

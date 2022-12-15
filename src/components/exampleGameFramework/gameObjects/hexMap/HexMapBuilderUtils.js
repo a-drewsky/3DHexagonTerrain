@@ -28,8 +28,6 @@ export default class HexMapBuilderUtilsClass {
             tileToSet.height = terrainHeight
             tileToSet.biome = tileBiome
 
-            this.hexMapData.setEntry(tileToSetKey.q, tileToSetKey.r, tileToSet)
-
         }
     }
 

@@ -4,9 +4,12 @@ import CollisionClass from '../../utilities/collision';
 
 import HexMapPathFinderClass from "./HexMapPathFinder"
 
+import HexMapViewSpritesRendererClass from './HexMapViewSpritesRenderer';
+import HexMapViewUtilsClass from './HexMapViewUtils';
+
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera, canvas) {
+    constructor(hexMapData, camera, canvas, images, settings) {
 
         this.hexMapData = hexMapData;
 
@@ -21,35 +24,17 @@ export default class HexMapControllerClass {
 
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, this.camera)
 
-    }
+        this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings)
 
-
-
-    findPath = () => {
-
-        let targetTile = this.hexMapData.getSelected()
-
-        if (targetTile == null) return
-
-        let unit = this.hexMapData.unitList[0]
-
-        let target = targetTile.originalPos
-
-        let path = this.pathFinder.findPath(unit.position, target)
-
-        if (!path) return
-
-        for (let tileObj of path) {
-            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            tile.selected = 'path'
-            this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
-        }
+        this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, this.viewUtils, settings)
 
     }
 
     findMoveSet = () => {
 
-        let unit = this.hexMapData.unitList[0]
+        let unit = this.hexMapData.getSelectedUnit()
+
+        if(unit == null) return
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
@@ -58,14 +43,10 @@ export default class HexMapControllerClass {
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
             tile.selected = 'move'
-            // tile.test = tileObj.moveCost
-            this.hexMapData.setEntry(tileObj.tile.q, tileObj.tile.r, tile)
         }
     }
 
-    lerp = () => {
-
-        let unit = this.hexMapData.unitList[0]
+    lerp = (unit) => {
 
         if (unit == null) return
 
@@ -80,8 +61,6 @@ export default class HexMapControllerClass {
         for (let tileObj of unit.path) {
             let tile = this.hexMapData.getEntry(tileObj.q, tileObj.r)
             tile.selected = 'path'
-            // tile.test = tileObj.moveCost
-            this.hexMapData.setEntry(tileObj.q, tileObj.r, tile)
         }
 
         let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
@@ -108,6 +87,41 @@ export default class HexMapControllerClass {
         if (nextPosition.height != startPosition.height) {
             unit.state = 'jumpUp'
         }
+
+    }
+
+    addUnit = () => {
+
+        let selectedTile = this.hexMapData.getSelected()
+
+        if(selectedTile != null && selectedTile.selected == 'general'){
+            let unit = {
+                position: {
+                   q: selectedTile.originalPos.q,
+                   r: selectedTile.originalPos.r
+                },
+                path: [],
+                destination: null,
+                destinationStartTime: null,
+                destinationCurTime: null,
+                name: 'Example Unit',
+                type: 'units',
+                sprite: 'exampleUnit',
+                state: 'idle',
+                frame: 0,
+                frameStartTime: Date.now(),
+                frameCurTime: Date.now(),
+                rotation: 3,
+                tileHeight: 3,
+                movementRange: 5,
+                renderImages: [],
+                renderShadowImages: []
+             }
+             this.renderer.renderUnit(unit)
+             this.hexMapData.unitList.push(unit)
+        }
+
+        this.utils.resetSelected()
 
     }
 
@@ -170,17 +184,6 @@ export default class HexMapControllerClass {
         }
 
 
-        let resetSelected = () => {
-            for (let [key, value] of this.hexMapData.getMap()) {
-                if (value.selected != null) {
-                    let keyObj = this.hexMapData.split(key)
-                    value.selected = null
-                    this.hexMapData.setEntry(keyObj.q, keyObj.r, value)
-                }
-            }
-        }
-
-
         if (!tileClicked) return
 
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
@@ -195,14 +198,13 @@ export default class HexMapControllerClass {
 
         let tile = this.hexMapData.getEntry(tileClicked.q, tileClicked.r)
 
-        if (this.hexMapData.getSelectedUnit() != null) {
+        let unit = this.hexMapData.getSelectedUnit()
 
+        if (unit != null) {
 
             if (tile.selected == 'unit') return
 
-            resetSelected()
-
-            let unit = this.hexMapData.unitList[0]
+            this.utils.resetSelected()
 
             let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
@@ -211,22 +213,29 @@ export default class HexMapControllerClass {
 
             if(moveSet.some(moveObj => moveObj.tile.q == tile.originalPos.q && moveObj.tile.r == tile.originalPos.r)){
                 tile.selected = 'general'
-                this.lerp()
+                this.lerp(unit)
             } else {
-                tile.selected = 'general'
+                let newUnit = this.hexMapData.getUnit(tile.originalPos.q, tile.originalPos.r)
+                if(newUnit == null){
+                    tile.selected = 'general'
+                    console.log("ACT")
+                } 
+                else {
+                    tile.selected = 'unit'
+                    this.findMoveSet()
+                }
             }
 
             return
         }
 
-        resetSelected()
+        this.utils.resetSelected()
 
         if (this.hexMapData.getUnit(tileClicked.q, tileClicked.r) != null){
             tile.selected = 'unit'
             this.findMoveSet()
         } 
         else tile.selected = 'general'
-        this.hexMapData.setEntry(tileClicked.q, tileClicked.r, tile)
     }
 
     keyPress = (key) => {

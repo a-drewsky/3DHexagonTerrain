@@ -107,10 +107,17 @@ export default class HexMapDataClass {
    }
 
    //return the selected unit tile or null
+   getSelectedUnitTile = () => {
+      let selectedTile = this.getValues().find(tile => tile.selected == 'unit')
+      if (selectedTile === undefined) return null
+      return selectedTile
+   }
+
+   //return the selected unit tile or null
    getSelectedUnit = () => {
-      let selected = this.getValues().find(tile => tile.selected == 'unit')
-      if (selected === undefined) return null
-      return selected
+      let selectedTile = this.getValues().find(tile => tile.selected == 'unit')
+      if (selectedTile === undefined) return null
+      return this.unitList.find(unit => unit.position.q == selectedTile.originalPos.q && unit.position.r == selectedTile.originalPos.r)
    }
 
    //returns keys of all neighbors adjacent to (q, r)
