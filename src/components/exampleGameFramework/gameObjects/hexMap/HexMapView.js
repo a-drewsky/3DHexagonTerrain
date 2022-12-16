@@ -50,7 +50,7 @@ export default class HexMapViewClass {
       this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.shadowRotationDims, this.images, this.utils, canvas);
       this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);
-      this.selectionView = new HexMapViewSelectionClass(hexMapData, this.utils, settings);
+      this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, images, this.utils);
 
    }
 

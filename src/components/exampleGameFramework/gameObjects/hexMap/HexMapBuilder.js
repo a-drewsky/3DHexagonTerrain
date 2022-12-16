@@ -122,7 +122,8 @@ export default class HexMapBuilderClass {
          midBiome: tileMidBiome,
          highBiome: tileHighBiome,
          veryhighBiome: tileVeryhighBiome,
-         selected: null
+         selected: null,
+         selectionImages: []
       }
 
    }

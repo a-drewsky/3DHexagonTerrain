@@ -34,6 +34,7 @@ export default class HighlighImagesClass {
                 if (imagesLoaded == Object.keys(this.images).length) {
                     delete this.images;
                     startGame();
+                    delete this.loadImages
                 }
             }
         }

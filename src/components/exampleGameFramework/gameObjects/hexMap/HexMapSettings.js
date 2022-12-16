@@ -37,13 +37,6 @@ export default class HexMapSettingsClass {
             r: 10
         }
 
-        this.HIGHLIGHT_COLORS = {
-            general: 'rgb(250, 235, 50)',
-            unit: 'rgb(50, 150, 225)',
-            move: 'rgb(50, 225, 75)',
-            path: 'rgb(50, 125, 250)'
-        }
-
 
         //BIOME GENERATION
 

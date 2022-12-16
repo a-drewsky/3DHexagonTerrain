@@ -42,7 +42,7 @@ export default class HexMapControllerClass {
 
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            tile.selected = 'move'
+            tile.selected = 'movement'
         }
     }
 
@@ -52,16 +52,11 @@ export default class HexMapControllerClass {
 
         let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        let targetPosition = this.hexMapData.getSelected()
+        let targetPosition = this.hexMapData.getSelectedUnitTile()
 
         if (targetPosition == null) return
 
         unit.path = this.utils.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
-
-        for (let tileObj of unit.path) {
-            let tile = this.hexMapData.getEntry(tileObj.q, tileObj.r)
-            tile.selected = 'path'
-        }
 
         let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
 
@@ -94,7 +89,7 @@ export default class HexMapControllerClass {
 
         let selectedTile = this.hexMapData.getSelected()
 
-        if(selectedTile != null && selectedTile.selected == 'general'){
+        if(selectedTile != null && selectedTile.selected == 'info'){
             let unit = {
                 position: {
                    q: selectedTile.originalPos.q,
@@ -212,12 +207,12 @@ export default class HexMapControllerClass {
             console.log(moveSet)
 
             if(moveSet.some(moveObj => moveObj.tile.q == tile.originalPos.q && moveObj.tile.r == tile.originalPos.r)){
-                tile.selected = 'general'
+                tile.selected = 'unit'
                 this.lerp(unit)
             } else {
                 let newUnit = this.hexMapData.getUnit(tile.originalPos.q, tile.originalPos.r)
                 if(newUnit == null){
-                    tile.selected = 'general'
+                    tile.selected = 'info'
                     console.log("ACT")
                 } 
                 else {
@@ -235,7 +230,7 @@ export default class HexMapControllerClass {
             tile.selected = 'unit'
             this.findMoveSet()
         } 
-        else tile.selected = 'general'
+        else tile.selected = 'info'
     }
 
     keyPress = (key) => {
