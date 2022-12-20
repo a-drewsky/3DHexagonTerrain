@@ -7,6 +7,9 @@ export default class InputControllerClass {
 
       this.canvas = canvas;
 
+      this.mouseMoveTimeStamp = 0
+      this.mouseMoveTime = 1000/60
+
       //State controller List
       this.showHexMapStateController = new ShowHexMapStateControllerClass(this.gameManager, canvas);
 
@@ -33,6 +36,12 @@ export default class InputControllerClass {
    }
 
    mouseMove = (x, y) => {
+
+      if(Date.now() - this.mouseMoveTimeStamp < this.mouseMoveTime) return
+
+      console.log("FIRE")
+      this.mouseMoveTimeStamp = Date.now()
+
       //State controller functions
       switch (this.gameManager.state.gameState) {
          case 'showHexMapState':

@@ -197,7 +197,7 @@ export default class HexMapViewSpritesRendererClass {
             if (terrainObject.shadowImages[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.utils.rotateMap()
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
@@ -211,7 +211,7 @@ export default class HexMapViewSpritesRendererClass {
             if (terrainObject.images[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.utils.rotateMap()
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
@@ -269,7 +269,7 @@ export default class HexMapViewSpritesRendererClass {
                     if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
 
                         this.camera.rotation = rotation;
-                        let rotatedMap = this.utils.rotateMap()
+                        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
                         let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
@@ -293,7 +293,7 @@ export default class HexMapViewSpritesRendererClass {
             if (terrainObject.images[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.utils.rotateMap()
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
             for (let j = 0; j < sprite.images.length; j++) {
@@ -353,7 +353,7 @@ export default class HexMapViewSpritesRendererClass {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
 
                     this.camera.rotation = rotation;
-                    let rotatedMap = this.utils.rotateMap()
+                    let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
                     let keyObj = this.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
 
 
@@ -376,7 +376,7 @@ export default class HexMapViewSpritesRendererClass {
             if (unitObject.renderImages[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.utils.rotateMap()
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
 
             for (let j = 0; j < sprite.idle.images.length; j++) {

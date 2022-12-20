@@ -71,6 +71,7 @@ export default class GameObjectManagerClass {
         }
 
         this.objectMap.get('hexMap').object.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size);
+        console.log("DONE BUILDING")
         this.objectMap.get('hexMap').object.prerender();
 
     }

@@ -51,14 +51,14 @@ export default class HexMapViewMapClass {
         //render all configs
         let renderConfig = (cameraRotation) => {
             this.camera.rotation = cameraRotation;
-            let rotatedMap = this.utils.rotateMap();
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             this.render(rotatedMap, renderCanvasDims);
         }
 
 
         let mapPosConfig = (cameraRotation) => {
             this.camera.rotation = cameraRotation;
-            let rotatedMap = this.utils.rotateMap();
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             this.setMapPos(rotatedMap, renderCanvasDims);
         }
 
@@ -271,8 +271,9 @@ export default class HexMapViewMapClass {
 
         if (shadowRotation > 11) shadowRotation -= 12;
 
-
         for (let [key, value] of rotatedMap) {
+
+            value = this.hexMapData.getEntry(value.q, value.r)
 
             let keyObj = this.hexMapData.split(key);
 
@@ -439,6 +440,8 @@ export default class HexMapViewMapClass {
 
         for (let [key, value] of rotatedMap) {
 
+            value = this.hexMapData.getEntry(value.q, value.r)
+
             if (value.height == height) {
 
                 let keyObj = this.hexMapData.split(key);
@@ -470,6 +473,8 @@ export default class HexMapViewMapClass {
         //draw shadow
         this.renderctx.beginPath();
         for (let [key, value] of rotatedMap) {
+
+            value = this.hexMapData.getEntry(value.q, value.r)
 
             let keyObj = this.hexMapData.split(key);
 
@@ -548,6 +553,8 @@ export default class HexMapViewMapClass {
         this.renderctx.beginPath();
 
         for (let [key, value] of rotatedMap) {
+
+            value = this.hexMapData.getEntry(value.q, value.r)
 
             let keyObj = this.hexMapData.split(key);
 

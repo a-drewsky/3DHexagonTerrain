@@ -3,7 +3,7 @@ import HexMapBuilderUtilsClass from "./HexMapBuilderUtils";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, settings) {
+   constructor(hexMapData, settings, config) {
       this.hexMapData = hexMapData;
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
@@ -16,6 +16,8 @@ export default class HexMapBuilderTerrainClass {
       this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
       this.secondMineChance = settings.SECOND_MINE_CHANCE
       this.thirdMineChace = settings.THIRD_MINE_CHACE
+
+      this.config = config
 
       this.utils = new HexMapBuilderUtilsClass(hexMapData, settings)
    }
@@ -71,19 +73,7 @@ export default class HexMapBuilderTerrainClass {
             this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
 
-            let terrain = {
-               position: {
-                  q: selectedTilePos.q,
-                  r: selectedTilePos.r
-               },
-               name: 'Stronghold',
-               type: 'structures',
-               sprite: 'base',
-               state: 0,
-               tileHeight: 2,
-               images: [],
-               shadowImages: []
-            }
+            let terrain = this.config.base(selectedTilePos)
 
             selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
             this.utils.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
@@ -174,19 +164,7 @@ export default class HexMapBuilderTerrainClass {
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
 
-               let terrain = {
-                  position: {
-                     q: selectedTilePos.q,
-                     r: selectedTilePos.r
-                  },
-                  name: 'Mine',
-                  type: 'structures',
-                  sprite: mineType,
-                  state: 0,
-                  tileHeight: 2,
-                  images: [],
-                  shadowImages: []
-               }
+               let terrain = this.config[mineType](selectedTilePos)
 
                selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
                this.utils.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
@@ -207,19 +185,7 @@ export default class HexMapBuilderTerrainClass {
 
          if ((value.biome == 'savanna' || value.biome == 'savannahill') && spawnChance > savannaTreeThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
 
-            let terrain = {
-               position: {
-                  q: keyObj.q,
-                  r: keyObj.r
-               },
-               name: 'Savanna Tree',
-               type: 'structures',
-               sprite: 'savannatree',
-               state: 0,
-               tileHeight: 3,
-               images: [],
-               shadowImages: []
-            }
+            let terrain = this.config.savannaTree(keyObj)
 
             this.utils.setStructure(keyObj.q, keyObj.r, terrain, value)
 
@@ -240,19 +206,7 @@ export default class HexMapBuilderTerrainClass {
          
          if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].name == 'Rocks' && spawnChance > replacesmallRockThreshold) {
 
-            let terrain = {
-               position: {
-                  q: keyObj.q,
-                  r: keyObj.r
-               },
-               name: 'Large Rock',
-               type: 'structures',
-               sprite: 'largerock',
-               state: 0,
-               tileHeight: 2,
-               images: [],
-               shadowImages: []
-            }
+            let terrain = this.config.largeRock(keyObj)
 
             this.hexMapData.terrainList[terrainIndex] = terrain
 
@@ -291,43 +245,20 @@ export default class HexMapBuilderTerrainClass {
 
          if (tileTreeNoise[value.biome] > this.terrainGenThresholds[value.biome] && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
 
-            let terrain = {
-               position: {
-                  q: keyObj.q,
-                  r: keyObj.r
-               }
-            }
+            let terrain
 
             switch (value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  terrain.name = 'Forest'
-                  terrain.type = 'modifiers'
-                  terrain.sprite = 'oaktree'
-                  terrain.state = 0
-                  terrain.tileHeight = 2
-                  terrain.images = []
-                  terrain.shadowImages = []
+                  terrain = this.config.oakTrees(keyObj)
                   break;
                case 'tundra':
                case 'snowhill':
-                  terrain.name = 'Forest'
-                  terrain.type = 'modifiers'
-                  terrain.sprite = 'tundratree'
-                  terrain.state = 0
-                  terrain.tileHeight = 3
-                  terrain.images = []
-                  terrain.shadowImages = []
+                  terrain = this.config.spruceTrees(keyObj)
                   break;
                case 'desert':
                case 'sandhill':
-                  terrain.name = 'Cacti'
-                  terrain.type = 'modifiers'
-                  terrain.sprite = 'deserttree'
-                  terrain.state = 0
-                  terrain.tileHeight = 3
-                  terrain.images = []
-                  terrain.shadowImages = []
+                  terrain = this.config.cacti(keyObj)
                   break;
                default:
                   continue;
@@ -336,19 +267,7 @@ export default class HexMapBuilderTerrainClass {
             this.hexMapData.terrainList.push(terrain)
 
          } else if (this.rockGenThreshold[value.biome] && tileRockNoise > this.rockGenThreshold[value.biome]) {
-            let terrain = {
-               position: {
-                  q: keyObj.q,
-                  r: keyObj.r
-               },
-               name: 'Rocks',
-               type: 'modifiers',
-               sprite: 'rocks',
-               state: 0,
-               tileHeight: 1,
-               images: [],
-               shadowImages: []
-            }
+            let terrain = this.config.smallRocks(keyObj)
 
             this.hexMapData.terrainList.push(terrain)
          }

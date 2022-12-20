@@ -32,6 +32,7 @@ export default class HexMapClass {
     }
 
     prerender = () => {
+        this.data.setRotatedMapList()
         this.view.prerender()
 
     }
@@ -107,12 +108,13 @@ export default class HexMapClass {
                     console.log('done')
 
                     //reset selection (make common function)
-                    for (let [key, value] of this.data.getMap()) {
-                        if (value.selected != null) {
-                            let keyObj = this.data.split(key)
-                            value.selected = null
-                        }
-                    }
+                    // for (let [key, value] of this.data.getMap()) {
+                    //     if (value.selected != null) {
+                    //         let keyObj = this.data.split(key)
+                    //         value.selected = null
+                    //     }
+                    // }
+                    this.data.selectionList = []
                 }
 
             }

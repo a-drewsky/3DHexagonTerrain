@@ -108,9 +108,25 @@ export default class HexMapViewClass {
 
       //render map
       this.mapView.prerender(renderCanvasDims);
+      console.log("map rendered")
 
-      //render trees
-      this.spriteView.prerender();
+      //render sprites
+      let terrainList = this.hexMapData.terrainList
+
+      let length = terrainList.length
+      let terrainNum = 0
+
+      while(terrainNum < length){
+
+         console.log(terrainNum)
+
+         this.spriteView.prerenderTerrain(this.hexMapData.terrainList[terrainNum]);
+
+         terrainNum++
+      }
+
+      this.spriteView.prerenderUnits();
+      console.log("sprites rendered")
 
 
       //set camera rotation

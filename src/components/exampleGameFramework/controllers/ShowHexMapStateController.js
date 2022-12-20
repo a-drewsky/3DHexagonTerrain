@@ -27,6 +27,8 @@ export default class ShowHexMapStateControllerClass {
 
     mouseMove = (x, y) => {
         this.gameManager.objects.objectMap.get('camera').object.controller.mouseMove(x, y);
+        
+        this.gameManager.objects.objectMap.get('hexMap').object.controller.mouseMove(x, y);
 
         //this.gameManager.state.draw();
     }

@@ -10,40 +10,13 @@ export default class HexMapControllerUtilsClass {
         this.pathFinder = new HexMapPathFinderClass(hexMapData, camera)
     }
 
-    rotateTile = (q, r, rotation) => {
-
-
-        let s = -q - r;
-        let angle = rotation * 15;
-        if (rotation % 2 == 1) angle -= 15;
-
-        let newQ = q;
-        let newR = r;
-        let newS = s;
-
-        for (let i = 0; i < angle; i += 30) {
-            q = -newR;
-            r = -newS;
-            s = -newQ;
-
-            newQ = q;
-            newR = r;
-            newS = s;
-        }
-
-        return {
-            q: newQ,
-            r: newR
-        }
-
+    resetSelected = () => {
+        this.hexMapData.selectionList = []
     }
 
-    resetSelected = () => {
-        for (let [key, value] of this.hexMapData.getMap()) {
-            if (value.selected != null) {
-                let keyObj = this.hexMapData.split(key)
-                value.selected = null
-            }
+    resetHover = () => {
+        for(let i=0; i< this.hexMapData.selectionList.length; i++){
+            if(this.hexMapData.selectionList[i].selection == 'hover') this.hexMapData.selectionList.splice(i, 1)
         }
     }
 
@@ -51,36 +24,14 @@ export default class HexMapControllerUtilsClass {
 
         if(targetTile == null || startTile == null) return
         
-        let target = targetTile.originalPos
-        let start = startTile.originalPos
+        let target = targetTile.position
+        let start = startTile.position
 
         let path = this.pathFinder.findPath(start, target)
 
         if(!path) return null
 
         return path
-    }
-
-    rotateMap = () => {
-        //Rotate the hexmap and set the rotatedMap object
-        let sortedArr = this.hexMapData.getKeys();
-
-        for (let i = 0; i < sortedArr.length; i++) {
-            sortedArr[i] = {
-                value: this.hexMapData.getEntry(sortedArr[i].q, sortedArr[i].r),
-                position: this.rotateTile(sortedArr[i].q, sortedArr[i].r, this.camera.rotation)
-            };
-        }
-
-        sortedArr.sort((a, b) => { return a.position.r - b.position.r || a.position.q - b.position.q });
-
-        let rotatedMap = new Map();
-
-        for (let i = 0; i < sortedArr.length; i++) {
-            rotatedMap.set(this.hexMapData.join(sortedArr[i].position.q, sortedArr[i].position.r), sortedArr[i].value);
-        }
-
-        return rotatedMap
     }
 
     hexPositionToXYPosition = (keyObj, tileHeight) => {

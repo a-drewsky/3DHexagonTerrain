@@ -32,10 +32,10 @@ export default class HexMapViewSelectionRendererClass {
         tileObj.selectionImages[selection][this.camera.rotation] = tempCanvas
 
         //crop image
-        let rotatedMap = this.utils.rotateMap()
-        let keyObj = this.utils.rotateTile(tileObj.originalPos.q, tileObj.originalPos.r, this.camera.rotation)
+        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+        let keyObj = this.utils.rotateTile(tileObj.position.q, tileObj.position.r, this.camera.rotation)
 
-        let croppedImage = this.utils.cropOutTiles(tileObj.selectionImages[selection][this.camera.rotation], { width: 1, height: 1, }, { x: 0, y: 0 }, keyObj, rotatedMap)
+        let croppedImage = this.utils.cropOutTiles(tileObj.selectionImages[selection][this.camera.rotation], { width: 1, height: 1 }, { x: 0, y: 0 }, keyObj, rotatedMap)
         tileObj.selectionImages[selection][this.camera.rotation] = croppedImage
 
     }

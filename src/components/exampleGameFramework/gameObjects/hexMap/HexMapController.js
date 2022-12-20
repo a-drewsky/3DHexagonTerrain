@@ -42,7 +42,12 @@ export default class HexMapControllerClass {
 
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            tile.selected = 'movement'
+            
+            this.hexMapData.selectionList.push({
+                q: tile.position.q,
+                r: tile.position.r,
+                selection: 'movement'
+            })
         }
     }
 
@@ -89,11 +94,11 @@ export default class HexMapControllerClass {
 
         let selectedTile = this.hexMapData.getSelected()
 
-        if(selectedTile != null && selectedTile.selected == 'info'){
+        if(selectedTile != null && this.getSelection(selectedTile.position.q, selectedTile.position.r) == 'info'){
             let unit = {
                 position: {
-                   q: selectedTile.originalPos.q,
-                   r: selectedTile.originalPos.r
+                   q: selectedTile.position.q,
+                   r: selectedTile.position.r
                 },
                 path: [],
                 destination: null,
@@ -118,6 +123,91 @@ export default class HexMapControllerClass {
 
         this.utils.resetSelected()
 
+    }
+
+    mouseMove = (x, y) => {
+
+        this.utils.resetHover()
+
+        x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
+        y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
+
+
+        let ogPos = {
+            x: x,
+            y: y
+        }
+
+        x += this.camera.position.x
+        y += this.camera.position.y
+
+        x -= this.hexMapData.posMap.get(this.camera.rotation).x
+
+        y -= this.hexMapData.posMap.get(this.camera.rotation).y
+
+        let hoverHex = {
+            q: ((2 / 3 * x)) / this.hexMapData.size,
+            r: ((-1 / 3 * x) + (Math.sqrt(3) / 3) * (y * (1 / this.hexMapData.squish))) / this.hexMapData.size
+        }
+
+        hoverHex = this.hexMapData.roundToNearestHex(hoverHex.q, hoverHex.r)
+
+
+        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+
+        let testList = [{ q: 0, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
+
+        let hoverTile = null
+
+        for (let i = 0; i < testList.length; i++) {
+            let testTile = {
+                q: hoverHex.q + testList[i].q,
+                r: hoverHex.r + testList[i].r
+            }
+
+            if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
+
+            let hexPos = this.utils.hexPositionToXYPosition(testTile, this.hexMapData.getEntryRotated(testTile.q, testTile.r, this.camera.rotation).height)
+
+            hexPos.x -= this.camera.position.x
+            hexPos.y -= this.camera.position.y
+
+
+            if (this.collision.pointHex(ogPos.x, ogPos.y, hexPos.x, hexPos.y, this.hexMapData.size, this.hexMapData.squish)) {
+                hoverTile = testTile
+            }
+
+        }
+
+
+        if (!hoverTile) return
+
+        let rotatedTile = rotatedMap.get(hoverTile.q + ',' + hoverTile.r)
+
+        hoverTile = {
+            q: rotatedTile.q,
+            r: rotatedTile.r
+        }
+
+        let tileObj = this.hexMapData.getEntry(hoverTile.q, hoverTile.r)
+
+        if(this.getSelection(tileObj.position.q, tileObj.position.r) == null){
+            this.setSelection(tileObj.position.q, tileObj.position.r, 'hover')
+        }
+    }
+
+    getSelection = (q, r) => {
+        let selected = this.hexMapData.selectionList.find(sel => sel.q == q && sel.r == r)
+        if(!selected) return null
+        return selected.selection
+    }
+
+    setSelection = (q, r, selection) => {
+        this.hexMapData.selectionList.push({
+            q: q,
+            r: r,
+            selection: selection
+        })
     }
 
     click = (x, y) => {
@@ -149,7 +239,7 @@ export default class HexMapControllerClass {
         hexClicked = this.hexMapData.roundToNearestHex(hexClicked.q, hexClicked.r)
 
 
-        let rotatedMap = this.utils.rotateMap()
+        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
 
 
@@ -164,9 +254,10 @@ export default class HexMapControllerClass {
                 r: hexClicked.r + testList[i].r
             }
 
+
             if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
 
-            let hexPos = this.utils.hexPositionToXYPosition(testTile, rotatedMap.get(testTile.q + ',' + testTile.r).height)
+            let hexPos = this.utils.hexPositionToXYPosition(testTile, this.hexMapData.getEntryRotated(testTile.q, testTile.r, this.camera.rotation).height)
 
             hexPos.x -= this.camera.position.x
             hexPos.y -= this.camera.position.y
@@ -177,15 +268,16 @@ export default class HexMapControllerClass {
             }
 
         }
-
+        
+        console.log(tileClicked)
 
         if (!tileClicked) return
 
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
 
         tileClicked = {
-            q: rotatedTile.originalPos.q,
-            r: rotatedTile.originalPos.r
+            q: rotatedTile.q,
+            r: rotatedTile.r
         }
 
         console.log(tileClicked)
@@ -197,26 +289,25 @@ export default class HexMapControllerClass {
 
         if (unit != null) {
 
-            if (tile.selected == 'unit') return
+            if (this.getSelection(tile.position.q, tile.position.r) == 'unit') return
 
             this.utils.resetSelected()
 
             let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
             console.log()
-            console.log(moveSet)
 
-            if(moveSet.some(moveObj => moveObj.tile.q == tile.originalPos.q && moveObj.tile.r == tile.originalPos.r)){
-                tile.selected = 'unit'
+            if(moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)){
+                this.setSelection(tile.position.q, tile.position.r, 'unit')
                 this.lerp(unit)
             } else {
-                let newUnit = this.hexMapData.getUnit(tile.originalPos.q, tile.originalPos.r)
+                let newUnit = this.hexMapData.getUnit(tile.position.q, tile.position.r)
                 if(newUnit == null){
-                    tile.selected = 'info'
+                    this.setSelection(tile.position.q, tile.position.r, 'info')
                     console.log("ACT")
                 } 
                 else {
-                    tile.selected = 'unit'
+                    this.setSelection(tile.position.q, tile.position.r, 'unit')
                     this.findMoveSet()
                 }
             }
@@ -227,10 +318,10 @@ export default class HexMapControllerClass {
         this.utils.resetSelected()
 
         if (this.hexMapData.getUnit(tileClicked.q, tileClicked.r) != null){
-            tile.selected = 'unit'
+            this.setSelection(tile.position.q, tile.position.r, 'unit')
             this.findMoveSet()
         } 
-        else tile.selected = 'info'
+        else this.setSelection(tile.position.q, tile.position.r, 'info')
     }
 
     keyPress = (key) => {

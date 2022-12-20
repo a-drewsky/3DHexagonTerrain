@@ -81,13 +81,13 @@ export default class HexMapViewSpritesClass {
          let keyObj
          let height
 
-         if(unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / this.travelTime > 0.5){
+         if (unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / this.travelTime > 0.5) {
             keyObj = this.utils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.camera.rotation)
-            height = this.hexMapData.getEntry(unitObject.destination.q, unitObject.destination.r).height
          } else {
             keyObj = this.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
-            height = this.hexMapData.getEntry(unitObject.position.q, unitObject.position.r).height
          }
+
+         height = this.hexMapData.getEntry(unitObject.position.q, unitObject.position.r).height
 
          spriteList.push({
             id: i,
@@ -102,7 +102,7 @@ export default class HexMapViewSpritesClass {
       let modifierPosList = ['top', 'unit', 'bottom']
 
       //sort terrain object list
-      spriteList.sort((a, b) => { return a.r - b.r || a.q - b.q || modifierPosList.indexOf(a.modifierPos) - modifierPosList.indexOf(b.modifierPos)})
+      spriteList.sort((a, b) => { return a.r - b.r || a.q - b.q || modifierPosList.indexOf(a.modifierPos) - modifierPosList.indexOf(b.modifierPos) })
 
       this.drawShadows(drawctx, spriteList)
       this.drawSprites(drawctx, spriteList)
@@ -116,8 +116,8 @@ export default class HexMapViewSpritesClass {
                this.drawStructure(drawctx, spriteList[i])
                break
             case 'modifiers':
-               if(spriteList[i].modifierPos == 'top') this.drawModifierTop(drawctx, spriteList[i])
-               if(spriteList[i].modifierPos == 'bottom') this.drawModifierBottom(drawctx, spriteList[i])
+               if (spriteList[i].modifierPos == 'top') this.drawModifierTop(drawctx, spriteList[i])
+               if (spriteList[i].modifierPos == 'bottom') this.drawModifierBottom(drawctx, spriteList[i])
                break
             case 'units':
                this.drawUnit(drawctx, spriteList[i])
@@ -130,7 +130,7 @@ export default class HexMapViewSpritesClass {
    drawShadows = (drawctx, spriteList) => {
       for (let i = 0; i < spriteList.length; i++) {
 
-         if(spriteList[i].modifierPos == 'bottom') continue
+         if (spriteList[i].modifierPos == 'bottom') continue
 
          let spriteObject
 
@@ -376,7 +376,7 @@ export default class HexMapViewSpritesClass {
 
       let shadowImage = this.images.units[spriteObject.sprite].shadowImages[this.camera.rotation]
 
-      shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.utils.rotateMap())
+      shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation])
 
       drawctx.drawImage(
          shadowImage,
@@ -459,7 +459,7 @@ export default class HexMapViewSpritesClass {
                r: spriteObject.destination.r
             }
          }
-
+         console.log("ACT")
          //set height
          let newHeight = this.hexMapData.getEntry(spriteObject.destination.q, spriteObject.destination.r).height
 
@@ -496,7 +496,7 @@ export default class HexMapViewSpritesClass {
       let spriteImage = this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][spriteRotation]
 
 
-      spriteImage = this.utils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.utils.rotateMap(), height)
+      spriteImage = this.utils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation], height)
       spriteImage = this.utils.darkenSpriteJump(spriteImage, spriteObject, closestTile, height)
 
       drawctx.drawImage(
@@ -509,19 +509,16 @@ export default class HexMapViewSpritesClass {
 
    }
 
-   prerender = () => {
+   prerenderTerrain = (terrainObject) => {
 
-      for (let i = 0; i < this.hexMapData.terrainList.length; i++) {
+      if (terrainObject == null) return
 
-         let terrainObject = this.hexMapData.terrainList[i]
+      if (terrainObject.type == 'modifiers') this.renderer.renderModifier(terrainObject)
+      if (terrainObject.type == 'structures') this.renderer.renderStructure(terrainObject)
 
-         if (terrainObject == null) continue
+   }
 
-         if (terrainObject.type == 'modifiers') this.renderer.renderModifier(terrainObject)
-         if (terrainObject.type == 'structures') this.renderer.renderStructure(terrainObject)
-
-      }
-
+   prerenderUnits = () => {
       for (let i = 0; i < this.hexMapData.unitList.length; i++) {
 
          let unitObject = this.hexMapData.unitList[i]
@@ -531,7 +528,6 @@ export default class HexMapViewSpritesClass {
          this.renderer.renderUnit(unitObject)
 
       }
-
    }
 
 }

@@ -5,9 +5,13 @@ export default class HexMapDataClass {
 
       this.posMap = new Map();
 
+      this.rotatedMapList = []
+
       this.terrainList = [];
 
       this.unitList = [];
+
+      this.selectionList = [];
 
       this.size = canvas.width / 25;
       this.squish = settings.HEXMAP_SQUISH;
@@ -47,6 +51,61 @@ export default class HexMapDataClass {
    setMaxHeight = (maxHeight) => {
       this.maxHeight = maxHeight;
    }
+
+   setRotatedMapList = () => {
+      let rotateTile = (q, r, rotation) => {
+
+
+         let s = -q - r;
+         let angle = rotation * 15;
+         if (rotation % 2 == 1) angle -= 15;
+
+         let newQ = q;
+         let newR = r;
+         let newS = s;
+
+         for (let i = 0; i < angle; i += 30) {
+            q = -newR;
+            r = -newS;
+            s = -newQ;
+
+            newQ = q;
+            newR = r;
+            newS = s;
+         }
+
+         return {
+            q: newQ,
+            r: newR
+         }
+
+      }
+
+      for (let i = 0; i < 12; i++) {
+         //Rotate the hexmap and set the rotatedMap object
+         let sortedArr = this.getKeys();
+
+         for (let j = 0; j < sortedArr.length; j++) {
+            let rotatedTile = rotateTile(sortedArr[j].q, sortedArr[j].r, i)
+            sortedArr[j] = {
+               rotPosQ: rotatedTile.q,
+               rotPosR: rotatedTile.r,
+               ogPosQ: sortedArr[j].q,
+               ogPosR: sortedArr[j].r
+            };
+         }
+
+         sortedArr.sort((a, b) => { return a.rotPosR - b.rotPosR || a.rotPosQ - b.rotPosQ });
+
+         let rotatedMap = new Map();
+
+         for (let j = 0; j < sortedArr.length; j++) {
+            rotatedMap.set(this.join(sortedArr[j].rotPosQ, sortedArr[j].rotPosR), {q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR});
+         }
+
+         this.rotatedMapList[i] = rotatedMap
+      }
+   }
    //END SET METHODS
 
 
@@ -54,6 +113,11 @@ export default class HexMapDataClass {
    //get an entry in the hexmap (returns a hex tile object)
    getEntry = (q, r) => {
       return this.hexMap.get(q + "," + r);
+   }
+
+   getEntryRotated = (q, r, rotation) => {
+      let rotatedTile = this.rotatedMapList[rotation].get(this.join(q, r))
+      return this.hexMap.get(rotatedTile.q + "," + rotatedTile.r)
    }
 
    //returns the hexmap
@@ -101,23 +165,24 @@ export default class HexMapDataClass {
 
    //return the selected tile or null
    getSelected = () => {
-      let selected = this.getValues().find(tile => tile.selected == 'info')
+      let selected = this.selectionList.find(sel => sel.selection == 'info')
       if (selected === undefined) return null
-      return selected
+      return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedUnitTile = () => {
-      let selectedTile = this.getValues().find(tile => tile.selected == 'unit')
-      if (selectedTile === undefined) return null
-      return selectedTile
+      let selected = this.selectionList.find(sel => sel.selection == 'unit')
+      if (selected === undefined) return null
+      console.log(selected)
+      return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedUnit = () => {
-      let selectedTile = this.getValues().find(tile => tile.selected == 'unit')
-      if (selectedTile === undefined) return null
-      return this.unitList.find(unit => unit.position.q == selectedTile.originalPos.q && unit.position.r == selectedTile.originalPos.r)
+      let selected = this.selectionList.find(sel => sel.selection == 'unit')
+      if (selected === undefined) return null
+      return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
    }
 
    //returns keys of all neighbors adjacent to (q, r)

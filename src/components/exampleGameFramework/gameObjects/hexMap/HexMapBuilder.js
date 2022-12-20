@@ -1,5 +1,6 @@
 import noise from "../../utilities/perlin";
 import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
+import HexMapConfigClass from "./hexMapConfig";
 
 export default class HexMapBuilderClass {
 
@@ -22,7 +23,8 @@ export default class HexMapBuilderClass {
       this.cellSize = settings.CELL_SIZE
       this.bufferSizes = settings.BUFFER_SIZES
 
-      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings);
+      this.config = new HexMapConfigClass()
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
 
    }
 
@@ -111,7 +113,7 @@ export default class HexMapBuilderClass {
       if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
 
       return {
-         originalPos: {
+         position: {
             q: keyObj.q,
             r: keyObj.r
          },
@@ -122,7 +124,6 @@ export default class HexMapBuilderClass {
          midBiome: tileMidBiome,
          highBiome: tileHighBiome,
          veryhighBiome: tileVeryhighBiome,
-         selected: null,
          selectionImages: []
       }
 
@@ -235,11 +236,7 @@ export default class HexMapBuilderClass {
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
          let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
-         let clonedTile = { ...tileToClone }
-         clonedTile.originalPos = {
-            q: keyObj.q,
-            r: keyObj.r
-         }
+         let clonedTile = this.cloneTile(tileToClone, keyObj)
          this.hexMapData.setEntry(keyObj.q, keyObj.r, clonedTile)
 
          return true
@@ -286,31 +283,27 @@ export default class HexMapBuilderClass {
 
    }
 
+   cloneTile = (tileToClone, keyObj) => {
+      return {
+         position: {
+            q: keyObj.q,
+            r: keyObj.r
+         },
+         height: tileToClone.height,
+         biome: tileToClone.biome,
+         verylowBiome: tileToClone.verylowBiome,
+         lowBiome: tileToClone.lowBiome,
+         midBiome: tileToClone.midBiome,
+         highBiome: tileToClone.highBiome,
+         veryhighBiome: tileToClone.veryhighBiome,
+         selectionImages: []
+      }
+   }
+
 
    //temp function for engineering
    addUnit = () => {
-      let unit = {
-         position: {
-            q: -7,
-            r: 28
-         },
-         path: [],
-         destination: null,
-         destinationStartTime: null,
-         destinationCurTime: null,
-         name: 'Example Unit',
-         type: 'units',
-         sprite: 'exampleUnit',
-         state: 'idle',
-         frame: 0,
-         frameStartTime: Date.now(),
-         frameCurTime: Date.now(),
-         rotation: 5,
-         tileHeight: 3,
-         movementRange: 5,
-         renderImages: [],
-         renderShadowImages: []
-      }
+      let unit = this.config.unit({q: -7, r: 28})
 
       this.hexMapData.unitList.push(unit)
    }
