@@ -202,13 +202,29 @@ export default class HexMapViewSpritesClass {
 
       if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
 
-      drawctx.drawImage(
-         spriteObject.images[spriteObject.state][this.camera.rotation],
-         spritePos.x,
-         spritePos.y,
-         spriteSize.width,
-         spriteSize.height
-      )
+      if (spriteObject.images[spriteObject.state][this.camera.rotation] == 'default') {
+
+         drawctx.drawImage(
+            this.hexMapData.defaultTerrainImages[spriteObject.type][spriteObject.sprite][spriteObject.state][this.camera.rotation],
+            spritePos.x,
+            spritePos.y,
+            spriteSize.width,
+            spriteSize.height
+         )
+
+      } else {
+
+         drawctx.drawImage(
+            spriteObject.images[spriteObject.state][this.camera.rotation],
+            spritePos.x,
+            spritePos.y,
+            spriteSize.width,
+            spriteSize.height
+         )
+
+      }
+
+
 
    }
 

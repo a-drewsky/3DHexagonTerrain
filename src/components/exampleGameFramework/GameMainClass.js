@@ -1,9 +1,9 @@
 
 //Import Game Manager
-import GameManagerClass from './managers/GameManager';
+import GameManagerClass from './GameManager';
 
 //Import Input Controller
-import InputControllerClass from './controllers/InputController';
+import InputControllerClass from './InputController';
 
 //Import Settings Class
 import SettingsClass from './utilities/gameSettings';
@@ -37,7 +37,7 @@ export default class GameMainClass {
       this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images);
 
       //Input controller
-      this.inputController = new InputControllerClass(this.gameManager, this.canvas);
+      this.inputController = new InputControllerClass(this.gameManager);
 
       //Draw interval that is activated when the game finishes loading
       this.updateInterval = null;
@@ -54,7 +54,7 @@ export default class GameMainClass {
       clearInterval(this.updateInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      for (let [key, value] of this.gameManager.objects.objectMap) {
+      for (let [key, value] of this.gameManager.objectMap) {
          if(value.clear) value.clear();
       }
    }
@@ -88,7 +88,7 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
       console.log("start")
-      this.gameManager.state.setShowHexMapState();
+      this.gameManager.state = 'play'
       this.updateInterval = setInterval(() => {
          this.update()
          this.draw()
@@ -109,7 +109,7 @@ export default class GameMainClass {
       await promise;
 
       //Create game objects
-      this.gameManager.objects.createObjects();
+      this.gameManager.createObjects();
 
       this.startGame();
 
@@ -120,8 +120,8 @@ export default class GameMainClass {
    //UPDATE FUNCTION
    update = () => {
       //update game objects
-      for (let [key, value] of this.gameManager.objects.objectMap) {
-         value.object.update(value.state);
+      for (let [key, value] of this.gameManager.objectMap) {
+         value.update(value.state);
       }
    }
    //END UPDATE FUNCTION
@@ -141,8 +141,8 @@ export default class GameMainClass {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       //draw game objects
-      for (let [key, value] of this.gameManager.objects.objectMap) {
-         if (value.state != 'disabled') value.object.draw(value.state);
+      for (let [key, value] of this.gameManager.objectMap) {
+         if (value.state != 'disabled') value.draw(value.state);
       }
 
       //draw fps

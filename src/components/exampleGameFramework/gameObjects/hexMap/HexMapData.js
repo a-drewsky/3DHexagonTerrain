@@ -9,6 +9,8 @@ export default class HexMapDataClass {
 
       this.terrainList = [];
 
+      this.defaultTerrainImages = {}
+
       this.unitList = [];
 
       this.selectionList = [];

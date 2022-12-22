@@ -122,4 +122,31 @@ export default class CameraControllerClass {
 
     }
 
+    zoom = (deltaY) => {
+        let zoomAmount = this.cameraData.zoomAmount
+
+        let updatePosition = false
+
+        this.cameraData.clearAnchorPoint();
+        if (deltaY > 0) {
+            if (this.cameraData.zoom < this.cameraData.maxZoom){
+                this.cameraData.zoom++;
+                updatePosition = true;
+            } 
+        } else {
+            if (this.cameraData.zoom > 0){
+                this.cameraData.zoom--;
+                updatePosition = true;
+            } 
+        }
+
+        if (updatePosition) {
+            //Set camera position
+            this.cameraData.setCameraPos(
+                this.cameraData.position.x - zoomAmount * deltaY / 200,
+                this.cameraData.position.y - zoomAmount * deltaY / 200 * (this.canvas.height/this.canvas.width)
+            );
+        }
+    }
+
 }

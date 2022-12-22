@@ -33,6 +33,39 @@ export default class CameraDataClass {
 
     }
 
+    setCameraPos = (anchorX, anchorY) => {
+        this.setPosition(anchorX, anchorY)
+    }
+
+    rotateCameraRight = () => {
+        this.clearAnchorPoint();
+        this.rotation++
+        if (this.rotation >= 12) this.rotation = 0 + (this.rotation - 12);
+        this.setVelocity();
+    }
+
+    rotateCameraLeft = () => {
+        this.clearAnchorPoint();
+        this.rotation--
+        if (this.rotation <= -1) this.rotation = 11 + (this.rotation + 1);
+        this.setVelocity();
+    }
+
+    setVelocity = () => {
+        let movement = {
+            up : this.movement.up == true ? 1 : 0,
+            left : this.movement.left == true ? 1 : 0,
+            down : this.movement.down == true ? 1 : 0,
+            right : this.movement.right == true ? 1 : 0,
+        }
+        this.velocity.x = movement.right - movement.left;
+        this.velocity.y = movement.down - movement.up;
+        if(Math.abs(this.velocity.x) == 1 && Math.abs(this.velocity.y) == 1){
+            this.velocity.x *= Math.sqrt(2)/2
+            this.velocity.y *= Math.sqrt(2)/2
+        }
+    }
+
     setPosition = (x, y) => {
         this.position = {
             x: x,

@@ -325,7 +325,6 @@ export default class HexMapBuilderClass {
       this.builderTerrain.generateTerrain(q, r, mapSize)
       this.addUnit()
 
-
    }
 
    buildDebugSmoothing = (q, r, mapSize) => {

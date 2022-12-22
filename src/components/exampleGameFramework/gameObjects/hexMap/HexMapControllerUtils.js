@@ -10,6 +10,20 @@ export default class HexMapControllerUtilsClass {
         this.pathFinder = new HexMapPathFinderClass(hexMapData, camera)
     }
 
+    getSelection = (q, r) => {
+        let selected = this.hexMapData.selectionList.find(sel => sel.q == q && sel.r == r)
+        if (!selected) return null
+        return selected.selection
+    }
+
+    setSelection = (q, r, selection) => {
+        this.hexMapData.selectionList.push({
+            q: q,
+            r: r,
+            selection: selection
+        })
+    }
+
     resetSelected = () => {
         this.hexMapData.selectionList = []
     }
@@ -49,6 +63,67 @@ export default class HexMapControllerUtilsClass {
         return {
             x: this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
             y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
+        }
+
+    }
+    
+
+    findMoveSet = () => {
+
+        let unit = this.hexMapData.getSelectedUnit()
+
+        if (unit == null) return
+
+        let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
+
+        if (!moveSet) return
+
+        for (let tileObj of moveSet) {
+            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+
+            this.hexMapData.selectionList.push({
+                q: tile.position.q,
+                r: tile.position.r,
+                selection: 'movement'
+            })
+        }
+    }
+
+    lerpUnit = (unit) => {
+
+        if (unit == null) return
+
+        let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
+
+        let targetPosition = this.hexMapData.getSelectedUnitTile()
+
+        if (targetPosition == null) return
+
+        unit.path = this.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
+
+        let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
+
+        unit.destination = unit.path[0]
+
+        unit.destinationStartTime = Date.now()
+        unit.destinationCurTime = Date.now()
+
+        //set rotation
+        let direction = {
+            q: unit.destination.q - unit.position.q,
+            r: unit.destination.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+        //make setState function (todo)
+        unit.state = 'walk'
+        unit.frame = 0
+
+        if (nextPosition.height != startPosition.height) {
+            unit.state = 'jumpUp'
         }
 
     }

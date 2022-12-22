@@ -227,6 +227,10 @@ export default class UnitImagesExampleUnitClass {
             y: 0.5
         }
 
+        this.deadSpace = [
+            [null, 4/32, null, 4/32, null, 4/32, null, 4/32, null, 4/32, null, 4/32]
+        ]
+
         this.idle = {
             images: [
                 [null, this.unit_1_m1_idle_1, null, this.unit_1_0_idle_1, null, this.unit_0_1_idle_1, null, this.unit_m1_1_idle_1, null, this.unit_m1_0_idle_1, null, this.unit_0_m1_idle_1]
