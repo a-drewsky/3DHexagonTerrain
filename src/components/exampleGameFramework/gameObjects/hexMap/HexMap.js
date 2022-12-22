@@ -128,8 +128,7 @@ export default class HexMapClass {
     }
 
     clear = () => {
-        this.view.renderMap.clear();
-        this.view.rotatedMap.clear();
+        this.view.clear()
     }
 
 }

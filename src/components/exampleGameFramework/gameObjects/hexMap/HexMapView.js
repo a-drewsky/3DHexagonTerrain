@@ -85,6 +85,10 @@ export default class HexMapViewClass {
       if (this.camera.position.y + zoom/2*this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom/2*this.hexMapData.squish
    }
 
+   clear = () => {
+      this.mapView.renderMap.clear();
+   }
+
    prerender = () => {
 
       console.log('prerender hexmap')
