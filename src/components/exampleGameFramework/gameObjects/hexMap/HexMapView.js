@@ -86,7 +86,8 @@ export default class HexMapViewClass {
    }
 
    clear = () => {
-      this.mapView.renderMap.clear();
+      this.mapView.stackMap.clear();
+      this.mapView.shadowMap.clear();
    }
 
    prerender = () => {

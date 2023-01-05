@@ -15,7 +15,7 @@ export default class HexMapDataClass {
 
       this.selectionList = [];
 
-      this.size = canvas.width / 25;
+      this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
 
       this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }

@@ -3,7 +3,6 @@ export default class HexMapViewMapClass {
     constructor(hexMapData, camera, settings, shadowRotationDims, images, utils, canvas) {
 
         this.renderctx = null; //should be local
-        this.renderMap = new Map();
 
         this.hexMapData = hexMapData
         this.camera = camera
@@ -13,6 +12,10 @@ export default class HexMapViewMapClass {
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
         this.geometricTilesDebug = settings.GEOMTRIC_TILES_DEBUG
         this.shadowRotationDims = shadowRotationDims
+        this.renderCanvasDims = null
+
+        this.stackMap = new Map();
+        this.shadowMap = new Map();
 
         this.images = images
         this.utils = utils
@@ -24,48 +27,50 @@ export default class HexMapViewMapClass {
 
     }
 
-    setRender = (cameraRotation, canvas) => {
-        this.renderMap.set(cameraRotation, canvas);
-    }
-
-    getRender = (cameraRotation) => {
-        return this.renderMap.get(cameraRotation);
-    }
-
     draw = (drawctx) => {
+
+        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
         let zoom = this.camera.zoomAmount * this.camera.zoom
 
         let position = this.camera.position
 
-        let canvasDims = this.canvasDims
+        drawctx.drawImage(this.shadowMap.get(0 + ',' + this.camera.rotation), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width))
 
-        let render = this.getRender(this.camera.rotation)
+        for (let [key, value] of rotatedMap) {
 
-        drawctx.drawImage(render, position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height / canvasDims.width), position.x, position.y, canvasDims.width + zoom, canvasDims.height + zoom * (canvasDims.height / canvasDims.width))
+            let keyObj = this.hexMapData.split(key)
+
+            let tilePos = this.utils.hexPositionToXYPosition(keyObj, this.hexMapData.getEntry(value.q, value.r).height)
+
+            let tileStr = value.q + ',' + value.r + ',' + this.camera.rotation
+
+            if (this.utils.onScreenCheck({x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish}, {width: this.stackMap.get(tileStr).width, height: this.stackMap.get(tileStr).height}, this.canvasDims) == true){
+                drawctx.drawImage(this.stackMap.get(tileStr), tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, this.stackMap.get(tileStr).width, this.stackMap.get(tileStr).height)
+            }
+
+
+        }
 
     }
 
     prerender = (renderCanvasDims) => {
 
-        //render all configs
-        let renderConfig = (cameraRotation) => {
-            this.camera.rotation = cameraRotation;
-            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            this.render(rotatedMap, renderCanvasDims);
-        }
-
-
-        let mapPosConfig = (cameraRotation) => {
-            this.camera.rotation = cameraRotation;
-            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            this.setMapPos(rotatedMap, renderCanvasDims);
-        }
+        this.renderCanvasDims = renderCanvasDims
 
         //render camera rotations
         for (let i = 0; i < 12; i++) {
-            if ((i - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) renderConfig(i);
-            else mapPosConfig(i);
+            this.camera.rotation = i;
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            this.setMapPos(rotatedMap, renderCanvasDims);
+            if (i % 2 == 1) {
+                let tablePosition = this.utils.getTablePosition();
+                this.drawGroundShadowLayer(rotatedMap, renderCanvasDims, tablePosition)
+                for (let j = 1; j <= this.hexMapData.maxHeight; j++) {
+                    this.drawShadowLayer(j, rotatedMap, renderCanvasDims);
+                }
+                this.render(i)
+            }
         }
 
     }
@@ -151,263 +156,115 @@ export default class HexMapViewMapClass {
         })
     }
 
-    render = (rotatedMap, renderCanvasDims) => {
-        this.setRender(this.camera.rotation, document.createElement('canvas'));
-        this.getRender(this.camera.rotation).width = renderCanvasDims.width;
-        this.getRender(this.camera.rotation).height = renderCanvasDims.height;
-        this.renderctx = this.getRender(this.camera.rotation).getContext("2d");
+    renderTileStack = (q, r, rotation) => {
+
+        console.log("RENDER STACK")
+
+        let tile = this.hexMapData.getEntry(q, r);
+
+        let stackCanvas = document.createElement('canvas')
+        stackCanvas.width = this.hexMapData.size * 2
+        stackCanvas.height = this.hexMapData.size * 2 + tile.height * this.hexMapData.tileHeight
+        let stackctx = stackCanvas.getContext('2d')
+
+        // console.log(tile)
+
+        for (let i = 1; i <= tile.height; i++) {
+            let tileBiome = tile.verylowBiome;
+
+            if (i >= this.elevationRanges['low']) {
+                tileBiome = tile.lowBiome
+            }
+            if (i >= this.elevationRanges['mid']) {
+                tileBiome = tile.midBiome
+            }
+            if (i >= this.elevationRanges['high']) {
+                tileBiome = tile.highBiome
+            }
+            if (i >= this.elevationRanges['veryhigh']) {
+                tileBiome = tile.veryhighBiome
+            }
+
+            if (tileBiome == 'water' && tile.height > 1) console.log(tile)
+
+
+            stackctx.drawImage(
+                this.images.tiles[tileBiome][this.camera.rotation],
+                0,
+                tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
+                this.hexMapData.size * 2,
+                this.hexMapData.size * 2
+            )
+
+            let shadowRotation;
+
+            if (this.camera.rotation % 2 == 0) {
+                shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
+            } else {
+                shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation - 1;
+            }
+
+            if (shadowRotation > 11) shadowRotation -= 12;
+
+            //wall shadow
+            this.utils.drawFlatHexagonWall(
+                stackctx,
+                this.hexMapData.size,
+                this.hexMapData.size * this.hexMapData.squish + tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
+                `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
+            );
+
+            //top shadows
+            stackctx.beginPath()
+
+            this.utils.clipFlatHexagonPath(stackctx, this.hexMapData.size, this.hexMapData.size * this.hexMapData.squish)
+
+            stackctx.save()
+            stackctx.clip()
+
+            let rotTile = this.utils.rotateTile(tile.position.q, tile.position.r, rotation)
+
+            let tilePos = this.utils.hexPositionToXYPosition(rotTile, tile.height)
+            tilePos.x -= this.hexMapData.size
+            tilePos.y -= this.hexMapData.size * this.hexMapData.squish
+
+            if(this.shadowMap.has(tile.height + ',' + rotation)) stackctx.drawImage(this.shadowMap.get(tile.height + ',' + rotation), -tilePos.x, -tilePos.y, this.renderCanvasDims.width, this.renderCanvasDims.height)
+
+            stackctx.restore()
+
+        }
+
+        return stackCanvas
+
+    }
+
+    render = (rotation) => {
+
+        for (let [key, value] of this.hexMapData.getMap()) {
+            let keyObj = this.hexMapData.split(key)
+            this.stackMap.set(keyObj.q + ',' + keyObj.r + ',' + rotation, this.renderTileStack(keyObj.q, keyObj.r, rotation))
+        }
+
+    }
+
+    drawShadowLayer = (height, rotatedMap, renderCanvasDims) => {
+
+        let shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = renderCanvasDims.width;
+        shadowCanvas.height = renderCanvasDims.height;
+        let shadowctx = shadowCanvas.getContext("2d");
 
         //set renderctx properties
-        this.renderctx.lineJoin = 'round';
-        this.renderctx.lineCap = 'round';
-        this.renderctx.textAlign = 'center';
-        this.renderctx.textBaseline = 'middle'
-        this.renderctx.clearRect(0, 0, renderCanvasDims.width, renderCanvasDims.height);
-        this.renderctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
-
-
-        //Set map hyp
-        let keys = [...rotatedMap.keys()].map(key => this.hexMapData.split(key))
-
-        let mapWidthMax = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-        let mapHeightMax = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
-        let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r)));
-        let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish)));
-
-        let mapWidth = Math.max(mapWidthMax, mapWidthMin)
-        let mapHeight = Math.max(mapHeightMax, mapHeightMin)
-
-        let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
-
-
-        //Set the hexmap position to the center of the canvas
-
-        let renderHexMapPos = {
-            x: 0,
-            y: 0
-        }
-
-        switch (this.camera.rotation) {
-            case 0:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
-                break;
-            case 1:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
-                break;
-            case 2:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
-                break;
-            case 3:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
-                break;
-            case 4:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
-                break;
-            case 5:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
-                break;
-            case 6:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
-                break;
-            case 7:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
-                break;
-            case 8:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
-                break;
-            case 9:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
-                break;
-            case 10:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
-                break;
-            case 11:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
-                break;
-        }
-
-        this.hexMapData.posMap.set(this.camera.rotation, {
-            x: renderHexMapPos.x,
-            y: renderHexMapPos.y
-        })
-
-        let tablePosition = this.utils.getTablePosition();
-
-
-        //draw the hex map
-
-        this.drawGroundShadowLayer(rotatedMap, tablePosition);
-
-        for (let i = 1; i <= this.hexMapData.maxHeight; i++) {
-            this.drawTileLayer(i, rotatedMap);
-
-            if (i < this.hexMapData.maxHeight) this.drawShadowLayer(i, rotatedMap);
-
-        }
-
-    }
-
-    drawTileLayer = (height, rotatedMap) => {
-
-        let shadowRotation;
-
-        if (this.camera.rotation % 2 == 0) {
-            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
-        } else {
-            shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation - 1;
-        }
-
-        if (shadowRotation > 11) shadowRotation -= 12;
-
-        for (let [key, value] of rotatedMap) {
-
-            value = this.hexMapData.getEntry(value.q, value.r)
-
-            let keyObj = this.hexMapData.split(key);
-
-            let tilePos = this.utils.hexPositionToXYPosition(keyObj, height)
-
-            //draw hexagon if at height
-            if (value.height == height) {
-
-                if (this.camera.rotation % 2 == 1) {
-                    if (this.geometricTilesDebug) {
-                        this.utils.drawFlatHexagon(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-                            `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
-                            '' + keyObj.q + ',' + keyObj.r
-                        );
-                    }
-                } else {
-                    if (this.geometricTilesDebug) {
-                        this.utils.drawPointyHexagon(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsl(${this.colors[value.biome].fill.h}, ${this.colors[value.biome].fill.s}%, ${this.colors[value.biome].fill.l}%)`,
-                            `hsl(${this.colors[value.biome].stroke.h}, ${this.colors[value.biome].stroke.s}%, ${this.colors[value.biome].stroke.l}%)`,
-                            '' + keyObj.q + ',' + keyObj.r
-                        );
-                    }
-                }
-
-            }
-
-            //draw hexagon wall
-            if (value.height >= height) {
-
-                let tileBiome = value.verylowBiome;
-
-                if (height >= this.elevationRanges['low']) {
-                    tileBiome = value.lowBiome
-                }
-                if (height >= this.elevationRanges['mid']) {
-                    tileBiome = value.midBiome
-                }
-                if (height >= this.elevationRanges['high']) {
-                    tileBiome = value.highBiome
-                }
-                if (height >= this.elevationRanges['veryhigh']) {
-                    tileBiome = value.veryhighBiome
-                }
-
-                if (this.camera.rotation % 2 == 1) {
-
-                    if (this.geometricTilesDebug) {
-                        this.utils.drawFlatHexagonWall(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                            `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                            `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-                            `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-                            `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
-                            `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].offset}%)`,
-                        );
-                    } else {
-                        this.renderctx.drawImage(
-                            this.images.tiles[tileBiome][this.camera.rotation],
-                            tilePos.x - this.hexMapData.size,
-                            tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
-                            this.hexMapData.size * 2,
-                            this.hexMapData.size * 2
-                        )
-
-                        //shadow
-                        this.utils.drawFlatHexagonWall(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
-                        );
-
-                    }
-
-
-
-                } else {
-
-                    if (this.geometricTilesDebug) {
-                        this.utils.drawPointyHexagonWall(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                            `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].left}%)`,
-                            `hsl(${this.colors[tileBiome].fill.h}, ${this.colors[tileBiome].fill.s}%, ${this.colors[tileBiome].fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`,
-                            `hsl(${this.colors[tileBiome].stroke.h}, ${this.colors[tileBiome].stroke.s}%, ${this.colors[tileBiome].stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].right}%)`
-                        );
-                    } else {
-                        this.renderctx.drawImage(
-                            this.images.tiles[tileBiome][this.camera.rotation],
-                            tilePos.x - this.hexMapData.size,
-                            tilePos.y - (this.hexMapData.size * this.hexMapData.squish),
-                            this.hexMapData.size * 2,
-                            this.hexMapData.size * 2
-                        )
-
-                        //shadow
-                        this.utils.drawPointyHexagonWall(
-                            this.renderctx,
-                            tilePos.x,
-                            tilePos.y,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                            `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                        );
-                    }
-
-                }
-
-
-            }
-        }
-
-    }
-
-    drawShadowLayer = (height, rotatedMap) => {
+        shadowctx.lineJoin = 'round';
+        shadowctx.lineCap = 'round';
+        shadowctx.textAlign = 'center';
+        shadowctx.textBaseline = 'middle'
+        shadowctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
         let shadowDims;
 
@@ -435,43 +292,8 @@ export default class HexMapViewMapClass {
             }
         }
 
-        //clip current layer
-        this.renderctx.beginPath();
-
-        for (let [key, value] of rotatedMap) {
-
-            value = this.hexMapData.getEntry(value.q, value.r)
-
-            if (value.height == height) {
-
-                let keyObj = this.hexMapData.split(key);
-
-                let tilePos = this.utils.hexPositionToXYPosition(keyObj, height)
-
-
-                if (this.camera.rotation % 2 == 1) {
-                    this.utils.clipFlatHexagonPath(
-                        this.renderctx,
-                        tilePos.x,
-                        tilePos.y
-                    );
-                } else {
-                    this.utils.clipPointyHexagonPath(
-                        this.renderctx,
-                        tilePos.x,
-                        tilePos.y
-                    );
-                }
-
-            }
-
-        }
-
-        this.renderctx.save();
-        this.renderctx.clip();
-
         //draw shadow
-        this.renderctx.beginPath();
+        shadowctx.beginPath();
         for (let [key, value] of rotatedMap) {
 
             value = this.hexMapData.getEntry(value.q, value.r)
@@ -492,7 +314,7 @@ export default class HexMapViewMapClass {
             if (value.height > height) {
 
                 this.utils.clipHexagonShadowPath(
-                    this.renderctx,
+                    shadowctx,
                     this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
                     this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - height * this.hexMapData.tileHeight,
                     this.hexMapData.posMap.get(this.camera.rotation).x + xOffset + shadowDims.x * (value.height - height),
@@ -504,13 +326,27 @@ export default class HexMapViewMapClass {
             }
 
         }
-        this.renderctx.fillStyle = 'rgba(25,25,25,0.3)';
-        this.renderctx.fill();
-        this.renderctx.restore();
+        shadowctx.fillStyle = 'rgba(25,25,25,0.3)';
+        shadowctx.fill();
+        // shadowctx.restore();
+
+        this.shadowMap.set(this.hexMapData.join(height, this.camera.rotation), shadowCanvas)
 
     }
 
-    drawGroundShadowLayer = (rotatedMap, tablePosition) => {
+    drawGroundShadowLayer = (rotatedMap, renderCanvasDims, tablePosition) => {
+
+        let shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = renderCanvasDims.width;
+        shadowCanvas.height = renderCanvasDims.height;
+        let shadowctx = shadowCanvas.getContext("2d");
+
+        //set renderctx properties
+        shadowctx.lineJoin = 'round';
+        shadowctx.lineCap = 'round';
+        shadowctx.textAlign = 'center';
+        shadowctx.textBaseline = 'middle'
+        shadowctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
         let shadowDims;
 
@@ -539,18 +375,18 @@ export default class HexMapViewMapClass {
         }
 
         //clip table
-        this.renderctx.beginPath();
+        shadowctx.beginPath();
 
-        this.renderctx.moveTo(tablePosition[0].x, tablePosition[0].y);
-        this.renderctx.lineTo(tablePosition[1].x, tablePosition[1].y);
-        this.renderctx.lineTo(tablePosition[2].x, tablePosition[2].y);
-        this.renderctx.lineTo(tablePosition[3].x, tablePosition[3].y);
-        this.renderctx.lineTo(tablePosition[0].x, tablePosition[0].y);
+        shadowctx.moveTo(tablePosition[0].x, tablePosition[0].y);
+        shadowctx.lineTo(tablePosition[1].x, tablePosition[1].y);
+        shadowctx.lineTo(tablePosition[2].x, tablePosition[2].y);
+        shadowctx.lineTo(tablePosition[3].x, tablePosition[3].y);
+        shadowctx.lineTo(tablePosition[0].x, tablePosition[0].y);
 
-        this.renderctx.save();
-        this.renderctx.clip();
+        shadowctx.save();
+        shadowctx.clip();
 
-        this.renderctx.beginPath();
+        shadowctx.beginPath();
 
         for (let [key, value] of rotatedMap) {
 
@@ -571,7 +407,7 @@ export default class HexMapViewMapClass {
             }
 
             this.utils.clipHexagonShadowPath(
-                this.renderctx,
+                shadowctx,
                 this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
                 this.hexMapData.posMap.get(this.camera.rotation).y + yOffset,
                 this.hexMapData.posMap.get(this.camera.rotation).x + xOffset + shadowDims.x * value.height,
@@ -581,9 +417,11 @@ export default class HexMapViewMapClass {
             );
         }
 
-        this.renderctx.fillStyle = 'rgba(25,25,25,0.3)';
-        this.renderctx.fill();
-        this.renderctx.restore();
+        shadowctx.fillStyle = 'rgba(25,25,25,0.3)';
+        shadowctx.fill();
+        shadowctx.restore();
+
+        this.shadowMap.set(this.hexMapData.join(0, this.camera.rotation), shadowCanvas)
 
     }
 

@@ -22,11 +22,11 @@ export default class HexMapSettingsClass {
 
         this.SHADOW_SIZE = 0.8;
 
-        this.TILE_HEIGHT = 8;
+        this.TILE_HEIGHT = 12;
         
         this.HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1;
 
-        this.TILE_SIZE = 40;
+        this.TILE_SIZE = 20;
 
         this.SHADOW_ROTATION = 1;
 
