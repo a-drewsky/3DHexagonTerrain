@@ -52,12 +52,12 @@ import unit_1_0_action_1 from '../images/units/exampleUnit/q1r0/example_unit_q1r
 import unit_1_0_action_2 from '../images/units/exampleUnit/q1r0/example_unit_q1r0_7.png'
 import unit_1_0_action_3 from '../images/units/exampleUnit/q1r0/example_unit_q1r0_8.png'
 
-import shadow_1 from '../images/modifiers/shadows/modifier_shadow_large_1.png'
-import shadow_3 from '../images/modifiers/shadows/modifier_shadow_large_3.png'
-import shadow_5 from '../images/modifiers/shadows/modifier_shadow_large_5.png'
-import shadow_7 from '../images/modifiers/shadows/modifier_shadow_large_7.png'
-import shadow_9 from '../images/modifiers/shadows/modifier_shadow_large_9.png'
-import shadow_11 from '../images/modifiers/shadows/modifier_shadow_large_11.png'
+import shadow_1 from '../images/shadows/medium_round_shadow_1.png'
+import shadow_3 from '../images/shadows/medium_round_shadow_3.png'
+import shadow_5 from '../images/shadows/medium_round_shadow_5.png'
+import shadow_7 from '../images/shadows/medium_round_shadow_7.png'
+import shadow_9 from '../images/shadows/medium_round_shadow_9.png'
+import shadow_11 from '../images/shadows/medium_round_shadow_11.png'
 
 export default class UnitImagesExampleUnitClass {
 

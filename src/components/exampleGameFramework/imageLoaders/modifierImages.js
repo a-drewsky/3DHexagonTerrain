@@ -8,19 +8,19 @@ import desert_tree_2 from '../images/modifiers/desert_tree_02.png'
 import rock_1 from '../images/modifiers/rock_01.png'
 import rock_2 from '../images/modifiers/rock_02.png'
 
-import modifier_shadow_large_1 from '../images/modifiers/shadows/modifier_shadow_large_1.png'
-import modifier_shadow_large_3 from '../images/modifiers/shadows/modifier_shadow_large_3.png'
-import modifier_shadow_large_5 from '../images/modifiers/shadows/modifier_shadow_large_5.png'
-import modifier_shadow_large_7 from '../images/modifiers/shadows/modifier_shadow_large_7.png'
-import modifier_shadow_large_9 from '../images/modifiers/shadows/modifier_shadow_large_9.png'
-import modifier_shadow_large_11 from '../images/modifiers/shadows/modifier_shadow_large_11.png'
+import medium_round_shadow_1 from '../images/shadows/medium_round_shadow_1.png'
+import medium_round_shadow_3 from '../images/shadows/medium_round_shadow_3.png'
+import medium_round_shadow_5 from '../images/shadows/medium_round_shadow_5.png'
+import medium_round_shadow_7 from '../images/shadows/medium_round_shadow_7.png'
+import medium_round_shadow_9 from '../images/shadows/medium_round_shadow_9.png'
+import medium_round_shadow_11 from '../images/shadows/medium_round_shadow_11.png'
 
-import modifier_shadow_small_1 from '../images/modifiers/shadows/modifier_shadow_small_1.png'
-import modifier_shadow_small_3 from '../images/modifiers/shadows/modifier_shadow_small_3.png'
-import modifier_shadow_small_5 from '../images/modifiers/shadows/modifier_shadow_small_5.png'
-import modifier_shadow_small_7 from '../images/modifiers/shadows/modifier_shadow_small_7.png'
-import modifier_shadow_small_9 from '../images/modifiers/shadows/modifier_shadow_small_9.png'
-import modifier_shadow_small_11 from '../images/modifiers/shadows/modifier_shadow_small_11.png'
+import small_round_shadow_1 from '../images/shadows/small_round_shadow_1.png'
+import small_round_shadow_3 from '../images/shadows/small_round_shadow_3.png'
+import small_round_shadow_5 from '../images/shadows/small_round_shadow_5.png'
+import small_round_shadow_7 from '../images/shadows/small_round_shadow_7.png'
+import small_round_shadow_9 from '../images/shadows/small_round_shadow_9.png'
+import small_round_shadow_11 from '../images/shadows/small_round_shadow_11.png'
 
 export default class ModifierImagesClass {
 
@@ -41,19 +41,19 @@ export default class ModifierImagesClass {
             rock_sprite_2: new Image(),
 
 
-            modifier_shadow_large_1: new Image(),
-            modifier_shadow_large_3: new Image(),
-            modifier_shadow_large_5: new Image(),
-            modifier_shadow_large_7: new Image(),
-            modifier_shadow_large_9: new Image(),
-            modifier_shadow_large_11: new Image(),
+            medium_round_shadow_1: new Image(),
+            medium_round_shadow_3: new Image(),
+            medium_round_shadow_5: new Image(),
+            medium_round_shadow_7: new Image(),
+            medium_round_shadow_9: new Image(),
+            medium_round_shadow_11: new Image(),
 
-            modifier_shadow_small_1: new Image(),
-            modifier_shadow_small_3: new Image(),
-            modifier_shadow_small_5: new Image(),
-            modifier_shadow_small_7: new Image(),
-            modifier_shadow_small_9: new Image(),
-            modifier_shadow_small_11: new Image(),
+            small_round_shadow_1: new Image(),
+            small_round_shadow_3: new Image(),
+            small_round_shadow_5: new Image(),
+            small_round_shadow_7: new Image(),
+            small_round_shadow_9: new Image(),
+            small_round_shadow_11: new Image(),
 
         }
 
@@ -87,19 +87,19 @@ export default class ModifierImagesClass {
         this.rock_sprite_2.src = rock_2
 
 
-        this.modifier_shadow_large_1.src = modifier_shadow_large_1
-        this.modifier_shadow_large_3.src = modifier_shadow_large_3
-        this.modifier_shadow_large_5.src = modifier_shadow_large_5
-        this.modifier_shadow_large_7.src = modifier_shadow_large_7
-        this.modifier_shadow_large_9.src = modifier_shadow_large_9
-        this.modifier_shadow_large_11.src = modifier_shadow_large_11
+        this.medium_round_shadow_1.src = medium_round_shadow_1
+        this.medium_round_shadow_3.src = medium_round_shadow_3
+        this.medium_round_shadow_5.src = medium_round_shadow_5
+        this.medium_round_shadow_7.src = medium_round_shadow_7
+        this.medium_round_shadow_9.src = medium_round_shadow_9
+        this.medium_round_shadow_11.src = medium_round_shadow_11
 
-        this.modifier_shadow_small_1.src = modifier_shadow_small_1
-        this.modifier_shadow_small_3.src = modifier_shadow_small_3
-        this.modifier_shadow_small_5.src = modifier_shadow_small_5
-        this.modifier_shadow_small_7.src = modifier_shadow_small_7
-        this.modifier_shadow_small_9.src = modifier_shadow_small_9
-        this.modifier_shadow_small_11.src = modifier_shadow_small_11
+        this.small_round_shadow_1.src = small_round_shadow_1
+        this.small_round_shadow_3.src = small_round_shadow_3
+        this.small_round_shadow_5.src = small_round_shadow_5
+        this.small_round_shadow_7.src = small_round_shadow_7
+        this.small_round_shadow_9.src = small_round_shadow_9
+        this.small_round_shadow_11.src = small_round_shadow_11
 
 
         this.size = {
@@ -124,8 +124,8 @@ export default class ModifierImagesClass {
                 this.oaktree_sprite_2
             ],
             shadowImages: [
-                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+                [null, this.medium_round_shadow_1, null, this.medium_round_shadow_3, null, this.medium_round_shadow_5, null, this.medium_round_shadow_7, null, this.medium_round_shadow_9, null, this.medium_round_shadow_11],
+                [null, this.small_round_shadow_1, null, this.small_round_shadow_3, null, this.small_round_shadow_5, null, this.small_round_shadow_7, null, this.small_round_shadow_9, null, this.small_round_shadow_11]
             ],
             shadowSize: {
                 width: 2,
@@ -142,8 +142,8 @@ export default class ModifierImagesClass {
                 this.tundratree_sprite_2
             ],
             shadowImages: [
-                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11]
+                [null, this.medium_round_shadow_1, null, this.medium_round_shadow_3, null, this.medium_round_shadow_5, null, this.medium_round_shadow_7, null, this.medium_round_shadow_9, null, this.medium_round_shadow_11],
+                [null, this.medium_round_shadow_1, null, this.medium_round_shadow_3, null, this.medium_round_shadow_5, null, this.medium_round_shadow_7, null, this.medium_round_shadow_9, null, this.medium_round_shadow_11]
             ],
             shadowSize: {
                 width: 2,
@@ -160,8 +160,8 @@ export default class ModifierImagesClass {
                 this.deserttree_sprite_2
             ],
             shadowImages: [
-                [null, this.modifier_shadow_large_1, null, this.modifier_shadow_large_3, null, this.modifier_shadow_large_5, null, this.modifier_shadow_large_7, null, this.modifier_shadow_large_9, null, this.modifier_shadow_large_11],
-                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11]
+                [null, this.medium_round_shadow_1, null, this.medium_round_shadow_3, null, this.medium_round_shadow_5, null, this.medium_round_shadow_7, null, this.medium_round_shadow_9, null, this.medium_round_shadow_11],
+                [null, this.small_round_shadow_1, null, this.small_round_shadow_3, null, this.small_round_shadow_5, null, this.small_round_shadow_7, null, this.small_round_shadow_9, null, this.small_round_shadow_11]
             ],
             shadowSize: {
                 width: 2,
@@ -178,7 +178,7 @@ export default class ModifierImagesClass {
                 this.rock_sprite_2
             ],
             shadowImages: [
-                [null, this.modifier_shadow_small_1, null, this.modifier_shadow_small_3, null, this.modifier_shadow_small_5, null, this.modifier_shadow_small_7, null, this.modifier_shadow_small_9, null, this.modifier_shadow_small_11],
+                [null, this.small_round_shadow_1, null, this.small_round_shadow_3, null, this.small_round_shadow_5, null, this.small_round_shadow_7, null, this.small_round_shadow_9, null, this.small_round_shadow_11],
                 [null, null, null, null, null, null, null, null, null, null, null, null]
             ],
             shadowSize: {

@@ -51,7 +51,7 @@ export default class HexMapClass {
 
                 unit.frame++
 
-                if (unit.frame >= this.images.units['exampleUnit'][unit.state].images.length) unit.frame = 0
+                if (unit.frame >= this.images.units[unit.sprite][unit.state].images.length) unit.frame = 0
             }
 
             if (unit.destination == null) continue

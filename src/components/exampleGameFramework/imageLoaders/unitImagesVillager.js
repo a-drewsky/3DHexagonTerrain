@@ -34,12 +34,12 @@ import backRight_walk_2 from '../images/units/villagerUnit/backRight/villager_un
 import backRight_jump_1 from '../images/units/villagerUnit/backRight/villager_unit_br_4.png'
 import backRight_jump_2 from '../images/units/villagerUnit/backRight/villager_unit_br_5.png'
 
-import shadow_1 from '../images/modifiers/shadows/modifier_shadow_large_1.png'
-import shadow_3 from '../images/modifiers/shadows/modifier_shadow_large_3.png'
-import shadow_5 from '../images/modifiers/shadows/modifier_shadow_large_5.png'
-import shadow_7 from '../images/modifiers/shadows/modifier_shadow_large_7.png'
-import shadow_9 from '../images/modifiers/shadows/modifier_shadow_large_9.png'
-import shadow_11 from '../images/modifiers/shadows/modifier_shadow_large_11.png'
+import shadow_1 from '../images/shadows/medium_round_shadow_1.png'
+import shadow_3 from '../images/shadows/medium_round_shadow_3.png'
+import shadow_5 from '../images/shadows/medium_round_shadow_5.png'
+import shadow_7 from '../images/shadows/medium_round_shadow_7.png'
+import shadow_9 from '../images/shadows/medium_round_shadow_9.png'
+import shadow_11 from '../images/shadows/medium_round_shadow_11.png'
 
 export default class UnitImagesVillagerClass {
 
@@ -186,7 +186,9 @@ export default class UnitImagesVillagerClass {
         this.walk = {
             images: [
                 [null, this.backRight_walk_1, null, this.frontRight_walk_1, null, this.front_walk_1, null, this.frontLeft_walk_1, null, this.backLeft_walk_1, null, this.back_walk_1],
-                [null, this.backRight_walk_2, null, this.frontRight_walk_2, null, this.front_walk_2, null, this.frontLeft_walk_2, null, this.backLeft_walk_2, null, this.back_walk_2]
+                [null, this.backRight_idle_1, null, this.frontRight_idle_1, null, this.front_idle_1, null, this.frontLeft_idle_1, null, this.backLeft_idle_1, null, this.back_idle_1],
+                [null, this.backRight_walk_2, null, this.frontRight_walk_2, null, this.front_walk_2, null, this.frontLeft_walk_2, null, this.backLeft_walk_2, null, this.back_walk_2],
+                [null, this.backRight_idle_1, null, this.frontRight_idle_1, null, this.front_idle_1, null, this.frontLeft_idle_1, null, this.backLeft_idle_1, null, this.back_idle_1]
             ]
         }
 
