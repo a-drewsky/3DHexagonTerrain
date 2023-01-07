@@ -6,12 +6,12 @@ export default class HexMapViewSpritesRendererClass {
         this.camera = camera
         this.images = images
         this.utils = utils
-        this.treeSpriteChance = settings.MODIFIER_SECOND_SPRITE_CHANCE
-        this.treeSpriteChanceIncrement = settings.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT
+
+
+        this.modifierSettings = settings.MODIFIERS
 
     }
 
-    //break this up
     renderModifier = (terrainObject) => {
 
         let sprites = this.images[terrainObject.type][terrainObject.sprite]
@@ -70,14 +70,14 @@ export default class HexMapViewSpritesRendererClass {
         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
         positions.splice(currentIndex, 1)
 
-        let chance = this.treeSpriteChance[terrainObject.sprite]
+        let chance = this.modifierSettings[terrainObject.sprite].secondSpriteChance
         let roll = Math.random()
         while (roll > chance && positions.length > 0) {
             currentIndex = Math.floor(Math.random() * positions.length)
             filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
             positions.splice(currentIndex, 1)
 
-            chance += this.treeSpriteChanceIncrement[terrainObject.sprite]
+            chance += this.modifierSettings[terrainObject.sprite].spriteIncrementChance
             roll = Math.random()
         }
 

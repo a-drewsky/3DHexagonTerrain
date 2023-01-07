@@ -5,7 +5,7 @@ export default class HexMapViewTableClass {
       this.hexMapData = hexMapData;
       this.camera = camera;
 
-      this.tableColors = settings.HEXMAP_COLORS.table;
+      this.tableColors = settings.TEMP_TABLE_COLORS;
       this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
       this.tableHeight = settings.TABLE_HEIGHT
       this.shadowRotationDims = shadowRotationDims

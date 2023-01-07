@@ -31,6 +31,8 @@ export default class HexMapDataClass {
       this.tileHeight = settings.TILE_HEIGHT;
 
       this.maxHeight = null;
+
+      this.state = 'selectTile'
    }
 
 
@@ -176,7 +178,6 @@ export default class HexMapDataClass {
    getSelectedUnitTile = () => {
       let selected = this.selectionList.find(sel => sel.selection == 'unit')
       if (selected === undefined) return null
-      console.log(selected)
       return this.getEntry(selected.q, selected.r)
    }
 

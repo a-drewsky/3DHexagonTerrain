@@ -1,6 +1,6 @@
-import noise from "../../utilities/perlin";
+import noise from "../../../utilities/perlin";
 import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
-import HexMapConfigClass from "./hexMapConfig";
+import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapBuilderClass {
 
@@ -13,15 +13,15 @@ export default class HexMapBuilderClass {
       this.maxElevation = settings.MAX_ELEVATION
       this.elevationMultiplier = settings.ELEVATION_MULTIPLIER
       this.seedMultiplier = settings.SEED_MULTIPLIER
-      this.noiseFluctuation = settings.NOISE_FLUCTUATION
       this.tempRanges = settings.TEMP_RANGES
       this.waterTempRanges = settings.WATER_TEMP_RANGES
-      this.biomeGroups = settings.BIOME_GROUPS
-      this.minBiomeSmoothing = settings.MIN_BIOME_SMOOTHING
       this.sandHillElevationDivisor = settings.SAND_HILL_ELVATION_DIVISOR
       this.mirror = settings.MIRROR_MAP
       this.cellSize = settings.CELL_SIZE
-      this.bufferSizes = settings.BUFFER_SIZES
+
+      this.biomeGenSettings = settings.BIOME_GENERATION
+
+      this.mapSizeSettings = settings.MAP_SIZES
 
       this.config = new HexMapConfigClass()
       this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
@@ -185,7 +185,7 @@ export default class HexMapBuilderClass {
          let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
          let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
-         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGroups[tileBiome].includes(this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome))
+         neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGenSettings[tileBiome].biomeGroup.includes(this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome))
          neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.hexMapData.join(neighborKey.q, neighborKey.r)))
 
 
@@ -265,7 +265,7 @@ export default class HexMapBuilderClass {
          }
 
          //Check size of biome set and fix tiles if neccessary
-         if (keyStrArr.length < this.minBiomeSmoothing[biome]) {
+         if (keyStrArr.length < this.biomeGenSettings[biome].minBiomeSmoothing) {
             while (keyStrArr.length > 0) {
                let keyStrArrObj = this.hexMapData.split(keyStrArr[0])
                let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
@@ -311,9 +311,9 @@ export default class HexMapBuilderClass {
 
    build = (q, r, mapSize) => {
 
-      let noiseFluctuation = this.noiseFluctuation[mapSize]
+      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
 
-      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize] * 2)
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
       this.generateBiomes(noiseFluctuation)
 
       this.smoothBiomes()
@@ -329,9 +329,9 @@ export default class HexMapBuilderClass {
 
    buildDebugSmoothing = (q, r, mapSize) => {
 
-      let noiseFluctuation = this.noiseFluctuation[mapSize]
+      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
 
-      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.bufferSizes[mapSize] * 2)
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
       this.generateBiomes(noiseFluctuation)
 
       if (this.hexMapData2 !== undefined) {

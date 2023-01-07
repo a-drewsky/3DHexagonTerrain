@@ -1,8 +1,8 @@
-import HexMapDataClass from "./HexMapData"
-import HexMapBuilderClass from "./HexMapBuilder"
-import HexMapControllerClass from "./HexMapController"
-import HexMapViewClass from "./HexMapView"
-import HexMapSettingsClass from "./HexMapSettings"
+import HexMapDataClass from "../HexMapData"
+import HexMapBuilderClass from "../builders/HexMapBuilder"
+import HexMapControllerClass from "../controllers/HexMapController"
+import HexMapViewClass from "../view/HexMapView"
+import HexMapSettingsClass from "../config/HexMapSettings"
 
 export default class HexMapDebugSmoothingClass {
 

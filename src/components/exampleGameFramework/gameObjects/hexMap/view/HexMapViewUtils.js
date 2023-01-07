@@ -470,7 +470,6 @@ export default class HexMapViewUtilsClass {
                 tempctx.save();
                 tempctx.clip();
 
-                //tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
                 tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
 
                 tempctx.restore();
@@ -594,7 +593,6 @@ export default class HexMapViewUtilsClass {
                 tempctx.save();
                 tempctx.clip();
 
-                //tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
                 tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
 
                 tempctx.restore();

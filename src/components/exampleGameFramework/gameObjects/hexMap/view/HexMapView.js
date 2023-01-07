@@ -20,13 +20,11 @@ export default class HexMapViewClass {
       this.shadowSize = settings.SHADOW_SIZE
       this.tableHeight = settings.TABLE_HEIGHT;
       this.initCameraPosition = settings.INIT_CAMERA_POSITION;
-      this.colors = settings.HEXMAP_COLORS;
       this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER;
       this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES;
 
       //Debug Settings
       this.debug = settings.DEBUG;
-      this.geometricTilesDebug = settings.GEOMTRIC_TILES_DEBUG;
 
       this.images = images;
 

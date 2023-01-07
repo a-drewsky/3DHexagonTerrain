@@ -1,4 +1,4 @@
-import noise from "../../utilities/perlin";
+import noise from "../../../utilities/perlin";
 import HexMapBuilderUtilsClass from "./HexMapBuilderUtils";
 
 export default class HexMapBuilderTerrainClass {
@@ -7,15 +7,14 @@ export default class HexMapBuilderTerrainClass {
       this.hexMapData = hexMapData;
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
-      this.noiseFluctuation = settings.NOISE_FLUCTUATION
-      this.terrainGenThresholds = settings.TERRAIN_GENERATION_THERSHOLD
-      this.terrainGenMaxNeighbors = settings.TERRAIN_GENERATION_MAX_NEIGHBORS
-      this.rockGenThreshold = settings.TERRAIN_ROCK_GEN_THRESHOLD
       this.cellSize = settings.CELL_SIZE
-      this.bufferSizes = settings.BUFFER_SIZES
       this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
       this.secondMineChance = settings.SECOND_MINE_CHANCE
       this.thirdMineChace = settings.THIRD_MINE_CHACE
+
+      this.mapSizeSettings = settings.MAP_SIZES
+
+      this.biomeGenSettings = settings.BIOME_GENERATION
 
       this.config = config
 
@@ -23,7 +22,7 @@ export default class HexMapBuilderTerrainClass {
    }
 
    generateTerrain = (q, r, mapSize) => {
-      let noiseFluctuation = this.noiseFluctuation[mapSize]
+      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
       this.generateModifiers(noiseFluctuation)
       this.generateSavannaTrees()
       this.generateLargeRocks()
@@ -34,7 +33,7 @@ export default class HexMapBuilderTerrainClass {
 
    generateStrongholds = (q, r, mapSize) => {
 
-      let bufferSize = this.bufferSizes[mapSize]
+      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
 
       for (let rGen = 0; rGen < r; rGen++) {
          for (let qGen = 0; qGen < q; qGen++) {
@@ -84,28 +83,24 @@ export default class HexMapBuilderTerrainClass {
    }
 
    generateMainBases = (q, r, mapSize) => {
-      let bufferSize = this.bufferSizes[mapSize]
+      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
 
       //base 1
       let rPos = Math.floor(bufferSize + this.cellSize.r * 0.25)
       let qPos = Math.floor(this.cellSize.q * 0.75 - Math.floor(0.25 / 2))
 
-      let selectedTile = this.hexMapData.getEntry(qPos, rPos)
-
-      this.utils.setMainBase(qPos, rPos, selectedTile)
+      this.utils.setMainBase(qPos, rPos)
 
       //base 2
       rPos = Math.floor(bufferSize + this.cellSize.r * r - this.cellSize.r * 0.25)
       qPos = Math.floor(this.cellSize.q * 1 - Math.floor(rPos / 2))
 
-      selectedTile = this.hexMapData.getEntry(qPos, rPos)
-
-      this.utils.setMainBase(qPos, rPos, selectedTile)
+      this.utils.setMainBase(qPos, rPos)
    }
 
    generateMines = (q, r, mapSize) => {
 
-      let bufferSize = this.bufferSizes[mapSize]
+      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
 
       let closeSpriteList = ['goldmine', 'coppermine']
 
@@ -243,7 +238,7 @@ export default class HexMapBuilderTerrainClass {
 
          let tileRockNoise = noise(rockSeeds[0] + keyObj.q / noiseFluctuation, rockSeeds[0] + keyObj.r / noiseFluctuation) * noise(rockSeeds[1] + keyObj.q / noiseFluctuation, rockSeeds[1] + keyObj.r / noiseFluctuation)
 
-         if (tileTreeNoise[value.biome] > this.terrainGenThresholds[value.biome] && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
+         if (tileTreeNoise[value.biome] > this.biomeGenSettings[value.biome].terrainGenThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
 
             let terrain
 
@@ -266,7 +261,7 @@ export default class HexMapBuilderTerrainClass {
 
             this.hexMapData.terrainList.push(terrain)
 
-         } else if (this.rockGenThreshold[value.biome] && tileRockNoise > this.rockGenThreshold[value.biome]) {
+         } else if (this.biomeGenSettings[value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[value.biome].rockGenThreshold) {
             let terrain = this.config.smallRocks(keyObj)
 
             this.hexMapData.terrainList.push(terrain)

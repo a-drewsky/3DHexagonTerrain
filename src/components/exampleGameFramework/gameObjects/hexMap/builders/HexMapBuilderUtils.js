@@ -4,7 +4,8 @@ export default class HexMapBuilderUtilsClass {
 
         this.hexMapData = hexMapData
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-        this.terrainGenMaxNeighbors = settings.TERRAIN_GENERATION_MAX_NEIGHBORS
+
+        this.biomeGenSettings = settings.BIOME_GENERATION
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {
@@ -74,7 +75,7 @@ export default class HexMapBuilderUtilsClass {
         }
     }
 
-    setMainBase = (q, r, tile) => {
+    setMainBase = (q, r) => {
 
         let cropList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
 
@@ -84,8 +85,6 @@ export default class HexMapBuilderUtilsClass {
 
         let terrainHeight = this.getAverageHeight(q, r, totalList)
 
-
-        //create main base terrain objects
         for (let i = 0; i < cropList.length; i++) {
 
             let tileToSetKey = {
@@ -132,7 +131,7 @@ export default class HexMapBuilderUtilsClass {
 
     maxNeighbors = (q, r, biome) => {
 
-        let maxNeighbors = this.terrainGenMaxNeighbors[biome]
+        let maxNeighbors = this.biomeGenSettings[biome].terrainGenMaxNeighbors
 
         let neighborKeys = this.hexMapData.getNeighborKeys(q, r)
 

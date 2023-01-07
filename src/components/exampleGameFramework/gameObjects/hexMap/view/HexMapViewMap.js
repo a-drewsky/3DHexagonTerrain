@@ -7,10 +7,8 @@ export default class HexMapViewMapClass {
         this.hexMapData = hexMapData
         this.camera = camera
         this.lineWidth = settings.HEXMAP_LINE_WIDTH
-        this.colors = settings.HEXMAP_COLORS
         this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-        this.geometricTilesDebug = settings.GEOMTRIC_TILES_DEBUG
         this.shadowRotationDims = shadowRotationDims
         this.renderCanvasDims = null
 
@@ -158,16 +156,12 @@ export default class HexMapViewMapClass {
 
     renderTileStack = (q, r, rotation) => {
 
-        console.log("RENDER STACK")
-
         let tile = this.hexMapData.getEntry(q, r);
 
         let stackCanvas = document.createElement('canvas')
         stackCanvas.width = this.hexMapData.size * 2
         stackCanvas.height = this.hexMapData.size * 2 + tile.height * this.hexMapData.tileHeight
         let stackctx = stackCanvas.getContext('2d')
-
-        // console.log(tile)
 
         for (let i = 1; i <= tile.height; i++) {
             let tileBiome = tile.verylowBiome;
@@ -184,8 +178,6 @@ export default class HexMapViewMapClass {
             if (i >= this.elevationRanges['veryhigh']) {
                 tileBiome = tile.veryhighBiome
             }
-
-            if (tileBiome == 'water' && tile.height > 1) console.log(tile)
 
 
             stackctx.drawImage(
@@ -328,7 +320,6 @@ export default class HexMapViewMapClass {
         }
         shadowctx.fillStyle = 'rgba(25,25,25,0.3)';
         shadowctx.fill();
-        // shadowctx.restore();
 
         this.shadowMap.set(this.hexMapData.join(height, this.camera.rotation), shadowCanvas)
 

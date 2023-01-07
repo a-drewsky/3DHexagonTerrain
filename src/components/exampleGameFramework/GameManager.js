@@ -1,5 +1,5 @@
 import HexMapClass from "./gameObjects/hexMap/HexMap"
-import HexMapDebugSmoothingClass from "./gameObjects/hexMap/HexMapDebugSmoothing";
+import HexMapDebugSmoothingClass from "./gameObjects/hexMap/debug/HexMapDebugSmoothing";
 import CameraClass from "./gameObjects/camera/Camera";
 
 

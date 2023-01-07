@@ -10,8 +10,6 @@ export default class HexMapViewSpritesClass {
       this.utils = utils
 
       this.shadowSize = settings.SHADOW_SIZE
-      this.treeSpriteChance = settings.MODIFIER_SECOND_SPRITE_CHANCE
-      this.treeSpriteChanceIncrement = settings.MODIFIER_SECOND_SPRITE_CHANCE_INCREMENT
 
       this.travelTime = settings.TRAVEL_TIME
       this.jumpAmount = settings.JUMP_AMOUNT
@@ -475,7 +473,7 @@ export default class HexMapViewSpritesClass {
                r: spriteObject.destination.r
             }
          }
-         console.log("ACT")
+         
          //set height
          let newHeight = this.hexMapData.getEntry(spriteObject.destination.q, spriteObject.destination.r).height
 
