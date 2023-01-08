@@ -10,7 +10,7 @@ import SettingsClass from './utilities/gameSettings';
 
 export default class GameMainClass {
 
-   constructor(canvas, images, setWinCondition, settings) {
+   constructor(canvas, images, setWinCondition, setUiComponents, settings) {
 
       //canvas
       this.canvas = canvas;
@@ -24,6 +24,18 @@ export default class GameMainClass {
       //loading
       this.loaded = false;
 
+      this.uiComponents = {
+         contextMenu: {
+            show: false,
+            x: 0,
+            y: 0
+         }
+      }
+
+      this.setUiComponents = setUiComponents
+
+      this.updateUi = () => this.setUiComponents(this.uiComponents)
+
       //win condition
       this.setWinCondition = setWinCondition;
 
@@ -34,7 +46,7 @@ export default class GameMainClass {
       this.images = images;
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images, this.uiComponents, this.updateUi);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);

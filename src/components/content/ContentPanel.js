@@ -5,6 +5,8 @@ import GameMainClass from '../exampleGameFramework/GameMainClass';
 
 import GameImagesClass from '../exampleGameFramework/imageLoaders/gameImages';
 
+import UiOverlay from './UiOverlay';
+
 const ContentPanel = () => {
 
    //SETUP
@@ -17,12 +19,24 @@ const ContentPanel = () => {
    const [winCondition, setWinCondition] = useState(null);
 
    const [imagesLoaded, setImagesLoaded] = useState(false);
+
+   const [uiComponents, setUiComponents] = useState({
+      contextMenu: {
+         show: false,
+         x: 0,
+         y: 0
+      }
+   })
    //END SETUP
 
 
    //SETTINGS
    const [sizeSetting, setSize] = useState('small');
    //END SETTINGS
+
+   const updateUi = (newUi) => {
+      setUiComponents(({ contextMenu }) => ({ contextMenu: newUi.contextMenu }));
+   }
 
 
    //CREATE NEW GAME METHOD
@@ -36,6 +50,7 @@ const ContentPanel = () => {
          canvas.current,
          gameImages,
          setWinCondition,
+         updateUi,
          {
             mapSize: sizeSetting
          }
@@ -97,7 +112,7 @@ const ContentPanel = () => {
 
    const keyDown = (nativeEvent) => {
       nativeEvent.preventDefault();
-      if(nativeEvent.repeat) return;
+      if (nativeEvent.repeat) return;
       if (gameClass && gameClass.loaded) gameClass.keyDown(nativeEvent.key)
    }
 
@@ -134,20 +149,29 @@ const ContentPanel = () => {
          {/*CANVAS*/}
          <div className={(winCondition != null || gameClass == null || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
-               <canvas
-                  ref={canvas}
-                  width={Math.min(window.innerWidth, 1000)}
-                  height={window.innerHeight / 2}
-                  onPointerDown={mouseDown}
-                  onPointerUp={mouseUp}
-                  onPointerMove={mouseMove}
-                  
-                  onWheel={mouseWheel}
-                  style={
-                     { imageRendering: 'crisp-edges', touchAction: 'none' }
+               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', border: '2px', borderStyle: 'solid' }}>
+                  <canvas
+                     ref={canvas}
+                     width={Math.min(window.innerWidth, 1000)}
+                     height={window.innerHeight / 2}
+                     onPointerDown={mouseDown}
+                     onPointerUp={mouseUp}
+                     onPointerMove={mouseMove}
+
+                     onWheel={mouseWheel}
+                     style={
+                        { imageRendering: 'crisp-edges', touchAction: 'none', width: '100%', height: '100%', position: 'absolute' }
+                     }
+                     className="mx-auto border"
+                  />
+
+                  {
+                     (gameClass) &&
+                     <UiOverlay uiComponents={uiComponents}></UiOverlay>
                   }
-                  className="mx-auto border"
-               />
+
+               </div>
+
             </Row>
          </div>
          {/*END CANVAS*/}
@@ -175,6 +199,7 @@ const ContentPanel = () => {
 
          </Form>
          {/*END GAME CREATION FORM*/}
+
       </>
    )
 }

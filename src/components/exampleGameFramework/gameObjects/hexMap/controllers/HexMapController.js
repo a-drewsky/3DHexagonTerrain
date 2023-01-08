@@ -9,7 +9,7 @@ import HexMapViewUtilsClass from '../view/HexMapViewUtils';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera, canvas, images, settings) {
+    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi) {
 
         this.hexMapData = hexMapData;
 
@@ -29,6 +29,10 @@ export default class HexMapControllerClass {
         this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings)
 
         this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, this.viewUtils, settings)
+
+        this.uiComponents = uiComponents
+
+        this.updateUi = updateUi
 
     }
 
@@ -100,6 +104,11 @@ export default class HexMapControllerClass {
     }
 
     click = (x, y) => {
+
+        this.uiComponents.contextMenu.show = !this.uiComponents.contextMenu.show
+        this.uiComponents.contextMenu.x = x
+        this.uiComponents.contextMenu.y = y - 150
+        this.updateUi()
 
         let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 

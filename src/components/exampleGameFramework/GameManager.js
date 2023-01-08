@@ -5,7 +5,7 @@ import CameraClass from "./gameObjects/camera/Camera";
 
 export default class GameManagerClass {
 
-    constructor(ctx, canvas, settings, images) {
+    constructor(ctx, canvas, settings, images, uiComponents, updateUi) {
 
         this.ctx = ctx;
         this.canvas = canvas;
@@ -15,6 +15,9 @@ export default class GameManagerClass {
         this.objectMap = new Map();
 
         this.state = 'loading'
+
+        this.uiComponents = uiComponents
+        this.updateUi = updateUi
     }
 
     //Set up function
@@ -41,7 +44,9 @@ export default class GameManagerClass {
                     this.canvas,
                     this.objectMap.get("camera").data,
                     this.images,
-                    this.settings
+                    this.settings,
+                    this.uiComponents,
+                    this.updateUi
                 )
             );
         }
