@@ -4,17 +4,27 @@ export default class InputControllerClass {
       this.gameManager = gameManager;
 
       this.mouseMoveTimeStamp = 0
-      this.mouseMoveTime = 1000/60
+      this.mouseMoveTime = 1000 / 60
 
    }
 
+   uiInput = (input) => {
+      switch (input) {
+         case 'move':
+            this.gameManager.objectMap.get('hexMap').controller.moveUnit();
+            return
+         case 'cancel':
+            this.gameManager.objectMap.get('hexMap').controller.cancelMovement();
+            return
+      }
+   }
 
    mouseDown = (x, y) => {
 
       //State controller functions
       switch (this.gameManager.state) {
          case 'play':
-            this.gameManager.objectMap.get('camera').controller.mouseDown(x, y);
+            // this.gameManager.objectMap.get('camera').controller.mouseDown(x, y);
             this.gameManager.objectMap.get('hexMap').controller.click(x, y);
             break;
       }
@@ -25,13 +35,14 @@ export default class InputControllerClass {
       switch (this.gameManager.state) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.mouseUp();
+            this.gameManager.objectMap.get('hexMap').controller.mouseUp();
             break;
       }
    }
 
    mouseMove = (x, y) => {
 
-      if(Date.now() - this.mouseMoveTimeStamp < this.mouseMoveTime) return
+      if (Date.now() - this.mouseMoveTimeStamp < this.mouseMoveTime) return
 
       this.mouseMoveTimeStamp = Date.now()
 
@@ -59,28 +70,28 @@ export default class InputControllerClass {
             if (key == 'e') {
 
                this.gameManager.objectMap.get('hexMap').controller.rotateRight()
-   
-           }
-   
-           if (key == 'q') {
-   
+
+            }
+
+            if (key == 'q') {
+
                this.gameManager.objectMap.get('hexMap').controller.rotateLeft()
-   
-           }
-   
-           if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-               this.gameManager.objectMap.get('camera').controller.keyDown(key);
-           }
-   
-           if (key == 'v') {
-               if(this.gameManager.objectMap.get('hexMap').settings.DEBUG){
-                   this.gameManager.objectMap.get('hexMap').switchView()
+
+            }
+
+            //   if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
+            //       this.gameManager.objectMap.get('camera').controller.keyDown(key);
+            //   }
+
+            if (key == 'v') {
+               if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) {
+                  this.gameManager.objectMap.get('hexMap').switchView()
                }
-           }
-   
-           if (key == 'u') {
+            }
+
+            if (key == 'u') {
                this.gameManager.objectMap.get('hexMap').controller.addUnit()
-           }
+            }
             break;
       }
    }
@@ -89,8 +100,8 @@ export default class InputControllerClass {
       switch (this.gameManager.state) {
          case 'play':
             if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-               this.gameManager.objectMap.get('camera').controller.keyUp(key);
-           }
+               // this.gameManager.objectMap.get('camera').controller.keyUp(key);
+            }
             break;
       }
    }

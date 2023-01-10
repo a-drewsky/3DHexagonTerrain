@@ -43,6 +43,7 @@ export default class GameManagerClass {
                     this.ctx,
                     this.canvas,
                     this.objectMap.get("camera").data,
+                    this.objectMap.get("camera").controller,
                     this.images,
                     this.settings,
                     this.uiComponents,

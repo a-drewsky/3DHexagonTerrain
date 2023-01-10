@@ -33,6 +33,10 @@ export default class HexMapDataClass {
       this.maxHeight = null;
 
       this.state = 'selectTile'
+
+      this.clickDist = 20
+      this.clickPos = null
+      this.clickMovePos = null
    }
 
 
@@ -177,6 +181,13 @@ export default class HexMapDataClass {
    //return the selected unit tile or null
    getSelectedUnitTile = () => {
       let selected = this.selectionList.find(sel => sel.selection == 'unit')
+      if (selected === undefined) return null
+      return this.getEntry(selected.q, selected.r)
+   }
+
+   //return the selected unit tile or null
+   getSelectedTargetTile = () => {
+      let selected = this.selectionList.find(sel => sel.selection == 'target')
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }

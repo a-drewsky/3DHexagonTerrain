@@ -34,11 +34,27 @@ export default class HexMapControllerClass {
 
         this.updateUi = updateUi
 
+        this.selectedUnit = null
+
+    }
+
+    mouseUp = () => {
+
+        if (this.hexMapData.clickPos!== null) this.clickTile(this.hexMapData.clickPos.x, this.hexMapData.clickPos.y)
+
+        this.hexMapData.clickPos = null
     }
 
     setHover = (x, y) => {
 
+        if (this.hexMapData.clickMovePos !== null) {
+            this.hexMapData.clickMovePos.x = x
+            this.hexMapData.clickMovePos.y = y
+        }
+
         this.utils.resetHover()
+
+        if (this.hexMapData.state == 'selectAction') return
 
         let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
@@ -74,22 +90,48 @@ export default class HexMapControllerClass {
         }
     }
 
-    selectMovement = (tileClicked, tile) => {
+    moveUnit = () => {
+        if (this.selectedUnit != null) this.utils.lerpUnit(this.selectedUnit)
+        this.hexMapData.state = 'animation'
+
+        this.uiComponents.contextMenu.show = false
+        this.uiComponents.contextMenu.x = null
+        this.uiComponents.contextMenu.y = null
+        this.updateUi()
+
+    }
+
+    cancelMovement = () => {
+        this.hexMapData.selectionList = []
+
+        this.hexMapData.state = 'selectTile'
+
+        this.uiComponents.contextMenu.show = false
+        this.uiComponents.contextMenu.x = null
+        this.uiComponents.contextMenu.y = null
+        this.updateUi()
+    }
+
+    selectMovement = (tileClicked, tile, x, y) => {
         let unit = this.hexMapData.getSelectedUnit()
 
         if (unit == null) return
 
         if (this.utils.getSelection(tile.position.q, tile.position.r) == 'unit') return
 
-        this.utils.resetSelected()
-
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
         if (moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'unit')
-            this.utils.lerpUnit(unit)
-            this.hexMapData.state = 'animation'
+            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectedUnit = unit
+            this.hexMapData.state = 'selectAction'
+
+            this.uiComponents.contextMenu.show = true
+            this.uiComponents.contextMenu.x = x
+            this.uiComponents.contextMenu.y = y - 150
+            this.updateUi()
         } else {
+            this.utils.resetSelected()
             let newUnit = this.hexMapData.getUnit(tile.position.q, tile.position.r)
             if (newUnit == null) {
                 this.utils.setSelection(tile.position.q, tile.position.r, 'info')
@@ -103,13 +145,7 @@ export default class HexMapControllerClass {
         }
     }
 
-    click = (x, y) => {
-
-        this.uiComponents.contextMenu.show = !this.uiComponents.contextMenu.show
-        this.uiComponents.contextMenu.x = x
-        this.uiComponents.contextMenu.y = y - 150
-        this.updateUi()
-
+    clickTile = (x, y) => {
         let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
         let tileClicked = this.utils.getSelectedTile(x, y, rotatedMap)
@@ -135,14 +171,24 @@ export default class HexMapControllerClass {
                 this.selectTile(tileClicked, tile)
                 return
             case 'selectMovement':
-                this.selectMovement(tileClicked, tile)
+                this.selectMovement(tileClicked, tile, x, y)
+                return
+            case 'selectAction':
                 return
             case 'animation':
                 return
         }
     }
 
+    click = (x, y) => {
+        this.hexMapData.clickPos = { x: x, y: y }
+        this.hexMapData.clickMovePos = { x: x, y: y }
+    }
+
     rotateRight = () => {
+
+        if(this.hexMapData.state == 'selectAction') return
+
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
 
@@ -188,6 +234,9 @@ export default class HexMapControllerClass {
     }
 
     rotateLeft = () => {
+
+        if(this.hexMapData.state == 'selectAction') return
+        
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
 

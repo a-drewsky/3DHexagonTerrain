@@ -149,7 +149,7 @@ const ContentPanel = () => {
          {/*CANVAS*/}
          <div className={(winCondition != null || gameClass == null || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
-               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', border: '2px', borderStyle: 'solid' }}>
+               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto'>
                   <canvas
                      ref={canvas}
                      width={Math.min(window.innerWidth, 1000)}
@@ -162,12 +162,11 @@ const ContentPanel = () => {
                      style={
                         { imageRendering: 'crisp-edges', touchAction: 'none', width: '100%', height: '100%', position: 'absolute' }
                      }
-                     className="mx-auto border"
                   />
 
                   {
                      (gameClass) &&
-                     <UiOverlay uiComponents={uiComponents}></UiOverlay>
+                     <UiOverlay uiComponents={uiComponents} gameClass={gameClass}></UiOverlay>
                   }
 
                </div>

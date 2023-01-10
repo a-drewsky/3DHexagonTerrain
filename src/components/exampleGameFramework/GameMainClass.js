@@ -60,7 +60,6 @@ export default class GameMainClass {
 
    }
 
-
    //TOP LEVEL CONTROLLERS
    clear = () => {
       clearInterval(this.updateInterval);
@@ -93,6 +92,10 @@ export default class GameMainClass {
 
    keyUp = (key) => {
       this.inputController.keyUp(key);
+   }
+
+   uiInput = (input) => {
+      this.inputController.uiInput(input)
    }
    //END TOP LEVEL CONTROLLERS
 

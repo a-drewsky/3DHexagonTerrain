@@ -115,13 +115,6 @@ export default class CameraControllerClass {
         }
     }
 
-    //change to setPosition
-    rotateCamera(anchorX, anchorY) {
-
-        this.cameraData.setPosition(anchorX, anchorY)
-
-    }
-
     zoom = (deltaY) => {
         let zoomAmount = this.cameraData.zoomAmount
 

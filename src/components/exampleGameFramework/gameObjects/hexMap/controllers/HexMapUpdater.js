@@ -1,18 +1,29 @@
+import CollisionClass from "../../../utilities/collision"
+
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer) {
+    constructor(hexMapData, images, settings, renderer, cameraController) {
 
         this.hexMapData = hexMapData
         this.images = images
         this.renderer = renderer
+        this.cameraController = cameraController
         this.animationRate = settings.AMIMATION_RATE
         this.travelTime = settings.TRAVEL_TIME
+
+        this.collision = new CollisionClass()
 
     }
 
     update = () => {
 
-        // console.log(this.hexMapData.state)
+        if (this.hexMapData.state != 'selectAction' && this.hexMapData.clickPos !== null) console.log(this.hexMapData.clickPos, this.hexMapData.clickMovePos)
+
+        if (this.hexMapData.state != 'selectAction' && this.hexMapData.clickPos !== null && this.collision.vectorDist(this.hexMapData.clickPos, this.hexMapData.clickMovePos) > this.hexMapData.clickDist) {
+            this.cameraController.mouseDown(this.hexMapData.clickMovePos.x, this.hexMapData.clickMovePos.y)
+            this.hexMapData.clickPos = null
+            this.hexMapData.clickMovePos = null
+        }
 
         for (let i in this.hexMapData.unitList) {
 
@@ -80,7 +91,7 @@ export default class HexMapUpdaterClass {
                     unit.frame = 0
 
                     this.renderer.renderUnit(unit)
-                    
+
                     this.hexMapData.selectionList = []
 
                     this.hexMapData.state = 'selectTile'

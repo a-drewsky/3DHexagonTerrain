@@ -100,9 +100,11 @@ export default class HexMapControllerUtilsClass {
 
         let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        let targetPosition = this.hexMapData.getSelectedUnitTile()
+        let targetPosition = this.hexMapData.getSelectedTargetTile()
 
         if (targetPosition == null) return
+
+        console.log(startPosition, targetPosition)
 
         unit.path = this.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
 

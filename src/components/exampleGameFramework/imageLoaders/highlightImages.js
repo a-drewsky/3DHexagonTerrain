@@ -18,7 +18,8 @@ export default class HighlighImagesClass {
             info: new Image(),
             movement: new Image(),
             path: new Image(),
-            unit: new Image()
+            unit: new Image(),
+            target: new Image()
 
         }
 
@@ -47,6 +48,7 @@ export default class HighlighImagesClass {
         this.movement.src = movement
         this.path.src = path
         this.unit.src = unit
+        this.target.src = unit
 
 
     }
