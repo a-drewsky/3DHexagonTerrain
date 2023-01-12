@@ -6,6 +6,8 @@ export default class HexMapSettingsClass {
 
         this.TRAVEL_TIME = 500
 
+        this.MINE_TIME = 2000
+
         this.JUMP_AMOUNT = 4
 
         this.AMIMATION_RATE = 1000/6

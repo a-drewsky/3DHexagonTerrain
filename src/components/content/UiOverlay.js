@@ -8,7 +8,7 @@ const UiOverlay = (props) => {
         <>
             {
                 (props.uiComponents.contextMenu.show == true) &&
-                <ContextMenu x={props.uiComponents.contextMenu.x} y={props.uiComponents.contextMenu.y} gameClass={props.gameClass}></ContextMenu>
+                <ContextMenu x={props.uiComponents.contextMenu.x} y={props.uiComponents.contextMenu.y} buttonList={props.uiComponents.contextMenu.buttonList} gameClass={props.gameClass}></ContextMenu>
             }
         </>
     )

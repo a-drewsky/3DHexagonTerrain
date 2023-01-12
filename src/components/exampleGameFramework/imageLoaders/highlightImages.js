@@ -48,7 +48,7 @@ export default class HighlighImagesClass {
         this.movement.src = movement
         this.path.src = path
         this.unit.src = unit
-        this.target.src = unit
+        this.target.src = path
 
 
     }

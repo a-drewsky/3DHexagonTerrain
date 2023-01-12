@@ -404,7 +404,6 @@ export default class HexMapViewSpritesClass {
 
    drawStaticUnit = (drawctx, spriteReference) => {
       let spriteObject = this.hexMapData.unitList[spriteReference.id]
-
       let keyObj = {
          q: spriteReference.q,
          r: spriteReference.r
@@ -436,9 +435,58 @@ export default class HexMapViewSpritesClass {
 
    }
 
+   drawActionUnit = (drawctx, spriteReference, spriteObject) => {
+      let pos = {
+         q: spriteReference.q,
+         r: spriteReference.r
+      }
+
+      let height = spriteReference.height
+
+      let sprite = this.images[spriteObject.type][spriteObject.sprite]
+
+      let spritePos = this.utils.hexPositionToXYPosition(pos, height)
+
+      let spriteSize = {
+         width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+         height: this.hexMapData.size * 2 * sprite.spriteSize.height
+      }
+
+      spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
+      spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
+
+      if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+
+      let spriteRotation = spriteObject.rotation + this.camera.rotation
+
+      if (this.camera.rotation % 2 == 1) spriteRotation--
+
+      if (spriteRotation > 11) spriteRotation -= 12
+
+      let spriteImage = this.images.units[spriteObject.sprite][spriteObject.state].images[spriteObject.frame][spriteRotation]
+
+
+      spriteImage = this.utils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation], height)
+      spriteImage = this.utils.darkenSpriteJump(spriteImage, spriteObject, pos, height)
+
+      drawctx.drawImage(
+         spriteImage,
+         spritePos.x,
+         spritePos.y,
+         spriteSize.width,
+         spriteSize.height
+      )
+
+   }
+
    drawUnit = (drawctx, spriteReference) => {
 
       let spriteObject = this.hexMapData.unitList[spriteReference.id]
+
+      if(spriteObject.target != null) {
+         this.drawActionUnit(drawctx, spriteReference, spriteObject)
+         return
+      }
 
       if (spriteObject.destination == null) {
          this.drawStaticUnit(drawctx, spriteReference)

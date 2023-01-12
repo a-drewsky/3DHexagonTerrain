@@ -28,7 +28,8 @@ export default class GameMainClass {
          contextMenu: {
             show: false,
             x: 0,
-            y: 0
+            y: 0,
+            buttonList: []
          }
       }
 

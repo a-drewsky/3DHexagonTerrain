@@ -4,11 +4,15 @@ import CollisionClass from "../../../utilities/collision"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, camera, canvas, images) {
+    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
         this.images = images
+
+        this.uiComponents = uiComponents
+
+        this.updateUi = updateUi
 
         this.pathFinder = new HexMapPathFinderClass(hexMapData, camera)
 
@@ -29,6 +33,11 @@ export default class HexMapControllerUtilsClass {
         })
     }
 
+    removeSelection = (q, r) => {
+        let index = this.hexMapData.selectionList.findIndex(sel => sel.q == q && sel.r == r)
+        this.hexMapData.selectionList.splice(index, 1)
+    }
+
     resetSelected = () => {
         this.hexMapData.selectionList = []
     }
@@ -37,6 +46,24 @@ export default class HexMapControllerUtilsClass {
         for(let i=0; i< this.hexMapData.selectionList.length; i++){
             if(this.hexMapData.selectionList[i].selection == 'hover') this.hexMapData.selectionList.splice(i, 1)
         }
+    }
+
+    clearContextMenu = () => {
+        this.uiComponents.contextMenu.show = false
+        this.uiComponents.contextMenu.x = null
+        this.uiComponents.contextMenu.y = null
+        this.uiComponents.contextMenu.buttonList = []
+
+        this.updateUi()
+    }
+
+    setContextMenu = (x, y, buttonList) => {
+        this.uiComponents.contextMenu.show = true
+        this.uiComponents.contextMenu.x = x
+        this.uiComponents.contextMenu.y = y
+        this.uiComponents.contextMenu.buttonList = buttonList
+
+        this.updateUi()
     }
 
     findPath = (startTile, targetTile) => {
@@ -92,6 +119,18 @@ export default class HexMapControllerUtilsClass {
                 selection: 'movement'
             })
         }
+
+        //search for mines
+        let neighbors = this.hexMapData.getNeighborKeys(unit.position.q, unit.position.r)
+        for(let tile of neighbors){
+            if(this.hexMapData.getTerrain(tile.q, tile.r) !== null && this.hexMapData.getTerrain(tile.q, tile.r).name == 'Mine'){
+                this.hexMapData.selectionList.push({
+                    q: tile.q,
+                    r: tile.r,
+                    selection: 'action'
+                })
+            }
+        }
     }
 
     lerpUnit = (unit) => {
@@ -132,6 +171,35 @@ export default class HexMapControllerUtilsClass {
             unit.state = 'jumpUp'
         }
 
+    }
+
+    mineOre = (unit) => {
+
+        let targetTile = this.hexMapData.getSelectedActionTile()
+        console.log(targetTile)
+        if(targetTile == null) return
+
+        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+        if(targetStructure == null) return
+
+        unit.target = targetStructure
+        unit.animationStartTime = Date.now()
+        unit.animationCurTime = Date.now()
+
+        //set rotation
+        let direction = {
+            q: targetTile.position.q - unit.position.q,
+            r: targetTile.position.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+        unit.state = 'mine'
+        unit.frame = 0
+
+        console.log(unit.state)
     }
 
     getSelectedTile = (x,y, rotatedMap) => {

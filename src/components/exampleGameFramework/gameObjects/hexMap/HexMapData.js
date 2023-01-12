@@ -37,6 +37,8 @@ export default class HexMapDataClass {
       this.clickDist = 20
       this.clickPos = null
       this.clickMovePos = null
+
+      this.resources = 0
    }
 
 
@@ -188,6 +190,13 @@ export default class HexMapDataClass {
    //return the selected unit tile or null
    getSelectedTargetTile = () => {
       let selected = this.selectionList.find(sel => sel.selection == 'target')
+      if (selected === undefined) return null
+      return this.getEntry(selected.q, selected.r)
+   }
+
+   //return the selected unit tile or null
+   getSelectedActionTile = () => {
+      let selected = this.selectionList.find(sel => sel.selection == 'action')
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }

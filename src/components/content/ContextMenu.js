@@ -4,10 +4,11 @@ import { Button } from 'react-bootstrap'
 const ContextMenu = (props) => {
 
     return (
-        <div style={{ border: '2px', borderStyle: 'solid', width: '100px', height: '150px', background: 'darkorange', position: 'absolute', top: props.y, left: props.x }} >
+        <div style={{ border: '2px', borderStyle: 'solid', background: 'darkorange', position: 'absolute', bottom: window.innerHeight / 2 - props.y, left: props.x }} className='p-2'>
 
-            <Button className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('move')}}>Move</Button>
-            <Button className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('cancel')}}>Cancel</Button>
+            {props.buttonList.includes('btnMove') && <Button id='btnMove' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('move')}}>Move</Button>}
+            {props.buttonList.includes('btnMine') && <Button id='btnMine' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('mine')}}>Mine</Button>}
+            {props.buttonList.includes('btnCancel') && <Button id='btnCancel' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('cancel')}}>Cancel</Button>}
 
         </div>
     )
