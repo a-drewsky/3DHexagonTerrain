@@ -8,6 +8,9 @@ import desert_tree_2 from '../images/modifiers/desert_tree_02.png'
 import rock_1 from '../images/modifiers/rock_01.png'
 import rock_2 from '../images/modifiers/rock_02.png'
 
+import empty_mine_back from '../images/modifiers/empty_mine_back.png'
+import empty_mine_front from '../images/modifiers/empty_mine_front.png'
+
 import medium_round_shadow_1 from '../images/shadows/medium_round_shadow_1.png'
 import medium_round_shadow_3 from '../images/shadows/medium_round_shadow_3.png'
 import medium_round_shadow_5 from '../images/shadows/medium_round_shadow_5.png'
@@ -40,6 +43,8 @@ export default class ModifierImagesClass {
             rock_sprite_1: new Image(),
             rock_sprite_2: new Image(),
 
+            empty_mine_back: new Image(),
+            empty_mine_front: new Image(),
 
             medium_round_shadow_1: new Image(),
             medium_round_shadow_3: new Image(),
@@ -101,6 +106,9 @@ export default class ModifierImagesClass {
         this.small_round_shadow_9.src = small_round_shadow_9
         this.small_round_shadow_11.src = small_round_shadow_11
 
+        this.empty_mine_back.src = empty_mine_back
+        this.empty_mine_front.src = empty_mine_front
+
 
         this.size = {
             width: 1,
@@ -109,6 +117,14 @@ export default class ModifierImagesClass {
         this.offset = {
             x: 0,
             y: 1
+        }
+        this.fullImageSize = {
+            width: 1,
+            height: 1.5
+        }
+        this.fullImageOffset = {
+            x: 0,
+            y: 0.5
         }
         this.modifierSize = {
             width: 1,
@@ -188,6 +204,24 @@ export default class ModifierImagesClass {
             shadowOffset: {
                 x: 0.5,
                 y: 1
+            }
+        }
+        this.emptymine = {
+            modifierImages: [
+                this.empty_mine_back,
+                this.empty_mine_front
+            ],
+            shadowImages: [
+                [null, null, null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null, null, null]
+            ],
+            shadowSize: {
+                width: 0,
+                height: 0
+            },
+            shadowOffset: {
+                x: 0,
+                y: 0
             }
         }
     }

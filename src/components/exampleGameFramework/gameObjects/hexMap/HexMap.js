@@ -25,7 +25,7 @@ export default class HexMapClass {
 
         this.renderer = new HexMapViewSpritesRendererClass(this.data, camera, images, this.utils, this.settings);
 
-        this.updater = new HexMapUpdaterClass(this.data, images, this.settings, this.renderer, cameraController, camera, canvas)
+        this.updater = new HexMapUpdaterClass(this.data, images, this.settings, this.renderer, cameraController, camera, canvas, uiComponents, updateUi)
 
         this.images = images
     }

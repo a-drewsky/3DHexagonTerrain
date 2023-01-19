@@ -66,6 +66,11 @@ export default class HexMapControllerUtilsClass {
         this.updateUi()
     }
 
+    setResourceBar = (resourceNum) => {
+        this.uiComponents.resourceBar.resourceNum = resourceNum
+        this.updateUi()
+    }
+
     findPath = (startTile, targetTile) => {
 
         if(targetTile == null || startTile == null) return
@@ -74,6 +79,21 @@ export default class HexMapControllerUtilsClass {
         let start = startTile.position
 
         let path = this.pathFinder.findPath(start, target)
+
+        if(!path) return null
+
+        return path
+    }
+
+    findClosestAdjacentPath = (startTile, targetTile) => {
+        if(targetTile == null || startTile == null) return
+        
+        let target = targetTile.position
+        let start = startTile.position
+
+        let neighbors = this.hexMapData.getNeighborKeys(target.q, target.r)
+
+        let path = this.pathFinder.findClosestPath(start, target, neighbors)
 
         if(!path) return null
 
@@ -108,6 +128,8 @@ export default class HexMapControllerUtilsClass {
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
+        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange+1)
+
         if (!moveSet) return
 
         for (let tileObj of moveSet) {
@@ -121,12 +143,12 @@ export default class HexMapControllerUtilsClass {
         }
 
         //search for mines
-        let neighbors = this.hexMapData.getNeighborKeys(unit.position.q, unit.position.r)
-        for(let tile of neighbors){
-            if(this.hexMapData.getTerrain(tile.q, tile.r) !== null && this.hexMapData.getTerrain(tile.q, tile.r).name == 'Mine'){
+        for(let tileObj of moveSetPlus1){
+            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            if(this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).name == 'Mine'){
                 this.hexMapData.selectionList.push({
-                    q: tile.q,
-                    r: tile.r,
+                    q: tile.position.q,
+                    r: tile.position.r,
                     selection: 'action'
                 })
             }
@@ -173,16 +195,41 @@ export default class HexMapControllerUtilsClass {
 
     }
 
-    mineOre = (unit) => {
+    lerpToTarget = (unit, target) => {
 
-        let targetTile = this.hexMapData.getSelectedActionTile()
-        console.log(targetTile)
-        if(targetTile == null) return
+        if (unit == null) return
 
-        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
-        if(targetStructure == null) return
+        let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        unit.target = targetStructure
+        unit.path = this.findClosestAdjacentPath(startPosition, target).map(tileObj => tileObj.tile)
+
+        let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
+
+        unit.destination = unit.path[0]
+
+        unit.destinationStartTime = Date.now()
+        unit.destinationCurTime = Date.now()
+
+        //set rotation
+        let direction = {
+            q: unit.destination.q - unit.position.q,
+            r: unit.destination.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+        unit.state = 'walk'
+        unit.frame = 0
+
+        if (nextPosition.height != startPosition.height) {
+            unit.state = 'jumpUp'
+        }
+    }
+
+    mineOre = (unit, targetTile) => {
+
         unit.animationStartTime = Date.now()
         unit.animationCurTime = Date.now()
 

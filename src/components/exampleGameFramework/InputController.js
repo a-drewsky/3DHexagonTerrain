@@ -19,6 +19,19 @@ export default class InputControllerClass {
          case 'cancel':
             this.gameManager.objectMap.get('hexMap').controller.cancelMovement();
             return
+         case 'rotateLeft':
+            this.gameManager.objectMap.get('hexMap').controller.rotateLeft()
+            return
+         case 'rotateRight':
+            this.gameManager.objectMap.get('hexMap').controller.rotateRight()
+            return
+         case 'addUnit':
+            this.gameManager.objectMap.get('hexMap').controller.addUnit()
+            return
+         case 'switchView':
+            if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) this.gameManager.objectMap.get('hexMap').switchView()
+            return
+
       }
    }
 
@@ -63,48 +76,6 @@ export default class InputControllerClass {
       switch (this.gameManager.state) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.zoom(deltaY);
-            break;
-      }
-   }
-
-   keyDown = (key) => {
-      switch (this.gameManager.state) {
-         case 'play':
-            if (key == 'e') {
-
-               this.gameManager.objectMap.get('hexMap').controller.rotateRight()
-
-            }
-
-            if (key == 'q') {
-
-               this.gameManager.objectMap.get('hexMap').controller.rotateLeft()
-
-            }
-
-            //   if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-            //       this.gameManager.objectMap.get('camera').controller.keyDown(key);
-            //   }
-
-            if (key == 'v') {
-               if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) {
-                  this.gameManager.objectMap.get('hexMap').switchView()
-               }
-            }
-
-            if (key == 'u') {
-               this.gameManager.objectMap.get('hexMap').controller.addUnit()
-            }
-            break;
-      }
-   }
-
-   keyUp = (key) => {
-      switch (this.gameManager.state) {
-         case 'play':
-            if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-               // this.gameManager.objectMap.get('camera').controller.keyUp(key);
-            }
             break;
       }
    }

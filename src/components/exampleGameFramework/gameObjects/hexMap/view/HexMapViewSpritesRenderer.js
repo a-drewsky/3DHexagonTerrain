@@ -291,7 +291,7 @@ export default class HexMapViewSpritesRendererClass {
                     tempCanvas.height = canvasSize.height
                     let tempctx = tempCanvas.getContext('2d')
 
-                    tempctx.drawImage(sprite.images[0][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                    tempctx.drawImage(sprite.images[terrainObject.state][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
 
                     imageList[rotation] = tempCanvas
@@ -430,6 +430,138 @@ export default class HexMapViewSpritesRendererClass {
 
         this.camera.rotation = initRotation
 
+    }
+
+    renderFullImageModifier = (terrainObject) => {
+
+        let initRotation = this.camera.rotation
+
+        let sprites = this.images[terrainObject.type][terrainObject.sprite]
+
+        //set canvas size
+        let canvasSize = {
+            width: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.width,
+            height: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.height
+        }
+
+        let imageList = []
+
+        for (let rotation = 0; rotation < 12; rotation++) {
+
+            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+
+                //create canvas
+                let tempCanvasTop = document.createElement('canvas')
+                tempCanvasTop.width = canvasSize.width
+                tempCanvasTop.height = canvasSize.height
+                let tempctxTop = tempCanvasTop.getContext('2d')
+
+                let tempCanvasBottom = document.createElement('canvas')
+                tempCanvasBottom.width = canvasSize.width
+                tempCanvasBottom.height = canvasSize.height
+                let tempctxBottom = tempCanvasBottom.getContext('2d')
+
+                tempctxBottom.drawImage(sprites.modifierImages[1], 0, 0, tempCanvasBottom.width, tempCanvasBottom.height)
+                tempctxTop.drawImage(sprites.modifierImages[0], 0, 0, tempCanvasTop.width, tempCanvasTop.height)
+
+                imageList[rotation] = {
+                    top: tempCanvasTop,
+                    bottom: tempCanvasBottom
+                }
+
+            } else {
+                imageList[rotation] = null
+            }
+
+        }
+
+        terrainObject.images[0] = imageList
+
+
+        terrainObject.shadowImages = null
+
+
+        //crop and darken sprites
+        for (let i = 0; i < terrainObject.images[0].length; i++) {
+            if (terrainObject.images[0][i] == null) continue
+
+            this.camera.rotation = i;
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+
+
+            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, terrainObject)
+            terrainObject.images[0][i].top = darkenedImageTop
+
+            let croppedImageBottom = this.utils.cropOutTiles(terrainObject.images[0][i].bottom, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let darkenedImageBottom = this.utils.darkenSprite(croppedImageBottom, terrainObject)
+            terrainObject.images[0][i].bottom = darkenedImageBottom
+        }
+
+        this.camera.rotation = initRotation
+    }
+
+    
+
+    renderSingleImageModifier = (terrainObject) => {
+
+        let initRotation = this.camera.rotation
+
+        let sprites = this.images[terrainObject.type][terrainObject.sprite]
+
+        //set canvas size
+        let canvasSize = {
+            width: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.width,
+            height: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.height
+        }
+
+        let imageList = []
+
+        for (let rotation = 0; rotation < 12; rotation++) {
+
+            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+
+                let tempCanvas = document.createElement('canvas')
+                tempCanvas.width = canvasSize.width
+                tempCanvas.height = canvasSize.height
+                let tempctx = tempCanvas.getContext('2d')
+
+                tempctx.drawImage(sprites.modifierImages[1], 0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.drawImage(sprites.modifierImages[0], 0, 0, tempCanvas.width, tempCanvas.height)
+
+                imageList[rotation] = {
+                    top: tempCanvas,
+                    bottom: null
+                }
+
+            } else {
+                imageList[rotation] = null
+            }
+
+        }
+
+        terrainObject.images[0] = imageList
+
+
+        terrainObject.shadowImages = null
+
+
+        //crop and darken sprites
+        for (let i = 0; i < terrainObject.images[0].length; i++) {
+            if (terrainObject.images[0][i] == null) continue
+
+            this.camera.rotation = i;
+            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+
+
+            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, terrainObject)
+            terrainObject.images[0][i].top = darkenedImageTop
+        }
+
+        this.camera.rotation = initRotation
     }
 
 }

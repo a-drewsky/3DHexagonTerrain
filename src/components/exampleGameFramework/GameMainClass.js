@@ -30,6 +30,9 @@ export default class GameMainClass {
             x: 0,
             y: 0,
             buttonList: []
+         },
+         resourceBar: {
+            resourceNum: 0
          }
       }
 

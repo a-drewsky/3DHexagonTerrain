@@ -26,6 +26,9 @@ const ContentPanel = () => {
          x: 0,
          y: 0,
          buttonList: []
+      },
+      resourceBar: {
+         resourceNum: 0
       }
    })
    //END SETUP
@@ -36,7 +39,7 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ contextMenu }) => ({ contextMenu: newUi.contextMenu }));
+      setUiComponents(({ contextMenu, resourceBar }) => ({ contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
    }
 
 
@@ -150,7 +153,7 @@ const ContentPanel = () => {
          {/*CANVAS*/}
          <div className={(winCondition != null || gameClass == null || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
-               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto'>
+               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
                   <canvas
                      ref={canvas}
                      width={Math.min(window.innerWidth, 1000)}
@@ -178,10 +181,10 @@ const ContentPanel = () => {
 
 
          {/*GAME CREATION FORM*/}
-         <Form className='mt-5 mb-5 border w-50 mx-auto' onSubmit={startNewGame}>
+         <Form className='mt-5 mb-5 border w-50 mx-auto p-3' onSubmit={startNewGame}>
 
             <Form.Group className='my-4 d-flex justify-content-center'>
-               <Form.Label className='my-auto mx-1 w-50 text-right'>Example Size Setting</Form.Label>
+               <Form.Label className='my-auto mx-1 w-50 text-end'>Example Size Setting</Form.Label>
                <div className='w-50 mx-1 '>
                   <Form.Control as="select" className='my-auto w-50' value={sizeSetting} onChange={(e) => setSize(e.target.value)}>
                      <option value={'small'}>Small</option>
@@ -199,6 +202,21 @@ const ContentPanel = () => {
 
          </Form>
          {/*END GAME CREATION FORM*/}
+
+
+         {/*DEBUG MENU FORM*/}
+         <Form className='mt-5 mb-5 border w-25 mx-auto p-3' onSubmit={startNewGame}>
+
+            <Form.Group className='d-flex justify-content-center'>
+               <Button className='m-1' onClick={() => { gameClass.uiInput('addUnit') }}>Add unit</Button>
+            </Form.Group>
+
+            <Form.Group className='d-flex justify-content-center'>
+               <Button className='m-1' onClick={() => { gameClass.uiInput('switchView') }}>Switch view</Button>
+            </Form.Group>
+
+         </Form>
+         {/*END DEBUG MENU FORM*/}
 
       </>
    )

@@ -56,7 +56,8 @@ export default class HexMapConfigClass {
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            resources: 100
         }
     }
 
@@ -72,7 +73,8 @@ export default class HexMapConfigClass {
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            resources: 100
         }
     }
 
@@ -88,7 +90,8 @@ export default class HexMapConfigClass {
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            resources: 100
         }
     }
 
@@ -104,7 +107,8 @@ export default class HexMapConfigClass {
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            resources: 100
         }
     }
 
@@ -120,7 +124,8 @@ export default class HexMapConfigClass {
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            resources: 100
         }
     }
 
@@ -156,6 +161,23 @@ export default class HexMapConfigClass {
         }
     }
 
+    emptymine = (pos) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            name: 'Empty Mine',
+            type: 'modifiers',
+            modifierType: 'singleImage',
+            sprite: 'emptymine',
+            state: 0,
+            tileHeight: 1,
+            images: [],
+            shadowImages: []
+        }
+    }
+
     smallRocks = (pos) => {
         return {
             position: {
@@ -164,6 +186,7 @@ export default class HexMapConfigClass {
             },
             name: 'Rocks',
             type: 'modifiers',
+            modifierType: 'components',
             sprite: 'rocks',
             state: 0,
             tileHeight: 1,
@@ -180,6 +203,7 @@ export default class HexMapConfigClass {
             },
             name: 'Forest',
             type: 'modifiers',
+            modifierType: 'components',
             sprite: 'oaktree',
             state: 0,
             tileHeight: 2,
@@ -196,6 +220,7 @@ export default class HexMapConfigClass {
             },
             name: 'Forest',
             type: 'modifiers',
+            modifierType: 'components',
             sprite: 'tundratree',
             state: 0,
             tileHeight: 2,
@@ -212,6 +237,7 @@ export default class HexMapConfigClass {
             },
             name: 'Cacti',
             type: 'modifiers',
+            modifierType: 'components',
             sprite: 'deserttree',
             state: 0,
             tileHeight: 2,
