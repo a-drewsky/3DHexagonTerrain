@@ -527,7 +527,6 @@ export default class HexMapViewSpritesRendererClass {
                 tempCanvas.height = canvasSize.height
                 let tempctx = tempCanvas.getContext('2d')
 
-                tempctx.drawImage(sprites.modifierImages[1], 0, 0, tempCanvas.width, tempCanvas.height)
                 tempctx.drawImage(sprites.modifierImages[0], 0, 0, tempCanvas.width, tempCanvas.height)
 
                 imageList[rotation] = {

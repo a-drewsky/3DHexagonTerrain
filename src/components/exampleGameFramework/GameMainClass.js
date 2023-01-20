@@ -91,11 +91,11 @@ export default class GameMainClass {
    }
 
    keyDown = (key) => {
-      this.inputController.keyDown(key);
+      
    }
 
    keyUp = (key) => {
-      this.inputController.keyUp(key);
+      
    }
 
    uiInput = (input) => {
