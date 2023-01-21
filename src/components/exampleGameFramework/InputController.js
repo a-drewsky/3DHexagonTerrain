@@ -31,6 +31,12 @@ export default class InputControllerClass {
          case 'switchView':
             if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) this.gameManager.objectMap.get('hexMap').switchView()
             return
+         case 'pause':
+            this.gameManager.setStatePause()
+            return
+         case 'play':
+            this.gameManager.setStatePlay()
+            return
 
       }
    }

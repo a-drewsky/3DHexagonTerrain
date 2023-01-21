@@ -330,7 +330,6 @@ export default class HexMapBuilderClass {
                if(hasStep == false){
                   tile.height--
                   reduced = true
-                  console.log("ACT")
                }
             }
    

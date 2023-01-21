@@ -14,7 +14,7 @@ export default class GameManagerClass {
 
         this.objectMap = new Map();
 
-        this.state = 'loading'
+        this.state = 'play'
 
         this.uiComponents = uiComponents
         this.updateUi = updateUi
@@ -56,6 +56,18 @@ export default class GameManagerClass {
         console.log("DONE BUILDING")
         this.objectMap.get('hexMap').prerender();
 
+    }
+
+    setStatePause = () => {
+        this.state = 'pause'
+        this.uiComponents.pauseMenu.show = true
+        this.updateUi()
+    }
+
+    setStatePlay = () => {
+        this.state = 'play'
+        this.uiComponents.pauseMenu.show = false
+        this.updateUi()
     }
 
 }

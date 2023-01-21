@@ -25,6 +25,9 @@ export default class GameMainClass {
       this.loaded = false;
 
       this.uiComponents = {
+         pauseMenu: {
+            show: false
+         },
          contextMenu: {
             show: false,
             x: 0,
@@ -38,7 +41,10 @@ export default class GameMainClass {
 
       this.setUiComponents = setUiComponents
 
-      this.updateUi = () => this.setUiComponents(this.uiComponents)
+      this.updateUi = () => {
+         console.log(this.uiComponents)
+         this.setUiComponents(this.uiComponents)
+      } 
 
       //win condition
       this.setWinCondition = setWinCondition;

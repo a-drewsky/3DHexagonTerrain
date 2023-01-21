@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Row, Form, Button } from 'react-bootstrap'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 
 import GameMainClass from '../exampleGameFramework/GameMainClass';
 
@@ -21,6 +21,9 @@ const ContentPanel = () => {
    const [imagesLoaded, setImagesLoaded] = useState(false);
 
    const [uiComponents, setUiComponents] = useState({
+      pauseMenu: {
+         show: false
+      },
       contextMenu: {
          show: false,
          x: 0,
@@ -39,7 +42,7 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ contextMenu, resourceBar }) => ({ contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
+      setUiComponents(({ pauseMenu, contextMenu, resourceBar }) => ({ pauseMenu: newUi.pauseMenu, contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
    }
 
 
@@ -64,6 +67,25 @@ const ContentPanel = () => {
       newGameClass.createGame();
 
       setWinCondition(null);
+   }
+
+   const endGame = () => {
+      if (gameClass) gameClass.clear();
+      setGameClass(undefined);
+      setUiComponents({
+         pauseMenu: {
+            show: false
+         },
+         contextMenu: {
+            show: false,
+            x: 0,
+            y: 0,
+            buttonList: []
+         },
+         resourceBar: {
+            resourceNum: 0
+         }
+      })
    }
    //END CREATE NEW GAME METHOD
 
@@ -170,7 +192,7 @@ const ContentPanel = () => {
 
                   {
                      (gameClass) &&
-                     <UiOverlay uiComponents={uiComponents} gameClass={gameClass}></UiOverlay>
+                     <UiOverlay uiComponents={uiComponents} gameClass={gameClass} endGame={endGame}></UiOverlay>
                   }
 
                </div>
@@ -179,45 +201,49 @@ const ContentPanel = () => {
          </div>
          {/*END CANVAS*/}
 
+         <Row>
+            <Col xs={3}></Col>
+            <Col xs={6}>
+               {/*GAME CREATION FORM*/}
+               <Form className='mt-5 mb-5 border w-75 p-3 mx-auto' onSubmit={startNewGame}>
 
-         {/*GAME CREATION FORM*/}
-         <Form className='mt-5 mb-5 border w-50 mx-auto p-3' onSubmit={startNewGame}>
+                  <Form.Group className='my-1 d-flex justify-content-center'>
+                     <Form.Label className='my-auto mx-1 w-50 text-end'>Size</Form.Label>
+                     <div className='w-50 mx-1 '>
+                        <Form.Control as="select" className='my-auto w-50' value={sizeSetting} onChange={(e) => setSize(e.target.value)}>
+                           <option value={'small'}>Small</option>
+                           <option value={'medium'}>Medium</option>
+                           <option value={'large'}>Large</option>
+                           <option value={'extralarge'}>Extra Large</option>
+                           <option value={'massive'}>Massive</option>
+                        </Form.Control>
+                     </div>
+                  </Form.Group>
 
-            <Form.Group className='my-4 d-flex justify-content-center'>
-               <Form.Label className='my-auto mx-1 w-50 text-end'>Example Size Setting</Form.Label>
-               <div className='w-50 mx-1 '>
-                  <Form.Control as="select" className='my-auto w-50' value={sizeSetting} onChange={(e) => setSize(e.target.value)}>
-                     <option value={'small'}>Small</option>
-                     <option value={'medium'}>Medium</option>
-                     <option value={'large'}>Large</option>
-                     <option value={'extralarge'}>Extra Large</option>
-                     <option value={'massive'}>Massive</option>
-                  </Form.Control>
-               </div>
-            </Form.Group>
+                  <Form.Group className='d-flex justify-content-center'>
+                     <Button className='m-1' type="submit">Run Game</Button>
+                  </Form.Group>
 
-            <Form.Group className='d-flex justify-content-center'>
-               <Button className='m-1' type="submit">Run Game</Button>
-            </Form.Group>
+               </Form>
+               {/*END GAME CREATION FORM*/}
 
-         </Form>
-         {/*END GAME CREATION FORM*/}
+            </Col>
+            <Col xs={3}>
+               {/*DEBUG MENU FORM*/}
+               <Form className='mt-5 mb-5 border w-100 p-3 mx-auto' onSubmit={startNewGame}>
 
+                  <Form.Group className='d-flex justify-content-center'>
+                     <Button className='m-1' onClick={() => { gameClass.uiInput('addUnit') }}>Add unit</Button>
+                  </Form.Group>
 
-         {/*DEBUG MENU FORM*/}
-         <Form className='mt-5 mb-5 border w-25 mx-auto p-3' onSubmit={startNewGame}>
+                  <Form.Group className='d-flex justify-content-center'>
+                     <Button className='m-1' onClick={() => { gameClass.uiInput('switchView') }}>Switch view</Button>
+                  </Form.Group>
 
-            <Form.Group className='d-flex justify-content-center'>
-               <Button className='m-1' onClick={() => { gameClass.uiInput('addUnit') }}>Add unit</Button>
-            </Form.Group>
-
-            <Form.Group className='d-flex justify-content-center'>
-               <Button className='m-1' onClick={() => { gameClass.uiInput('switchView') }}>Switch view</Button>
-            </Form.Group>
-
-         </Form>
-         {/*END DEBUG MENU FORM*/}
-
+               </Form>
+               {/*END DEBUG MENU FORM*/}
+            </Col>
+         </Row>
       </>
    )
 }
