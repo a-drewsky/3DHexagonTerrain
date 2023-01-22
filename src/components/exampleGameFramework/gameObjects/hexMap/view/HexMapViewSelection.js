@@ -15,13 +15,15 @@ export default class HexMapViewSelectionClass {
 
       //draw highlight for selected tile
 
-      for (let i = 0; i < this.hexMapData.selectionList.length; i++) {
+      let selectionArr = this.utils.getSelectionArr()
 
-         let selectionObj = this.hexMapData.selectionList[i]
+      for (let i = 0; i < selectionArr.length; i++) {
+
+         let selectionObj = selectionArr[i]
 
          let keyObj = {
-            q: selectionObj.q,
-            r: selectionObj.r
+            q: selectionObj.position.q,
+            r: selectionObj.position.r
          }
 
          let value = this.hexMapData.getEntry(keyObj.q, keyObj.r)

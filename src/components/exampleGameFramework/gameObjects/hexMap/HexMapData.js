@@ -13,7 +13,17 @@ export default class HexMapDataClass {
 
       this.unitList = [];
 
-      this.selectionList = [];
+      this.selections = {
+         action: null,
+         attack: null,
+         hover: null,
+         info: null,
+         path: null,
+         unit: null,
+         target: null,
+         movement: [],
+
+      }
 
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
@@ -175,35 +185,35 @@ export default class HexMapDataClass {
 
    //return the selected tile or null
    getSelected = () => {
-      let selected = this.selectionList.find(sel => sel.selection == 'info')
+      let selected = this.selections['info']
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedUnitTile = () => {
-      let selected = this.selectionList.find(sel => sel.selection == 'unit')
+      let selected = this.selections['unit']
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedTargetTile = () => {
-      let selected = this.selectionList.find(sel => sel.selection == 'target')
+      let selected = this.selections['target']
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedActionTile = () => {
-      let selected = this.selectionList.find(sel => sel.selection == 'action')
+      let selected = this.selections['action']
       if (selected === undefined) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedUnit = () => {
-      let selected = this.selectionList.find(sel => sel.selection == 'unit')
+      let selected = this.selections['unit']
       if (selected === undefined) return null
       return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
    }

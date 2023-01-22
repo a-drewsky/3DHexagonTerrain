@@ -9,7 +9,7 @@ import HexMapViewUtilsClass from '../view/HexMapViewUtils';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi) {
+    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi, renderer) {
 
         this.hexMapData = hexMapData;
 
@@ -20,7 +20,6 @@ export default class HexMapControllerClass {
         this.images = images
 
 
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi);
 
         this.collision = new CollisionClass();
 
@@ -28,7 +27,8 @@ export default class HexMapControllerClass {
 
         this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings)
 
-        this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, this.viewUtils, settings)
+        this.renderer = renderer
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
 
         this.uiComponents = uiComponents
 
@@ -142,7 +142,7 @@ export default class HexMapControllerClass {
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange+1)
-        moveSetPlus1 = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).name == 'Mine')
+        moveSetPlus1 = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
 
         if(moveSetPlus1.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.utils.resetSelected()
@@ -317,6 +317,8 @@ export default class HexMapControllerClass {
     addUnit = () => {
 
         let selectedTile = this.hexMapData.getSelected()
+
+        console.log(this.utils.getSelection(selectedTile.position.q, selectedTile.position.r))
 
         if (selectedTile != null && this.utils.getSelection(selectedTile.position.q, selectedTile.position.r) == 'info') {
             let unit = {

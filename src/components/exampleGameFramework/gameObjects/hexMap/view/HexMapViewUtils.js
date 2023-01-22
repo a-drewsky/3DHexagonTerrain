@@ -60,6 +60,26 @@ export default class HexMapViewUtilsClass {
 
     }
 
+    getSelectionArr = () => {
+        let selectionList = Object.entries(this.hexMapData.selections)
+
+        let filteredSelectionList = []
+
+        for(let sel of selectionList){
+            if(sel[1] == null) continue
+            if(Array.isArray(sel[1])){
+                for(let arrSel of sel[1]){
+                    filteredSelectionList.push({position: arrSel, selection: sel[0]})
+                }
+                continue
+            }
+
+            filteredSelectionList.push({position: sel[1], selection: sel[0]})
+
+        }
+        return filteredSelectionList
+    }
+
     getTablePosition = () => {
 
         let keys = this.hexMapData.getKeys();

@@ -4,7 +4,7 @@ import CollisionClass from "../../../utilities/collision"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi) {
+    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi, renderer) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
@@ -14,38 +14,82 @@ export default class HexMapControllerUtilsClass {
 
         this.updateUi = updateUi
 
+        this.renderer = renderer
+
         this.pathFinder = new HexMapPathFinderClass(hexMapData, camera)
 
         this.collision = new CollisionClass();
     }
 
-    getSelection = (q, r) => {
-        let selected = this.hexMapData.selectionList.find(sel => sel.q == q && sel.r == r)
+    getSelectionArr = () => {
+        let selectionList = Object.entries(this.hexMapData.selections)
+
+        let filteredSelectionList = []
+
+        for(let sel of selectionList){
+            if(sel[1] == null) continue
+            if(Array.isArray(sel[1])){
+                for(let arrSel of sel[1]){
+                    filteredSelectionList.push({position: arrSel, selection: sel[0]})
+                }
+                continue
+            }
+
+            filteredSelectionList.push({position: sel[1], selection: sel[0]})
+
+        }
+        return filteredSelectionList
+    }
+
+    getSelectionObj = (q, r) => {
+        let selectionArr = this.getSelectionArr()
+
+        let selected = selectionArr.find(sel => sel.position.q == q && sel.position.r == r)
         if (!selected) return null
+        return {
+            position: {q: selected.position.q, r: selected.position.r},
+            selection: selected.selection
+        }
+    }
+
+    getSelection = (q, r) => {
+        let selected = this.getSelectionObj(q, r)
+        if(selected == null) return null
         return selected.selection
     }
 
     setSelection = (q, r, selection) => {
-        this.hexMapData.selectionList.push({
-            q: q,
-            r: r,
-            selection: selection
-        })
+        if(selection == 'movement'){
+            this.hexMapData.selections[selection].push({q: q, r: r})
+        } else {
+            this.hexMapData.selections[selection] = {q: q, r: r}
+        }
     }
 
     removeSelection = (q, r) => {
-        let index = this.hexMapData.selectionList.findIndex(sel => sel.q == q && sel.r == r)
-        this.hexMapData.selectionList.splice(index, 1)
+        let selected = this.getSelectionObj(q, r)
+
+        if(selected == null) return
+        if(selected.selection == 'movement') this.hexMapData.selections['movement'] = []
+        else this.hexMapData.selections[selected.selection] = null
     }
 
     resetSelected = () => {
-        this.hexMapData.selectionList = []
+        this.hexMapData.selections = {
+            action: null,
+            attack: null,
+            hover: null,
+            info: null,
+            path: null,
+            unit: null,
+            target: null,
+            movement: [],
+   
+         }
     }
 
     resetHover = () => {
-        for(let i=0; i< this.hexMapData.selectionList.length; i++){
-            if(this.hexMapData.selectionList[i].selection == 'hover') this.hexMapData.selectionList.splice(i, 1)
-        }
+        this.hexMapData.selections['hover'] = null
     }
 
     clearContextMenu = () => {
@@ -135,24 +179,22 @@ export default class HexMapControllerUtilsClass {
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
 
-            this.hexMapData.selectionList.push({
-                q: tile.position.q,
-                r: tile.position.r,
-                selection: 'movement'
-            })
+            this.setSelection(tile.position.q, tile.position.r, 'movement')
         }
 
         //search for mines
         for(let tileObj of moveSetPlus1){
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if(this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).name == 'Mine'){
-                this.hexMapData.selectionList.push({
-                    q: tile.position.q,
-                    r: tile.position.r,
-                    selection: 'action'
-                })
+            if(this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'mine'){
+                this.setSelection(tile.position.q, tile.position.r, 'action')
             }
         }
+    }
+
+    updateTerrain = (q, r, terrain) => {
+        this.renderer.renderSingleImageModifier(terrain)
+        let terrainIndex = this.hexMapData.getTerrainIndex(q, r)
+        this.hexMapData.terrainList[terrainIndex] = terrain
     }
 
     lerpUnit = (unit) => {

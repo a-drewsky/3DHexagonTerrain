@@ -375,13 +375,13 @@ export default class HexMapBuilderClass {
       this.generateBiomes(noiseFluctuation)
 
       this.smoothBiomes()
-      this.reduceTileHeights()
 
       //mirror the map if selected
       //if (this.mirror) this.mirrorMap(q, r)
 
       //add terrain features
       this.builderTerrain.generateTerrain(q, r, mapSize)
+      this.reduceTileHeights()
       this.addUnit()
 
    }

@@ -16,7 +16,7 @@ export default class HexMapUpdaterClass {
         this.mineTime = settings.MINE_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
         this.config = new HexMapConfigClass()
 
     }
@@ -54,9 +54,7 @@ export default class HexMapUpdaterClass {
             this.renderer.renderStructure(mine)
         } else {
             let emptymine = this.config.emptymine(mine.position)
-            this.renderer.renderSingleImageModifier(emptymine)
-            let terrainIndex = this.hexMapData.getTerrainIndex(mine.position.q, mine.position.r)
-            this.hexMapData.terrainList[terrainIndex] = emptymine
+            this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
         }
         
     }

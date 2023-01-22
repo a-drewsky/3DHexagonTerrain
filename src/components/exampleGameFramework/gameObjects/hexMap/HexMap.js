@@ -19,11 +19,11 @@ export default class HexMapClass {
 
         this.builder = new HexMapBuilderClass(this.data, this.settings);
 
-        this.controller = new HexMapControllerClass(this.data, camera, canvas, images, this.settings, uiComponents, updateUi);
-
         this.utils = new HexMapViewUtilsClass(this.data, camera, this.settings)
 
         this.renderer = new HexMapViewSpritesRendererClass(this.data, camera, images, this.utils, this.settings);
+
+        this.controller = new HexMapControllerClass(this.data, camera, canvas, images, this.settings, uiComponents, updateUi, this.renderer);
 
         this.updater = new HexMapUpdaterClass(this.data, images, this.settings, this.renderer, cameraController, camera, canvas, uiComponents, updateUi)
 

@@ -50,7 +50,8 @@ export default class HexMapConfigClass {
                 q: pos.q,
                 r: pos.r
             },
-            name: 'Mine',
+            name: 'Gold Mine',
+            tag: 'mine',
             type: 'structures',
             sprite: 'goldmine',
             state: 0,
@@ -67,7 +68,8 @@ export default class HexMapConfigClass {
                 q: pos.q,
                 r: pos.r
             },
-            name: 'Mine',
+            name: 'Copper Mine',
+            tag: 'mine',
             type: 'structures',
             sprite: 'coppermine',
             state: 0,
@@ -84,7 +86,8 @@ export default class HexMapConfigClass {
                 q: pos.q,
                 r: pos.r
             },
-            name: 'Mine',
+            name: 'Iron Mine',
+            tag: 'mine',
             type: 'structures',
             sprite: 'ironmine',
             state: 0,
@@ -101,7 +104,8 @@ export default class HexMapConfigClass {
                 q: pos.q,
                 r: pos.r
             },
-            name: 'Mine',
+            name: 'Ruby Mine',
+            tag: 'mine',
             type: 'structures',
             sprite: 'rubymine',
             state: 0,
@@ -118,7 +122,8 @@ export default class HexMapConfigClass {
                 q: pos.q,
                 r: pos.r
             },
-            name: 'Mine',
+            name: 'Amethyst Mine',
+            tag: 'mine',
             type: 'structures',
             sprite: 'amethystmine',
             state: 0,
@@ -136,6 +141,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Savanna Tree',
+            tag: 'largeTree',
             type: 'structures',
             sprite: 'savannatree',
             state: 0,
