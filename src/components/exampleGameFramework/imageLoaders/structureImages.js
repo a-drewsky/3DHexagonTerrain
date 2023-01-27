@@ -59,13 +59,38 @@ import savanna_tree_shadow_7 from '../images/shadows/savanna_tree_shadow_7.png'
 import savanna_tree_shadow_9 from '../images/shadows/savanna_tree_shadow_9.png'
 import savanna_tree_shadow_11 from '../images/shadows/savanna_tree_shadow_11.png'
 
-import main_base_q0r0 from '../images/structures/bases/main_base_q0r0.png'
-import main_base_qm1r0 from '../images/structures/bases/main_base_q-1r0.png'
-import main_base_q0rm1 from '../images/structures/bases/main_base_q0r-1.png'
-import main_base_q1rm1 from '../images/structures/bases/main_base_q1r-1.png'
-import main_base_q1r0 from '../images/structures/bases/main_base_q1r0.png'
-import main_base_q0r1 from '../images/structures/bases/main_base_q0r1.png'
-import main_base_qm1r1 from '../images/structures/bases/main_base_q-1r1.png'
+import main_base_q0r0 from '../images/structures/mainBase/main_base_q0r0.png'
+
+import main_base_qm1r0_1 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_1.png'
+import main_base_qm1r0_2 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_2.png'
+import main_base_qm1r0_3 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_3.png'
+import main_base_qm1r0_4 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_4.png'
+
+import main_base_q0rm1_1 from '../images/structures/mainBase/q0r-1/main_base_q0r-1_1.png'
+import main_base_q0rm1_2 from '../images/structures/mainBase/q0r-1/main_base_q0r-1_2.png'
+import main_base_q0rm1_3 from '../images/structures/mainBase/q0r-1/main_base_q0r-1_3.png'
+import main_base_q0rm1_4 from '../images/structures/mainBase/q0r-1/main_base_q0r-1_4.png'
+
+import main_base_q1rm1_1 from '../images/structures/mainBase/q1r-1/main_base_q1r-1_1.png'
+import main_base_q1rm1_2 from '../images/structures/mainBase/q1r-1/main_base_q1r-1_2.png'
+import main_base_q1rm1_3 from '../images/structures/mainBase/q1r-1/main_base_q1r-1_3.png'
+import main_base_q1rm1_4 from '../images/structures/mainBase/q1r-1/main_base_q1r-1_4.png'
+
+import main_base_q1r0_1 from '../images/structures/mainBase/q1r0/main_base_q1r0_1.png'
+import main_base_q1r0_2 from '../images/structures/mainBase/q1r0/main_base_q1r0_2.png'
+import main_base_q1r0_3 from '../images/structures/mainBase/q1r0/main_base_q1r0_3.png'
+import main_base_q1r0_4 from '../images/structures/mainBase/q1r0/main_base_q1r0_4.png'
+
+import main_base_q0r1_1 from '../images/structures/mainBase/q0r1/main_base_q0r1_1.png'
+import main_base_q0r1_2 from '../images/structures/mainBase/q0r1/main_base_q0r1_2.png'
+import main_base_q0r1_3 from '../images/structures/mainBase/q0r1/main_base_q0r1_3.png'
+import main_base_q0r1_4 from '../images/structures/mainBase/q0r1/main_base_q0r1_4.png'
+
+import main_base_qm1r1_1 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_1.png'
+import main_base_qm1r1_2 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_2.png'
+import main_base_qm1r1_3 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_3.png'
+import main_base_qm1r1_4 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_4.png'
+
 
 import flag_shadow_1 from '../images/shadows/small_round_shadow_1.png'
 import flag_shadow_3 from '../images/shadows/small_round_shadow_3.png'
@@ -142,12 +167,30 @@ export default class StructureImagesClass {
             savanna_tree_shadow_11: new Image(),
 
             main_base_q0r0: new Image(),
-            main_base_qm1r0: new Image(),
-            main_base_q0rm1: new Image(),
-            main_base_q1rm1: new Image(),
-            main_base_q1r0: new Image(),
-            main_base_q0r1: new Image(),
-            main_base_qm1r1: new Image(),
+            main_base_qm1r0_1: new Image(),
+            main_base_qm1r0_2: new Image(),
+            main_base_qm1r0_3: new Image(),
+            main_base_qm1r0_4: new Image(),
+            main_base_q0rm1_1: new Image(),
+            main_base_q0rm1_2: new Image(),
+            main_base_q0rm1_3: new Image(),
+            main_base_q0rm1_4: new Image(),
+            main_base_q1rm1_1: new Image(),
+            main_base_q1rm1_2: new Image(),
+            main_base_q1rm1_3: new Image(),
+            main_base_q1rm1_4: new Image(),
+            main_base_q1r0_1: new Image(),
+            main_base_q1r0_2: new Image(),
+            main_base_q1r0_3: new Image(),
+            main_base_q1r0_4: new Image(),
+            main_base_q0r1_1: new Image(),
+            main_base_q0r1_2: new Image(),
+            main_base_q0r1_3: new Image(),
+            main_base_q0r1_4: new Image(),
+            main_base_qm1r1_1: new Image(),
+            main_base_qm1r1_2: new Image(),
+            main_base_qm1r1_3: new Image(),
+            main_base_qm1r1_4: new Image(),
 
             flag_shadow_1: new Image(),
             flag_shadow_3: new Image(),
@@ -235,12 +278,36 @@ export default class StructureImagesClass {
         this.savanna_tree_shadow_11.src = savanna_tree_shadow_11
 
         this.main_base_q0r0.src = main_base_q0r0
-        this.main_base_qm1r0.src = main_base_qm1r0
-        this.main_base_q0rm1.src = main_base_q0rm1
-        this.main_base_q1rm1.src = main_base_q1rm1
-        this.main_base_q1r0.src = main_base_q1r0
-        this.main_base_q0r1.src = main_base_q0r1
-        this.main_base_qm1r1.src = main_base_qm1r1
+
+        this.main_base_qm1r0_1.src = main_base_qm1r0_1
+        this.main_base_qm1r0_2.src = main_base_qm1r0_2
+        this.main_base_qm1r0_3.src = main_base_qm1r0_3
+        this.main_base_qm1r0_4.src = main_base_qm1r0_4
+
+        this.main_base_q0rm1_1.src = main_base_q0rm1_1
+        this.main_base_q0rm1_2.src = main_base_q0rm1_2
+        this.main_base_q0rm1_3.src = main_base_q0rm1_3
+        this.main_base_q0rm1_4.src = main_base_q0rm1_4
+
+        this.main_base_q1rm1_1.src = main_base_q1rm1_1
+        this.main_base_q1rm1_2.src = main_base_q1rm1_2
+        this.main_base_q1rm1_3.src = main_base_q1rm1_3
+        this.main_base_q1rm1_4.src = main_base_q1rm1_4
+
+        this.main_base_q1r0_1.src = main_base_q1r0_1 
+        this.main_base_q1r0_2.src = main_base_q1r0_2 
+        this.main_base_q1r0_3.src = main_base_q1r0_3 
+        this.main_base_q1r0_4.src = main_base_q1r0_4 
+
+        this.main_base_q0r1_1.src = main_base_q0r1_1 
+        this.main_base_q0r1_2.src = main_base_q0r1_2 
+        this.main_base_q0r1_3.src = main_base_q0r1_3 
+        this.main_base_q0r1_4.src = main_base_q0r1_4 
+
+        this.main_base_qm1r1_1.src = main_base_qm1r1_1
+        this.main_base_qm1r1_2.src = main_base_qm1r1_2
+        this.main_base_qm1r1_3.src = main_base_qm1r1_3
+        this.main_base_qm1r1_4.src = main_base_qm1r1_4
 
         this.flag_shadow_1.src = flag_shadow_1
         this.flag_shadow_3.src = flag_shadow_3
@@ -277,7 +344,7 @@ export default class StructureImagesClass {
                 [null, this.flag_shadow_1, null, this.flag_shadow_3, null, this.flag_shadow_5, null, this.flag_shadow_7, null, this.flag_shadow_9, null, this.flag_shadow_11]
             ],
             deadSpace: [
-                [null, 3/32, null, 3/32, null, 3/32, null, 3/32, null, 3/32, null, 3/32]
+                [null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32]
             ]
         }
 
@@ -299,13 +366,22 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1]
+                [null, this.main_base_qm1r0_1, null, this.main_base_q0rm1_1, null, this.main_base_q1rm1_1, null, this.main_base_q1r0_1, null, this.main_base_q0r1_1, null, this.main_base_qm1r1_1],
+                [null, this.main_base_qm1r0_2, null, this.main_base_q0rm1_2, null, this.main_base_q1rm1_2, null, this.main_base_q1r0_2, null, this.main_base_q0r1_2, null, this.main_base_qm1r1_2],
+                [null, this.main_base_qm1r0_3, null, this.main_base_q0rm1_3, null, this.main_base_q1rm1_3, null, this.main_base_q1r0_3, null, this.main_base_q0r1_3, null, this.main_base_qm1r1_3],
+                [null, this.main_base_qm1r0_4, null, this.main_base_q0rm1_4, null, this.main_base_q1rm1_4, null, this.main_base_q1r0_4, null, this.main_base_q0r1_4, null, this.main_base_qm1r1_4]
             ],
             shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 8/32, null, 13/32]
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 8 / 32, null, 13 / 32],
+                [null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32]
             ]
         }
 
@@ -327,13 +403,22 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0]
+                [null, this.main_base_q0rm1_1, null, this.main_base_q1rm1_1, null, this.main_base_q1r0_1, null, this.main_base_q0r1_1, null, this.main_base_qm1r1_1, null, this.main_base_qm1r0_1],
+                [null, this.main_base_q0rm1_2, null, this.main_base_q1rm1_2, null, this.main_base_q1r0_2, null, this.main_base_q0r1_2, null, this.main_base_qm1r1_2, null, this.main_base_qm1r0_2],
+                [null, this.main_base_q0rm1_3, null, this.main_base_q1rm1_3, null, this.main_base_q1r0_3, null, this.main_base_q0r1_3, null, this.main_base_qm1r1_3, null, this.main_base_qm1r0_3],
+                [null, this.main_base_q0rm1_4, null, this.main_base_q1rm1_4, null, this.main_base_q1r0_4, null, this.main_base_q0r1_4, null, this.main_base_qm1r1_4, null, this.main_base_qm1r0_4]
             ],
             shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 13/32, null, 13/32, null, 13/32, null, 8/32, null, 13/32, null, 13/32]
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 8 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 14 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32]
             ]
         }
 
@@ -355,13 +440,19 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1]
+                [null, this.main_base_q1rm1_1, null, this.main_base_q1r0_1, null, this.main_base_q0r1_1, null, this.main_base_qm1r1_1, null, this.main_base_qm1r0_1, null, this.main_base_q0rm1_1],
+                [null, this.main_base_q1rm1_2, null, this.main_base_q1r0_2, null, this.main_base_q0r1_2, null, this.main_base_qm1r1_2, null, this.main_base_qm1r0_2, null, this.main_base_q0rm1_2],
+                [null, this.main_base_q1rm1_3, null, this.main_base_q1r0_3, null, this.main_base_q0r1_3, null, this.main_base_qm1r1_3, null, this.main_base_qm1r0_3, null, this.main_base_q0rm1_3],
+                [null, this.main_base_q1rm1_4, null, this.main_base_q1r0_4, null, this.main_base_q0r1_4, null, this.main_base_qm1r1_4, null, this.main_base_qm1r0_4, null, this.main_base_q0rm1_4]
             ],
             shadowImages: [
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 13/32, null, 13/32, null, 8/32, null, 13/32, null, 13/32, null, 13/32]
+                [null, 13 / 32, null, 13 / 32, null, 8 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 14 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32],
+                [null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32]
             ]
         }
 
@@ -383,13 +474,22 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_q1r0, null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1]
+                [null, this.main_base_q1r0_1, null, this.main_base_q0r1_1, null, this.main_base_qm1r1_1, null, this.main_base_qm1r0_1, null, this.main_base_q0rm1_1, null, this.main_base_q1rm1_1],
+                [null, this.main_base_q1r0_2, null, this.main_base_q0r1_2, null, this.main_base_qm1r1_2, null, this.main_base_qm1r0_2, null, this.main_base_q0rm1_2, null, this.main_base_q1rm1_2],
+                [null, this.main_base_q1r0_3, null, this.main_base_q0r1_3, null, this.main_base_qm1r1_3, null, this.main_base_qm1r0_3, null, this.main_base_q0rm1_3, null, this.main_base_q1rm1_3],
+                [null, this.main_base_q1r0_4, null, this.main_base_q0r1_4, null, this.main_base_qm1r1_4, null, this.main_base_qm1r0_4, null, this.main_base_q0rm1_4, null, this.main_base_q1rm1_4]
             ],
             shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 13/32, null, 8/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32]
+                [null, 13 / 32, null, 8 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32],
+                [null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 14 / 32, null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32]
             ]
         }
 
@@ -411,13 +511,22 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_q0r1, null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0]
+                [null, this.main_base_q0r1_1, null, this.main_base_qm1r1_1, null, this.main_base_qm1r0_1, null, this.main_base_q0rm1_1, null, this.main_base_q1rm1_1, null, this.main_base_q1r0_1],
+                [null, this.main_base_q0r1_2, null, this.main_base_qm1r1_2, null, this.main_base_qm1r0_2, null, this.main_base_q0rm1_2, null, this.main_base_q1rm1_2, null, this.main_base_q1r0_2],
+                [null, this.main_base_q0r1_3, null, this.main_base_qm1r1_3, null, this.main_base_qm1r0_3, null, this.main_base_q0rm1_3, null, this.main_base_q1rm1_3, null, this.main_base_q1r0_3],
+                [null, this.main_base_q0r1_4, null, this.main_base_qm1r1_4, null, this.main_base_qm1r0_4, null, this.main_base_q0rm1_4, null, this.main_base_q1rm1_4, null, this.main_base_q1r0_4]
             ],
             shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 8/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32]
+                [null, 8 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 8 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32],
+                [null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32],
+                [null, 8 / 32, null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32]
             ]
         }
 
@@ -439,13 +548,22 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.main_base_qm1r1, null, this.main_base_qm1r0, null, this.main_base_q0rm1, null, this.main_base_q1rm1, null, this.main_base_q1r0, null, this.main_base_q0r1]
+                [null, this.main_base_qm1r1_1, null, this.main_base_qm1r0_1, null, this.main_base_q0rm1_1, null, this.main_base_q1rm1_1, null, this.main_base_q1r0_1, null, this.main_base_q0r1_1],
+                [null, this.main_base_qm1r1_2, null, this.main_base_qm1r0_2, null, this.main_base_q0rm1_2, null, this.main_base_q1rm1_2, null, this.main_base_q1r0_2, null, this.main_base_q0r1_2],
+                [null, this.main_base_qm1r1_3, null, this.main_base_qm1r0_3, null, this.main_base_q0rm1_3, null, this.main_base_q1rm1_3, null, this.main_base_q1r0_3, null, this.main_base_q0r1_3],
+                [null, this.main_base_qm1r1_4, null, this.main_base_qm1r0_4, null, this.main_base_q0rm1_4, null, this.main_base_q1rm1_4, null, this.main_base_q1r0_4, null, this.main_base_q0r1_4]
             ],
             shadowImages: [
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
+                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 8/32]
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 8 / 32],
+                [null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 14 / 32, null, 8 / 32],
+                [null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32],
+                [null, 14 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 14 / 32, null, 8 / 32]
             ]
         }
 
@@ -473,7 +591,7 @@ export default class StructureImagesClass {
                 [null, this.savanna_tree_shadow_1, null, this.savanna_tree_shadow_3, null, this.savanna_tree_shadow_5, null, this.savanna_tree_shadow_7, null, this.savanna_tree_shadow_9, null, this.savanna_tree_shadow_11]
             ],
             deadSpace: [
-                [null, 2/32, null, 2/32, null, 2/32, null, 2/32, null, 2/32, null, 2/32]
+                [null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32]
             ]
         }
 
@@ -501,7 +619,7 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32]
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32]
             ]
         }
 
@@ -529,7 +647,7 @@ export default class StructureImagesClass {
                 [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11]
             ],
             deadSpace: [
-                [null, 16/32, null, 13/32, null, 16/32, null, 16/32, null, 13/32, null, 16/32]
+                [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32]
             ]
         }
 
@@ -561,11 +679,11 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32],
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
             ]
 
         }
@@ -598,11 +716,11 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32],
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
             ]
         }
 
@@ -634,11 +752,11 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32],
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
             ]
         }
 
@@ -670,11 +788,11 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32],
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
             ]
         }
 
@@ -706,11 +824,11 @@ export default class StructureImagesClass {
                 [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
             ],
             deadSpace: [
-                [null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32, null, 11/32],
-                [null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32, null, 13/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
-                [null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32, null, 18/32],
+                [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+                [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+                [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
             ]
         }
 

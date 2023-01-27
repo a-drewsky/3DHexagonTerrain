@@ -24,6 +24,8 @@ import small_round_shadow_7 from '../images/shadows/small_round_shadow_7.png'
 import small_round_shadow_9 from '../images/shadows/small_round_shadow_9.png'
 import small_round_shadow_11 from '../images/shadows/small_round_shadow_11.png'
 
+import rubble_pile from '../images/modifiers/rubble_pile.png'
+
 export default class ModifierImagesClass {
 
     constructor() {
@@ -57,6 +59,8 @@ export default class ModifierImagesClass {
             small_round_shadow_7: new Image(),
             small_round_shadow_9: new Image(),
             small_round_shadow_11: new Image(),
+
+            rubble_pile: new Image()
 
         }
 
@@ -105,6 +109,8 @@ export default class ModifierImagesClass {
         this.small_round_shadow_11.src = small_round_shadow_11
 
         this.empty_mine.src = empty_mine
+
+        this.rubble_pile.src = rubble_pile
 
 
         this.size = {
@@ -206,6 +212,22 @@ export default class ModifierImagesClass {
         this.emptymine = {
             modifierImages: [
                 this.empty_mine
+            ],
+            shadowImages: [
+                [null, null, null, null, null, null, null, null, null, null, null, null]
+            ],
+            shadowSize: {
+                width: 0,
+                height: 0
+            },
+            shadowOffset: {
+                x: 0,
+                y: 0
+            }
+        }
+        this.rubblePile = {
+            modifierImages: [
+                this.rubble_pile
             ],
             shadowImages: [
                 [null, null, null, null, null, null, null, null, null, null, null, null]
