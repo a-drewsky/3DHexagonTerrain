@@ -1,11 +1,9 @@
 
 import HexMapControllerUtilsClass from './HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
-
 import HexMapPathFinderClass from "../utils/HexMapPathFinder"
-
-import HexMapViewSpritesRendererClass from '../view/HexMapViewSpritesRenderer';
 import HexMapViewUtilsClass from '../view/HexMapViewUtils';
+import HexMapConfigClass from '../config/hexMapConfig';
 
 export default class HexMapControllerClass {
 
@@ -29,6 +27,8 @@ export default class HexMapControllerClass {
 
         this.renderer = renderer
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
+
+        this.config = new HexMapConfigClass()
 
         this.uiComponents = uiComponents
 
@@ -72,7 +72,7 @@ export default class HexMapControllerClass {
         let tileObj = this.hexMapData.getEntry(hoverTile.q, hoverTile.r)
 
         if (this.utils.getSelection(tileObj.position.q, tileObj.position.r) == null) {
-            this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover')
+            this.utils.setSelection(tileObj.position.q, tileObj.position.r, this.hexMapData.hoverType)
         }
     }
 
@@ -99,19 +99,19 @@ export default class HexMapControllerClass {
 
     mineOre = () => {
 
-        if(this.selectedUnit == null) return
+        if (this.selectedUnit == null) return
 
         let targetTile = this.hexMapData.getSelectedActionTile()
-        if(targetTile == null) return
+        if (targetTile == null) return
 
         let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
-        if(targetStructure == null) return
+        if (targetStructure == null) return
 
         this.selectedUnit.target = targetStructure
 
         let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
 
-        if(neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length==1){
+        if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.utils.mineOre(this.selectedUnit, targetTile)
             this.utils.resetSelected()
             this.hexMapData.state = 'animation'
@@ -141,10 +141,10 @@ export default class HexMapControllerClass {
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange+1)
+        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
         moveSetPlus1 = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
 
-        if(moveSetPlus1.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
+        if (moveSetPlus1.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.utils.resetSelected()
             this.utils.setSelection(tile.position.q, tile.position.r, 'action')
             this.selectedUnit = unit
@@ -206,6 +206,9 @@ export default class HexMapControllerClass {
             case 'selectMovement':
                 this.selectMovement(tileClicked, tile, x, y)
                 return
+            case 'placeUnit':
+                this.addUnit(tile)
+                return
             case 'selectAction':
                 return
             case 'animation':
@@ -214,6 +217,11 @@ export default class HexMapControllerClass {
     }
 
     click = (x, y) => {
+
+        switch (this.hexMapData.hoverType) {
+
+        }
+
         this.hexMapData.clickPos = { x: x, y: y }
         this.hexMapData.clickMovePos = { x: x, y: y }
     }
@@ -314,38 +322,22 @@ export default class HexMapControllerClass {
         }
     }
 
-    addUnit = () => {
+    setPlaceUnit = () => {
+        this.utils.resetHover()
+        this.hexMapData.hoverType = 'hover_place'
+        this.hexMapData.state = 'placeUnit'
+    }
 
-        let selectedTile = this.hexMapData.getSelected()
+    addUnit = (tile) => {
 
-        console.log(this.utils.getSelection(selectedTile.position.q, selectedTile.position.r))
-
-        if (selectedTile != null && this.utils.getSelection(selectedTile.position.q, selectedTile.position.r) == 'info') {
-            let unit = {
-                position: {
-                    q: selectedTile.position.q,
-                    r: selectedTile.position.r
-                },
-                path: [],
-                destination: null,
-                destinationStartTime: null,
-                destinationCurTime: null,
-                name: 'Example Unit',
-                type: 'units',
-                sprite: 'exampleUnit',
-                state: 'idle',
-                frame: 0,
-                frameStartTime: Date.now(),
-                frameCurTime: Date.now(),
-                rotation: 3,
-                tileHeight: 3,
-                movementRange: 5,
-                renderImages: [],
-                renderShadowImages: []
-            }
+        if (tile != null) {
+            let unit = this.config.unit(tile.position)
             this.renderer.renderUnit(unit)
             this.hexMapData.unitList.push(unit)
         }
+
+        this.hexMapData.hoverType = 'hover_select'
+        this.hexMapData.state = 'selectTile'
 
         this.utils.resetSelected()
 

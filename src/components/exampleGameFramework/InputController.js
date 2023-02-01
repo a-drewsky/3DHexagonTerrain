@@ -26,7 +26,7 @@ export default class InputControllerClass {
             this.gameManager.objectMap.get('hexMap').controller.rotateRight()
             return
          case 'addUnit':
-            this.gameManager.objectMap.get('hexMap').controller.addUnit()
+            this.gameManager.objectMap.get('hexMap').controller.setPlaceUnit()
             return
          case 'switchView':
             if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) this.gameManager.objectMap.get('hexMap').switchView()

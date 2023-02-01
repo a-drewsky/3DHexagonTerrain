@@ -78,18 +78,20 @@ export default class HexMapControllerUtilsClass {
         this.hexMapData.selections = {
             action: null,
             attack: null,
-            hover: null,
             info: null,
             path: null,
             unit: null,
             target: null,
             movement: [],
+            hover_select: null,
+            hover_place: null,
    
          }
     }
 
     resetHover = () => {
-        this.hexMapData.selections['hover'] = null
+        this.hexMapData.selections['hover_select'] = null
+        this.hexMapData.selections['hover_place'] = null
     }
 
     clearContextMenu = () => {

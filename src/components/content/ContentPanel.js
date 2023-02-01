@@ -233,10 +233,6 @@ const ContentPanel = () => {
                <Form className='mt-5 mb-5 border w-100 p-3 mx-auto' onSubmit={startNewGame}>
 
                   <Form.Group className='d-flex justify-content-center'>
-                     <Button className='m-1' onClick={() => { gameClass.uiInput('addUnit') }}>Add unit</Button>
-                  </Form.Group>
-
-                  <Form.Group className='d-flex justify-content-center'>
                      <Button className='m-1' onClick={() => { gameClass.uiInput('switchView') }}>Switch view</Button>
                   </Form.Group>
 

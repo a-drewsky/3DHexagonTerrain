@@ -16,14 +16,16 @@ export default class HexMapDataClass {
       this.selections = {
          action: null,
          attack: null,
-         hover: null,
          info: null,
          path: null,
          unit: null,
          target: null,
          movement: [],
-
+         hover_select: null,
+         hover_place: null
       }
+
+      this.hoverType = 'hover_select'
 
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
