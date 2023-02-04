@@ -17,6 +17,7 @@ export default class HexMapConfigClass {
             type: 'units',
             sprite: 'villager',
             state: 'idle',
+            futureState: null,
             frame: 0,
             frameStartTime: Date.now(),
             frameCurTime: Date.now(),

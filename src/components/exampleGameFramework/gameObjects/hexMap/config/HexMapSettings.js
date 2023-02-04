@@ -7,6 +7,7 @@ export default class HexMapSettingsClass {
         this.TRAVEL_TIME = 500
 
         this.MINE_TIME = 2000
+        this.ATTACK_TIME = 1600
 
         this.JUMP_AMOUNT = 4
 

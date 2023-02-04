@@ -14,6 +14,7 @@ export default class HexMapUpdaterClass {
         this.animationRate = settings.AMIMATION_RATE
         this.travelTime = settings.TRAVEL_TIME
         this.mineTime = settings.MINE_TIME
+        this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
@@ -50,20 +51,20 @@ export default class HexMapUpdaterClass {
 
         mine.state = newState
 
-        if(mine.state < 4){
+        if (mine.state < 4) {
             this.renderer.renderStructure(mine)
         } else {
             let emptymine = this.config.emptymine(mine.position)
             this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
         }
-        
+
     }
 
     updateUnit = (unit) => {
 
         this.setUnitFrame(unit)
 
-        switch(unit.state){
+        switch (unit.state) {
             case 'walk':
             case 'jumpUp':
             case 'jumpDown':
@@ -71,6 +72,9 @@ export default class HexMapUpdaterClass {
                 return
             case 'mine':
                 if (unit.target != null) this.updateUnitMining(unit)
+                return
+            case 'attack':
+                if (unit.target != null) this.updateUnitAttacking(unit)
                 return
 
         }
@@ -91,7 +95,7 @@ export default class HexMapUpdaterClass {
     collectMineResources = (mine) => {
         mine.resources -= 25
         this.hexMapData.resources++
-        
+
         this.utils.setResourceBar(this.hexMapData.resources)
         this.updateMine(mine)
     }
@@ -101,6 +105,27 @@ export default class HexMapUpdaterClass {
         if (unit.animationCurTime - unit.animationStartTime >= this.mineTime) {
 
             this.collectMineResources(unit.target)
+
+            unit.target = null
+            unit.animationCurTime = null
+            unit.animationStartTime = null
+
+            //make some sort of setState function
+            unit.state = 'idle'
+            unit.frame = 0
+
+            this.renderer.renderUnit(unit)
+
+            this.utils.resetSelected()
+
+            this.hexMapData.state = 'selectTile'
+        }
+    }
+
+    updateUnitAttacking = (unit) => {
+        unit.animationCurTime = Date.now()
+        if (unit.animationCurTime - unit.animationStartTime >= this.attackTime) {
+
 
             unit.target = null
             unit.animationCurTime = null
@@ -166,18 +191,16 @@ export default class HexMapUpdaterClass {
                 unit.destinationStartTime = null
                 unit.frame = 0
 
-                if(unit.target == null) {
+                if (unit.futureState == null) {
                     unit.state = 'idle'
                     this.renderer.renderUnit(unit)
                     this.utils.resetSelected()
                     this.hexMapData.state = 'selectTile'
                 } else {
-                    this.utils.mineOre(unit, unit.target)
-                    this.utils.resetSelected()
-                    this.hexMapData.state = 'animation'
-                    this.utils.clearContextMenu()
+                    console.log(unit.futureState)
+                    this.utils.setUnitFutureState(unit)
                 }
-                
+
             }
 
         }

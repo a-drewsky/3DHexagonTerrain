@@ -26,16 +26,16 @@ export default class HexMapControllerUtilsClass {
 
         let filteredSelectionList = []
 
-        for(let sel of selectionList){
-            if(sel[1] == null) continue
-            if(Array.isArray(sel[1])){
-                for(let arrSel of sel[1]){
-                    filteredSelectionList.push({position: arrSel, selection: sel[0]})
+        for (let sel of selectionList) {
+            if (sel[1] == null) continue
+            if (Array.isArray(sel[1])) {
+                for (let arrSel of sel[1]) {
+                    filteredSelectionList.push({ position: arrSel, selection: sel[0] })
                 }
                 continue
             }
 
-            filteredSelectionList.push({position: sel[1], selection: sel[0]})
+            filteredSelectionList.push({ position: sel[1], selection: sel[0] })
 
         }
         return filteredSelectionList
@@ -47,46 +47,47 @@ export default class HexMapControllerUtilsClass {
         let selected = selectionArr.find(sel => sel.position.q == q && sel.position.r == r)
         if (!selected) return null
         return {
-            position: {q: selected.position.q, r: selected.position.r},
+            position: { q: selected.position.q, r: selected.position.r },
             selection: selected.selection
         }
     }
 
     getSelection = (q, r) => {
         let selected = this.getSelectionObj(q, r)
-        if(selected == null) return null
+        if (selected == null) return null
         return selected.selection
     }
 
     setSelection = (q, r, selection) => {
-        if(selection == 'movement'){
-            this.hexMapData.selections[selection].push({q: q, r: r})
+        console.log(this.hexMapData.selections)
+        if (selection == 'movement' || selection == 'action' || selection == 'attack') {
+            this.hexMapData.selections[selection].push({ q: q, r: r })
         } else {
-            this.hexMapData.selections[selection] = {q: q, r: r}
+            this.hexMapData.selections[selection] = { q: q, r: r }
         }
     }
 
     removeSelection = (q, r) => {
         let selected = this.getSelectionObj(q, r)
 
-        if(selected == null) return
-        if(selected.selection == 'movement') this.hexMapData.selections['movement'] = []
+        if (selected == null) return
+        if (selected.selection == 'movement' || selected.selection == 'action' || selected.selection == 'attack') this.hexMapData.selections[selected.selection] = []
         else this.hexMapData.selections[selected.selection] = null
     }
 
     resetSelected = () => {
         this.hexMapData.selections = {
-            action: null,
-            attack: null,
             info: null,
             path: null,
             unit: null,
             target: null,
             movement: [],
+            action: [],
+            attack: [],
             hover_select: null,
             hover_place: null,
-   
-         }
+
+        }
     }
 
     resetHover = () => {
@@ -119,21 +120,21 @@ export default class HexMapControllerUtilsClass {
 
     findPath = (startTile, targetTile) => {
 
-        if(targetTile == null || startTile == null) return
-        
+        if (targetTile == null || startTile == null) return
+
         let target = targetTile.position
         let start = startTile.position
 
         let path = this.pathFinder.findPath(start, target)
 
-        if(!path) return null
+        if (!path) return null
 
         return path
     }
 
     findClosestAdjacentPath = (startTile, targetTile) => {
-        if(targetTile == null || startTile == null) return
-        
+        if (targetTile == null || startTile == null) return
+
         let target = targetTile.position
         let start = startTile.position
 
@@ -141,7 +142,7 @@ export default class HexMapControllerUtilsClass {
 
         let path = this.pathFinder.findClosestPath(start, target, neighbors)
 
-        if(!path) return null
+        if (!path) return null
 
         return path
     }
@@ -164,7 +165,7 @@ export default class HexMapControllerUtilsClass {
         }
 
     }
-    
+
 
     findMoveSet = () => {
 
@@ -174,7 +175,7 @@ export default class HexMapControllerUtilsClass {
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange+1)
+        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
 
         if (!moveSet) return
 
@@ -185,10 +186,15 @@ export default class HexMapControllerUtilsClass {
         }
 
         //search for mines
-        for(let tileObj of moveSetPlus1){
+        for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if(this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'mine'){
+            if (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'mine') {
                 this.setSelection(tile.position.q, tile.position.r, 'action')
+                continue
+            }
+            if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null) {
+                this.setSelection(tile.position.q, tile.position.r, 'attack')
+                continue
             }
         }
     }
@@ -272,6 +278,26 @@ export default class HexMapControllerUtilsClass {
         }
     }
 
+    setUnitFutureState = (unit) => {
+
+        console.log(unit.futureState)
+
+        switch (unit.futureState) {
+            case 'mine':
+                this.mineOre(unit, unit.target)
+                break
+            case 'attack':
+                this.attackUnit(unit, unit.target)
+                break
+
+        }
+
+        this.resetSelected()
+        this.hexMapData.state = 'animation'
+        unit.futureState = null
+
+    }
+
     mineOre = (unit, targetTile) => {
 
         unit.animationStartTime = Date.now()
@@ -289,11 +315,28 @@ export default class HexMapControllerUtilsClass {
 
         unit.state = 'mine'
         unit.frame = 0
-
-        console.log(unit.state)
     }
 
-    getSelectedTile = (x,y, rotatedMap) => {
+    attackUnit = (unit, targetTile) => {
+
+        unit.animationStartTime = Date.now()
+        unit.animationCurTime = Date.now()
+
+        //set rotation
+        let direction = {
+            q: targetTile.position.q - unit.position.q,
+            r: targetTile.position.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+        unit.state = 'attack'
+        unit.frame = 0
+    }
+
+    getSelectedTile = (x, y, rotatedMap) => {
         x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
         y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
 
@@ -349,7 +392,7 @@ export default class HexMapControllerUtilsClass {
             let tileUnit = this.hexMapData.getUnit(testTile.q, testTile.r)
 
             if (tileTerrain && tileTerrain.type == 'structures') {
-                
+
                 let spriteObj = this.images[tileTerrain.type][tileTerrain.sprite]
 
                 let spritePos = {
@@ -372,7 +415,7 @@ export default class HexMapControllerUtilsClass {
 
             }
 
-            if(tileUnit && tileUnit.state == 'idle'){
+            if (tileUnit && tileUnit.state == 'idle') {
                 let spriteObj = this.images[tileUnit.type][tileUnit.sprite]
 
                 let spritePos = {
@@ -404,15 +447,15 @@ export default class HexMapControllerUtilsClass {
 
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
-        
+
         let size = this.hexMapData.size;
         let squish = this.hexMapData.squish;
 
         let zoom = zoomLevel * zoomAmount
 
         let centerPos = {
-            x: this.camera.position.x + zoom/2 + this.canvas.width / 2 - this.hexMapData.posMap.get(this.camera.rotation).x,
-            y: this.camera.position.y + zoom/2 * (this.canvas.height/this.canvas.width) + this.canvas.height / 2 - this.hexMapData.posMap.get(this.camera.rotation).y
+            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.hexMapData.posMap.get(this.camera.rotation).x,
+            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.hexMapData.posMap.get(this.camera.rotation).y
         }
 
 

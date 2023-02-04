@@ -101,7 +101,7 @@ export default class HexMapControllerClass {
 
         if (this.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedActionTile()
+        let targetTile = this.hexMapData.getSelectedTargetTile()
         if (targetTile == null) return
 
         let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
@@ -117,6 +117,35 @@ export default class HexMapControllerClass {
             this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
         } else {
+            this.selectedUnit.futureState = 'mine'
+            this.utils.lerpToTarget(this.selectedUnit, targetTile)
+            this.utils.resetSelected()
+            this.hexMapData.state = 'animation'
+            this.utils.clearContextMenu()
+        }
+    }
+
+    attack = () => {
+
+        if (this.selectedUnit == null) return
+
+        let targetTile = this.hexMapData.getSelectedTargetTile()
+        if (targetTile == null) return
+
+        let targetUnit = this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r)
+        if (targetUnit == null) return
+
+        this.selectedUnit.target = targetUnit
+
+        let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
+
+        if (neighbors.filter(tile => tile.q == targetUnit.position.q && tile.r == targetUnit.position.r).length == 1) {
+            this.utils.attackUnit(this.selectedUnit, targetUnit)
+            this.utils.resetSelected()
+            this.hexMapData.state = 'animation'
+            this.utils.clearContextMenu()
+        } else {
+            this.selectedUnit.futureState = 'attack'
             this.utils.lerpToTarget(this.selectedUnit, targetTile)
             this.utils.resetSelected()
             this.hexMapData.state = 'animation'
@@ -142,15 +171,26 @@ export default class HexMapControllerClass {
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
-        moveSetPlus1 = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
+        let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
+        let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null)
 
-        if (moveSetPlus1.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
+        if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.utils.resetSelected()
-            this.utils.setSelection(tile.position.q, tile.position.r, 'action')
+            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
             this.selectedUnit = unit
             this.hexMapData.state = 'selectAction'
 
             this.utils.setContextMenu(x, y, ['btnMine', 'btnCancel'])
+            return
+        }
+
+        if (attackMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
+            this.utils.resetSelected()
+            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectedUnit = unit
+            this.hexMapData.state = 'selectAction'
+
+            this.utils.setContextMenu(x, y, ['btnAttack', 'btnCancel'])
             return
         }
 
@@ -217,10 +257,6 @@ export default class HexMapControllerClass {
     }
 
     click = (x, y) => {
-
-        switch (this.hexMapData.hoverType) {
-
-        }
 
         this.hexMapData.clickPos = { x: x, y: y }
         this.hexMapData.clickMovePos = { x: x, y: y }

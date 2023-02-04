@@ -16,6 +16,9 @@ export default class InputControllerClass {
          case 'mine':
             this.gameManager.objectMap.get('hexMap').controller.mineOre();
             return
+         case 'attack':
+            this.gameManager.objectMap.get('hexMap').controller.attack();
+            return
          case 'cancel':
             this.gameManager.objectMap.get('hexMap').controller.cancelMovement();
             return

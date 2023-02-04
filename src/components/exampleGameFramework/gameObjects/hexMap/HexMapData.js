@@ -14,13 +14,13 @@ export default class HexMapDataClass {
       this.unitList = [];
 
       this.selections = {
-         action: null,
-         attack: null,
          info: null,
          path: null,
          unit: null,
          target: null,
          movement: [],
+         action: [],
+         attack: [],
          hover_select: null,
          hover_place: null
       }
@@ -208,9 +208,7 @@ export default class HexMapDataClass {
 
    //return the selected unit tile or null
    getSelectedActionTile = () => {
-      let selected = this.selections['action']
-      if (selected === undefined) return null
-      return this.getEntry(selected.q, selected.r)
+      return this.selections['action']
    }
 
    //return the selected unit tile or null

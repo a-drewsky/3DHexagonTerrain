@@ -8,6 +8,7 @@ const ContextMenu = (props) => {
 
             {props.buttonList.includes('btnMove') && <Button id='btnMove' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('move')}}>Move</Button>}
             {props.buttonList.includes('btnMine') && <Button id='btnMine' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('mine')}}>Mine</Button>}
+            {props.buttonList.includes('btnAttack') && <Button id='btnAttack' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('attack')}}>Attack</Button>}
             {props.buttonList.includes('btnCancel') && <Button id='btnCancel' className='d-block mx-auto my-2' onClick={() => {props.gameClass.uiInput('cancel')}}>Cancel</Button>}
 
         </div>
