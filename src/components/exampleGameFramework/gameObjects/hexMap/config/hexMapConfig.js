@@ -37,9 +37,27 @@ export default class HexMapConfigClass {
             },
             name: 'Stronghold',
             type: 'structures',
+            tag: 'base',
             sprite: 'base',
             state: 0,
             tileHeight: 2,
+            images: [],
+            shadowImages: []
+        }
+    }
+
+    mainBase = (pos, posName) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            name: 'Main Base',
+            type: 'structures',
+            tag: 'base',
+            sprite: `mainbase_q${posName.q}r${posName.r}`,
+            state: 0,
+            tileHeight: 3,
             images: [],
             shadowImages: []
         }
@@ -160,6 +178,7 @@ export default class HexMapConfigClass {
             },
             name: 'Large Rock',
             type: 'structures',
+            tag: 'blocker',
             sprite: 'largerock',
             state: 0,
             tileHeight: 2,
@@ -176,6 +195,7 @@ export default class HexMapConfigClass {
             },
             name: 'Empty Mine',
             type: 'modifiers',
+            tag: 'ruins',
             modifierType: 'singleImage',
             sprite: 'emptymine',
             state: 0,
@@ -194,6 +214,7 @@ export default class HexMapConfigClass {
             name: 'Rocks',
             type: 'modifiers',
             modifierType: 'components',
+            tag: 'ruins',
             sprite: 'rocks',
             state: 0,
             tileHeight: 1,
@@ -211,6 +232,7 @@ export default class HexMapConfigClass {
             name: 'Forest',
             type: 'modifiers',
             modifierType: 'components',
+            tag: 'smallTrees',
             sprite: 'oaktree',
             state: 0,
             tileHeight: 2,
@@ -228,6 +250,7 @@ export default class HexMapConfigClass {
             name: 'Forest',
             type: 'modifiers',
             modifierType: 'components',
+            tag: 'smallTrees',
             sprite: 'tundratree',
             state: 0,
             tileHeight: 2,
@@ -245,6 +268,7 @@ export default class HexMapConfigClass {
             name: 'Cacti',
             type: 'modifiers',
             modifierType: 'components',
+            tag: 'smallTrees',
             sprite: 'deserttree',
             state: 0,
             tileHeight: 2,

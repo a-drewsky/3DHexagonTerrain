@@ -59,7 +59,6 @@ export default class HexMapControllerUtilsClass {
     }
 
     setSelection = (q, r, selection) => {
-        console.log(this.hexMapData.selections)
         if (selection == 'movement' || selection == 'action' || selection == 'attack') {
             this.hexMapData.selections[selection].push({ q: q, r: r })
         } else {
@@ -192,7 +191,8 @@ export default class HexMapControllerUtilsClass {
                 this.setSelection(tile.position.q, tile.position.r, 'action')
                 continue
             }
-            if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null) {
+            if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'base')) {
                 this.setSelection(tile.position.q, tile.position.r, 'attack')
                 continue
             }

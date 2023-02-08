@@ -1,11 +1,13 @@
 export default class HexMapBuilderUtilsClass {
 
-    constructor(hexMapData, settings) {
+    constructor(hexMapData, settings, config) {
 
         this.hexMapData = hexMapData
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
 
         this.biomeGenSettings = settings.BIOME_GENERATION
+
+        this.config = config
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {
@@ -100,19 +102,7 @@ export default class HexMapBuilderUtilsClass {
             if (posName.q == -1) posName.q = 'm1'
             if (posName.r == -1) posName.r = 'm1'
 
-            let terrain = {
-                position: {
-                    q: tileToSetKey.q,
-                    r: tileToSetKey.r
-                },
-                name: 'Main Base',
-                type: 'structures',
-                sprite: `mainbase_q${posName.q}r${posName.r}`,
-                state: 0,
-                tileHeight: 3,
-                images: [],
-                shadowImages: []
-            }
+            let terrain = this.config.mainBase(tileToSetKey, posName)
 
             let curTerrainIndex = this.hexMapData.getTerrainIndex(terrain.position.q, terrain.position.r)
 

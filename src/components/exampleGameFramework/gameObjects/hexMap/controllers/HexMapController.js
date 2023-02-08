@@ -132,15 +132,22 @@ export default class HexMapControllerClass {
         let targetTile = this.hexMapData.getSelectedTargetTile()
         if (targetTile == null) return
 
-        let targetUnit = this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r)
-        if (targetUnit == null) return
+        let targetObject
 
-        this.selectedUnit.target = targetUnit
+        if(this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r) != null){
+            targetObject = this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r)
+        } else {
+            if(this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r) == null) return
+            targetObject = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+        }
+        if (targetObject == null) return
+
+        this.selectedUnit.target = targetObject
 
         let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
 
-        if (neighbors.filter(tile => tile.q == targetUnit.position.q && tile.r == targetUnit.position.r).length == 1) {
-            this.utils.attackUnit(this.selectedUnit, targetUnit)
+        if (neighbors.filter(tile => tile.q == targetObject.position.q && tile.r == targetObject.position.r).length == 1) {
+            this.utils.attackUnit(this.selectedUnit, targetObject)
             this.utils.resetSelected()
             this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
@@ -172,7 +179,8 @@ export default class HexMapControllerClass {
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
         let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
-        let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null)
+        let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null
+            || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'base'))
 
         if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.utils.resetSelected()

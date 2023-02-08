@@ -18,7 +18,7 @@ export default class HexMapBuilderTerrainClass {
 
       this.config = config
 
-      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings)
+      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, config)
    }
 
    generateTerrain = (q, r, mapSize) => {

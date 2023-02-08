@@ -31,12 +31,36 @@ import amethyst_mine_3 from '../images/structures/mines/amethyst_mine_3.png'
 import amethyst_mine_4 from '../images/structures/mines/amethyst_mine_4.png'
 import amethyst_mine_5 from '../images/structures/mines/amethyst_mine_5.png'
 
-import base_1 from '../images/structures/bases/base_1.png'
-import base_3 from '../images/structures/bases/base_3.png'
-import base_5 from '../images/structures/bases/base_5.png'
-import base_7 from '../images/structures/bases/base_7.png'
-import base_9 from '../images/structures/bases/base_9.png'
-import base_11 from '../images/structures/bases/base_11.png'
+import base_1_1 from '../images/structures/bases/1/base_1_1.png'
+import base_1_2 from '../images/structures/bases/1/base_1_2.png'
+import base_1_3 from '../images/structures/bases/1/base_1_3.png'
+import base_1_4 from '../images/structures/bases/1/base_1_4.png'
+
+import base_3_1 from '../images/structures/bases/3/base_3_1.png'
+import base_3_2 from '../images/structures/bases/3/base_3_2.png'
+import base_3_3 from '../images/structures/bases/3/base_3_3.png'
+import base_3_4 from '../images/structures/bases/3/base_3_4.png'
+
+import base_5_1 from '../images/structures/bases/5/base_5_1.png'
+import base_5_2 from '../images/structures/bases/5/base_5_2.png'
+import base_5_3 from '../images/structures/bases/5/base_5_3.png'
+import base_5_4 from '../images/structures/bases/5/base_5_4.png'
+
+import base_7_1 from '../images/structures/bases/7/base_7_1.png'
+import base_7_2 from '../images/structures/bases/7/base_7_2.png'
+import base_7_3 from '../images/structures/bases/7/base_7_3.png'
+import base_7_4 from '../images/structures/bases/7/base_7_4.png'
+
+import base_9_1 from '../images/structures/bases/9/base_9_1.png'
+import base_9_2 from '../images/structures/bases/9/base_9_2.png'
+import base_9_3 from '../images/structures/bases/9/base_9_3.png'
+import base_9_4 from '../images/structures/bases/9/base_9_4.png'
+
+import base_11_1 from '../images/structures/bases/11/base_11_1.png'
+import base_11_2 from '../images/structures/bases/11/base_11_2.png'
+import base_11_3 from '../images/structures/bases/11/base_11_3.png'
+import base_11_4 from '../images/structures/bases/11/base_11_4.png'
+
 
 import large_rock_shadow_1 from '../images/shadows/large_round_shadow_1.png'
 import large_rock_shadow_3 from '../images/shadows/large_round_shadow_3.png'
@@ -138,12 +162,30 @@ export default class StructureImagesClass {
             amethystmine_sprite_4: new Image(),
             amethystmine_sprite_5: new Image(),
 
-            base_sprite_1: new Image(),
-            base_sprite_3: new Image(),
-            base_sprite_5: new Image(),
-            base_sprite_7: new Image(),
-            base_sprite_9: new Image(),
-            base_sprite_11: new Image(),
+            base_1_1: new Image(),
+            base_1_2: new Image(),
+            base_1_3: new Image(),
+            base_1_4: new Image(),
+            base_3_1: new Image(),
+            base_3_2: new Image(),
+            base_3_3: new Image(),
+            base_3_4: new Image(),
+            base_5_1: new Image(),
+            base_5_2: new Image(),
+            base_5_3: new Image(),
+            base_5_4: new Image(),
+            base_7_1: new Image(),
+            base_7_2: new Image(),
+            base_7_3: new Image(),
+            base_7_4: new Image(),
+            base_9_1: new Image(),
+            base_9_2: new Image(),
+            base_9_3: new Image(),
+            base_9_4: new Image(),
+            base_11_1: new Image(),
+            base_11_2: new Image(),
+            base_11_3: new Image(),
+            base_11_4: new Image(),
 
             large_rock_shadow_1: new Image(),
             large_rock_shadow_3: new Image(),
@@ -249,12 +291,30 @@ export default class StructureImagesClass {
         this.amethystmine_sprite_4.src = amethyst_mine_4
         this.amethystmine_sprite_5.src = amethyst_mine_5
 
-        this.base_sprite_1.src = base_1
-        this.base_sprite_3.src = base_3
-        this.base_sprite_5.src = base_5
-        this.base_sprite_7.src = base_7
-        this.base_sprite_9.src = base_9
-        this.base_sprite_11.src = base_11
+        this.base_1_1.src = base_1_1
+        this.base_1_2.src = base_1_2
+        this.base_1_3.src = base_1_3
+        this.base_1_4.src = base_1_4
+        this.base_3_1.src = base_3_1
+        this.base_3_2.src = base_3_2
+        this.base_3_3.src = base_3_3
+        this.base_3_4.src = base_3_4
+        this.base_5_1.src = base_5_1
+        this.base_5_2.src = base_5_2
+        this.base_5_3.src = base_5_3
+        this.base_5_4.src = base_5_4
+        this.base_7_1.src = base_7_1
+        this.base_7_2.src = base_7_2
+        this.base_7_3.src = base_7_3
+        this.base_7_4.src = base_7_4
+        this.base_9_1.src = base_9_1
+        this.base_9_2.src = base_9_2
+        this.base_9_3.src = base_9_3
+        this.base_9_4.src = base_9_4
+        this.base_11_1.src = base_11_1
+        this.base_11_2.src = base_11_2
+        this.base_11_3.src = base_11_3
+        this.base_11_4.src = base_11_4
 
         this.large_rock_shadow_1.src = large_rock_shadow_1
         this.large_rock_shadow_3.src = large_rock_shadow_3
@@ -294,15 +354,15 @@ export default class StructureImagesClass {
         this.main_base_q1rm1_3.src = main_base_q1rm1_3
         this.main_base_q1rm1_4.src = main_base_q1rm1_4
 
-        this.main_base_q1r0_1.src = main_base_q1r0_1 
-        this.main_base_q1r0_2.src = main_base_q1r0_2 
-        this.main_base_q1r0_3.src = main_base_q1r0_3 
-        this.main_base_q1r0_4.src = main_base_q1r0_4 
+        this.main_base_q1r0_1.src = main_base_q1r0_1
+        this.main_base_q1r0_2.src = main_base_q1r0_2
+        this.main_base_q1r0_3.src = main_base_q1r0_3
+        this.main_base_q1r0_4.src = main_base_q1r0_4
 
-        this.main_base_q0r1_1.src = main_base_q0r1_1 
-        this.main_base_q0r1_2.src = main_base_q0r1_2 
-        this.main_base_q0r1_3.src = main_base_q0r1_3 
-        this.main_base_q0r1_4.src = main_base_q0r1_4 
+        this.main_base_q0r1_1.src = main_base_q0r1_1
+        this.main_base_q0r1_2.src = main_base_q0r1_2
+        this.main_base_q0r1_3.src = main_base_q0r1_3
+        this.main_base_q0r1_4.src = main_base_q0r1_4
 
         this.main_base_qm1r1_1.src = main_base_qm1r1_1
         this.main_base_qm1r1_2.src = main_base_qm1r1_2
@@ -641,9 +701,15 @@ export default class StructureImagesClass {
                 y: 0.5
             },
             images: [
-                [null, this.base_sprite_1, null, this.base_sprite_3, null, this.base_sprite_5, null, this.base_sprite_7, null, this.base_sprite_9, null, this.base_sprite_11]
+                [null, this.base_1_1, null, this.base_3_1, null, this.base_5_1, null, this.base_7_1, null, this.base_9_1, null, this.base_11_1],
+                [null, this.base_1_2, null, this.base_3_2, null, this.base_5_2, null, this.base_7_2, null, this.base_9_3, null, this.base_11_2],
+                [null, this.base_1_3, null, this.base_3_3, null, this.base_5_3, null, this.base_7_3, null, this.base_9_3, null, this.base_11_3],
+                [null, this.base_1_4, null, this.base_3_4, null, this.base_5_4, null, this.base_7_4, null, this.base_9_4, null, this.base_11_4]
             ],
             shadowImages: [
+                [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11],
+                [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11],
+                [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11],
                 [null, this.base_shadow_1, null, this.base_shadow_3, null, this.base_shadow_5, null, this.base_shadow_7, null, this.base_shadow_9, null, this.base_shadow_11]
             ],
             deadSpace: [
