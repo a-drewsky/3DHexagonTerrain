@@ -187,12 +187,12 @@ export default class HexMapControllerUtilsClass {
         //search for mines
         for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'mine') {
+            if (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource') {
                 this.setSelection(tile.position.q, tile.position.r, 'action')
                 continue
             }
             if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
-                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).tag == 'base')) {
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
                 this.setSelection(tile.position.q, tile.position.r, 'attack')
                 continue
             }
@@ -226,28 +226,21 @@ export default class HexMapControllerUtilsClass {
         unit.destinationStartTime = Date.now()
         unit.destinationCurTime = Date.now()
 
-        //set rotation
-        let direction = {
-            q: unit.destination.q - unit.position.q,
-            r: unit.destination.r - unit.position.r
-        }
-
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-
-        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
-
-        unit.state = 'walk'
-        unit.frame = 0
+        this.setUnitDirection(unit, unit.destination)
 
         if (nextPosition.height != startPosition.height) {
-            unit.state = 'jumpUp'
+            this.setUnitAnimation(unit, 'jumpUp')
+        } else {
+            this.setUnitAnimation(unit, 'walk')
         }
 
     }
 
-    lerpToTarget = (unit, target) => {
+    lerpToTarget = (unit, target, futureState) => {
 
         if (unit == null) return
+
+        unit.futureState = futureState
 
         let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
@@ -278,6 +271,24 @@ export default class HexMapControllerUtilsClass {
         }
     }
 
+    setUnitIdle = (unit) => {
+        unit.target = null
+        unit.animationCurTime = null
+        unit.animationStartTime = null
+
+        unit.state = 'idle'
+        unit.frame = 0
+
+        this.renderer.renderUnit(unit)
+
+        this.resetHexMapState()
+    }
+
+    resetHexMapState = () => {
+        this.resetSelected()
+        this.hexMapData.state = 'selectTile'
+    }
+
     setUnitFutureState = (unit) => {
 
         console.log(unit.futureState)
@@ -292,48 +303,45 @@ export default class HexMapControllerUtilsClass {
 
         }
 
-        this.resetSelected()
-        this.hexMapData.state = 'animation'
         unit.futureState = null
+        this.resetSelected()
 
+    }
+
+    setUnitDirection = (unit, targetPos) => {
+        let direction = {
+            q: targetPos.q - unit.position.q,
+            r: targetPos.r - unit.position.r
+        }
+
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+
+        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+    }
+
+    setUnitAnimation = (unit, state) => {
+        this.hexMapData.state = 'animation'
+        unit.state = state
+        unit.frame = 0
+        unit.animationStartTime = Date.now()
+        unit.animationCurTime = Date.now()
+        unit.frameStartTime = Date.now()
+        unit.frameCurTime = Date.now()
     }
 
     mineOre = (unit, targetTile) => {
 
-        unit.animationStartTime = Date.now()
-        unit.animationCurTime = Date.now()
+        this.setUnitDirection(unit, targetTile.position)
 
-        //set rotation
-        let direction = {
-            q: targetTile.position.q - unit.position.q,
-            r: targetTile.position.r - unit.position.r
-        }
-
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-
-        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
-
-        unit.state = 'mine'
-        unit.frame = 0
+        this.setUnitAnimation(unit, 'mine')
     }
 
-    attackUnit = (unit, targetTile) => {
+    attackUnit = (unit) => {
 
-        unit.animationStartTime = Date.now()
-        unit.animationCurTime = Date.now()
 
-        //set rotation
-        let direction = {
-            q: targetTile.position.q - unit.position.q,
-            r: targetTile.position.r - unit.position.r
-        }
+        this.setUnitDirection(unit, unit.target.position)
 
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-
-        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
-
-        unit.state = 'attack'
-        unit.frame = 0
+        this.setUnitAnimation(unit, 'attack')
     }
 
     getSelectedTile = (x, y, rotatedMap) => {
@@ -391,7 +399,7 @@ export default class HexMapControllerUtilsClass {
             let tileTerrain = this.hexMapData.getTerrain(testTile.q, testTile.r)
             let tileUnit = this.hexMapData.getUnit(testTile.q, testTile.r)
 
-            if (tileTerrain && tileTerrain.type == 'structures') {
+            if (tileTerrain && tileTerrain.type != 'modifier') {
 
                 let spriteObj = this.images[tileTerrain.type][tileTerrain.sprite]
 

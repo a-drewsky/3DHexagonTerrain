@@ -41,7 +41,7 @@ export default class HexMapPathFinderClass {
 
     isValid = (q, r) => {
         let terrain = this.hexMapData.getTerrain(q, r)
-        if(terrain != null && terrain.type == 'structures') return false
+        if(terrain != null && terrain.type != 'modifier') return false
         let unit = this.hexMapData.getUnit(q, r)
         if(unit != null) return false
         return true

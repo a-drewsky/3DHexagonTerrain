@@ -1,11 +1,13 @@
 export default class HexMapViewUtilsClass {
 
-    constructor(hexMapData, camera, settings) {
+    constructor(hexMapData, camera, settings, images) {
 
         this.hexMapData = hexMapData
         this.camera = camera
 
         this.shadowSize = settings.SHADOW_SIZE
+
+        this.images = images
 
         this.shadowPositions = {
             0: {
@@ -497,6 +499,68 @@ export default class HexMapViewUtilsClass {
         }
 
         return tempCanvas
+    }
+
+    addHealthBar = (image, imageSize, object) => {
+
+        if(object.health==100) return image
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        let healthBarIndex = 10 - Math.floor(object.health/10)
+
+        let healthBarSprite = this.images.ui.healthbar
+
+        let healthbarSpriteSize = {
+            width: this.hexMapData.size * 2 * healthBarSprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * healthBarSprite.spriteSize.height
+        }
+
+        let healthbarPos = {
+            x: tempCanvas.width / 2 - healthbarSpriteSize.width/2,
+            y: 0
+        }
+
+        tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
+
+        return tempCanvas
+
+    }
+
+    addResourceBar = (image, imageSize, object) => {
+
+        if(object.resources==100) return image
+
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
+        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        let resourceBarIndex = 10 - Math.floor(object.resources/10)
+
+        let resourceBarSprite = this.images.ui.resourcebar
+
+        let resourcebarSpriteSize = {
+            width: this.hexMapData.size * 2 * resourceBarSprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * resourceBarSprite.spriteSize.height
+        }
+
+        let resourcebarPos = {
+            x: tempCanvas.width / 2 - resourcebarSpriteSize.width/2,
+            y: 0
+        }
+
+        tempctx.drawImage(resourceBarSprite.images[resourceBarIndex], resourcebarPos.x, resourcebarPos.y, resourcebarSpriteSize.width, resourcebarSpriteSize.height)
+
+        return tempCanvas
+
     }
 
     cropOutTilesJump = (image, imageSize, imageOffset, keyObj, rotatedMap, height) => {

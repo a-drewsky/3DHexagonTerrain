@@ -44,7 +44,7 @@ export default class HexMapViewClass {
          11: { q: 0 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
 
-      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings);
+      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
       this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.shadowRotationDims, this.images, this.utils, canvas);
       this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);

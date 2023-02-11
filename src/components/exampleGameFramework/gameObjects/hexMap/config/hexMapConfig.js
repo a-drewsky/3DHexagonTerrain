@@ -14,7 +14,7 @@ export default class HexMapConfigClass {
             animationStartTime: null,
             animationCurTime: null,
             name: 'Villager',
-            type: 'units',
+            type: 'unit',
             sprite: 'villager',
             state: 'idle',
             futureState: null,
@@ -25,7 +25,50 @@ export default class HexMapConfigClass {
             tileHeight: 3,
             movementRange: 5,
             renderImages: [],
-            renderShadowImages: []
+            renderShadowImages: [],
+            health: 100,
+            stateConfig: {
+                idle: {
+                    rate: 'static',
+                    duration: 'continuous',
+                    type: 'static'
+                },
+                walk: {
+                    rate: 150,
+                    duration: 'continuous',
+                    type: 'moving'
+                },
+                jumpUp: {
+                    rate: 'static',
+                    duration: 'continuous',
+                    type: 'moving'
+                },
+                jumpDown: {
+                    rate: 'static',
+                    duration: 'continuous',
+                    type: 'moving'
+                },
+                mine: {
+                    rate: 150,
+                    duration: 1800,
+                    type: 'action'
+                },
+                attack: {
+                    rate: 150,
+                    duration: 750,
+                    type: 'action'
+                },
+                hit: {
+                    rate: 300,
+                    duration: 900,
+                    type: 'action'
+                },
+                death: {
+                    rate: 150,
+                    duration: 600,
+                    type: 'action'
+                }
+            }
         }
     }
 
@@ -36,13 +79,13 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Stronghold',
-            type: 'structures',
-            tag: 'base',
+            type: 'base',
             sprite: 'base',
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            health: 100
         }
     }
 
@@ -53,13 +96,13 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Main Base',
-            type: 'structures',
-            tag: 'base',
+            type: 'base',
             sprite: `mainbase_q${posName.q}r${posName.r}`,
             state: 0,
             tileHeight: 3,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            health: 100
         }
     }
 
@@ -70,8 +113,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Gold Mine',
-            tag: 'mine',
-            type: 'structures',
+            type: 'resource',
             sprite: 'goldmine',
             state: 0,
             tileHeight: 2,
@@ -88,8 +130,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Copper Mine',
-            tag: 'mine',
-            type: 'structures',
+            type: 'resource',
             sprite: 'coppermine',
             state: 0,
             tileHeight: 2,
@@ -106,8 +147,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Iron Mine',
-            tag: 'mine',
-            type: 'structures',
+            type: 'resource',
             sprite: 'ironmine',
             state: 0,
             tileHeight: 2,
@@ -124,8 +164,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Ruby Mine',
-            tag: 'mine',
-            type: 'structures',
+            type: 'resource',
             sprite: 'rubymine',
             state: 0,
             tileHeight: 2,
@@ -142,8 +181,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Amethyst Mine',
-            tag: 'mine',
-            type: 'structures',
+            type: 'resource',
             sprite: 'amethystmine',
             state: 0,
             tileHeight: 2,
@@ -160,8 +198,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Savanna Tree',
-            tag: 'largeTree',
-            type: 'structures',
+            type: 'prop',
             sprite: 'savannatree',
             state: 0,
             tileHeight: 3,
@@ -177,8 +214,7 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Large Rock',
-            type: 'structures',
-            tag: 'blocker',
+            type: 'prop',
             sprite: 'largerock',
             state: 0,
             tileHeight: 2,
@@ -194,10 +230,26 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Empty Mine',
-            type: 'modifiers',
-            tag: 'ruins',
+            type: 'modifier',
             modifierType: 'singleImage',
             sprite: 'emptymine',
+            state: 0,
+            tileHeight: 1,
+            images: [],
+            shadowImages: []
+        }
+    }
+
+    rubblepile = (pos) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            name: 'Rubble Pile',
+            type: 'modifier',
+            modifierType: 'singleImage',
+            sprite: 'rubblepile',
             state: 0,
             tileHeight: 1,
             images: [],
@@ -212,9 +264,8 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Rocks',
-            type: 'modifiers',
+            type: 'modifier',
             modifierType: 'components',
-            tag: 'ruins',
             sprite: 'rocks',
             state: 0,
             tileHeight: 1,
@@ -230,9 +281,8 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Forest',
-            type: 'modifiers',
+            type: 'modifier',
             modifierType: 'components',
-            tag: 'smallTrees',
             sprite: 'oaktree',
             state: 0,
             tileHeight: 2,
@@ -248,9 +298,8 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Forest',
-            type: 'modifiers',
+            type: 'modifier',
             modifierType: 'components',
-            tag: 'smallTrees',
             sprite: 'tundratree',
             state: 0,
             tileHeight: 2,
@@ -266,9 +315,8 @@ export default class HexMapConfigClass {
                 r: pos.r
             },
             name: 'Cacti',
-            type: 'modifiers',
+            type: 'modifier',
             modifierType: 'components',
-            tag: 'smallTrees',
             sprite: 'deserttree',
             state: 0,
             tileHeight: 2,

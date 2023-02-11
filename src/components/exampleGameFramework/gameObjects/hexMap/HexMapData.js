@@ -9,8 +9,6 @@ export default class HexMapDataClass {
 
       this.terrainList = [];
 
-      this.defaultTerrainImages = {}
-
       this.unitList = [];
 
       this.selections = {
@@ -183,6 +181,13 @@ export default class HexMapDataClass {
       let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
       if (index == -1) return null
       return this.unitList[index]
+   }
+
+   //delete unit at position (q, r)
+   deleteUnit = (q, r) => {
+      let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
+      if (index == -1) return
+      this.unitList.splice(index, 1)
    }
 
    //return the selected tile or null

@@ -39,6 +39,7 @@ export default class UiImagesClass {
             healthbar_9: new Image(),
             healthbar_10: new Image(),
             healthbar_11: new Image(),
+
             resourcebar_1: new Image(),
             resourcebar_2: new Image(),
             resourcebar_3: new Image(),
@@ -57,11 +58,14 @@ export default class UiImagesClass {
 
     loadImages = (startGame) => {
 
+
         let imagesLoaded = 0;
         for (let [key, value] of Object.entries(this.images)) {
             this[key] = value;
             value.onload = () => {
                 imagesLoaded++;
+                
+                console.log(imagesLoaded)
                 if (imagesLoaded == Object.keys(this.images).length) {
                     delete this.images;
                     startGame();
@@ -71,28 +75,29 @@ export default class UiImagesClass {
         }
 
 
-        this.healthbar_1 = healthbar_1
-        this.healthbar_2 = healthbar_2
-        this.healthbar_3 = healthbar_3
-        this.healthbar_4 = healthbar_4
-        this.healthbar_5 = healthbar_5
-        this.healthbar_6 = healthbar_6
-        this.healthbar_7 = healthbar_7
-        this.healthbar_8 = healthbar_8
-        this.healthbar_9 = healthbar_9
-        this.healthbar_10 = healthbar_10
-        this.healthbar_11 = healthbar_11
-        this.resourcebar_1 = resourcebar_1
-        this.resourcebar_2 = resourcebar_2
-        this.resourcebar_3 = resourcebar_3
-        this.resourcebar_4 = resourcebar_4
-        this.resourcebar_5 = resourcebar_5
-        this.resourcebar_6 = resourcebar_6
-        this.resourcebar_7 = resourcebar_7
-        this.resourcebar_8 = resourcebar_8
-        this.resourcebar_9 = resourcebar_9
-        this.resourcebar_10 = resourcebar_10
-        this.resourcebar_11 = resourcebar_11
+        this.healthbar_1.src = healthbar_1
+        this.healthbar_2.src = healthbar_2
+        this.healthbar_3.src = healthbar_3
+        this.healthbar_4.src = healthbar_4
+        this.healthbar_5.src = healthbar_5
+        this.healthbar_6.src = healthbar_6
+        this.healthbar_7.src = healthbar_7
+        this.healthbar_8.src = healthbar_8
+        this.healthbar_9.src = healthbar_9
+        this.healthbar_10.src = healthbar_10
+        this.healthbar_11.src = healthbar_11
+
+        this.resourcebar_1.src = resourcebar_1
+        this.resourcebar_2.src = resourcebar_2
+        this.resourcebar_3.src = resourcebar_3
+        this.resourcebar_4.src = resourcebar_4
+        this.resourcebar_5.src = resourcebar_5
+        this.resourcebar_6.src = resourcebar_6
+        this.resourcebar_7.src = resourcebar_7
+        this.resourcebar_8.src = resourcebar_8
+        this.resourcebar_9.src = resourcebar_9
+        this.resourcebar_10.src = resourcebar_10
+        this.resourcebar_11.src = resourcebar_11
 
         this.healthbar = {
             spriteSize: {
@@ -103,7 +108,7 @@ export default class UiImagesClass {
                 x: 0,
                 y: 0.5
             },
-            images: [ healthbar_1, healthbar_2, healthbar_3, healthbar_4, healthbar_5, healthbar_6, healthbar_7, healthbar_8, healthbar_9, healthbar_10, healthbar_11 ]
+            images: [ this.healthbar_1, this.healthbar_2, this.healthbar_3, this.healthbar_4, this.healthbar_5, this.healthbar_6, this.healthbar_7, this.healthbar_8, this.healthbar_9, this.healthbar_10, this.healthbar_11 ]
         }
 
         this.resourcebar = {
@@ -115,7 +120,7 @@ export default class UiImagesClass {
                 x: 0,
                 y: 0.5
             },
-            images: [ resourcebar_1, resourcebar_2, resourcebar_3, resourcebar_4, resourcebar_5, resourcebar_6, resourcebar_7, resourcebar_8, resourcebar_9, resourcebar_10, resourcebar_11 ]
+            images: [ this.resourcebar_1, this.resourcebar_2, this.resourcebar_3, this.resourcebar_4, this.resourcebar_5, this.resourcebar_6, this.resourcebar_7, this.resourcebar_8, this.resourcebar_9, this.resourcebar_10, this.resourcebar_11 ]
         }
 
 

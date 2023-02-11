@@ -43,11 +43,11 @@ import frontLeft_attack_3 from '../images/units/villagerUnit/attack/frontLeft/vi
 import frontLeft_attack_4 from '../images/units/villagerUnit/attack/frontLeft/villager_unit_attack_frontLeft_4.png'
 import frontLeft_attack_5 from '../images/units/villagerUnit/attack/frontLeft/villager_unit_attack_frontLeft_5.png'
 
-import frontLeft_hit_1 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontLeft_1.png'
-import frontLeft_hit_2 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontLeft_2.png'
-import frontLeft_hit_3 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontLeft_3.png'
-import frontLeft_death_1 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontLeft_4.png'
-import frontLeft_death_2 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontLeft_5.png'
+import frontLeft_hit_1 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontleft_1.png'
+import frontLeft_hit_2 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontleft_2.png'
+import frontLeft_hit_3 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontleft_3.png'
+import frontLeft_death_1 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontleft_4.png'
+import frontLeft_death_2 from '../images/units/villagerUnit/death/frontLeft/villager_unit_death_frontleft_5.png'
 
 
 import frontRight_idle_1 from '../images/units/villagerUnit/walk/frontRight/villager_unit_fr_1.png'
@@ -69,11 +69,11 @@ import frontRight_attack_3 from '../images/units/villagerUnit/attack/frontRight/
 import frontRight_attack_4 from '../images/units/villagerUnit/attack/frontRight/villager_unit_attack_frontRight_4.png'
 import frontRight_attack_5 from '../images/units/villagerUnit/attack/frontRight/villager_unit_attack_frontRight_5.png'
 
-import frontRight_hit_1 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontRight_1.png'
-import frontRight_hit_2 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontRight_2.png'
-import frontRight_hit_3 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontRight_3.png'
-import frontRight_death_1 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontRight_4.png'
-import frontRight_death_2 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontRight_5.png'
+import frontRight_hit_1 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontright_1.png'
+import frontRight_hit_2 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontright_2.png'
+import frontRight_hit_3 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontright_3.png'
+import frontRight_death_1 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontright_4.png'
+import frontRight_death_2 from '../images/units/villagerUnit/death/frontRight/villager_unit_death_frontright_5.png'
 
 
 import back_idle_1 from '../images/units/villagerUnit/walk/back/villager_unit_b_1.png'
@@ -121,11 +121,11 @@ import backLeft_attack_3 from '../images/units/villagerUnit/attack/backLeft/vill
 import backLeft_attack_4 from '../images/units/villagerUnit/attack/backLeft/villager_unit_attack_backLeft_4.png'
 import backLeft_attack_5 from '../images/units/villagerUnit/attack/backLeft/villager_unit_attack_backLeft_5.png'
 
-import backLeft_hit_1 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backLeft_1.png'
-import backLeft_hit_2 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backLeft_2.png'
-import backLeft_hit_3 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backLeft_3.png'
-import backLeft_death_1 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backLeft_4.png'
-import backLeft_death_2 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backLeft_5.png'
+import backLeft_hit_1 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backleft_1.png'
+import backLeft_hit_2 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backleft_2.png'
+import backLeft_hit_3 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backleft_3.png'
+import backLeft_death_1 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backleft_4.png'
+import backLeft_death_2 from '../images/units/villagerUnit/death/backLeft/villager_unit_death_backleft_5.png'
 
 
 import backRight_idle_1 from '../images/units/villagerUnit/walk/backRight/villager_unit_br_1.png'
@@ -147,11 +147,11 @@ import backRight_attack_3 from '../images/units/villagerUnit/attack/backRight/vi
 import backRight_attack_4 from '../images/units/villagerUnit/attack/backRight/villager_unit_attack_backRight_4.png'
 import backRight_attack_5 from '../images/units/villagerUnit/attack/backRight/villager_unit_attack_backRight_5.png'
 
-import backRight_hit_1 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backRight_1.png'
-import backRight_hit_2 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backRight_2.png'
-import backRight_hit_3 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backRight_3.png'
-import backRight_death_1 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backRight_4.png'
-import backRight_death_2 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backRight_5.png'
+import backRight_hit_1 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backright_1.png'
+import backRight_hit_2 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backright_2.png'
+import backRight_hit_3 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backright_3.png'
+import backRight_death_1 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backright_4.png'
+import backRight_death_2 from '../images/units/villagerUnit/death/backRight/villager_unit_death_backright_5.png'
 
 import shadow_1 from '../images/shadows/medium_round_shadow_1.png'
 import shadow_3 from '../images/shadows/medium_round_shadow_3.png'
@@ -545,6 +545,18 @@ export default class UnitImagesVillagerClass {
             ]
         }
 
+        this.jumpUp = {
+            images: [
+                [null, this.backRight_jump_1, null, this.frontRight_jump_1, null, this.front_jump_1, null, this.frontLeft_jump_1, null, this.backLeft_jump_1, null, this.back_jump_1]
+            ]
+        }
+
+        this.jumpDown = {
+            images: [
+                [null, this.backRight_jump_2, null, this.frontRight_jump_2, null, this.front_jump_2, null, this.frontLeft_jump_2, null, this.backLeft_jump_2, null, this.back_jump_2]
+            ]
+        }
+
         this.mine = {
             images: [
                 [null, this.backRight_mine_1, null, this.frontRight_mine_1, null, this.front_mine_1, null, this.frontLeft_mine_1, null, this.backLeft_mine_1, null, this.back_mine_1],
@@ -580,18 +592,6 @@ export default class UnitImagesVillagerClass {
                 [null, this.backRight_death_2, null, this.frontRight_death_2, null, this.front_death_2, null, this.frontLeft_death_2, null, this.backLeft_death_2, null, this.back_death_2],
                 [null, this.backRight_death_2, null, this.frontRight_death_2, null, this.front_death_2, null, this.frontLeft_death_2, null, this.backLeft_death_2, null, this.back_death_2],
                 [null, this.backRight_death_2, null, this.frontRight_death_2, null, this.front_death_2, null, this.frontLeft_death_2, null, this.backLeft_death_2, null, this.back_death_2]
-            ]
-        }
-
-        this.jumpUp = {
-            images: [
-                [null, this.backRight_jump_1, null, this.frontRight_jump_1, null, this.front_jump_1, null, this.frontLeft_jump_1, null, this.backLeft_jump_1, null, this.back_jump_1]
-            ]
-        }
-
-        this.jumpDown = {
-            images: [
-                [null, this.backRight_jump_2, null, this.frontRight_jump_2, null, this.front_jump_2, null, this.frontLeft_jump_2, null, this.backLeft_jump_2, null, this.back_jump_2]
             ]
         }
 

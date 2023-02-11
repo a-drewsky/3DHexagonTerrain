@@ -23,7 +23,7 @@ export default class HexMapControllerClass {
 
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, this.camera)
 
-        this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings)
+        this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
 
         this.renderer = renderer
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
@@ -93,7 +93,6 @@ export default class HexMapControllerClass {
     moveUnit = () => {
         if (this.selectedUnit != null) this.utils.lerpUnit(this.selectedUnit)
         this.utils.resetSelected()
-        this.hexMapData.state = 'animation'
         this.utils.clearContextMenu()
     }
 
@@ -114,13 +113,10 @@ export default class HexMapControllerClass {
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.utils.mineOre(this.selectedUnit, targetTile)
             this.utils.resetSelected()
-            this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
         } else {
-            this.selectedUnit.futureState = 'mine'
-            this.utils.lerpToTarget(this.selectedUnit, targetTile)
+            this.utils.lerpToTarget(this.selectedUnit, targetTile, 'mine')
             this.utils.resetSelected()
-            this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
         }
     }
@@ -147,15 +143,12 @@ export default class HexMapControllerClass {
         let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
 
         if (neighbors.filter(tile => tile.q == targetObject.position.q && tile.r == targetObject.position.r).length == 1) {
-            this.utils.attackUnit(this.selectedUnit, targetObject)
+            this.utils.attackUnit(this.selectedUnit)
             this.utils.resetSelected()
-            this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
         } else {
-            this.selectedUnit.futureState = 'attack'
-            this.utils.lerpToTarget(this.selectedUnit, targetTile)
+            this.utils.lerpToTarget(this.selectedUnit, targetTile, 'attack')
             this.utils.resetSelected()
-            this.hexMapData.state = 'animation'
             this.utils.clearContextMenu()
         }
     }
@@ -178,9 +171,9 @@ export default class HexMapControllerClass {
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
-        let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'mine')
+        let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'resource')
         let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null
-            || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).tag == 'base'))
+            || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'base'))
 
         if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.utils.resetSelected()

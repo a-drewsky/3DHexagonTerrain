@@ -4,7 +4,7 @@ export default class HexMapViewSelectionRendererClass {
 
         this.hexMapData = hexMapData
         this.camera = camera
-        this.images = images.highlights
+        this.images = images.highlight
         this.utils = utils
 
     }

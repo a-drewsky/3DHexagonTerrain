@@ -51,7 +51,7 @@ export default class HexMapBuilderUtilsClass {
         if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
 
         let terrainIndex = this.hexMapData.getTerrainIndex(tilePosQ, tilePosR)
-        if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type == 'structures') return false
+        if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type != 'modifier') return false
 
         let doubleTileNeighbors = this.hexMapData.getDoubleNeighborKeys(tilePosQ, tilePosR)
 
@@ -62,7 +62,7 @@ export default class HexMapBuilderUtilsClass {
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
             let terrainIndex = this.hexMapData.getTerrainIndex(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
-            if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type == 'structures') return false
+            if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].type != 'modifier') return false
         }
 
         return true

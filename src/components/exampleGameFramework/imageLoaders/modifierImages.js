@@ -225,7 +225,7 @@ export default class ModifierImagesClass {
                 y: 0
             }
         }
-        this.rubblePile = {
+        this.rubblepile = {
             modifierImages: [
                 this.rubble_pile
             ],

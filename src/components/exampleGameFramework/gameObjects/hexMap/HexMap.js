@@ -19,7 +19,7 @@ export default class HexMapClass {
 
         this.builder = new HexMapBuilderClass(this.data, this.settings);
 
-        this.utils = new HexMapViewUtilsClass(this.data, camera, this.settings)
+        this.utils = new HexMapViewUtilsClass(this.data, camera, this.settings, images)
 
         this.renderer = new HexMapViewSpritesRendererClass(this.data, camera, images, this.utils, this.settings);
 

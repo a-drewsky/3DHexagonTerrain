@@ -181,7 +181,7 @@ export default class HexMapViewMapClass {
 
 
             stackctx.drawImage(
-                this.images.tiles[tileBiome][this.camera.rotation],
+                this.images.tile[tileBiome][this.camera.rotation],
                 0,
                 tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
                 this.hexMapData.size * 2,

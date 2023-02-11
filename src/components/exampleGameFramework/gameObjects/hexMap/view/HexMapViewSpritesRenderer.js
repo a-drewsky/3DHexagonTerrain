@@ -18,8 +18,8 @@ export default class HexMapViewSpritesRendererClass {
 
         //set canvas size
         let canvasSize = {
-            width: this.hexMapData.size * 2 * this.images.modifiers.size.width,
-            height: this.hexMapData.size * 2 * this.images.modifiers.size.height
+            width: this.hexMapData.size * 2 * this.images.modifier.size.width,
+            height: this.hexMapData.size * 2 * this.images.modifier.size.height
         }
 
         let shadowCanvasSize = {
@@ -114,18 +114,18 @@ export default class HexMapViewSpritesRendererClass {
                     if (filteredPositionsList[i].y > 0) {
                         tempctxBottom.drawImage(
                             sprites.modifierImages[filteredPositionsList[i].imageNum],
-                            canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width / 2 + filteredPositionsList[i].x,
-                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifiers.modifierSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width,
-                            this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height
+                            canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifier.modifierSize.width / 2 + filteredPositionsList[i].x,
+                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifier.modifierSize.height / 2 + filteredPositionsList[i].y,
+                            this.hexMapData.size * 2 * this.images.modifier.modifierSize.width,
+                            this.hexMapData.size * 2 * this.images.modifier.modifierSize.height
                         )
                     } else {
                         tempctxTop.drawImage(
                             sprites.modifierImages[filteredPositionsList[i].imageNum],
-                            canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width / 2 + filteredPositionsList[i].x,
-                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifiers.modifierSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * this.images.modifiers.modifierSize.width,
-                            this.hexMapData.size * 2 * this.images.modifiers.modifierSize.height
+                            canvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifier.modifierSize.width / 2 + filteredPositionsList[i].x,
+                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifier.modifierSize.height / 2 + filteredPositionsList[i].y,
+                            this.hexMapData.size * 2 * this.images.modifier.modifierSize.width,
+                            this.hexMapData.size * 2 * this.images.modifier.modifierSize.height
                         )
                     }
                 }
@@ -172,10 +172,10 @@ export default class HexMapViewSpritesRendererClass {
                     if (sprites.shadowImages[filteredPositionsList[i].imageNum][rotation] != null) {
                         tempctx.drawImage(
                             sprites.shadowImages[filteredPositionsList[i].imageNum][rotation],
-                            shadowCanvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifiers.shadowSpriteSize.width / 2 + filteredPositionsList[i].x,
-                            shadowCanvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifiers.shadowSpriteSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * this.images.modifiers.shadowSpriteSize.width,
-                            this.hexMapData.size * 2 * this.images.modifiers.shadowSpriteSize.height
+                            shadowCanvasSize.width / 2 - this.hexMapData.size * 2 * this.images.modifier.shadowSpriteSize.width / 2 + filteredPositionsList[i].x,
+                            shadowCanvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * this.images.modifier.shadowSpriteSize.height / 2 + filteredPositionsList[i].y,
+                            this.hexMapData.size * 2 * this.images.modifier.shadowSpriteSize.width,
+                            this.hexMapData.size * 2 * this.images.modifier.shadowSpriteSize.height
                         )
                     }
                 }
@@ -215,58 +215,19 @@ export default class HexMapViewSpritesRendererClass {
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
-            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap, true)
+            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifier.size, this.images.modifier.offset, keyObj, rotatedMap, true)
             let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, terrainObject)
             terrainObject.images[0][i].top = darkenedImageTop
 
-            let croppedImageBottom = this.utils.cropOutTiles(terrainObject.images[0][i].bottom, this.images.modifiers.size, this.images.modifiers.offset, keyObj, rotatedMap, true)
+            let croppedImageBottom = this.utils.cropOutTiles(terrainObject.images[0][i].bottom, this.images.modifier.size, this.images.modifier.offset, keyObj, rotatedMap, true)
             let darkenedImageBottom = this.utils.darkenSprite(croppedImageBottom, terrainObject)
             terrainObject.images[0][i].bottom = darkenedImageBottom
         }
     }
 
-    renderDefaultImages = (type, sprite, state) => {
-
-        let spriteObj = this.images[type][sprite]
-
-        let canvasSize = {
-            width: this.hexMapData.size * 2 * spriteObj.spriteSize.width,
-            height: this.hexMapData.size * 2 * spriteObj.spriteSize.height
-        }
-
-        let imageList = []
-        for (let rotation = 0; rotation < 12; rotation++) {
-            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
-
-                //create canvas
-                let tempCanvas = document.createElement('canvas')
-                tempCanvas.width = canvasSize.width
-                tempCanvas.height = canvasSize.height
-                let tempctx = tempCanvas.getContext('2d')
-
-                tempctx.drawImage(spriteObj.images[state][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
-
-
-                imageList[rotation] = tempCanvas
-
-            } else {
-                imageList[rotation] = null
-            }
-        }
-
-        if (!this.hexMapData.defaultTerrainImages[type]) this.hexMapData.defaultTerrainImages[type] = {}
-        if (!this.hexMapData.defaultTerrainImages[type][sprite]) this.hexMapData.defaultTerrainImages[type][sprite] = []
-
-        this.hexMapData.defaultTerrainImages[type][sprite][state] = imageList
-    }
-
     renderStructure = (terrainObject) => {
 
         let initRotation = this.camera.rotation
-
-        if (!this.hexMapData.defaultTerrainImages[terrainObject.type] || !this.hexMapData.defaultTerrainImages[terrainObject.type][terrainObject.sprite] || !this.hexMapData.defaultTerrainImages[terrainObject.type][terrainObject.sprite][terrainObject.state]) {
-            this.renderDefaultImages(terrainObject.type, terrainObject.sprite, terrainObject.state)
-        }
 
         let sprite = this.images[terrainObject.type][terrainObject.sprite]
 
@@ -281,23 +242,24 @@ export default class HexMapViewSpritesRendererClass {
             if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
 
                 this.camera.rotation = rotation;
-                let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-                let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
-                if (this.utils.needsCropping(sprite.spriteOffset, keyObj, rotatedMap) == true) {
-                    //create canvas
-                    let tempCanvas = document.createElement('canvas')
-                    tempCanvas.width = canvasSize.width
-                    tempCanvas.height = canvasSize.height
-                    let tempctx = tempCanvas.getContext('2d')
+                //create canvas
+                let tempCanvas = document.createElement('canvas')
+                tempCanvas.width = canvasSize.width
+                tempCanvas.height = canvasSize.height
+                let tempctx = tempCanvas.getContext('2d')
 
-                    tempctx.drawImage(sprite.images[terrainObject.state][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.drawImage(sprite.images[terrainObject.state][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
-
-                    imageList[rotation] = tempCanvas
-                } else {
-                    imageList[rotation] = 'default'
+                if (terrainObject.type == 'resource') {
+                    tempCanvas = this.utils.addResourceBar(tempCanvas, sprite.spriteSize, terrainObject)
                 }
+
+                if (terrainObject.type == 'base') {
+                    tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, terrainObject)
+                }
+
+                imageList[rotation] = tempCanvas
 
             } else {
                 imageList[rotation] = null
@@ -333,7 +295,8 @@ export default class HexMapViewSpritesRendererClass {
 
         //crop and darken
         for (let i = 0; i < terrainObject.images[0].length; i++) {
-            if (terrainObject.images[0][i] == null || terrainObject.images[0][i] == 'default') continue
+
+            if(terrainObject.images[0][i] == null) continue
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
@@ -376,6 +339,7 @@ export default class HexMapViewSpritesRendererClass {
 
                     tempctx.drawImage(sprite.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
+                    tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, unitObject)
 
                     imageList[rotation] = tempCanvas
 
@@ -440,8 +404,8 @@ export default class HexMapViewSpritesRendererClass {
 
         //set canvas size
         let canvasSize = {
-            width: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.width,
-            height: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.height
+            width: this.hexMapData.size * 2 * this.images.modifier.fullImageSize.width,
+            height: this.hexMapData.size * 2 * this.images.modifier.fullImageSize.height
         }
 
         let imageList = []
@@ -490,11 +454,11 @@ export default class HexMapViewSpritesRendererClass {
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
-            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifier.fullImageSize, this.images.modifier.fullImageOffset, keyObj, rotatedMap, true)
             let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, terrainObject)
             terrainObject.images[0][i].top = darkenedImageTop
 
-            let croppedImageBottom = this.utils.cropOutTiles(terrainObject.images[0][i].bottom, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let croppedImageBottom = this.utils.cropOutTiles(terrainObject.images[0][i].bottom, this.images.modifier.fullImageSize, this.images.modifier.fullImageOffset, keyObj, rotatedMap, true)
             let darkenedImageBottom = this.utils.darkenSprite(croppedImageBottom, terrainObject)
             terrainObject.images[0][i].bottom = darkenedImageBottom
         }
@@ -502,7 +466,7 @@ export default class HexMapViewSpritesRendererClass {
         this.camera.rotation = initRotation
     }
 
-    
+
 
     renderSingleImageModifier = (terrainObject) => {
 
@@ -512,8 +476,8 @@ export default class HexMapViewSpritesRendererClass {
 
         //set canvas size
         let canvasSize = {
-            width: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.width,
-            height: this.hexMapData.size * 2 * this.images.modifiers.fullImageSize.height
+            width: this.hexMapData.size * 2 * this.images.modifier.fullImageSize.width,
+            height: this.hexMapData.size * 2 * this.images.modifier.fullImageSize.height
         }
 
         let imageList = []
@@ -555,7 +519,7 @@ export default class HexMapViewSpritesRendererClass {
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
-            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifiers.fullImageSize, this.images.modifiers.fullImageOffset, keyObj, rotatedMap, true)
+            let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifier.fullImageSize, this.images.modifier.fullImageOffset, keyObj, rotatedMap, true)
             let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, terrainObject)
             terrainObject.images[0][i].top = darkenedImageTop
         }

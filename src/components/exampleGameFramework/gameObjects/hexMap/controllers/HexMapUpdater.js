@@ -11,9 +11,7 @@ export default class HexMapUpdaterClass {
         this.renderer = renderer
         this.cameraController = cameraController
 
-        this.animationRate = settings.AMIMATION_RATE
         this.travelTime = settings.TRAVEL_TIME
-        this.mineTime = settings.MINE_TIME
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
@@ -60,35 +58,82 @@ export default class HexMapUpdaterClass {
 
     }
 
+    updateBase = (base) => {
+
+        let health = base.health
+
+        let curState = base.state
+
+        let newState = health > 75 ? 0 : health > 50 ? 1 : health > 25 ? 2 : health > 0 ? 3 : 4
+
+        if (newState == curState) return
+
+        base.state = newState
+
+        if (base.state < 4) {
+            this.renderer.renderStructure(base)
+        } else {
+            let rubblepile = this.config.rubblepile(base.position)
+            this.utils.updateTerrain(base.position.q, base.position.r, rubblepile)
+        }
+
+    }
+
     updateUnit = (unit) => {
 
         this.setUnitFrame(unit)
+
+        unit.animationCurTime = Date.now()
+
+        if (unit.stateConfig[unit.state].duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.stateConfig[unit.state].duration) return
 
         switch (unit.state) {
             case 'walk':
             case 'jumpUp':
             case 'jumpDown':
-                if (unit.destination != null) this.updateUnitPath(unit)
+                this.updateUnitPath(unit)
                 return
             case 'mine':
-                if (unit.target != null) this.updateUnitMining(unit)
+                this.endUnitMining(unit)
                 return
             case 'attack':
-                if (unit.target != null) this.updateUnitAttacking(unit)
+                this.endUnitAttacking(unit)
+                return
+            case 'hit':
+                this.endUnitHit(unit)
+                return
+            case 'death':
+                this.endUnitDeath(unit)
                 return
 
         }
 
     }
 
+    endUnitDeath = (unit) => {
+        this.hexMapData.deleteUnit(unit.position.q, unit.position.r)
+        this.utils.resetHexMapState()
+    }
+
+    endUnitHit = (unit) => {
+        if (unit.health > 0) {
+            this.utils.setUnitIdle(unit)
+            return
+        }
+
+        this.utils.setUnitAnimation(unit, 'death')
+
+    }
+
     setUnitFrame = (unit) => {
         unit.frameCurTime = Date.now()
-        if (unit.frameCurTime - unit.frameStartTime > this.animationRate) {
+        if (unit.stateConfig[unit.state].rate == 'static') return
+        if (unit.frameCurTime - unit.frameStartTime > unit.stateConfig[unit.state].rate) {
             unit.frameStartTime = Date.now()
 
             unit.frame++
 
-            if (unit.frame >= this.images.units[unit.sprite][unit.state].images.length) unit.frame = 0
+            if (unit.frame >= this.images.unit[unit.sprite][unit.state].images.length) unit.frame = 0
         }
     }
 
@@ -100,47 +145,24 @@ export default class HexMapUpdaterClass {
         this.updateMine(mine)
     }
 
-    updateUnitMining = (unit) => {
-        unit.animationCurTime = Date.now()
-        if (unit.animationCurTime - unit.animationStartTime >= this.mineTime) {
-
-            this.collectMineResources(unit.target)
-
-            unit.target = null
-            unit.animationCurTime = null
-            unit.animationStartTime = null
-
-            //make some sort of setState function
-            unit.state = 'idle'
-            unit.frame = 0
-
-            this.renderer.renderUnit(unit)
-
-            this.utils.resetSelected()
-
-            this.hexMapData.state = 'selectTile'
-        }
+    endUnitMining = (unit) => {
+        this.collectMineResources(unit.target)
+        this.utils.setUnitIdle(unit)
     }
 
-    updateUnitAttacking = (unit) => {
-        unit.animationCurTime = Date.now()
-        if (unit.animationCurTime - unit.animationStartTime >= this.attackTime) {
+    endUnitAttacking = (unit) => {
+        unit.target.health -= 10
 
-
-            unit.target = null
-            unit.animationCurTime = null
-            unit.animationStartTime = null
-
-            //make some sort of setState function
-            unit.state = 'idle'
-            unit.frame = 0
-
-            this.renderer.renderUnit(unit)
-
-            this.utils.resetSelected()
-
-            this.hexMapData.state = 'selectTile'
+        if (unit.target.type == 'unit') {
+            this.utils.setUnitAnimation(unit.target, 'hit')
         }
+
+        if (unit.target.type == 'base') {
+            this.renderer.renderStructure(unit.target)
+            this.updateBase(unit.target)
+        }
+
+        this.utils.setUnitIdle(unit)
     }
 
     updateUnitPath = (unit) => {
@@ -148,7 +170,7 @@ export default class HexMapUpdaterClass {
             //make getPercent function
             let percent = (unit.destinationCurTime - unit.destinationStartTime) / this.travelTime
 
-            if (percent >= 0.5) unit.state = 'jumpDown'
+            if (percent >= 0.5) this.utils.setUnitAnimation(unit, 'jumpDown')
         }
 
         unit.destinationCurTime = Date.now()
@@ -163,41 +185,25 @@ export default class HexMapUpdaterClass {
                 unit.destinationCurTime = Date.now()
                 unit.destinationStartTime = Date.now()
 
-                //set rotation
-                let direction = {
-                    q: unit.destination.q - unit.position.q,
-                    r: unit.destination.r - unit.position.r
-                }
-
-                let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-
-                unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+                this.utils.setUnitDirection(unit, unit.destination)
 
                 if (unit.state != 'walk') {
-                    unit.state = 'walk'
-                    unit.frame = 0
+                    this.utils.setUnitAnimation(unit, 'walk')
                 }
                 let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
                 let nextPosition = this.hexMapData.getEntry(unit.destination.q, unit.destination.r)
                 if (nextPosition.height != startPosition.height) {
-                    unit.frame = 0
-                    unit.state = 'jumpUp'
+                    this.utils.setUnitAnimation(unit, 'jumpUp')
                 }
 
-                this.hexMapData.state = 'animation'
             } else {
                 unit.destination = null
                 unit.destinationCurTime = null
                 unit.destinationStartTime = null
-                unit.frame = 0
 
                 if (unit.futureState == null) {
-                    unit.state = 'idle'
-                    this.renderer.renderUnit(unit)
-                    this.utils.resetSelected()
-                    this.hexMapData.state = 'selectTile'
+                    this.utils.setUnitIdle(unit)
                 } else {
-                    console.log(unit.futureState)
                     this.utils.setUnitFutureState(unit)
                 }
 
