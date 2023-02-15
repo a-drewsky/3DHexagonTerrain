@@ -4,7 +4,7 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer, cameraController, camera, canvas, uiComponents, updateUi) {
+    constructor(hexMapData, images, settings, renderer, cameraController, camera, canvas, uiComponents, updateUi, globalState) {
 
         this.hexMapData = hexMapData
         this.images = images
@@ -15,7 +15,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }
@@ -151,18 +151,20 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitAttacking = (unit) => {
-        unit.target.health -= 10
 
-        if (unit.target.type == 'unit') {
-            this.utils.setUnitAnimation(unit.target, 'hit')
-        }
-
-        if (unit.target.type == 'base') {
-            this.renderer.renderStructure(unit.target)
-            this.updateBase(unit.target)
-        }
-
+        let target = unit.target
         this.utils.setUnitIdle(unit)
+        target.health -= 25
+
+        if (target.type == 'unit') {
+            this.utils.setUnitAnimation(target, 'hit')
+        }
+
+        if (target.type == 'base') {
+            this.renderer.renderStructure(target)
+            this.updateBase(target)
+        }
+
     }
 
     updateUnitPath = (unit) => {

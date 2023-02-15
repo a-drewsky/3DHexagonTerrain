@@ -17,7 +17,7 @@ import savanna_tree_shadow_9 from '../images/shadows/savanna_tree_shadow_9.png'
 import savanna_tree_shadow_11 from '../images/shadows/savanna_tree_shadow_11.png'
 
 
-export default class StructureImagesClass {
+export default class PropImagesClass {
 
     constructor() {
 

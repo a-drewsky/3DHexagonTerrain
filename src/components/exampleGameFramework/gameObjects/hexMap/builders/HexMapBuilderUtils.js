@@ -79,9 +79,9 @@ export default class HexMapBuilderUtilsClass {
 
     setMainBase = (q, r) => {
 
-        let cropList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
+        let cropList = [{ q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
 
-        let flatList = [{ q: 0, r: -2 }, { q: 1, r: -2 }, { q: 2, r: -2 }, { q: 2, r: -1 }, { q: 2, r: 0 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -2, r: 1 }, { q: -2, r: 0 }, { q: -1, r: -1 }]
+        let flatList = [{ q: 0, r: 0 }, { q: 0, r: -2 }, { q: 1, r: -2 }, { q: 2, r: -2 }, { q: 2, r: -1 }, { q: 2, r: 0 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -2, r: 1 }, { q: -2, r: 0 }, { q: -1, r: -1 }]
 
         let totalList = [...cropList, ...flatList]
 
@@ -115,6 +115,23 @@ export default class HexMapBuilderUtilsClass {
         }
 
         this.flattenTerrain(q, r, totalList, terrainHeight)
+
+        //add flag
+
+        let tileToSetKey = {
+            q: q,
+            r: r
+        }
+
+        let terrain = this.config.flag(tileToSetKey)
+
+        let curTerrainIndex = this.hexMapData.getTerrainIndex(terrain.position.q, terrain.position.r)
+
+        if (curTerrainIndex != -1) {
+            this.hexMapData.terrainList[curTerrainIndex] = terrain
+        } else {
+            this.hexMapData.terrainList.push(terrain)
+        }
 
     }
 

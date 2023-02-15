@@ -106,6 +106,22 @@ export default class HexMapConfigClass {
         }
     }
 
+    flag = (pos) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            name: 'Flag',
+            type: 'flag',
+            sprite: 'flag',
+            state: 0,
+            tileHeight: 5,
+            images: [],
+            shadowImages: [],
+        }
+    }
+
     goldmine = (pos) => {
         return {
             position: {

@@ -19,6 +19,9 @@ export default class InputControllerClass {
          case 'attack':
             this.gameManager.objectMap.get('hexMap').controller.attack();
             return
+         case 'capture':
+            this.gameManager.objectMap.get('hexMap').controller.capture();
+            return
          case 'cancel':
             this.gameManager.objectMap.get('hexMap').controller.cancelMovement();
             return
@@ -47,7 +50,7 @@ export default class InputControllerClass {
    mouseDown = (x, y) => {
 
       //State controller functions
-      switch (this.gameManager.state) {
+      switch (this.gameManager.state.current) {
          case 'play':
             // this.gameManager.objectMap.get('camera').controller.mouseDown(x, y);
             this.gameManager.objectMap.get('hexMap').controller.click(x, y);
@@ -57,7 +60,7 @@ export default class InputControllerClass {
 
    mouseUp = (x, y) => {
       //State controller functions
-      switch (this.gameManager.state) {
+      switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.mouseUp();
             this.gameManager.objectMap.get('hexMap').controller.mouseUp();
@@ -72,7 +75,7 @@ export default class InputControllerClass {
       this.mouseMoveTimeStamp = Date.now()
 
       //State controller functions
-      switch (this.gameManager.state) {
+      switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.mouseMove(x, y);
             this.gameManager.objectMap.get('hexMap').controller.setHover(x, y);
@@ -82,7 +85,7 @@ export default class InputControllerClass {
 
    mouseWheel = (deltaY) => {
       //State controller functions
-      switch (this.gameManager.state) {
+      switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.zoom(deltaY);
             break;

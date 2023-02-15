@@ -24,6 +24,9 @@ const ContentPanel = () => {
       pauseMenu: {
          show: false
       },
+      endGameMenu: {
+         show: false
+      },
       contextMenu: {
          show: false,
          x: 0,
@@ -42,17 +45,17 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, contextMenu, resourceBar }) => ({ pauseMenu: newUi.pauseMenu, contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
+      setUiComponents(({ pauseMenu, endGameMenu, contextMenu, resourceBar }) => ({ pauseMenu: newUi.pauseMenu, endGameMenu: newUi.endGameMenu, contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
    }
 
 
    //CREATE NEW GAME METHOD
    const startNewGame = (e) => {
-      e.preventDefault();
+      if(e) e.preventDefault();
       if (gameClass && !gameClass.loaded) return;
 
       if (gameClass) gameClass.clear();
-      setGameClass(undefined);
+      setGameClass(null);
       let newGameClass = new GameMainClass(
          canvas.current,
          gameImages,
@@ -71,9 +74,12 @@ const ContentPanel = () => {
 
    const endGame = () => {
       if (gameClass) gameClass.clear();
-      setGameClass(undefined);
+      setGameClass(null);
       setUiComponents({
          pauseMenu: {
+            show: false
+         },
+         endGameMenu: {
             show: false
          },
          contextMenu: {
@@ -86,6 +92,11 @@ const ContentPanel = () => {
             resourceNum: 0
          }
       })
+   }
+
+   const restartGame = () => {
+      endGame()
+      startNewGame()
    }
    //END CREATE NEW GAME METHOD
 
@@ -192,7 +203,7 @@ const ContentPanel = () => {
 
                   {
                      (gameClass) &&
-                     <UiOverlay uiComponents={uiComponents} gameClass={gameClass} endGame={endGame}></UiOverlay>
+                     <UiOverlay uiComponents={uiComponents} gameClass={gameClass} endGame={endGame} restartGame={restartGame}></UiOverlay>
                   }
 
                </div>

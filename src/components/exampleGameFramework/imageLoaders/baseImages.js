@@ -43,8 +43,6 @@ import base_shadow_7 from '../images/shadows/base_shadow_7.png'
 import base_shadow_9 from '../images/shadows/base_shadow_9.png'
 import base_shadow_11 from '../images/shadows/base_shadow_11.png'
 
-import main_base_q0r0 from '../images/structures/mainBase/main_base_q0r0.png'
-
 import main_base_qm1r0_1 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_1.png'
 import main_base_qm1r0_2 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_2.png'
 import main_base_qm1r0_3 from '../images/structures/mainBase/q-1r0/main_base_q-1r0_3.png'
@@ -75,15 +73,7 @@ import main_base_qm1r1_2 from '../images/structures/mainBase/q-1r1/main_base_q-1
 import main_base_qm1r1_3 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_3.png'
 import main_base_qm1r1_4 from '../images/structures/mainBase/q-1r1/main_base_q-1r1_4.png'
 
-
-import flag_shadow_1 from '../images/shadows/small_round_shadow_1.png'
-import flag_shadow_3 from '../images/shadows/small_round_shadow_3.png'
-import flag_shadow_5 from '../images/shadows/small_round_shadow_5.png'
-import flag_shadow_7 from '../images/shadows/small_round_shadow_7.png'
-import flag_shadow_9 from '../images/shadows/small_round_shadow_9.png'
-import flag_shadow_11 from '../images/shadows/small_round_shadow_11.png'
-
-export default class StructureImagesClass {
+export default class BaseImagesClass {
 
     constructor() {
 
@@ -127,7 +117,6 @@ export default class StructureImagesClass {
             base_shadow_9: new Image(),
             base_shadow_11: new Image(),
 
-            main_base_q0r0: new Image(),
             main_base_qm1r0_1: new Image(),
             main_base_qm1r0_2: new Image(),
             main_base_qm1r0_3: new Image(),
@@ -151,14 +140,7 @@ export default class StructureImagesClass {
             main_base_qm1r1_1: new Image(),
             main_base_qm1r1_2: new Image(),
             main_base_qm1r1_3: new Image(),
-            main_base_qm1r1_4: new Image(),
-
-            flag_shadow_1: new Image(),
-            flag_shadow_3: new Image(),
-            flag_shadow_5: new Image(),
-            flag_shadow_7: new Image(),
-            flag_shadow_9: new Image(),
-            flag_shadow_11: new Image()
+            main_base_qm1r1_4: new Image()
         }
 
     }
@@ -216,8 +198,6 @@ export default class StructureImagesClass {
         this.base_shadow_9.src = base_shadow_9
         this.base_shadow_11.src = base_shadow_11
 
-        this.main_base_q0r0.src = main_base_q0r0
-
         this.main_base_qm1r0_1.src = main_base_qm1r0_1
         this.main_base_qm1r0_2.src = main_base_qm1r0_2
         this.main_base_qm1r0_3.src = main_base_qm1r0_3
@@ -248,44 +228,9 @@ export default class StructureImagesClass {
         this.main_base_qm1r1_3.src = main_base_qm1r1_3
         this.main_base_qm1r1_4.src = main_base_qm1r1_4
 
-        this.flag_shadow_1.src = flag_shadow_1
-        this.flag_shadow_3.src = flag_shadow_3
-        this.flag_shadow_5.src = flag_shadow_5
-        this.flag_shadow_7.src = flag_shadow_7
-        this.flag_shadow_9.src = flag_shadow_9
-        this.flag_shadow_11.src = flag_shadow_11
-
 
 
         //Create Image objects
-
-        this.mainbase_q0r0 = {
-            spriteSize: {
-                width: 1,
-                height: 1.5
-            },
-            spriteOffset: {
-                x: 0,
-                y: 0.5
-            },
-            shadowSize: {
-                width: 1,
-                height: 1.5
-            },
-            shadowOffset: {
-                x: 0,
-                y: 0.5
-            },
-            images: [
-                [null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0, null, this.main_base_q0r0]
-            ],
-            shadowImages: [
-                [null, this.flag_shadow_1, null, this.flag_shadow_3, null, this.flag_shadow_5, null, this.flag_shadow_7, null, this.flag_shadow_9, null, this.flag_shadow_11]
-            ],
-            deadSpace: [
-                [null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32]
-            ]
-        }
 
         this.mainbase_qm1r0 = {
             spriteSize: {

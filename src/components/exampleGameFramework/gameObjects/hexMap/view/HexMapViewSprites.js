@@ -14,7 +14,7 @@ export default class HexMapViewSpritesClass {
       this.travelTime = settings.TRAVEL_TIME
       this.jumpAmount = settings.JUMP_AMOUNT
 
-      this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, utils, settings);
+      this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, settings);
 
       this.canvasDims = {
          width: canvas.width,
@@ -113,6 +113,7 @@ export default class HexMapViewSpritesClass {
             case 'base':
             case 'prop':
             case 'resource':
+            case 'flag':
                this.drawStructure(drawctx, spriteList[i])
                break
             case 'modifier':

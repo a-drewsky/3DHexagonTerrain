@@ -4,11 +4,12 @@ import CollisionClass from "../../../utilities/collision"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi, renderer) {
+    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi, renderer, globalState) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
         this.images = images
+        this.globalState = globalState
 
         this.uiComponents = uiComponents
 
@@ -174,7 +175,7 @@ export default class HexMapControllerUtilsClass {
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
+        let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.position)
 
         if (!moveSet) return
 
@@ -196,6 +197,11 @@ export default class HexMapControllerUtilsClass {
                 this.setSelection(tile.position.q, tile.position.r, 'attack')
                 continue
             }
+            if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
+                this.setSelection(tile.position.q, tile.position.r, 'action')
+                continue
+            }
         }
     }
 
@@ -214,8 +220,6 @@ export default class HexMapControllerUtilsClass {
         let targetPosition = this.hexMapData.getSelectedTargetTile()
 
         if (targetPosition == null) return
-
-        console.log(startPosition, targetPosition)
 
         unit.path = this.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
 
@@ -253,21 +257,12 @@ export default class HexMapControllerUtilsClass {
         unit.destinationStartTime = Date.now()
         unit.destinationCurTime = Date.now()
 
-        //set rotation
-        let direction = {
-            q: unit.destination.q - unit.position.q,
-            r: unit.destination.r - unit.position.r
-        }
-
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-
-        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
-
-        unit.state = 'walk'
-        unit.frame = 0
+        this.setUnitDirection(unit, unit.destination)
 
         if (nextPosition.height != startPosition.height) {
-            unit.state = 'jumpUp'
+            this.setUnitAnimation(unit, 'jumpUp')
+        } else {
+            this.setUnitAnimation(unit, 'walk')
         }
     }
 
@@ -291,14 +286,15 @@ export default class HexMapControllerUtilsClass {
 
     setUnitFutureState = (unit) => {
 
-        console.log(unit.futureState)
-
         switch (unit.futureState) {
             case 'mine':
                 this.mineOre(unit, unit.target)
                 break
             case 'attack':
                 this.attackUnit(unit, unit.target)
+                break
+            case 'capture':
+                this.captureFlag(unit, unit.target)
                 break
 
         }
@@ -342,6 +338,15 @@ export default class HexMapControllerUtilsClass {
         this.setUnitDirection(unit, unit.target.position)
 
         this.setUnitAnimation(unit, 'attack')
+    }
+
+    captureFlag = (unit, targetTile) => {
+
+        this.setUnitDirection(unit, targetTile.position)
+
+        this.globalState.current = this.globalState.pause
+        this.uiComponents.endGameMenu.show = true
+        this.updateUi()
     }
 
     getSelectedTile = (x, y, rotatedMap) => {

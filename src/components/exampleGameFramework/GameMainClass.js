@@ -28,6 +28,9 @@ export default class GameMainClass {
          pauseMenu: {
             show: false
          },
+         endGameMenu: {
+            show: false
+         },
          contextMenu: {
             show: false,
             x: 0,
@@ -113,7 +116,7 @@ export default class GameMainClass {
    //SETUP FUNCTIONS
    startGame = () => {
       console.log("start")
-      this.gameManager.state = 'play'
+      this.gameManager.state.current = this.gameManager.state.play
       this.updateInterval = setInterval(() => {
          this.update()
          this.draw()
@@ -146,7 +149,7 @@ export default class GameMainClass {
    update = () => {
       //update game objects
       for (let [key, value] of this.gameManager.objectMap) {
-         value.update(value.state);
+         if(this.gameManager.state.current == this.gameManager.state.play) value.update(value.state);
       }
    }
    //END UPDATE FUNCTION

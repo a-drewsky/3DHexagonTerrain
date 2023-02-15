@@ -1,11 +1,14 @@
+import HexMapViewUtilsClass from "./HexMapViewUtils";
+
 export default class HexMapViewSpritesRendererClass {
 
-    constructor(hexMapData, camera, images, utils, settings) {
+    constructor(hexMapData, camera, images, settings) {
 
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images
-        this.utils = utils
+        console.log(settings)
+        this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
 
 
         this.modifierSettings = settings.MODIFIERS

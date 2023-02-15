@@ -36,7 +36,7 @@ import large_rock_shadow_7 from '../images/shadows/large_round_shadow_7.png'
 import large_rock_shadow_9 from '../images/shadows/large_round_shadow_9.png'
 import large_rock_shadow_11 from '../images/shadows/large_round_shadow_11.png'
 
-export default class StructureImagesClass {
+export default class ResourceImagesClass {
 
     constructor() {
 

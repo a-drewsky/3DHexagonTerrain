@@ -115,54 +115,24 @@ export default class HexMapPathFinderClass {
         return processed
     }
 
-    findFullMoveSet = (start, moveAmount) => {
-        let startNode = this.createNode(start.q, start.r)
+    findFullMoveSet = (moveSet, unitPos) => {
 
-        let toSearch = [startNode]
-        let processed = []
+        let newMoveSet = [...moveSet]
+        
+        for(let node of moveSet){
+            let tile = node.tile
 
-        while (toSearch.length > 0) {
-            let current = toSearch[0]
+            let neighbors = this.createNeighborNodes(tile.q, tile.r)
 
-            for (let t of toSearch) {
-                if (t.moveCost < current.moveCost){
-                    current = t
-                } 
+            for(let neighborNode of neighbors){
+                if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
+                if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q == neighborNode.tile.q && moveSetNode.tile.r == neighborNode.tile.r) != -1) continue
+                newMoveSet.push(neighborNode)
             }
-
-            processed.push(current)
-            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
-            toSearch.splice(currentToSearchIndex, 1)
-
-            //Get Neighbors
-            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
-
-
-            //assign cost to neighbors and add to search list
-            for (let neighbor of neighbors) {
-
-                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
-
-                let tileCost = this.getTileCost(neighbor.tile)
-
-                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
-
-                if (!inSearch || costToNeighbor < neighbor.g) {
-                    neighbor.moveCost = costToNeighbor
-                    neighbor.connection = current
-
-                    if (!inSearch && neighbor.moveCost <= moveAmount) {
-                        toSearch.push(neighbor)
-                    }
-                }
-
-            }
-
         }
-        let startIndex = processed.findIndex(node => node.tile.q == start.q && node.tile.r == start.r)
-        processed.splice(startIndex, 1)
-        return processed
+
+        return newMoveSet
+
     }
 
     findPath = (start, target) => {

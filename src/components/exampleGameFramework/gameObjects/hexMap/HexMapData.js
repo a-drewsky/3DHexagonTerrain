@@ -23,8 +23,6 @@ export default class HexMapDataClass {
          hover_place: null
       }
 
-      this.hoverType = 'hover_select'
-
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
 
@@ -193,21 +191,22 @@ export default class HexMapDataClass {
    //return the selected tile or null
    getSelected = () => {
       let selected = this.selections['info']
-      if (selected === undefined) return null
+      if (selected === null) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedUnitTile = () => {
       let selected = this.selections['unit']
-      if (selected === undefined) return null
+      if (selected === null) return null
       return this.getEntry(selected.q, selected.r)
    }
 
    //return the selected unit tile or null
    getSelectedTargetTile = () => {
       let selected = this.selections['target']
-      if (selected === undefined) return null
+      if (selected === null) return null
+      console.log(selected)
       return this.getEntry(selected.q, selected.r)
    }
 
@@ -219,7 +218,7 @@ export default class HexMapDataClass {
    //return the selected unit tile or null
    getSelectedUnit = () => {
       let selected = this.selections['unit']
-      if (selected === undefined) return null
+      if (selected === null) return null
       return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
    }
 

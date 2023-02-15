@@ -7,7 +7,7 @@ import HexMapConfigClass from '../config/hexMapConfig';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi, renderer) {
+    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -26,7 +26,7 @@ export default class HexMapControllerClass {
         this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
 
         this.renderer = renderer
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer, globalState);
 
         this.config = new HexMapConfigClass()
 
@@ -72,7 +72,9 @@ export default class HexMapControllerClass {
         let tileObj = this.hexMapData.getEntry(hoverTile.q, hoverTile.r)
 
         if (this.utils.getSelection(tileObj.position.q, tileObj.position.r) == null) {
-            this.utils.setSelection(tileObj.position.q, tileObj.position.r, this.hexMapData.hoverType)
+            if(this.hexMapData.state == 'placeUnit') this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_place')
+            else this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_select')
+            
         }
     }
 
@@ -153,6 +155,31 @@ export default class HexMapControllerClass {
         }
     }
 
+    capture = () => {
+
+        if (this.selectedUnit == null) return
+
+        let targetTile = this.hexMapData.getSelectedTargetTile()
+        if (targetTile == null) return
+
+        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+        if (targetStructure == null) return
+
+        this.selectedUnit.target = targetStructure
+
+        let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
+
+        if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
+            this.utils.captureFlag(this.selectedUnit, targetTile)
+            this.utils.resetSelected()
+            this.utils.clearContextMenu()
+        } else {
+            this.utils.lerpToTarget(this.selectedUnit, targetTile, 'capture')
+            this.utils.resetSelected()
+            this.utils.clearContextMenu()
+        }
+    }
+
     cancelMovement = () => {
         this.utils.resetSelected()
 
@@ -170,8 +197,9 @@ export default class HexMapControllerClass {
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(unit.position, unit.movementRange + 1)
+        let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.position)
         let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'resource')
+        let flagMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'flag')
         let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null
             || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'base'))
 
@@ -182,6 +210,16 @@ export default class HexMapControllerClass {
             this.hexMapData.state = 'selectAction'
 
             this.utils.setContextMenu(x, y, ['btnMine', 'btnCancel'])
+            return
+        }
+
+        if (flagMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
+            this.utils.resetSelected()
+            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectedUnit = unit
+            this.hexMapData.state = 'selectAction'
+
+            this.utils.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
             return
         }
 
@@ -360,8 +398,10 @@ export default class HexMapControllerClass {
     }
 
     setPlaceUnit = () => {
+        if(this.hexMapData.state != 'selectTile') return
+
+        this.utils.resetSelected()
         this.utils.resetHover()
-        this.hexMapData.hoverType = 'hover_place'
         this.hexMapData.state = 'placeUnit'
     }
 
@@ -373,7 +413,6 @@ export default class HexMapControllerClass {
             this.hexMapData.unitList.push(unit)
         }
 
-        this.hexMapData.hoverType = 'hover_select'
         this.hexMapData.state = 'selectTile'
 
         this.utils.resetSelected()

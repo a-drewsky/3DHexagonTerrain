@@ -14,7 +14,12 @@ export default class GameManagerClass {
 
         this.objectMap = new Map();
 
-        this.state = 'play'
+        //create all state objects like this
+        this.state = {
+            play: 'play',
+            pause: 'pause'
+        }
+        this.state.current = this.state.play
 
         this.uiComponents = uiComponents
         this.updateUi = updateUi
@@ -47,7 +52,8 @@ export default class GameManagerClass {
                     this.images,
                     this.settings,
                     this.uiComponents,
-                    this.updateUi
+                    this.updateUi,
+                    this.state
                 )
             );
         }
@@ -59,13 +65,13 @@ export default class GameManagerClass {
     }
 
     setStatePause = () => {
-        this.state = 'pause'
+        this.state.current = this.state.pause
         this.uiComponents.pauseMenu.show = true
         this.updateUi()
     }
 
     setStatePlay = () => {
-        this.state = 'play'
+        this.state.current = this.state.play
         this.uiComponents.pauseMenu.show = false
         this.updateUi()
     }

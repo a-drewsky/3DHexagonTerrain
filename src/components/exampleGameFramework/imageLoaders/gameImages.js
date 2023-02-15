@@ -7,6 +7,7 @@ import ResourceImagesClass from './resourceImages'
 import UnitImagesClass from './unitImages'
 import HighlighImagesClass from './highlightImages'
 import UiImagesClass from './uiImages'
+import FlagImagesClass from './flagImages'
 
 export default class GameImagesClass {
 
@@ -20,6 +21,7 @@ export default class GameImagesClass {
         this.unit = new UnitImagesClass()
         this.highlight = new HighlighImagesClass()
         this.ui = new UiImagesClass()
+        this.flag = new FlagImagesClass()
 
     }
 
@@ -28,7 +30,7 @@ export default class GameImagesClass {
         let testLoaded = () => {
             totalLoaded++
             console.log(totalLoaded)
-            if(totalLoaded == 8) startGame()
+            if(totalLoaded == 9) startGame()
         }
         this.tile.loadImages(testLoaded)
         this.modifier.loadImages(testLoaded)
@@ -38,6 +40,7 @@ export default class GameImagesClass {
         this.unit.loadImages(testLoaded)
         this.highlight.loadImages(testLoaded)
         this.ui.loadImages(testLoaded)
+        this.flag.loadImages(testLoaded)
     }
 
 }
