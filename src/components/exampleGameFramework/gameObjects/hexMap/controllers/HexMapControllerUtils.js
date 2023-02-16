@@ -304,13 +304,37 @@ export default class HexMapControllerUtilsClass {
 
     }
 
+    getDistance = (pos1, pos2) => {
+        return (Math.abs(pos1.q - pos2.q) 
+          + Math.abs(pos1.q + pos1.r - pos2.q - pos2.r)
+          + Math.abs(pos1.r - pos2.r)) / 2
+    }
+
+    getClosestPos = (pos, posMap) => {
+        let distMap = posMap.map( mapPos => mapPos===null ? Infinity : this.getDistance(pos, mapPos))
+
+        let index = distMap.indexOf(Math.min(...distMap))
+        return posMap[index]
+    }
+
     setUnitDirection = (unit, targetPos) => {
-        let direction = {
-            q: targetPos.q - unit.position.q,
-            r: targetPos.r - unit.position.r
-        }
+
+        //find closest neighbor to targetPos
 
         let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+        let rotatePosMap = directionMap.map(pos => pos===null ? null : { q: unit.position.q - pos.q, r: unit.position.r - pos.r })
+        
+        let closestPos
+        if(rotatePosMap.findIndex(pos => pos !== null && pos.q == targetPos.q && pos.r == targetPos.r ) != -1){
+            closestPos = targetPos
+        } else {
+            closestPos = this.getClosestPos(targetPos, rotatePosMap)
+        }
+
+        let direction = {
+            q: closestPos.q - unit.position.q,
+            r: closestPos.r - unit.position.r
+        }
 
         unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
     }
@@ -338,6 +362,23 @@ export default class HexMapControllerUtilsClass {
         this.setUnitDirection(unit, unit.target.position)
 
         this.setUnitAnimation(unit, 'attack')
+    }
+
+    setChooseRotation = (unit) => {
+
+        unit.target = null
+        unit.animationCurTime = null
+        unit.animationStartTime = null
+
+        unit.state = 'idle'
+        unit.frame = 0
+
+        this.renderer.renderUnit(unit)
+
+        this.setSelection(unit.position.q, unit.position.r, 'rotate')
+
+        this.hexMapData.state = 'chooseRotation'
+
     }
 
     captureFlag = (unit, targetTile) => {

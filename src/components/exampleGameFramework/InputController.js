@@ -78,7 +78,7 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.objectMap.get('camera').controller.mouseMove(x, y);
-            this.gameManager.objectMap.get('hexMap').controller.setHover(x, y);
+            this.gameManager.objectMap.get('hexMap').controller.mouseMove(x, y);
             break;
       }
    }

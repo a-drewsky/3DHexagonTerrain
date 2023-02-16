@@ -204,7 +204,7 @@ export default class HexMapUpdaterClass {
                 unit.destinationStartTime = null
 
                 if (unit.futureState == null) {
-                    this.utils.setUnitIdle(unit)
+                    this.utils.setChooseRotation(unit)
                 } else {
                     this.utils.setUnitFutureState(unit)
                 }

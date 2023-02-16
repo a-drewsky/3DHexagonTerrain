@@ -16,6 +16,7 @@ export default class HexMapDataClass {
          path: null,
          unit: null,
          target: null,
+         rotate: null,
          movement: [],
          action: [],
          attack: [],
@@ -218,6 +219,13 @@ export default class HexMapDataClass {
    //return the selected unit tile or null
    getSelectedUnit = () => {
       let selected = this.selections['unit']
+      if (selected === null) return null
+      return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
+   }
+
+   //return the selected unit tile or null
+   getSelectedUnitToRotate = () => {
+      let selected = this.selections['rotate']
       if (selected === null) return null
       return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
    }
