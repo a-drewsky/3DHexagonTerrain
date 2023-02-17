@@ -64,6 +64,22 @@ export default class HexMapPathFinderClass {
         return path.reverse()
     }
 
+    pathCost = (path) => {
+
+        let cost = 0
+
+        for(let index in path){
+            if(index==0) continue
+            let tile = path[index]
+            let tileCost = this.getTileCost(tile)
+
+            cost += tileCost + this.getHeightDifference(path[index-1], path[index]) + 1
+        }
+
+        return cost
+
+    }
+
     findMoveSet = (start, moveAmount) => {
         let startNode = this.createNode(start.q, start.r)
 

@@ -13,10 +13,10 @@ export default class HexMapDataClass {
 
       this.selections = {
          info: null,
-         path: null,
          unit: null,
          target: null,
          rotate: null,
+         path: [],
          movement: [],
          action: [],
          attack: [],

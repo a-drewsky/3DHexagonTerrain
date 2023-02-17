@@ -47,9 +47,15 @@ export default class HexMapControllerClass {
 
     mouseMove = (x, y) => {
 
+        if (this.hexMapData.clickMovePos !== null) {
+            this.hexMapData.clickMovePos.x = x
+            this.hexMapData.clickMovePos.y = y
+        }
+
+        this.utils.resetHover()
+
         switch (this.hexMapData.state) {
             case 'selectTile':
-            case 'selectMovement':
             case 'placeUnit':
             case 'animation':
                 this.setHover(x, y)
@@ -60,27 +66,16 @@ export default class HexMapControllerClass {
                 return
             case 'selectAction':
                 return
+            case 'selectMovement':
+                this.updateUnitPath(x, y)
         }
     }
 
     clickTile = (x, y) => {
-        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
-        let tileClicked = this.utils.getSelectedTile(x, y, rotatedMap)
-
-        console.log(tileClicked)
+        let tileClicked = this.utils.getSelectedTile(x, y)
 
         if (!tileClicked) return
-
-        let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
-
-        tileClicked = {
-            q: rotatedTile.q,
-            r: rotatedTile.r
-        }
-
-        console.log(tileClicked)
-
 
         let tile = this.hexMapData.getEntry(tileClicked.q, tileClicked.r)
 
@@ -118,57 +113,103 @@ export default class HexMapControllerClass {
 
     setHover = (x, y) => {
 
-        if (this.hexMapData.clickMovePos !== null) {
-            this.hexMapData.clickMovePos.x = x
-            this.hexMapData.clickMovePos.y = y
-        }
-
-        this.utils.resetHover()
-
-        if (this.hexMapData.state == 'selectAction') return
-
-        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-
-        let hoverTile = this.utils.getSelectedTile(x, y, rotatedMap)
+        let hoverTile = this.utils.getSelectedTile(x, y)
 
         if (!hoverTile) return
 
-        let rotatedTile = rotatedMap.get(hoverTile.q + ',' + hoverTile.r)
-
-        hoverTile = {
-            q: rotatedTile.q,
-            r: rotatedTile.r
-        }
-
         let tileObj = this.hexMapData.getEntry(hoverTile.q, hoverTile.r)
 
-        if (this.utils.getSelection(tileObj.position.q, tileObj.position.r) == null) {
-            if (this.hexMapData.state == 'placeUnit') this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_place')
-            else this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_select')
-
+        switch (this.hexMapData.state) {
+            case 'placeUnit':
+                this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_place')
+                return
+            case 'selectTile':
+                this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover_select')
+                return
+            case 'selectMovement':
+            case 'chooseRotation':
+            case 'animation':
+            case 'selectAction':
+                return
         }
+    }
+
+    updateUnitPath = (x, y) => {
+
+        let hoverTile = this.utils.getSelectedTile(x, y)
+
+        if (!hoverTile) return
+
+        let path = this.hexMapData.selections.path
+
+        let unit = this.hexMapData.getSelectedUnit()
+
+        if(unit.position.q == hoverTile.q && unit.position.r == hoverTile.r){
+            this.hexMapData.selections.path = []
+            return
+        }
+
+        let findNewPath = false
+
+        if(this.hexMapData.selections.movement.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1){
+
+            let actionSelections = [...this.hexMapData.selections.action, ...this.hexMapData.selections.attack]
+
+            if(actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1){
+                this.hexMapData.selections.path = []
+                return
+            } else {
+                let neighbors
+                if(path.length>0) neighbors = this.hexMapData.getNeighborKeys(path[path.length-1].q, path[path.length-1].r)
+                else neighbors = this.hexMapData.getNeighborKeys(unit.position.q, unit.position.r)
+        
+                if(neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1){
+                    this.hexMapData.selections.path = this.utils.findClosestAdjacentPath(unit.position, hoverTile)
+                    return
+                }
+            }
+        } else if(path.length == 0) {
+            let neighbors = this.hexMapData.getNeighborKeys(unit.position.q, unit.position.r)
+            if(neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
+                findNewPath = true
+            } else {
+                path.push(hoverTile)
+            }
+        } else if (path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
+            if(path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != path.length - 1){
+                findNewPath = true
+            }
+        } else {
+            let neighbors = this.hexMapData.getNeighborKeys(path[path.length-1].q, path[path.length-1].r)
+            neighbors.push(path[path.length-1])
+    
+            if(neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1){
+                findNewPath = true
+            } else {
+                path.push(hoverTile)
+            }
+        }
+
+
+        if(this.utils.checkValidPath() == false) findNewPath = true
+
+        if(findNewPath == false) return
+
+        let newPath = this.utils.findPath(unit.position, hoverTile)
+
+        this.hexMapData.selections.path = newPath
     }
 
     setUnitMouseDirection = (x, y) => {
 
-        
+
         let unit = this.hexMapData.getSelectedUnitToRotate()
 
         if (unit == null) return
 
-        
-        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-
-        let tileClicked = this.utils.getSelectedTile(x, y, rotatedMap)
+        let tileClicked = this.utils.getSelectedTile(x, y)
 
         if (!tileClicked) return
-
-        let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
-
-        tileClicked = {
-            q: rotatedTile.q,
-            r: rotatedTile.r
-        }
 
         this.utils.setUnitDirection(unit, tileClicked)
         this.renderer.renderUnit(unit)
@@ -209,7 +250,7 @@ export default class HexMapControllerClass {
 
         let neighbors = this.hexMapData.getNeighborKeys(this.selectedUnit.position.q, this.selectedUnit.position.r)
 
-        if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
+        if (this.hexMapData.selections.path.length == 0) {
             this.utils.mineOre(this.selectedUnit, targetTile)
             this.utils.resetSelected()
             this.utils.clearContextMenu()
@@ -301,7 +342,6 @@ export default class HexMapControllerClass {
             || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'base'))
 
         if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.resetSelected()
             this.utils.setSelection(tile.position.q, tile.position.r, 'target')
             this.selectedUnit = unit
             this.hexMapData.state = 'selectAction'
@@ -311,7 +351,6 @@ export default class HexMapControllerClass {
         }
 
         if (flagMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.resetSelected()
             this.utils.setSelection(tile.position.q, tile.position.r, 'target')
             this.selectedUnit = unit
             this.hexMapData.state = 'selectAction'
@@ -321,7 +360,6 @@ export default class HexMapControllerClass {
         }
 
         if (attackMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.resetSelected()
             this.utils.setSelection(tile.position.q, tile.position.r, 'target')
             this.selectedUnit = unit
             this.hexMapData.state = 'selectAction'
@@ -331,7 +369,6 @@ export default class HexMapControllerClass {
         }
 
         if (moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)) {
-            this.utils.resetSelected()
             this.utils.setSelection(tile.position.q, tile.position.r, 'target')
             this.selectedUnit = unit
             this.hexMapData.state = 'selectAction'

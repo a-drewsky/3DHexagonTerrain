@@ -60,7 +60,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     setSelection = (q, r, selection) => {
-        if (selection == 'movement' || selection == 'action' || selection == 'attack') {
+        if (Array.isArray(this.hexMapData.selections[selection])) {
             this.hexMapData.selections[selection].push({ q: q, r: r })
         } else {
             this.hexMapData.selections[selection] = { q: q, r: r }
@@ -71,16 +71,16 @@ export default class HexMapControllerUtilsClass {
         let selected = this.getSelectionObj(q, r)
 
         if (selected == null) return
-        if (selected.selection == 'movement' || selected.selection == 'action' || selected.selection == 'attack') this.hexMapData.selections[selected.selection] = []
+        if (Array.isArray(this.hexMapData.selections[selected.selection])) this.hexMapData.selections[selected.selection] = []
         else this.hexMapData.selections[selected.selection] = null
     }
 
     resetSelected = () => {
         this.hexMapData.selections = {
             info: null,
-            path: null,
             unit: null,
             target: null,
+            path: [],
             movement: [],
             action: [],
             attack: [],
@@ -122,21 +122,23 @@ export default class HexMapControllerUtilsClass {
 
         if (targetTile == null || startTile == null) return
 
-        let target = targetTile.position
-        let start = startTile.position
+        let target = targetTile
+        let start = startTile
 
         let path = this.pathFinder.findPath(start, target)
 
         if (!path) return null
 
-        return path
+        console.log(path.map(tileObj => tileObj.tile))
+
+        return path.map(tileObj => tileObj.tile)
     }
 
     findClosestAdjacentPath = (startTile, targetTile) => {
         if (targetTile == null || startTile == null) return
 
-        let target = targetTile.position
-        let start = startTile.position
+        let target = targetTile
+        let start = startTile
 
         let neighbors = this.hexMapData.getNeighborKeys(target.q, target.r)
 
@@ -144,7 +146,15 @@ export default class HexMapControllerUtilsClass {
 
         if (!path) return null
 
-        return path
+        return path.map(tileObj => tileObj.tile)
+    }
+
+    checkValidPath = () => {
+        let unit = this.hexMapData.getSelectedUnit()
+        let path = [this.hexMapData.selections.unit, ...this.hexMapData.selections.path]
+        let pathCost = this.pathFinder.pathCost(path)
+        if(pathCost <= unit.movementRange) return true
+        return false
     }
 
     hexPositionToXYPosition = (keyObj, tileHeight) => {
@@ -162,6 +172,18 @@ export default class HexMapControllerUtilsClass {
         return {
             x: this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
             y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
+        }
+
+    }
+
+    XYPositionTohexPosition = (x, y) => {
+
+        let q = ((Math.sqrt(3) / 3) * x - (1 / 3) * y) / this.hexMapData.size
+        let r = ((2 / 3) * y) / this.hexMapData.size
+
+        return {
+            q: q,
+            r: r
         }
 
     }
@@ -215,13 +237,13 @@ export default class HexMapControllerUtilsClass {
 
         if (unit == null) return
 
-        let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
+        let startTile = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        let targetPosition = this.hexMapData.getSelectedTargetTile()
+        let targetTile = this.hexMapData.getSelectedTargetTile()
 
-        if (targetPosition == null) return
+        if (targetTile == null) return
 
-        unit.path = this.findPath(startPosition, targetPosition).map(tileObj => tileObj.tile)
+        unit.path = this.hexMapData.selections.path
 
         let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
 
@@ -232,7 +254,7 @@ export default class HexMapControllerUtilsClass {
 
         this.setUnitDirection(unit, unit.destination)
 
-        if (nextPosition.height != startPosition.height) {
+        if (nextPosition.height != startTile.height) {
             this.setUnitAnimation(unit, 'jumpUp')
         } else {
             this.setUnitAnimation(unit, 'walk')
@@ -248,7 +270,7 @@ export default class HexMapControllerUtilsClass {
 
         let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        unit.path = this.findClosestAdjacentPath(startPosition, target).map(tileObj => tileObj.tile)
+        unit.path = this.hexMapData.selections.path
 
         let nextPosition = this.hexMapData.getEntry(unit.path[0].q, unit.path[0].r)
 
@@ -390,7 +412,10 @@ export default class HexMapControllerUtilsClass {
         this.updateUi()
     }
 
-    getSelectedTile = (x, y, rotatedMap) => {
+    getSelectedTile = (x, y) => {
+
+        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+
         x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
         y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
 
@@ -493,7 +518,11 @@ export default class HexMapControllerUtilsClass {
 
         }
 
-        return tileClicked
+        if(tileClicked === null) return null
+        
+        let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
+
+        return rotatedTile
 
     }
 
