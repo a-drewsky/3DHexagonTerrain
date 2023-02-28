@@ -48,6 +48,8 @@ export default class HexMapDataClass {
       this.clickMovePos = null
 
       this.resources = 0
+
+      this.selectedUnit = null
    }
 
 

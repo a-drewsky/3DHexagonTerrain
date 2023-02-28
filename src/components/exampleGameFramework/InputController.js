@@ -11,28 +11,30 @@ export default class InputControllerClass {
    uiInput = (input) => {
       switch (input) {
          case 'move':
-            this.gameManager.objectMap.get('hexMap').controller.moveUnit();
+            this.gameManager.objectMap.get('hexMap').controller.uiController.move();
             return
          case 'mine':
-            this.gameManager.objectMap.get('hexMap').controller.mineOre();
+            this.gameManager.objectMap.get('hexMap').controller.uiController.mine();
             return
          case 'attack':
-            this.gameManager.objectMap.get('hexMap').controller.attack();
+            this.gameManager.objectMap.get('hexMap').controller.uiController.attack();
             return
          case 'capture':
-            this.gameManager.objectMap.get('hexMap').controller.capture();
+            this.gameManager.objectMap.get('hexMap').controller.uiController.capture();
             return
          case 'cancel':
-            this.gameManager.objectMap.get('hexMap').controller.cancelMovement();
+            this.gameManager.objectMap.get('hexMap').controller.uiController.cancel();
             return
          case 'rotateLeft':
-            this.gameManager.objectMap.get('hexMap').controller.rotateLeft()
+            this.gameManager.objectMap.get('hexMap').controller.uiController.rotateLeft()
+            this.gameManager.objectMap.get('camera').controller.rotateLeft()
             return
          case 'rotateRight':
-            this.gameManager.objectMap.get('hexMap').controller.rotateRight()
+            this.gameManager.objectMap.get('hexMap').controller.uiController.rotateRight()
+            this.gameManager.objectMap.get('camera').controller.rotateRight()
             return
          case 'addUnit':
-            this.gameManager.objectMap.get('hexMap').controller.setPlaceUnit()
+            this.gameManager.objectMap.get('hexMap').controller.uiController.setPlaceUnit()
             return
          case 'switchView':
             if (this.gameManager.objectMap.get('hexMap').settings.DEBUG) this.gameManager.objectMap.get('hexMap').switchView()
@@ -53,7 +55,7 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             // this.gameManager.objectMap.get('camera').controller.mouseDown(x, y);
-            this.gameManager.objectMap.get('hexMap').controller.click(x, y);
+            this.gameManager.objectMap.get('hexMap').controller.mouseDown(x, y);
             break;
       }
    }

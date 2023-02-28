@@ -18,7 +18,7 @@ export default class CameraControllerClass {
     mouseMove = (x, y) => {
         if (this.cameraData.anchorPoint == null) return;
 
-        if(x < 0 || y < 0 || x > this.canvas.width || y > this.canvas.height){
+        if (x < 0 || y < 0 || x > this.canvas.width || y > this.canvas.height) {
             this.mouseUp()
             return;
         }
@@ -32,15 +32,15 @@ export default class CameraControllerClass {
     mouseWheel = (deltaY) => {
         this.cameraData.clearAnchorPoint();
         if (deltaY > 0) {
-            if (this.cameraData.zoom < this.cameraData.maxZoom){
+            if (this.cameraData.zoom < this.cameraData.maxZoom) {
                 this.cameraData.zoom++;
                 return true;
-            } 
+            }
         } else {
-            if (this.cameraData.zoom > 0){
+            if (this.cameraData.zoom > 0) {
                 this.cameraData.zoom--;
                 return true;
-            } 
+            }
         }
 
         return false;
@@ -50,7 +50,7 @@ export default class CameraControllerClass {
     keyDown = (key) => {
         this.cameraData.clearAnchorPoint();
 
-        switch(key){
+        switch (key) {
             case 'e':
                 this.cameraData.rotation++;
                 break;
@@ -82,7 +82,7 @@ export default class CameraControllerClass {
     keyUp = (key) => {
         this.cameraData.clearAnchorPoint();
 
-        switch(key){
+        switch (key) {
             case 'w':
                 this.cameraData.movement.up = false;
                 break;
@@ -96,22 +96,22 @@ export default class CameraControllerClass {
                 this.cameraData.movement.right = false;
                 break;
         }
-        
+
         this.setVelocity();
     }
 
     setVelocity = () => {
         let movement = {
-            up : this.cameraData.movement.up == true ? 1 : 0,
-            left : this.cameraData.movement.left == true ? 1 : 0,
-            down : this.cameraData.movement.down == true ? 1 : 0,
-            right : this.cameraData.movement.right == true ? 1 : 0,
+            up: this.cameraData.movement.up == true ? 1 : 0,
+            left: this.cameraData.movement.left == true ? 1 : 0,
+            down: this.cameraData.movement.down == true ? 1 : 0,
+            right: this.cameraData.movement.right == true ? 1 : 0,
         }
         this.cameraData.velocity.x = movement.right - movement.left;
         this.cameraData.velocity.y = movement.down - movement.up;
-        if(Math.abs(this.cameraData.velocity.x) == 1 && Math.abs(this.cameraData.velocity.y) == 1){
-            this.cameraData.velocity.x *= Math.sqrt(2)/2
-            this.cameraData.velocity.y *= Math.sqrt(2)/2
+        if (Math.abs(this.cameraData.velocity.x) == 1 && Math.abs(this.cameraData.velocity.y) == 1) {
+            this.cameraData.velocity.x *= Math.sqrt(2) / 2
+            this.cameraData.velocity.y *= Math.sqrt(2) / 2
         }
     }
 
@@ -122,23 +122,41 @@ export default class CameraControllerClass {
 
         this.cameraData.clearAnchorPoint();
         if (deltaY > 0) {
-            if (this.cameraData.zoom < this.cameraData.maxZoom){
+            if (this.cameraData.zoom < this.cameraData.maxZoom) {
                 this.cameraData.zoom++;
                 updatePosition = true;
-            } 
+            }
         } else {
-            if (this.cameraData.zoom > 0){
+            if (this.cameraData.zoom > 0) {
                 this.cameraData.zoom--;
                 updatePosition = true;
-            } 
+            }
         }
 
         if (updatePosition) {
             //Set camera position
             this.cameraData.setCameraPos(
                 this.cameraData.position.x - zoomAmount * deltaY / 200,
-                this.cameraData.position.y - zoomAmount * deltaY / 200 * (this.canvas.height/this.canvas.width)
+                this.cameraData.position.y - zoomAmount * deltaY / 200 * (this.canvas.height / this.canvas.width)
             );
+        }
+    }
+
+    rotateRight = () => {
+        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
+            this.cameraData.clearAnchorPoint();
+            this.cameraData.rotation++
+            if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
+            this.cameraData.setVelocity();
+        }
+    }
+
+    rotateLeft = () => {
+        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
+            this.cameraData.clearAnchorPoint();
+            this.cameraData.rotation--
+            if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
+            this.cameraData.setVelocity();
         }
     }
 

@@ -194,6 +194,7 @@ const ContentPanel = () => {
                      onPointerDown={mouseDown}
                      onPointerUp={mouseUp}
                      onPointerMove={mouseMove}
+                     onPointerLeave={mouseUp}
 
                      onWheel={mouseWheel}
                      style={

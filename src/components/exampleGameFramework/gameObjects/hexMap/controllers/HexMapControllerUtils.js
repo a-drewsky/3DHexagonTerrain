@@ -526,7 +526,7 @@ export default class HexMapControllerUtilsClass {
 
     }
 
-    getCenterHexPos = () => {
+    getCenterHexPos = (newRotation) => {
 
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
@@ -536,16 +536,19 @@ export default class HexMapControllerUtilsClass {
 
         let zoom = zoomLevel * zoomAmount
 
+        let rotation = this.camera.rotation
+        if(newRotation !== undefined && newRotation !== null) rotation = newRotation
+
         let centerPos = {
-            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.hexMapData.posMap.get(this.camera.rotation).x,
-            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.hexMapData.posMap.get(this.camera.rotation).y
+            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.hexMapData.posMap.get(rotation).x,
+            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.hexMapData.posMap.get(rotation).y
         }
 
 
         let centerHexPos;
 
 
-        if (this.camera.rotation % 2 == 0) {
+        if (rotation % 2 == 0) {
             centerHexPos = {
                 q: (Math.sqrt(3) / 3 * centerPos.x - 1 / 3 * (centerPos.y * (1 / squish))) / size,
                 r: ((centerPos.y * (1 / squish)) * (2 / 3)) / size
