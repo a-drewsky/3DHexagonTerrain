@@ -303,7 +303,7 @@ export default class HexMapControllerUtilsClass {
 
     resetHexMapState = () => {
         this.resetSelected()
-        this.hexMapData.state = 'selectTile'
+        this.hexMapData.state.current = this.hexMapData.state.selectTile
     }
 
     setUnitFutureState = (unit) => {
@@ -362,7 +362,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     setUnitAnimation = (unit, state) => {
-        this.hexMapData.state = 'animation'
+        this.hexMapData.state.current = this.hexMapData.state.animation
         unit.state = state
         unit.frame = 0
         unit.animationStartTime = Date.now()
@@ -399,7 +399,7 @@ export default class HexMapControllerUtilsClass {
 
         this.setSelection(unit.position.q, unit.position.r, 'rotate')
 
-        this.hexMapData.state = 'chooseRotation'
+        this.hexMapData.state.current = this.hexMapData.state.chooseRotation
 
     }
 

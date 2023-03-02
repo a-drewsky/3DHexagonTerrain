@@ -1,10 +1,11 @@
 export default class HexMapControllerUiClass {
 
-    constructor(hexMapData, camera, canvas, utils) {
+    constructor(hexMapData, cameraController, camera, canvas, utils) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
         this.utils = utils
+        this.cameraController = cameraController
     }
 
     move = () => {
@@ -24,8 +25,6 @@ export default class HexMapControllerUiClass {
         if (targetStructure == null) return
 
         this.hexMapData.selectedUnit.target = targetStructure
-
-        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.selectedUnit.position.q, this.hexMapData.selectedUnit.position.r)
 
         if (this.hexMapData.selections.path.length == 0) {
             this.utils.mineOre(this.hexMapData.selectedUnit, targetTile)
@@ -57,9 +56,7 @@ export default class HexMapControllerUiClass {
 
         this.hexMapData.selectedUnit.target = targetObject
 
-        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.selectedUnit.position.q, this.hexMapData.selectedUnit.position.r)
-
-        if (neighbors.filter(tile => tile.q == targetObject.position.q && tile.r == targetObject.position.r).length == 1) {
+        if (this.hexMapData.selections.path.length == 0) {
             this.utils.attackUnit(this.hexMapData.selectedUnit)
             this.utils.resetSelected()
             this.utils.clearContextMenu()
@@ -96,24 +93,24 @@ export default class HexMapControllerUiClass {
     }
 
     setPlaceUnit = () => {
-        if (this.hexMapData.state != 'selectTile') return
+        if (this.hexMapData.state.current != 'selectTile') return
 
         this.utils.resetSelected()
         this.utils.resetHover()
-        this.hexMapData.state = 'placeUnit'
+        this.hexMapData.state.current = this.hexMapData.state.placeUnit
     }
 
     cancel = () => {
         this.utils.resetSelected()
 
-        this.hexMapData.state = 'selectTile'
+        this.hexMapData.state.current = this.hexMapData.state.selectTile
 
         this.utils.clearContextMenu()
     }
     
     rotateRight = () => {
 
-        if (this.hexMapData.state == 'selectAction') return
+        if (this.hexMapData.state.current == 'selectAction') return
 
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
@@ -159,11 +156,13 @@ export default class HexMapControllerUiClass {
 
             }
         }
+
+        this.cameraController.rotateRight()
     }
 
     rotateLeft = () => {
 
-        if (this.hexMapData.state == 'selectAction') return
+        if (this.hexMapData.state.current == 'selectAction') return
 
         let zoomAmount = this.camera.zoomAmount
         let zoomLevel = this.camera.zoom
@@ -210,6 +209,8 @@ export default class HexMapControllerUiClass {
 
             }
         }
+
+        this.cameraController.rotateLeft()
     }
 
 }

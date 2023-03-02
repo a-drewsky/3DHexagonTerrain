@@ -1,6 +1,5 @@
 import HexMapClass from "./gameObjects/hexMap/HexMap"
 import HexMapDebugSmoothingClass from "./gameObjects/hexMap/debug/HexMapDebugSmoothing";
-import CameraClass from "./gameObjects/camera/Camera";
 
 
 export default class GameManagerClass {
@@ -17,7 +16,8 @@ export default class GameManagerClass {
         //create all state objects like this
         this.state = {
             play: 'play',
-            pause: 'pause'
+            pause: 'pause',
+            current: null
         }
         this.state.current = this.state.play
 
@@ -28,16 +28,11 @@ export default class GameManagerClass {
     //Set up function
     createObjects = () => {
 
-        //Initialize game objects
-        this.objectMap.set("camera", new CameraClass(this.canvas)
-        );
-
         if (this.settings.DEBUG) {
             this.objectMap.set("hexMap",
                 new HexMapDebugSmoothingClass(
                     this.ctx,
                     this.canvas,
-                    this.objectMap.get("camera").data,
                     this.images,
                     this.settings
                 )
@@ -47,8 +42,6 @@ export default class GameManagerClass {
                 new HexMapClass(
                     this.ctx,
                     this.canvas,
-                    this.objectMap.get("camera").data,
-                    this.objectMap.get("camera").controller,
                     this.images,
                     this.settings,
                     this.uiComponents,

@@ -41,7 +41,16 @@ export default class HexMapDataClass {
 
       this.maxHeight = null;
 
-      this.state = 'selectTile'
+      this.state = {
+         selectTile: 'selectTile',
+         selectMovement: 'selectMovement',
+         placeUnit: 'placeUnit',
+         chooseRotation: 'chooseRotation',
+         selectAction: 'selectAction',
+         animation: 'animation',
+         current: null
+      }
+      this.state.current = this.state.selectTile
 
       this.clickDist = 20
       this.clickPos = null

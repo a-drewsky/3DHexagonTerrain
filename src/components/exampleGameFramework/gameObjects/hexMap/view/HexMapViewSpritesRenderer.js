@@ -7,7 +7,6 @@ export default class HexMapViewSpritesRendererClass {
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images
-        console.log(settings)
         this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
 
 

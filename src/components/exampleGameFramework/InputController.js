@@ -27,11 +27,9 @@ export default class InputControllerClass {
             return
          case 'rotateLeft':
             this.gameManager.objectMap.get('hexMap').controller.uiController.rotateLeft()
-            this.gameManager.objectMap.get('camera').controller.rotateLeft()
             return
          case 'rotateRight':
             this.gameManager.objectMap.get('hexMap').controller.uiController.rotateRight()
-            this.gameManager.objectMap.get('camera').controller.rotateRight()
             return
          case 'addUnit':
             this.gameManager.objectMap.get('hexMap').controller.uiController.setPlaceUnit()
@@ -54,7 +52,6 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            // this.gameManager.objectMap.get('camera').controller.mouseDown(x, y);
             this.gameManager.objectMap.get('hexMap').controller.mouseDown(x, y);
             break;
       }
@@ -64,7 +61,6 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.objectMap.get('camera').controller.mouseUp();
             this.gameManager.objectMap.get('hexMap').controller.mouseUp();
             break;
       }
@@ -79,7 +75,6 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.objectMap.get('camera').controller.mouseMove(x, y);
             this.gameManager.objectMap.get('hexMap').controller.mouseMove(x, y);
             break;
       }
@@ -89,7 +84,7 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.objectMap.get('camera').controller.zoom(deltaY);
+            this.gameManager.objectMap.get('hexMap').camera.controller.zoom(deltaY);
             break;
       }
    }

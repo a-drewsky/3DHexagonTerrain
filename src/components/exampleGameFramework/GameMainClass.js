@@ -20,6 +20,7 @@ export default class GameMainClass {
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle'
       this.ctx.lineWidth = 1;
+      this.ctx.imageSmoothingEnabled = false;
 
       //loading
       this.loaded = false;

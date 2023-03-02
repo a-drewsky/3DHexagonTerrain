@@ -10,7 +10,7 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, camera, canvas, images, settings, uiComponents, updateUi, renderer, globalState) {
+    constructor(hexMapData, cameraController, camera, canvas, images, settings, uiComponents, updateUi, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -35,9 +35,11 @@ export default class HexMapControllerClass {
 
         this.updateUi = updateUi
 
+        this.cameraController = cameraController
+
         this.mouseController = new HexMapControllerMouseClass(hexMapData, renderer, this.pathFinder, this.utils, this.config)
 
-        this.uiController = new HexMapControllerUiClass(hexMapData, camera, canvas, this.utils)
+        this.uiController = new HexMapControllerUiClass(hexMapData, cameraController, camera, canvas, this.utils)
 
     }
 
@@ -48,6 +50,8 @@ export default class HexMapControllerClass {
     }
 
     mouseUp = () => {
+
+        this.cameraController.mouseUp()
 
         if (this.hexMapData.clickPos !== null) {
 
@@ -64,7 +68,7 @@ export default class HexMapControllerClass {
 
             let tile = this.hexMapData.getEntry(tileClicked.q, tileClicked.r)
 
-            switch (this.hexMapData.state) {
+            switch (this.hexMapData.state.current) {
                 case 'selectTile':
                     this.mouseController.selectTile(tileClicked, tile)
                     return
@@ -88,6 +92,8 @@ export default class HexMapControllerClass {
 
     mouseMove = (x, y) => {
 
+        this.cameraController.mouseMove(x, y)
+
         if (this.hexMapData.clickMovePos !== null) {
             this.hexMapData.clickMovePos.x = x
             this.hexMapData.clickMovePos.y = y
@@ -95,11 +101,14 @@ export default class HexMapControllerClass {
 
         this.utils.resetHover()
 
-        switch (this.hexMapData.state) {
+        switch (this.hexMapData.state.current) {
             case 'selectTile':
             case 'placeUnit':
             case 'animation':
                 this.mouseController.setHover(x, y)
+                return
+            case 'selectMovement':
+                this.mouseController.updateUnitPath(x, y)
                 return
             case 'chooseRotation':
                 this.mouseController.setUnitMouseDirection(x, y)
@@ -107,8 +116,6 @@ export default class HexMapControllerClass {
                 return
             case 'selectAction':
                 return
-            case 'selectMovement':
-                this.mouseController.updateUnitPath(x, y)
         }
     }
 

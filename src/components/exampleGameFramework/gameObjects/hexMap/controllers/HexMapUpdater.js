@@ -22,9 +22,7 @@ export default class HexMapUpdaterClass {
 
     update = () => {
 
-        if (this.hexMapData.state != 'selectAction' && this.hexMapData.clickPos !== null) console.log(this.hexMapData.clickPos, this.hexMapData.clickMovePos)
-
-        if (this.hexMapData.state != 'selectAction' && this.hexMapData.clickPos !== null && this.collision.vectorDist(this.hexMapData.clickPos, this.hexMapData.clickMovePos) > this.hexMapData.clickDist) {
+        if (this.hexMapData.state.current != 'selectAction' && this.hexMapData.clickPos !== null && this.collision.vectorDist(this.hexMapData.clickPos, this.hexMapData.clickMovePos) > this.hexMapData.clickDist) {
             this.cameraController.mouseDown(this.hexMapData.clickMovePos.x, this.hexMapData.clickMovePos.y)
             this.hexMapData.clickPos = null
             this.hexMapData.clickMovePos = null
