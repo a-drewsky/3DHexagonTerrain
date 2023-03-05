@@ -1,32 +1,32 @@
-import copper_mine_1 from '../images/structures/mines/copper_mine_1.png'
-import copper_mine_2 from '../images/structures/mines/copper_mine_2.png'
-import copper_mine_3 from '../images/structures/mines/copper_mine_3.png'
-import copper_mine_4 from '../images/structures/mines/copper_mine_4.png'
-import copper_mine_5 from '../images/structures/mines/copper_mine_5.png'
+import copper_mine_1 from '../images/mines/copper_mine_1.png'
+import copper_mine_2 from '../images/mines/copper_mine_2.png'
+import copper_mine_3 from '../images/mines/copper_mine_3.png'
+import copper_mine_4 from '../images/mines/copper_mine_4.png'
+import copper_mine_5 from '../images/mines/copper_mine_5.png'
 
-import gold_mine_1 from '../images/structures/mines/gold_mine_1.png'
-import gold_mine_2 from '../images/structures/mines/gold_mine_2.png'
-import gold_mine_3 from '../images/structures/mines/gold_mine_3.png'
-import gold_mine_4 from '../images/structures/mines/gold_mine_4.png'
-import gold_mine_5 from '../images/structures/mines/gold_mine_5.png'
+import gold_mine_1 from '../images/mines/gold_mine_1.png'
+import gold_mine_2 from '../images/mines/gold_mine_2.png'
+import gold_mine_3 from '../images/mines/gold_mine_3.png'
+import gold_mine_4 from '../images/mines/gold_mine_4.png'
+import gold_mine_5 from '../images/mines/gold_mine_5.png'
 
-import iron_mine_1 from '../images/structures/mines/iron_mine_1.png'
-import iron_mine_2 from '../images/structures/mines/iron_mine_2.png'
-import iron_mine_3 from '../images/structures/mines/iron_mine_3.png'
-import iron_mine_4 from '../images/structures/mines/iron_mine_4.png'
-import iron_mine_5 from '../images/structures/mines/iron_mine_5.png'
+import iron_mine_1 from '../images/mines/iron_mine_1.png'
+import iron_mine_2 from '../images/mines/iron_mine_2.png'
+import iron_mine_3 from '../images/mines/iron_mine_3.png'
+import iron_mine_4 from '../images/mines/iron_mine_4.png'
+import iron_mine_5 from '../images/mines/iron_mine_5.png'
 
-import ruby_mine_1 from '../images/structures/mines/ruby_mine_1.png'
-import ruby_mine_2 from '../images/structures/mines/ruby_mine_2.png'
-import ruby_mine_3 from '../images/structures/mines/ruby_mine_3.png'
-import ruby_mine_4 from '../images/structures/mines/ruby_mine_4.png'
-import ruby_mine_5 from '../images/structures/mines/ruby_mine_5.png'
+import ruby_mine_1 from '../images/mines/ruby_mine_1.png'
+import ruby_mine_2 from '../images/mines/ruby_mine_2.png'
+import ruby_mine_3 from '../images/mines/ruby_mine_3.png'
+import ruby_mine_4 from '../images/mines/ruby_mine_4.png'
+import ruby_mine_5 from '../images/mines/ruby_mine_5.png'
 
-import amethyst_mine_1 from '../images/structures/mines/amethyst_mine_1.png'
-import amethyst_mine_2 from '../images/structures/mines/amethyst_mine_2.png'
-import amethyst_mine_3 from '../images/structures/mines/amethyst_mine_3.png'
-import amethyst_mine_4 from '../images/structures/mines/amethyst_mine_4.png'
-import amethyst_mine_5 from '../images/structures/mines/amethyst_mine_5.png'
+import amethyst_mine_1 from '../images/mines/amethyst_mine_1.png'
+import amethyst_mine_2 from '../images/mines/amethyst_mine_2.png'
+import amethyst_mine_3 from '../images/mines/amethyst_mine_3.png'
+import amethyst_mine_4 from '../images/mines/amethyst_mine_4.png'
+import amethyst_mine_5 from '../images/mines/amethyst_mine_5.png'
 
 
 import large_rock_shadow_1 from '../images/shadows/large_round_shadow_1.png'
@@ -160,9 +160,7 @@ export default class ResourceImagesClass {
                 [null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4, null, this.coppermine_sprite_4],
                 [null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5, null, this.coppermine_sprite_5]
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
                 [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
@@ -197,9 +195,7 @@ export default class ResourceImagesClass {
                 [this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4, this.goldmine_sprite_4],
                 [this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5, this.goldmine_sprite_5],
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
                 [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
@@ -233,9 +229,7 @@ export default class ResourceImagesClass {
                 [this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4, this.ironmine_sprite_4],
                 [this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5, this.ironmine_sprite_5],
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
                 [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
@@ -269,9 +263,7 @@ export default class ResourceImagesClass {
                 [this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4, this.rubymine_sprite_4],
                 [this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5, this.rubymine_sprite_5],
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
                 [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
@@ -305,9 +297,7 @@ export default class ResourceImagesClass {
                 [this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4, this.amethystmine_sprite_4],
                 [this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5, this.amethystmine_sprite_5],
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
                 [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],

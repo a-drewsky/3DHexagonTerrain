@@ -102,9 +102,17 @@ export default class HexMapBuilderUtilsClass {
             if (posName.q == -1) posName.q = 'm1'
             if (posName.r == -1) posName.r = 'm1'
 
-            let terrain = this.config.mainBase(tileToSetKey, posName)
+            let terrain = this.config.mainBase(tileToSetKey)
 
-            let curTerrainIndex = this.hexMapData.getTerrainIndex(terrain.position.q, terrain.position.r)
+            //set main base rotation
+            if(posName.q == 1 && posName.r == 'm1') terrain.rotation = 1
+            else if(posName.q == 1 && posName.r == 0) terrain.rotation = 3
+            else if(posName.q == 0 && posName.r == 1) terrain.rotation = 5
+            else if(posName.q == 'm1' && posName.r == 1) terrain.rotation = 7
+            else if(posName.q == 'm1' && posName.r == 0) terrain.rotation = 9
+            else if(posName.q == 0 && posName.r == 'm1') terrain.rotation = 11
+
+            let curTerrainIndex = this.hexMapData.getTerrainIndex(tileToSetKey.q, tileToSetKey.r)
 
             if (curTerrainIndex != -1) {
                 this.hexMapData.terrainList[curTerrainIndex] = terrain

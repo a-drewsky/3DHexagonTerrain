@@ -1,7 +1,7 @@
 
 import TileImagesClass from './tileImages'
 import ModifierImagesClass from './modifierImages'
-import BaseImagesClass from './baseImages'
+import BaseImagesClass from './bases/baseImages'
 import PropImagesClass from './propImages'
 import ResourceImagesClass from './resourceImages'
 import UnitImagesClass from './unitImages'

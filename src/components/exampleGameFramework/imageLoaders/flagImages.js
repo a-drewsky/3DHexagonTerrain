@@ -1,4 +1,4 @@
-import flag from '../images/structures/mainBase/main_base_q0r0.png'
+import flag from '../images/bases/mainBase/main_base_q0r0.png'
 
 import flag_shadow_1 from '../images/shadows/small_round_shadow_1.png'
 import flag_shadow_3 from '../images/shadows/small_round_shadow_3.png'
@@ -71,9 +71,7 @@ export default class FlagImagesClass {
             images: [
                 [null, this.flag, null, this.flag, null, this.flag, null, this.flag, null, this.flag, null, this.flag]
             ],
-            shadowImages: [
-                [null, this.flag_shadow_1, null, this.flag_shadow_3, null, this.flag_shadow_5, null, this.flag_shadow_7, null, this.flag_shadow_9, null, this.flag_shadow_11]
-            ],
+            shadowImages: [null, this.flag_shadow_1, null, this.flag_shadow_3, null, this.flag_shadow_5, null, this.flag_shadow_7, null, this.flag_shadow_9, null, this.flag_shadow_11],
             deadSpace: [
                 [null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32, null, 3 / 32]
             ]

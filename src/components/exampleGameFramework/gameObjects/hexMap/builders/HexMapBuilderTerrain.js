@@ -28,10 +28,10 @@ export default class HexMapBuilderTerrainClass {
       this.generateLargeRocks()
       this.generateMainBases(q, r, mapSize)
       this.generateMines(q, r, mapSize)
-      this.generateStrongholds(q, r, mapSize)
+      this.generateBunkers(q, r, mapSize)
    }
 
-   generateStrongholds = (q, r, mapSize) => {
+   generateBunkers = (q, r, mapSize) => {
 
       let bufferSize = this.mapSizeSettings[mapSize].bufferSize
 
@@ -72,7 +72,7 @@ export default class HexMapBuilderTerrainClass {
             this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
 
-            let terrain = this.config.base(selectedTilePos)
+            let terrain = this.config.bunker(selectedTilePos)
 
             selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
             this.utils.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)

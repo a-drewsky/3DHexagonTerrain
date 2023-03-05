@@ -1,18 +1,13 @@
+import shadow_1 from '../../images/shadows/base_shadow_1.png'
+import shadow_3 from '../../images/shadows/base_shadow_3.png'
+import shadow_5 from '../../images/shadows/base_shadow_5.png'
+import shadow_7 from '../../images/shadows/base_shadow_7.png'
+import shadow_9 from '../../images/shadows/base_shadow_9.png'
+import shadow_11 from '../../images/shadows/base_shadow_11.png'
 
+import base_sheet from '../../images/bases/mainBase/main_base_sheet.png'
 
-import shadow_1 from '../images/shadows/medium_round_shadow_1.png'
-import shadow_3 from '../images/shadows/medium_round_shadow_3.png'
-import shadow_5 from '../images/shadows/medium_round_shadow_5.png'
-import shadow_7 from '../images/shadows/medium_round_shadow_7.png'
-import shadow_9 from '../images/shadows/medium_round_shadow_9.png'
-import shadow_11 from '../images/shadows/medium_round_shadow_11.png'
-
-import attack_sheet from '../images/units/villagerUnit/villager_unit_attack_sheet.png'
-import death_sheet from '../images/units/villagerUnit/villager_unit_death_sheet.png'
-import mine_sheet from '../images/units/villagerUnit/villager_unit_mine_sheet.png'
-import walk_sheet from '../images/units/villagerUnit/villager_unit_walk_sheet.png'
-
-export default class UnitImagesVillagerClass {
+export default class MainBaseImagesClass {
 
     constructor() {
 
@@ -38,18 +33,21 @@ export default class UnitImagesVillagerClass {
         }
 
         this.shadowSize = {
-            width: 1,
+            width: 2,
             height: 1.5
         }
 
         this.shadowOffset = {
-            x: 0,
+            x: 0.5,
             y: 0.5
         }
 
-        this.deadSpace = [
-            [null, 9 / 32, null, 9 / 32, null, 9 / 32, null, 9 / 32, null, 9 / 32, null, 9 / 32]
-        ]
+        this.deadSpace = {
+            'health_lte_100': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
+            'health_lte_75': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
+            'health_lte_50': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
+            'health_lte_25': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32]
+        }
 
         this.rows = {
             0: 'frontRight',
@@ -61,90 +59,30 @@ export default class UnitImagesVillagerClass {
         }
 
         this.sheet_data = {
-            attack: {
-                image: attack_sheet,
+            default: {
+                image: base_sheet,
+                spriteCount: 5,
                 sprites: {
-                    0: 'attack_1',
-                    1: 'attack_2',
-                    2: 'attack_3',
-                    3: 'attack_4',
-                    4: 'attack_5'
-                }
-            },
-            death: {
-                image: death_sheet,
-                sprites: {
-                    0: 'hit_1',
-                    1: 'hit_2',
-                    2: 'hit_3',
-                    3: 'death_1',
-                    4: 'death_2'
-                }
-            },
-            mine: {
-                image: mine_sheet,
-                sprites: {
-                    0: 'mine_1',
-                    1: 'mine_2',
-                    2: 'mine_3',
-                    3: 'mine_4',
-                    4: 'mine_5',
-                    5: 'mine_6'
-                }
-            },
-            walk: {
-                image: walk_sheet,
-                sprites: {
-                    0: 'idle_1',
-                    1: 'walk_1',
-                    2: 'walk_2',
-                    3: 'jump_1',
-                    4: 'jump_2'
+                    0: 'default_1',
+                    1: 'default_2',
+                    2: 'default_3',
+                    3: 'default_4'
                 }
             }
         }
 
         this.animation_data = {
-            idle: [
-                'idle_1'
+            health_lte_100: [
+                'default_1'
             ],
-            walk: [
-                'walk_1',
-                'idle_1',
-                'walk_2',
-                'idle_1'
+            health_lte_75: [
+                'default_2'
             ],
-            jumpUp: [
-                'jump_1'
+            health_lte_50: [
+                'default_3'
             ],
-            jumpDown: [
-                'jump_2'
-            ],
-            mine: [
-                'mine_1',
-                'mine_2',
-                'mine_3',
-                'mine_4',
-                'mine_5',
-                'mine_6'
-            ],
-            attack: [
-                'attack_1',
-                'attack_2',
-                'attack_3',
-                'attack_4',
-                'attack_5'
-            ],
-            hit: [
-                'hit_1',
-                'hit_2',
-                'hit_3'
-            ],
-            death: [
-                'death_1',
-                'death_2',
-                'death_2',
-                'death_2'
+            health_lte_25: [
+                'default_4'
             ]
         }
 

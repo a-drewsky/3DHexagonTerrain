@@ -1,5 +1,5 @@
-import savanna_tree from '../images/structures/savanna_tree.png'
-import large_rock from '../images/structures/large_rock.png'
+import savanna_tree from '../images/props/savanna_tree.png'
+import large_rock from '../images/props/large_rock.png'
 
 
 import large_rock_shadow_1 from '../images/shadows/large_round_shadow_1.png'
@@ -98,9 +98,7 @@ export default class PropImagesClass {
             images: [
                 [this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite, this.savannatree_sprite]
             ],
-            shadowImages: [
-                [null, this.savanna_tree_shadow_1, null, this.savanna_tree_shadow_3, null, this.savanna_tree_shadow_5, null, this.savanna_tree_shadow_7, null, this.savanna_tree_shadow_9, null, this.savanna_tree_shadow_11]
-            ],
+            shadowImages: [null, this.savanna_tree_shadow_1, null, this.savanna_tree_shadow_3, null, this.savanna_tree_shadow_5, null, this.savanna_tree_shadow_7, null, this.savanna_tree_shadow_9, null, this.savanna_tree_shadow_11],
             deadSpace: [
                 [null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32, null, 2 / 32]
             ]
@@ -126,9 +124,7 @@ export default class PropImagesClass {
             images: [
                 [this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite, this.largerock_sprite]
             ],
-            shadowImages: [
-                [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11]
-            ],
+            shadowImages: [null, this.large_rock_shadow_1, null, this.large_rock_shadow_3, null, this.large_rock_shadow_5, null, this.large_rock_shadow_7, null, this.large_rock_shadow_9, null, this.large_rock_shadow_11],
             deadSpace: [
                 [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32]
             ]

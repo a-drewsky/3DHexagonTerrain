@@ -56,19 +56,20 @@ export default class HexMapUpdaterClass {
 
     }
 
+    //move to base class
     updateBase = (base) => {
 
         let health = base.health
 
         let curState = base.state
 
-        let newState = health > 75 ? 0 : health > 50 ? 1 : health > 25 ? 2 : health > 0 ? 3 : 4
+        let newState = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
 
         if (newState == curState) return
 
         base.state = newState
 
-        if (base.state < 4) {
+        if (base.state != 'destroyed') {
             this.renderer.renderStructure(base)
         } else {
             let rubblepile = this.config.rubblepile(base.position)

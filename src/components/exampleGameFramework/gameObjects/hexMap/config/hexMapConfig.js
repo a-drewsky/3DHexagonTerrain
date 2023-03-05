@@ -72,7 +72,7 @@ export default class HexMapConfigClass {
         }
     }
 
-    base = (pos) => {
+    bunker = (pos) => {
         return {
             position: {
                 q: pos.q,
@@ -80,16 +80,17 @@ export default class HexMapConfigClass {
             },
             name: 'Stronghold',
             type: 'base',
-            sprite: 'base',
-            state: 0,
+            sprite: 'bunker',
+            state: 'health_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            health: 100
+            health: 100,
+            rotation: 1
         }
     }
 
-    mainBase = (pos, posName) => {
+    mainBase = (pos) => {
         return {
             position: {
                 q: pos.q,
@@ -97,12 +98,13 @@ export default class HexMapConfigClass {
             },
             name: 'Main Base',
             type: 'base',
-            sprite: `mainbase_q${posName.q}r${posName.r}`,
-            state: 0,
+            sprite: `mainbase`,
+            state: 'health_lte_100',
             tileHeight: 3,
             images: [],
             shadowImages: [],
-            health: 100
+            health: 100,
+            rotation: 1
         }
     }
 
