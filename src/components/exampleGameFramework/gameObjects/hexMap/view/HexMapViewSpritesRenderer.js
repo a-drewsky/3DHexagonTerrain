@@ -244,7 +244,7 @@ export default class HexMapViewSpritesRendererClass {
 
         let imageList = []
 
-        if(terrainObject.type == 'base'){
+        if(terrainObject.type == 'base' || terrainObject.type == 'resource' || terrainObject.type == 'prop'){
 
 
             for (let i = 0; i < sprite[terrainObject.state].images.length; i++) {
@@ -263,6 +263,14 @@ export default class HexMapViewSpritesRendererClass {
                         let tempctx = tempCanvas.getContext('2d')
     
                         tempctx.drawImage(sprite[terrainObject.state].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+    
+                        if (terrainObject.type == 'resource') {
+                            tempCanvas = this.utils.addResourceBar(tempCanvas, sprite.spriteSize, terrainObject)
+                        }
+        
+                        if (terrainObject.type == 'base') {
+                            tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, terrainObject)
+                        }
     
                         imageList[rotation] = tempCanvas
     

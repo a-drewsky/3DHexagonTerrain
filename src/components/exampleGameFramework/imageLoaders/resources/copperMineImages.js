@@ -1,14 +1,14 @@
 import ImageLoaderClass from '../ImageLoader'
 
-import shadow_sheet from '../../images/shadows/base_shadow_sheet.png'
+import copper_mine_sheet from '../../images/resources/copper_mine_sheet.png'
 
-import bunker_sheet from '../../images/bases/base/base_sheet.png'
+import shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
 
-export default class BunkerImagesClass extends ImageLoaderClass {
+export default class CopperMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super(shadow_sheet, true)
 
         this.spriteSize = {
             width: 1,
@@ -31,10 +31,10 @@ export default class BunkerImagesClass extends ImageLoaderClass {
         }
 
         this.deadSpace = {
-            'health_lte_100': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_75': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_50': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_25': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32]
+            'resources_lte_100': [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
+            'resources_lte_75': [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
+            'resources_lte_50': [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
+            'resources_lte_25': [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32]  
         }
 
         this.rows = {
@@ -48,7 +48,7 @@ export default class BunkerImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: bunker_sheet,
+                image: copper_mine_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',
@@ -59,16 +59,16 @@ export default class BunkerImagesClass extends ImageLoaderClass {
         }
 
         this.animation_data = {
-            health_lte_100: [
+            resources_lte_100: [
                 'default_1'
             ],
-            health_lte_75: [
+            resources_lte_75: [
                 'default_2'
             ],
-            health_lte_50: [
+            resources_lte_50: [
                 'default_3'
             ],
-            health_lte_25: [
+            resources_lte_25: [
                 'default_4'
             ]
         }

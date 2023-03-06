@@ -41,13 +41,13 @@ export default class HexMapUpdaterClass {
 
         let curState = mine.state
 
-        let newState = resources > 75 ? 0 : resources > 50 ? 1 : resources > 25 ? 2 : resources > 0 ? 3 : 4
+        let newState = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
 
         if (newState == curState) return
 
         mine.state = newState
 
-        if (mine.state < 4) {
+        if (mine.state != 'destroyed') {
             this.renderer.renderStructure(mine)
         } else {
             let emptymine = this.config.emptymine(mine.position)

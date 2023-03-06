@@ -65,7 +65,6 @@ export default class UiImagesClass {
             value.onload = () => {
                 imagesLoaded++;
                 
-                console.log(imagesLoaded)
                 if (imagesLoaded == Object.keys(this.images).length) {
                     delete this.images;
                     startGame();

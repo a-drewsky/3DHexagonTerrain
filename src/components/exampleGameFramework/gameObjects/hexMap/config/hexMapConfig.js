@@ -132,12 +132,13 @@ export default class HexMapConfigClass {
             },
             name: 'Gold Mine',
             type: 'resource',
-            sprite: 'goldmine',
-            state: 0,
+            sprite: 'gold_mine',
+            state: 'resources_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            resources: 100
+            resources: 100,
+            rotation: 1
         }
     }
 
@@ -149,12 +150,13 @@ export default class HexMapConfigClass {
             },
             name: 'Copper Mine',
             type: 'resource',
-            sprite: 'coppermine',
-            state: 0,
+            sprite: 'copper_mine',
+            state: 'resources_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            resources: 100
+            resources: 100,
+            rotation: 1
         }
     }
 
@@ -166,12 +168,13 @@ export default class HexMapConfigClass {
             },
             name: 'Iron Mine',
             type: 'resource',
-            sprite: 'ironmine',
-            state: 0,
+            sprite: 'iron_mine',
+            state: 'resources_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            resources: 100
+            resources: 100,
+            rotation: 1
         }
     }
 
@@ -183,12 +186,13 @@ export default class HexMapConfigClass {
             },
             name: 'Ruby Mine',
             type: 'resource',
-            sprite: 'rubymine',
-            state: 0,
+            sprite: 'ruby_mine',
+            state: 'resources_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            resources: 100
+            resources: 100,
+            rotation: 1
         }
     }
 
@@ -200,12 +204,13 @@ export default class HexMapConfigClass {
             },
             name: 'Amethyst Mine',
             type: 'resource',
-            sprite: 'amethystmine',
-            state: 0,
+            sprite: 'amethyst_mine',
+            state: 'resources_lte_100',
             tileHeight: 2,
             images: [],
             shadowImages: [],
-            resources: 100
+            resources: 100,
+            rotation: 1
         }
     }
 
@@ -217,11 +222,12 @@ export default class HexMapConfigClass {
             },
             name: 'Savanna Tree',
             type: 'prop',
-            sprite: 'savannatree',
-            state: 0,
+            sprite: 'savanna_tree',
+            state: 'default',
             tileHeight: 3,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -233,11 +239,12 @@ export default class HexMapConfigClass {
             },
             name: 'Large Rock',
             type: 'prop',
-            sprite: 'largerock',
-            state: 0,
+            sprite: 'large_rock',
+            state: 'default',
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
