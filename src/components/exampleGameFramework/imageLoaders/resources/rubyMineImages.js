@@ -30,11 +30,11 @@ export default class RubyMineImagesClass extends ImageLoaderClass {
             y: 0.5
         }
 
-        this.deadSpace = {
-            'resources_lte_100': [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32],
-            'resources_lte_75': [null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32, null, 13 / 32],
-            'resources_lte_50': [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32],
-            'resources_lte_25': [null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32, null, 18 / 32]  
+        this.padding = {
+            'resources_lte_100': [null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}],
+            'resources_lte_75': [null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}],
+            'resources_lte_50': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}],
+            'resources_lte_25': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}]  
         }
 
         this.rows = {

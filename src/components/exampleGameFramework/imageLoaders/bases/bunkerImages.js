@@ -30,11 +30,11 @@ export default class BunkerImagesClass extends ImageLoaderClass {
             y: 0.5
         }
 
-        this.deadSpace = {
-            'health_lte_100': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_75': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_50': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32],
-            'health_lte_25': [null, 16 / 32, null, 13 / 32, null, 16 / 32, null, 16 / 32, null, 13 / 32, null, 16 / 32]
+        this.padding = {
+            'health_lte_100': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
+            'health_lte_75': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
+            'health_lte_50': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
+            'health_lte_25': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}]
         }
 
         this.rows = {

@@ -200,19 +200,19 @@ export default class HexMapSettingsClass {
         }
         
         this.MODIFIERS = {
-            oaktree: {
+            woodland_trees: {
                 secondSpriteChance: 0.4,
                 spriteIncrementChance: 0.2
             },
-            tundratree: {
+            tundra_trees: {
                 secondSpriteChance: 0.6,
                 spriteIncrementChance: 0.2
             },
-            deserttree: {
+            desert_trees: {
                 secondSpriteChance: 0.6,
                 spriteIncrementChance: 0.3
             },
-            rocks: {
+            small_rocks: {
                 secondSpriteChance: 0.4,
                 spriteIncrementChance: 0.2
             }

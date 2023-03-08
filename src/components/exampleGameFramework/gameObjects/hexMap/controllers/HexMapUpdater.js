@@ -88,8 +88,7 @@ export default class HexMapUpdaterClass {
 
         switch (unit.state) {
             case 'walk':
-            case 'jumpUp':
-            case 'jumpDown':
+            case 'jump':
                 this.updateUnitPath(unit)
                 return
             case 'mine':
@@ -167,12 +166,6 @@ export default class HexMapUpdaterClass {
     }
 
     updateUnitPath = (unit) => {
-        if (unit.state == 'jumpUp') {
-            //make getPercent function
-            let percent = (unit.destinationCurTime - unit.destinationStartTime) / this.travelTime
-
-            if (percent >= 0.5) this.utils.setUnitAnimation(unit, 'jumpDown')
-        }
 
         unit.destinationCurTime = Date.now()
         if (unit.destinationCurTime - unit.destinationStartTime >= this.travelTime) {
@@ -194,7 +187,7 @@ export default class HexMapUpdaterClass {
                 let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
                 let nextPosition = this.hexMapData.getEntry(unit.destination.q, unit.destination.r)
                 if (nextPosition.height != startPosition.height) {
-                    this.utils.setUnitAnimation(unit, 'jumpUp')
+                    this.utils.setUnitAnimation(unit, 'jump')
                 }
 
             } else {

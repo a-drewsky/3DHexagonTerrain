@@ -154,15 +154,23 @@ export default class HexMapViewSpritesClass {
 
          let shadowPos = this.utils.hexPositionToXYPosition(keyObj, spriteList[i].height)
 
-
-         shadowSize = {
-            width: this.hexMapData.size * 2 * sprite.shadowSize.width,
-            height: this.hexMapData.size * 2 * sprite.shadowSize.height
+         if(spriteObject.type == 'modifier'){
+            shadowSize = {
+               width: this.hexMapData.size * 2 * this.images.modifier.shadowSize.width,
+               height: this.hexMapData.size * 2 * this.images.modifier.shadowSize.height
+            }
+   
+            shadowPos.x -= this.hexMapData.size + this.images.modifier.shadowOffset.x * this.hexMapData.size * 2
+            shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.images.modifier.shadowOffset.y * this.hexMapData.size * 2
+         } else {
+            shadowSize = {
+               width: this.hexMapData.size * 2 * sprite.shadowSize.width,
+               height: this.hexMapData.size * 2 * sprite.shadowSize.height
+            }
+   
+            shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
+            shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
          }
-
-         shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
-         shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
-
 
          if (this.utils.onScreenCheck(shadowPos, shadowSize, this.canvasDims) == false) continue
 

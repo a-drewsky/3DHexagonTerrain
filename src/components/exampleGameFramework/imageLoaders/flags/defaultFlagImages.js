@@ -1,11 +1,10 @@
 import ImageLoaderClass from '../ImageLoader'
 
-import savanna_tree from '../../images/props/savanna_tree.png'
+import flag from '../../images/bases/mainBase/main_base_q0r0.png'
 
-import shadow_sheet from '../../images/shadows/savanna_tree_shadow_sheet.png'
+import shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
 
-
-export default class SavannaTreeImagesClass extends ImageLoaderClass {
+export default class DefaultFlagImagesClass extends ImageLoaderClass {
 
     constructor() {
 
@@ -22,17 +21,17 @@ export default class SavannaTreeImagesClass extends ImageLoaderClass {
         }
 
         this.shadowSize = {
-            width: 2,
+            width: 1,
             height: 1.5
         }
 
         this.shadowOffset = {
-            x: 0.5,
+            x: 0,
             y: 0.5
         }
 
         this.padding = {
-            'default': [null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}]
+            'default': [null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}]
         }
 
         this.rows = {
@@ -46,7 +45,7 @@ export default class SavannaTreeImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: savanna_tree,
+                image: flag,
                 sprites: {
                     0: 'default'
                 }

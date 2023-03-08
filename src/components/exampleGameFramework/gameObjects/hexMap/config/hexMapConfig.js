@@ -38,13 +38,8 @@ export default class HexMapConfigClass {
                     duration: 'continuous',
                     type: 'moving'
                 },
-                jumpUp: {
-                    rate: 'static',
-                    duration: 'continuous',
-                    type: 'moving'
-                },
-                jumpDown: {
-                    rate: 'static',
+                jump: {
+                    rate: 250,
                     duration: 'continuous',
                     type: 'moving'
                 },
@@ -116,11 +111,12 @@ export default class HexMapConfigClass {
             },
             name: 'Flag',
             type: 'flag',
-            sprite: 'flag',
-            state: 0,
+            sprite: 'default',
+            state: 'default',
             tileHeight: 5,
             images: [],
             shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -257,11 +253,12 @@ export default class HexMapConfigClass {
             name: 'Empty Mine',
             type: 'modifier',
             modifierType: 'singleImage',
-            sprite: 'emptymine',
+            sprite: 'empty_mine',
             state: 0,
             tileHeight: 1,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -274,11 +271,12 @@ export default class HexMapConfigClass {
             name: 'Rubble Pile',
             type: 'modifier',
             modifierType: 'singleImage',
-            sprite: 'rubblepile',
+            sprite: 'rubble_pile',
             state: 0,
             tileHeight: 1,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -291,11 +289,12 @@ export default class HexMapConfigClass {
             name: 'Rocks',
             type: 'modifier',
             modifierType: 'components',
-            sprite: 'rocks',
+            sprite: 'small_rocks',
             state: 0,
             tileHeight: 1,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -308,11 +307,12 @@ export default class HexMapConfigClass {
             name: 'Forest',
             type: 'modifier',
             modifierType: 'components',
-            sprite: 'oaktree',
+            sprite: 'woodland_trees',
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -325,11 +325,12 @@ export default class HexMapConfigClass {
             name: 'Forest',
             type: 'modifier',
             modifierType: 'components',
-            sprite: 'tundratree',
+            sprite: 'tundra_trees',
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 
@@ -342,11 +343,12 @@ export default class HexMapConfigClass {
             name: 'Cacti',
             type: 'modifier',
             modifierType: 'components',
-            sprite: 'deserttree',
+            sprite: 'desert_trees',
             state: 0,
             tileHeight: 2,
             images: [],
-            shadowImages: []
+            shadowImages: [],
+            rotation: 1
         }
     }
 

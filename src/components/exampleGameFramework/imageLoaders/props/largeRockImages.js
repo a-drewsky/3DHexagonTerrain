@@ -31,8 +31,8 @@ export default class LargeRockImagesClass extends ImageLoaderClass {
             y: 0.5
         }
 
-        this.deadSpace = {
-            'default': [null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32, null, 11 / 32]
+        this.padding = {
+            'default': [null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}]
         }
 
         this.rows = {

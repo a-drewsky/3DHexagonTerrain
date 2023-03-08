@@ -25,8 +25,8 @@ export default class HexMapViewSpritesRendererClass {
         }
 
         let shadowCanvasSize = {
-            width: this.hexMapData.size * 2 * sprites.shadowSize.width,
-            height: this.hexMapData.size * 2 * sprites.shadowSize.height
+            width: this.hexMapData.size * 2 * this.images.modifier.shadowSize.width,
+            height: this.hexMapData.size * 2 * this.images.modifier.shadowSize.height
         }
 
         //set positions
@@ -71,7 +71,7 @@ export default class HexMapViewSpritesRendererClass {
         let currentIndex = Math.floor(Math.random() * positions.length)
         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
         positions.splice(currentIndex, 1)
-
+        console.log(terrainObject.sprite)
         let chance = this.modifierSettings[terrainObject.sprite].secondSpriteChance
         let roll = Math.random()
         while (roll > chance && positions.length > 0) {
@@ -203,7 +203,7 @@ export default class HexMapViewSpritesRendererClass {
             let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
-            let shadowImage = this.utils.cropStructureShadow(terrainObject.shadowImages[0][i], sprites.shadowSize, sprites.shadowOffset, keyObj, rotatedMap, true)
+            let shadowImage = this.utils.cropStructureShadow(terrainObject.shadowImages[0][i], this.images.modifier.shadowSize, this.images.modifier.shadowOffset, keyObj, rotatedMap, true)
             terrainObject.shadowImages[0][i] = shadowImage
         }
 
@@ -244,7 +244,7 @@ export default class HexMapViewSpritesRendererClass {
 
         let imageList = []
 
-        if(terrainObject.type == 'base' || terrainObject.type == 'resource' || terrainObject.type == 'prop'){
+        if(terrainObject.type == 'base' || terrainObject.type == 'resource' || terrainObject.type == 'prop' || terrainObject.type == 'flag'){
 
 
             for (let i = 0; i < sprite[terrainObject.state].images.length; i++) {

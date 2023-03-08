@@ -1,13 +1,13 @@
 
 import TileImagesClass from './tileImages'
-import ModifierImagesClass from './modifierImages'
+import ModifierImagesClass from './modifiers/modifierImages'
 import BaseImagesClass from './bases/baseImages'
 import PropImagesClass from './props/propImages'
 import ResourceImagesClass from './resources/resourceImages'
-import UnitImagesClass from './unitImages'
+import UnitImagesClass from './units/unitImages'
 import HighlighImagesClass from './highlightImages'
-import UiImagesClass from './uiImages'
-import FlagImagesClass from './flagImages'
+import UiImagesClass from './ui/uiImages'
+import FlagImagesClass from './flags/flagImages'
 
 export default class GameImagesClass {
 
