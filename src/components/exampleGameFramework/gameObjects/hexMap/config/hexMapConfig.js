@@ -67,6 +67,24 @@ export default class HexMapConfigClass {
         }
     }
 
+    tile = (pos) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            height: null,
+            biome: null,
+            verylowBiome: null,
+            lowBiome: null,
+            midBiome: null,
+            highBiome: null,
+            veryhighBiome: null,
+            images: [],
+            selectionImages: []
+        }
+    }
+
     bunker = (pos) => {
         return {
             position: {

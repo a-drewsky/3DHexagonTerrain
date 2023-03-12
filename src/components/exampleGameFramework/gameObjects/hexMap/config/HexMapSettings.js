@@ -30,7 +30,7 @@ export default class HexMapSettingsClass {
 
         this.SHADOW_ROTATION = 1;
 
-        this.INIT_CAMERA_POSITION = 'middle' //top, middle or bottom
+        this.INIT_CAMERA_POSITION = 'bottom' //top, middle or bottom
 
         this.MAX_ELEVATION = 12;
 

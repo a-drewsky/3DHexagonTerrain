@@ -119,4 +119,9 @@ export default class HexMapControllerClass {
         }
     }
 
+    zoom = (deltaY) => {
+        this.cameraController.zoom(deltaY)
+        this.utils.resetHover()
+    }
+
 }

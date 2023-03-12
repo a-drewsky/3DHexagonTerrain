@@ -16,6 +16,8 @@ export default class HexMapViewSpritesRendererClass {
 
     renderModifier = (terrainObject) => {
 
+        let initCameraRotation = this.camera.rotation
+
         let sprites = this.images[terrainObject.type][terrainObject.sprite]
 
         //set canvas size
@@ -71,7 +73,7 @@ export default class HexMapViewSpritesRendererClass {
         let currentIndex = Math.floor(Math.random() * positions.length)
         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
         positions.splice(currentIndex, 1)
-        console.log(terrainObject.sprite)
+        
         let chance = this.modifierSettings[terrainObject.sprite].secondSpriteChance
         let roll = Math.random()
         while (roll > chance && positions.length > 0) {
@@ -225,6 +227,7 @@ export default class HexMapViewSpritesRendererClass {
             let darkenedImageBottom = this.utils.darkenSprite(croppedImageBottom, terrainObject)
             terrainObject.images[0][i].bottom = darkenedImageBottom
         }
+        this.camera.rotation = initCameraRotation
     }
 
     renderStructure = (terrainObject) => {
@@ -232,9 +235,6 @@ export default class HexMapViewSpritesRendererClass {
         let initRotation = this.camera.rotation
 
         let sprite = this.images[terrainObject.type][terrainObject.sprite]
-
-        console.log(terrainObject)
-        console.log(sprite)
 
         let canvasSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,

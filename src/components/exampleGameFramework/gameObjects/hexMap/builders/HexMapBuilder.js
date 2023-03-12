@@ -33,34 +33,30 @@ export default class HexMapBuilderClass {
       if (this.mirror) {
          for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-               this.hexMapData.setEntry(q, r, {
-                  height: 0
-               });
+               this.hexMapData.setEntry(q, r, this.config.tile({ q: q, r: r }));
             }
          }
       } else {
          for (let r = 0; r < Rgen; r++) {
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-               this.hexMapData.setEntry(q, r, {
-                  height: 0
-               });
+               this.hexMapData.setEntry(q, r, this.config.tile({ q: q, r: r }));
             }
          }
       }
 
    }
 
-   mirrorMapFunc = (Qgen, Rgen) => {
-      for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
-         let dist = 0;
-         for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
-            this.hexMapData.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
-            dist++;
-         }
-      }
-   }
+   // mirrorMapFunc = (Qgen, Rgen) => {
+   //    for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
+   //       let dist = 0;
+   //       for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
+   //          this.hexMapData.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
+   //          dist++;
+   //       }
+   //    }
+   // }
 
-   generteTileBiomes = (keyObj, tileHeight, tileTemp) => {
+   generteTileBiomes = (tileObj, tileHeight, tileTemp) => {
 
       //set biome
       let tileBiome = null
@@ -112,20 +108,14 @@ export default class HexMapBuilderClass {
       if (tileHeight >= this.elevationRanges['high']) tileBiome = tileHighBiome
       if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
 
-      return {
-         position: {
-            q: keyObj.q,
-            r: keyObj.r
-         },
-         height: tileHeight,
-         biome: tileBiome,
-         verylowBiome: tileVerylowBiome,
-         lowBiome: tileLowBiome,
-         midBiome: tileMidBiome,
-         highBiome: tileHighBiome,
-         veryhighBiome: tileVeryhighBiome,
-         selectionImages: []
-      }
+
+      tileObj.height = tileHeight
+      tileObj.biome = tileBiome
+      tileObj.verylowBiome = tileVerylowBiome
+      tileObj.lowBiome = tileLowBiome
+      tileObj.midBiome = tileMidBiome
+      tileObj.highBiome = tileHighBiome
+      tileObj.veryhighBiome = tileVeryhighBiome
 
    }
 
@@ -170,10 +160,7 @@ export default class HexMapBuilderClass {
          //temp generation
          let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
 
-         let tile = this.generteTileBiomes(keyObj, tileHeight, tileTemp)
-
-
-         this.hexMapData.setEntry(keyObj.q, keyObj.r, tile)
+         this.generteTileBiomes(this.hexMapData.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
 
       }
 
@@ -294,47 +281,47 @@ export default class HexMapBuilderClass {
    reduceTileHeights = () => {
       let reduced = true
 
-      while(reduced == true){
+      while (reduced == true) {
          reduced = false
          for (let [key, value] of this.hexMapData.getMap()) {
-   
+
             let keyObj = this.hexMapData.split(key);
             let tile = this.hexMapData.getEntry(keyObj.q, keyObj.r)
             let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
-   
+
             let isCliff = false
-   
-            for(let neighborKey of neighborKeys){
+
+            for (let neighborKey of neighborKeys) {
                let neighborTile = this.hexMapData.getEntry(neighborKey.q, neighborKey.r)
-   
-               if(tile.height - neighborTile.height > 2){
+
+               if (tile.height - neighborTile.height > 2) {
                   isCliff = true
                   break
                }
             }
-   
-            if(isCliff == false) continue
-   
+
+            if (isCliff == false) continue
+
             let hasStep = false
-   
-            while(hasStep == false) {
-   
-               for(let neighborKey of neighborKeys){
+
+            while (hasStep == false) {
+
+               for (let neighborKey of neighborKeys) {
                   let neighborTile = this.hexMapData.getEntry(neighborKey.q, neighborKey.r)
-      
-                  if(tile.height - neighborTile.height > 0 && tile.height - neighborTile.height < 3){
+
+                  if (tile.height - neighborTile.height > 0 && tile.height - neighborTile.height < 3) {
                      hasStep = true
                      break
                   }
                }
-               if(hasStep == false){
+               if (hasStep == false) {
                   tile.height--
                   reduced = true
                }
             }
-   
+
             this.setTileBiome(tile)
-   
+
          }
       }
 
@@ -342,28 +329,18 @@ export default class HexMapBuilderClass {
    }
 
    cloneTile = (tileToClone, keyObj) => {
-      return {
-         position: {
-            q: keyObj.q,
-            r: keyObj.r
-         },
-         height: tileToClone.height,
-         biome: tileToClone.biome,
-         verylowBiome: tileToClone.verylowBiome,
-         lowBiome: tileToClone.lowBiome,
-         midBiome: tileToClone.midBiome,
-         highBiome: tileToClone.highBiome,
-         veryhighBiome: tileToClone.veryhighBiome,
-         selectionImages: []
-      }
-   }
 
+      let newTile = this.config.tile(keyObj)
 
-   //temp function for engineering
-   addUnit = () => {
-      let unit = this.config.unit({q: -7, r: 28})
+      newTile.height = tileToClone.height
+      newTile.biome = tileToClone.biome
+      newTile.verylowBiome = tileToClone.verylowBiome
+      newTile.lowBiome = tileToClone.lowBiome
+      newTile.midBiome = tileToClone.midBiome
+      newTile.highBiome = tileToClone.highBiome
+      newTile.veryhighBiome = tileToClone.veryhighBiome
 
-      this.hexMapData.unitList.push(unit)
+      return newTile
    }
 
 
@@ -382,7 +359,6 @@ export default class HexMapBuilderClass {
       //add terrain features
       this.builderTerrain.generateTerrain(q, r, mapSize)
       this.reduceTileHeights()
-      this.addUnit()
 
    }
 

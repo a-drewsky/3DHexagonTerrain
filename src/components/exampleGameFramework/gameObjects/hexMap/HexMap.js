@@ -37,7 +37,9 @@ export default class HexMapClass {
 
     prerender = () => {
         this.data.setRotatedMapList()
+        this.view.initializeCanvas()
         this.view.prerender()
+        this.view.initializeCamera()
 
     }
 

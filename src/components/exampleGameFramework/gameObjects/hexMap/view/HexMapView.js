@@ -44,6 +44,8 @@ export default class HexMapViewClass {
          11: { q: 0 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
       }
 
+      this.renderStack = []
+
       this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
       this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.shadowRotationDims, this.utils);
       this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.shadowRotationDims, this.images, this.utils, canvas);
@@ -58,7 +60,7 @@ export default class HexMapViewClass {
 
       this.tableView.draw(this.drawctx)
 
-      this.mapView.draw(this.drawctx)
+      this.mapView.draw(this.drawctx, this.renderStack.length == 0)
 
       this.selectionView.draw(this.drawctx)
 
@@ -76,20 +78,35 @@ export default class HexMapViewClass {
    }
 
    update = () => {
+      //check camera
       let zoom = this.camera.zoom * this.camera.zoomAmount
-      if (this.camera.position.x + zoom/2 < 0 - this.canvas.width / 2) this.camera.position.x = 0 - this.canvas.width / 2 - zoom/2
-      if (this.camera.position.x + zoom/2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2  - zoom/2
-      if (this.camera.position.y + zoom/2*this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom/2*this.hexMapData.squish
-      if (this.camera.position.y + zoom/2*this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom/2*this.hexMapData.squish
+      if (this.camera.position.x + zoom / 2 < 0 - this.canvas.width / 2) this.camera.position.x = 0 - this.canvas.width / 2 - zoom / 2
+      if (this.camera.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
+      if (this.camera.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+      if (this.camera.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+
+      //check render stack
+      if(this.renderStack.length > 0){
+         let tileToRender = this.renderStack.pop()
+
+         let tileObj = this.hexMapData.getEntry(tileToRender.q, tileToRender.r)
+         this.mapView.renderTileStack(tileObj)
+
+         let terrainObj = this.hexMapData.getTerrain(tileToRender.q, tileToRender.r)
+         
+         if(terrainObj !== null){
+            this.spriteView.prerenderTerrain(terrainObj);
+         }
+         
+         if(this.renderStack.length == 0) console.log("done rendering")
+      }
    }
 
    clear = () => {
-      this.mapView.stackMap.clear();
-      this.mapView.shadowMap.clear();
+      this.mapView.renderer.shadowMap.clear();
    }
 
-   prerender = () => {
-
+   initializeCanvas = () => {
       console.log('prerender hexmap')
 
       //Set render canvas size
@@ -108,9 +125,12 @@ export default class HexMapViewClass {
       this.drawCanvas.width = renderCanvasDims.width;
       this.drawCanvas.height = renderCanvasDims.height;
       this.drawctx = this.drawCanvas.getContext("2d");
+   }
+
+   prerender = () => {
 
       //render map
-      this.mapView.prerender(renderCanvasDims);
+      this.mapView.renderer.prerender(this.drawCanvas);
       console.log("map rendered")
 
       //render sprites
@@ -119,18 +139,28 @@ export default class HexMapViewClass {
       let length = terrainList.length
       let terrainNum = 0
 
-      while(terrainNum < length){
 
-         console.log(terrainNum)
 
-         this.spriteView.prerenderTerrain(this.hexMapData.terrainList[terrainNum]);
+      for (let [key, value] of this.hexMapData.getMap()) {
 
-         terrainNum++
+         this.renderStack.push(value.position)
+         // this.mapView.renderTileStack(value)
       }
 
-      this.spriteView.prerenderUnits();
-      console.log("sprites rendered")
+      // while (terrainNum < length) {
 
+      //    console.log(terrainNum)
+
+      //    this.spriteView.prerenderTerrain(this.hexMapData.terrainList[terrainNum]);
+
+      //    terrainNum++
+      // }
+      // console.log("sprites rendered")
+   }
+
+   initializeCamera = () => {
+
+      let keys = this.hexMapData.getKeys();
 
       //set camera rotation
       this.camera.rotation = this.camera.initCameraRotation;
@@ -182,6 +212,7 @@ export default class HexMapViewClass {
          mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width / 2,
          mappos.y + (camPos.q * vecQ.y * this.hexMapData.squish + camPos.r * vecR.y * this.hexMapData.squish) - this.canvas.height / 2
       )
+      console.log("camera set")
    }
 
 }

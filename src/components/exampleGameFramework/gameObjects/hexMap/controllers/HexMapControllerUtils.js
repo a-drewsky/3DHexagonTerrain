@@ -442,7 +442,7 @@ export default class HexMapControllerUtilsClass {
 
 
 
-        let testList = [{ q: 0, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
+        let testList = [{ q: 0, r: 0 }, { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }]
 
 
         let tileClicked = null
@@ -474,7 +474,6 @@ export default class HexMapControllerUtilsClass {
             let tileUnit = this.hexMapData.getUnit(rotatedTile.position.q, rotatedTile.position.r)
 
             if (tileTerrain && tileTerrain.type != 'modifier') {
-
 
                 let spriteObj = this.images[tileTerrain.type][tileTerrain.sprite]
 
@@ -525,6 +524,10 @@ export default class HexMapControllerUtilsClass {
         if(tileClicked === null) return null
         
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
+
+        let tileClickedObj = this.hexMapData.getEntry(rotatedTile.q, rotatedTile.r)
+
+        if(!tileClickedObj.images || tileClickedObj.images.length==0) return null
 
         return rotatedTile
 

@@ -1,7 +1,7 @@
 export default class HexMapDataClass {
 
    constructor(settings, canvas) {
-      this.hexMap = new Map();
+      this.tileMap = new Map();
 
       this.posMap = new Map();
 
@@ -63,14 +63,14 @@ export default class HexMapDataClass {
 
 
    //SET METHODS
-   //Set an entry in the hexmap (void)
+   //Set an entry in the tileMap (void)
    setEntry = (q, r, obj) => {
-      this.hexMap.set(q + ',' + r, obj);
+      this.tileMap.set(q + ',' + r, obj);
    }
 
-   //delete an entry in the hexmap (void)
+   //delete an entry in the tileMap (void)
    deleteEntry = (q, r) => {
-      this.hexMap.delete(q + "," + r);
+      this.tileMap.delete(q + "," + r);
    }
 
    setDimensions = (x, y) => {
@@ -140,38 +140,38 @@ export default class HexMapDataClass {
 
 
    //GET METHODS
-   //get an entry in the hexmap (returns a hex tile object)
+   //get an entry in the tileMap (returns a hex tile object)
    getEntry = (q, r) => {
-      return this.hexMap.get(q + "," + r);
+      return this.tileMap.get(q + "," + r);
    }
 
    getEntryRotated = (q, r, rotation) => {
       let rotatedTile = this.rotatedMapList[rotation].get(this.join(q, r))
-      return this.hexMap.get(rotatedTile.q + "," + rotatedTile.r)
+      return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
    }
 
-   //returns the hexmap
+   //returns the tileMap
    getMap = () => {
-      return this.hexMap
+      return this.tileMap
    }
 
-   //returns the number of entries in the hexmap
+   //returns the number of entries in the tileMap
    getMapSize = () => {
-      return this.hexMap.size
+      return this.tileMap.size
    }
 
-   //returns all keys for the hexmap
+   //returns all keys for the tileMap
    getKeys = () => {
-      return [...this.hexMap.keys()].map(key => this.split(key))
+      return [...this.tileMap.keys()].map(key => this.split(key))
    }
 
    getValues = () => {
-      return [...this.hexMap.values()]
+      return [...this.tileMap.values()]
    }
 
    //return all key strings
    getKeyStrings = () => {
-      return [...this.hexMap.keys()]
+      return [...this.tileMap.keys()]
    }
 
    //return index of terrain at tile (q, r) or -1 if the tile has no terrain
@@ -355,7 +355,7 @@ export default class HexMapDataClass {
    //CHECK METHODS
    //check if hexmap has an entry (returns a boolean)
    hasEntry = (q, r) => {
-      return this.hexMap.has([q, r].join(','));
+      return this.tileMap.has([q, r].join(','));
    }
    //END CHECK METHODS
 

@@ -84,7 +84,7 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.objectMap.get('hexMap').camera.controller.zoom(deltaY);
+            this.gameManager.objectMap.get('hexMap').controller.zoom(deltaY);
             break;
       }
    }
