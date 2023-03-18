@@ -1,5 +1,5 @@
 
-import HexMapPathFinderClass from "../utils/HexMapPathFinder"
+import HexMapPathFinderClass from "./HexMapPathFinder"
 import CollisionClass from "../../../utilities/collision"
 
 export default class HexMapControllerUtilsClass {
@@ -129,8 +129,6 @@ export default class HexMapControllerUtilsClass {
 
         if (!path) return null
 
-        console.log(path.map(tileObj => tileObj.tile))
-
         return path.map(tileObj => tileObj.tile)
     }
 
@@ -150,7 +148,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     checkValidPath = () => {
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.selections.getSelectedUnit()
         let path = [this.hexMapData.selections.unit, ...this.hexMapData.selections.path]
         let pathCost = this.pathFinder.pathCost(path)
         if(pathCost <= unit.movementRange) return true
@@ -191,7 +189,7 @@ export default class HexMapControllerUtilsClass {
 
     findMoveSet = () => {
 
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.selections.getSelectedUnit()
 
         if (unit == null) return
 
@@ -228,7 +226,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     updateTerrain = (q, r, terrain) => {
-        this.renderer.renderSingleImageModifier(terrain)
+        this.renderer.spriteRenderer.renderSingleImageModifier(terrain)
         let terrainIndex = this.hexMapData.getTerrainIndex(q, r)
         this.hexMapData.terrainList[terrainIndex] = terrain
     }
@@ -239,7 +237,7 @@ export default class HexMapControllerUtilsClass {
 
         let startTile = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
+        let targetTile = this.hexMapData.selections.getSelectedTargetTile()
 
         if (targetTile == null) return
 
@@ -296,7 +294,7 @@ export default class HexMapControllerUtilsClass {
         unit.state = 'idle'
         unit.frame = 0
 
-        this.renderer.renderUnit(unit)
+        this.renderer.spriteRenderer.renderUnit(unit)
 
         this.resetHexMapState()
     }
@@ -395,7 +393,7 @@ export default class HexMapControllerUtilsClass {
         unit.state = 'idle'
         unit.frame = 0
 
-        this.renderer.renderUnit(unit)
+        this.renderer.spriteRenderer.renderUnit(unit)
 
         this.setSelection(unit.position.q, unit.position.r, 'rotate')
 

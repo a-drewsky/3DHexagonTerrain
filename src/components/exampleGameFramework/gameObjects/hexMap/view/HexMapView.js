@@ -1,6 +1,6 @@
 import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./HexMapViewSprites";
-import HexMapViewUtilsClass from "./HexMapViewUtils";
+import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
 import HexMapViewTableClass from "./HexMapViewTable";
 import HexMapViewSelectionClass from "./HexMapViewSelection";
 
@@ -28,29 +28,11 @@ export default class HexMapViewClass {
 
       this.images = images;
 
-      //starts at top position and rotates clockwise
-      this.shadowRotationDims = {
-         0: { q: 0.25 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.9, right: 0.9, offset: 0.7, wallBot: 1 },
-         1: { q: 0.5 * this.shadowSize, r: -0.5 * this.shadowSize, left: 1, right: 0.8, offset: 0.6, wallBot: 0.9 },
-         2: { q: 0.5 * this.shadowSize, r: -0.25 * this.shadowSize, left: 0.9, right: 0.7, offset: 0.5, wallBot: 0.8 },
-         3: { q: 0.5 * this.shadowSize, r: 0 * this.shadowSize, left: 0.8, right: 0.6, offset: 0.4, wallBot: 0.7 },
-         4: { q: 0.25 * this.shadowSize, r: 0.25 * this.shadowSize, left: 0.7, right: 0.5, offset: 0.5, wallBot: 0.6 },
-         5: { q: 0 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.6, right: 0.4, offset: 0.6, wallBot: 0.5 },
-         6: { q: -0.25 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.5, right: 0.5, offset: 0.7, wallBot: 0.4 },
-         7: { q: -0.5 * this.shadowSize, r: 0.5 * this.shadowSize, left: 0.4, right: 0.6, offset: 0.8, wallBot: 0.5 },
-         8: { q: -0.5 * this.shadowSize, r: 0.25 * this.shadowSize, left: 0.5, right: 0.7, offset: 0.9, wallBot: 0.6 },
-         9: { q: -0.5 * this.shadowSize, r: 0 * this.shadowSize, left: 0.6, right: 0.8, offset: 1, wallBot: 0.7 },
-         10: { q: -0.25 * this.shadowSize, r: -0.25 * this.shadowSize, left: 0.7, right: 0.9, offset: 0.9, wallBot: 0.8 },
-         11: { q: 0 * this.shadowSize, r: -0.5 * this.shadowSize, left: 0.8, right: 1, offset: 0.8, wallBot: 0.9 },
-      }
-
-      this.renderStack = []
-
       this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
-      this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.shadowRotationDims, this.utils);
-      this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.shadowRotationDims, this.images, this.utils, canvas);
+      this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.utils);
+      this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.images, this.utils, canvas);
       this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);
-      this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, images, this.utils);
+      this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, settings, images);
 
    }
 
@@ -60,7 +42,7 @@ export default class HexMapViewClass {
 
       this.tableView.draw(this.drawctx)
 
-      this.mapView.draw(this.drawctx, this.renderStack.length == 0)
+      this.mapView.draw(this.drawctx)
 
       this.selectionView.draw(this.drawctx)
 
@@ -84,30 +66,13 @@ export default class HexMapViewClass {
       if (this.camera.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
       if (this.camera.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
       if (this.camera.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
-
-      //check render stack
-      if(this.renderStack.length > 0){
-         let tileToRender = this.renderStack.pop()
-
-         let tileObj = this.hexMapData.getEntry(tileToRender.q, tileToRender.r)
-         this.mapView.renderTileStack(tileObj)
-
-         let terrainObj = this.hexMapData.getTerrain(tileToRender.q, tileToRender.r)
-         
-         if(terrainObj !== null){
-            this.spriteView.prerenderTerrain(terrainObj);
-         }
-         
-         if(this.renderStack.length == 0) console.log("done rendering")
-      }
    }
 
    clear = () => {
-      this.mapView.renderer.shadowMap.clear();
+      this.hexMapData.shadowMap.clear();
    }
 
    initializeCanvas = () => {
-      console.log('prerender hexmap')
 
       //Set render canvas size
       let keys = this.hexMapData.getKeys();
@@ -125,37 +90,6 @@ export default class HexMapViewClass {
       this.drawCanvas.width = renderCanvasDims.width;
       this.drawCanvas.height = renderCanvasDims.height;
       this.drawctx = this.drawCanvas.getContext("2d");
-   }
-
-   prerender = () => {
-
-      //render map
-      this.mapView.renderer.prerender(this.drawCanvas);
-      console.log("map rendered")
-
-      //render sprites
-      let terrainList = this.hexMapData.terrainList
-
-      let length = terrainList.length
-      let terrainNum = 0
-
-
-
-      for (let [key, value] of this.hexMapData.getMap()) {
-
-         this.renderStack.push(value.position)
-         // this.mapView.renderTileStack(value)
-      }
-
-      // while (terrainNum < length) {
-
-      //    console.log(terrainNum)
-
-      //    this.spriteView.prerenderTerrain(this.hexMapData.terrainList[terrainNum]);
-
-      //    terrainNum++
-      // }
-      // console.log("sprites rendered")
    }
 
    initializeCamera = () => {
@@ -212,7 +146,6 @@ export default class HexMapViewClass {
          mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width / 2,
          mappos.y + (camPos.q * vecQ.y * this.hexMapData.squish + camPos.r * vecR.y * this.hexMapData.squish) - this.canvas.height / 2
       )
-      console.log("camera set")
    }
 
 }

@@ -1,14 +1,24 @@
 export default class HexMapDataClass {
 
    constructor(settings, canvas) {
+
+      this.state = {
+         selectTile: 'selectTile',
+         selectMovement: 'selectMovement',
+         placeUnit: 'placeUnit',
+         chooseRotation: 'chooseRotation',
+         selectAction: 'selectAction',
+         animation: 'animation',
+         current: null
+      }
+      this.state.current = this.state.selectTile
+
+
       this.tileMap = new Map();
-
+      this.shadowMap = new Map();
       this.posMap = new Map();
-
       this.rotatedMapList = []
-
       this.terrainList = [];
-
       this.unitList = [];
 
       this.selections = {
@@ -24,40 +34,38 @@ export default class HexMapDataClass {
          hover_place: null
       }
 
+      // this.selections = {
+      //    hover: null,
+      //    tile: null,
+      //    unit: null,
+      //    pathing: {
+      //       path: [],
+      //       movement: [],
+      //       action: [],
+      //       attack: []
+      //    }
+      // }
+
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
+      this.tileHeight = settings.TILE_HEIGHT;
+      this.shadowRotation = settings.SHADOW_ROTATION;
 
       this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
       this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
-
       this.flatTopVecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
-
       this.sideLength = Math.PI / 3;
-
-      this.shadowRotation = settings.SHADOW_ROTATION;
-
-      this.tileHeight = settings.TILE_HEIGHT;
 
       this.maxHeight = null;
 
-      this.state = {
-         selectTile: 'selectTile',
-         selectMovement: 'selectMovement',
-         placeUnit: 'placeUnit',
-         chooseRotation: 'chooseRotation',
-         selectAction: 'selectAction',
-         animation: 'animation',
-         current: null
-      }
-      this.state.current = this.state.selectTile
-
+      //should be camera data
       this.clickDist = 20
       this.clickPos = null
       this.clickMovePos = null
 
+      //will be player data
       this.resources = 0
-
       this.selectedUnit = null
    }
 
@@ -136,6 +144,87 @@ export default class HexMapDataClass {
          this.rotatedMapList[i] = rotatedMap
       }
    }
+
+   setMapPos = (rotation, renderCanvasDims) => {
+
+      //Set map hyp
+      let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.split(key))
+
+      let mapWidthMax = Math.max(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r));
+      let mapHeightMax = Math.max(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish));
+      let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r)));
+      let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish)));
+
+      let mapWidth = Math.max(mapWidthMax, mapWidthMin)
+      let mapHeight = Math.max(mapHeightMax, mapHeightMin)
+
+      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+
+
+      //Set the hexmap position to the center of the canvas
+
+      let renderHexMapPos = {
+          x: 0,
+          y: 0
+      }
+
+      switch (rotation) {
+          case 0:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+              break;
+          case 1:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+              break;
+          case 2:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+              break;
+          case 3:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+              break;
+          case 4:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+              break;
+          case 5:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+              break;
+          case 6:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+              break;
+          case 7:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+              break;
+          case 8:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+              break;
+          case 9:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+              break;
+          case 10:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+              break;
+          case 11:
+              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+              break;
+      }
+
+
+      this.posMap.set(rotation, {
+          x: renderHexMapPos.x,
+          y: renderHexMapPos.y
+      })
+  }
    //END SET METHODS
 
 
@@ -201,8 +290,8 @@ export default class HexMapDataClass {
    }
 
    //return the selected tile or null
-   getSelected = () => {
-      let selected = this.selections['info']
+   getSelectedTile = () => {
+      let selected = this.selections['tile']
       if (selected === null) return null
       return this.getEntry(selected.q, selected.r)
    }
@@ -215,17 +304,11 @@ export default class HexMapDataClass {
    }
 
    //return the selected unit tile or null
-   getSelectedTargetTile = () => {
-      let selected = this.selections['target']
-      if (selected === null) return null
-      console.log(selected)
-      return this.getEntry(selected.q, selected.r)
-   }
-
-   //return the selected unit tile or null
-   getSelectedActionTile = () => {
-      return this.selections['action']
-   }
+   // getSelectedTargetTile = () => {
+   //    let selected = this.selections['target']
+   //    if (selected === null) return null
+   //    return this.getEntry(selected.q, selected.r)
+   // }
 
    //return the selected unit tile or null
    getSelectedUnit = () => {
@@ -235,11 +318,11 @@ export default class HexMapDataClass {
    }
 
    //return the selected unit tile or null
-   getSelectedUnitToRotate = () => {
-      let selected = this.selections['rotate']
-      if (selected === null) return null
-      return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
-   }
+   // getSelectedUnitToRotate = () => {
+   //    let selected = this.selections['rotate']
+   //    if (selected === null) return null
+   //    return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
+   // }
 
    //returns keys of all neighbors adjacent to (q, r)
    getNeighborKeys = (q, r) => {

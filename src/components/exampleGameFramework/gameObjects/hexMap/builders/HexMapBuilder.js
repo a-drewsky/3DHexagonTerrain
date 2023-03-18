@@ -1,6 +1,7 @@
 import noise from "../../../utilities/perlin";
 import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 import HexMapConfigClass from "../config/hexMapConfig";
+import HexMapBuilderUtilsClass from "./HexMapBuilderUtils";
 
 export default class HexMapBuilderClass {
 
@@ -24,7 +25,39 @@ export default class HexMapBuilderClass {
       this.mapSizeSettings = settings.MAP_SIZES
 
       this.config = new HexMapConfigClass()
-      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
+      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config, this.utils);
+
+   }
+
+   build = (q, r, mapSize) => {
+
+      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
+
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
+      this.generateBiomes(noiseFluctuation)
+
+      this.smoothBiomes()
+
+      this.builderTerrain.generateTerrain(q, r, mapSize)
+      this.reduceTileHeights()
+
+   }
+
+   buildDebugSmoothing = (q, r, mapSize) => {
+
+      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
+
+      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
+      this.generateBiomes(noiseFluctuation)
+
+      if (this.hexMapData2 !== undefined) {
+         this.hexMapData2.hexMap = new Map(this.hexMapData.hexMap)
+         this.hexMapData2.maxHeight = this.hexMapData.maxHeight
+      }
+
+      this.smoothBiomes()
+
 
    }
 
@@ -46,15 +79,45 @@ export default class HexMapBuilderClass {
 
    }
 
-   // mirrorMapFunc = (Qgen, Rgen) => {
-   //    for (let r = Math.ceil(Rgen / 2); r < Rgen; r++) {
-   //       let dist = 0;
-   //       for (let q = -1 * Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q < Qgen - Math.floor((Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2))) / 2); q++) {
-   //          this.hexMapData.setEntry(-1 * Math.floor(r / 2) + dist, r, structuredClone(this.hexMapData.getEntry(q, Math.ceil(Rgen / 2) - 2 - (r - Math.ceil(Rgen / 2)))));
-   //          dist++;
-   //       }
-   //    }
-   // }
+   generateBiomes = (noiseFluctuation) => {
+
+      //set generation seeds
+      let elevationSeed1 = Math.random() * this.seedMultiplier
+      let elevationSeed2 = Math.random() * this.seedMultiplier
+      let tempSeed1 = Math.random() * this.seedMultiplier
+      let tempSeed2 = Math.random() * this.seedMultiplier
+
+      for (let [key, value] of this.hexMapData.getMap()) {
+
+         let keyObj = this.hexMapData.split(key);
+
+         //elevation generation
+         let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
+
+         let tileHeight = Math.ceil(tileHeightNoise * this.elevationMultiplier)
+
+         let heightSet = false;
+         for (let i in this.lowTerrainGenerationRanges) {
+            if (tileHeight <= this.lowTerrainGenerationRanges[i]) {
+               tileHeight = parseInt(i);
+               heightSet = true;
+               break;
+            }
+         }
+         if (!heightSet) tileHeight -= this.lowTerrainGenerationRanges[4] - 4;
+
+         tileHeight = Math.min(tileHeight, this.maxElevation)
+
+
+         //temp generation
+         let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
+
+         this.generteTileBiomes(this.hexMapData.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
+
+      }
+
+      this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
+   }
 
    generteTileBiomes = (tileObj, tileHeight, tileTemp) => {
 
@@ -117,54 +180,6 @@ export default class HexMapBuilderClass {
       tileObj.highBiome = tileHighBiome
       tileObj.veryhighBiome = tileVeryhighBiome
 
-   }
-
-   setTileBiome = (tile) => {
-      if (tile.height >= this.elevationRanges['verylow']) tile.biome = tile.verylowBiome
-      if (tile.height >= this.elevationRanges['low']) tile.biome = tile.lowBiome
-      if (tile.height >= this.elevationRanges['mid']) tile.biome = tile.midBiome
-      if (tile.height >= this.elevationRanges['high']) tile.biome = tile.highBiome
-      if (tile.height >= this.elevationRanges['veryhigh']) tile.biome = tile.veryhighBiome
-   }
-
-   generateBiomes = (noiseFluctuation) => {
-
-      //set generation seeds
-      let elevationSeed1 = Math.random() * this.seedMultiplier
-      let elevationSeed2 = Math.random() * this.seedMultiplier
-      let tempSeed1 = Math.random() * this.seedMultiplier
-      let tempSeed2 = Math.random() * this.seedMultiplier
-
-      for (let [key, value] of this.hexMapData.getMap()) {
-
-         let keyObj = this.hexMapData.split(key);
-
-         //elevation generation
-         let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
-
-         let tileHeight = Math.ceil(tileHeightNoise * this.elevationMultiplier)
-
-         let heightSet = false;
-         for (let i in this.lowTerrainGenerationRanges) {
-            if (tileHeight <= this.lowTerrainGenerationRanges[i]) {
-               tileHeight = parseInt(i);
-               heightSet = true;
-               break;
-            }
-         }
-         if (!heightSet) tileHeight -= this.lowTerrainGenerationRanges[4] - 4;
-
-         tileHeight = Math.min(tileHeight, this.maxElevation)
-
-
-         //temp generation
-         let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
-
-         this.generteTileBiomes(this.hexMapData.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
-
-      }
-
-      this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
    }
 
    smoothBiomes = () => {
@@ -231,7 +246,7 @@ export default class HexMapBuilderClass {
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
          let tileToClone = this.hexMapData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
-         let clonedTile = this.cloneTile(tileToClone, keyObj)
+         let clonedTile = this.utils.cloneTile(tileToClone, keyObj)
          this.hexMapData.setEntry(keyObj.q, keyObj.r, clonedTile)
 
          return true
@@ -320,67 +335,11 @@ export default class HexMapBuilderClass {
                }
             }
 
-            this.setTileBiome(tile)
+            this.utils.setTileBiome(tile)
 
          }
       }
 
-
-   }
-
-   cloneTile = (tileToClone, keyObj) => {
-
-      let newTile = this.config.tile(keyObj)
-
-      newTile.height = tileToClone.height
-      newTile.biome = tileToClone.biome
-      newTile.verylowBiome = tileToClone.verylowBiome
-      newTile.lowBiome = tileToClone.lowBiome
-      newTile.midBiome = tileToClone.midBiome
-      newTile.highBiome = tileToClone.highBiome
-      newTile.veryhighBiome = tileToClone.veryhighBiome
-
-      return newTile
-   }
-
-
-   build = (q, r, mapSize) => {
-
-      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
-
-      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
-      this.generateBiomes(noiseFluctuation)
-
-      this.smoothBiomes()
-
-      //mirror the map if selected
-      //if (this.mirror) this.mirrorMap(q, r)
-
-      //add terrain features
-      this.builderTerrain.generateTerrain(q, r, mapSize)
-      this.reduceTileHeights()
-
-   }
-
-   buildDebugSmoothing = (q, r, mapSize) => {
-
-      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
-
-      this.generateMap(q * this.cellSize.q, r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2)
-      this.generateBiomes(noiseFluctuation)
-
-      if (this.hexMapData2 !== undefined) {
-         this.hexMapData2.hexMap = new Map(this.hexMapData.hexMap)
-         this.hexMapData2.maxHeight = this.hexMapData.maxHeight
-      }
-
-      this.smoothBiomes()
-
-
-   }
-
-   mirrorMap = (q, r) => {
-      this.mirrorMapFunc(q, r)
    }
 
 }

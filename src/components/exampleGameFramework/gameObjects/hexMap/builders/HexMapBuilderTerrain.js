@@ -1,9 +1,8 @@
 import noise from "../../../utilities/perlin";
-import HexMapBuilderUtilsClass from "./HexMapBuilderUtils";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, settings, config) {
+   constructor(hexMapData, settings, config, utils) {
       this.hexMapData = hexMapData;
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
@@ -17,8 +16,8 @@ export default class HexMapBuilderTerrainClass {
       this.biomeGenSettings = settings.BIOME_GENERATION
 
       this.config = config
+      this.utils = utils
 
-      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, config)
    }
 
    generateTerrain = (q, r, mapSize) => {
@@ -28,10 +27,10 @@ export default class HexMapBuilderTerrainClass {
       this.generateLargeRocks()
       this.generateMainBases(q, r, mapSize)
       this.generateMines(q, r, mapSize)
-      this.generateBunkers(q, r, mapSize)
+      this.generateBases(q, r, mapSize)
    }
 
-   generateBunkers = (q, r, mapSize) => {
+   generateBases = (q, r, mapSize) => {
 
       let bufferSize = this.mapSizeSettings[mapSize].bufferSize
 

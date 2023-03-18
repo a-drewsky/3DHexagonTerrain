@@ -18,7 +18,7 @@ export default class HexMapControllerUiClass {
 
         if (this.hexMapData.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
+        let targetTile = this.hexMapData.selections.getSelectedTargetTile()
         if (targetTile == null) return
 
         let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
@@ -41,7 +41,7 @@ export default class HexMapControllerUiClass {
 
         if (this.hexMapData.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
+        let targetTile = this.hexMapData.selections.getSelectedTargetTile()
         if (targetTile == null) return
 
         let targetObject
@@ -71,7 +71,7 @@ export default class HexMapControllerUiClass {
 
         if (this.hexMapData.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
+        let targetTile = this.hexMapData.selections.getSelectedTargetTile()
         if (targetTile == null) return
 
         let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)

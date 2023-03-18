@@ -24,8 +24,8 @@ export default class HexMapConfigClass {
             rotation: 5,
             tileHeight: 3,
             movementRange: 5,
-            renderImages: [],
-            renderShadowImages: [],
+            images: [],
+            shadowImages: [],
             health: 100,
             stateConfig: {
                 idle: {

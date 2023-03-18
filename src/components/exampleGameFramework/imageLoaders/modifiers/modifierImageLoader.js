@@ -36,7 +36,6 @@ export default class ModifierImageLoaderClass {
         }
 
         for (let imageName in this.image_data) {
-            console.log(imageName)
             this.images[imageName] = new Image()
         }
 
@@ -73,7 +72,6 @@ export default class ModifierImageLoaderClass {
         }
 
         for (let imageName in this.image_data) {
-            console.log(imageName)
             this[imageName].src = this.image_data[imageName].sprite
 
         }

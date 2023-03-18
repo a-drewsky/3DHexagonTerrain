@@ -54,6 +54,7 @@ export default class GameManagerClass {
         this.objectMap.get('hexMap').build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size);
         console.log("DONE BUILDING")
         this.objectMap.get('hexMap').prerender();
+        console.log("DONE PRERENDERING")
 
     }
 

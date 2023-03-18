@@ -1,5 +1,5 @@
 import CollisionClass from "../../../utilities/collision"
-import HexMapControllerUtilsClass from "./HexMapControllerUtils"
+import HexMapControllerUtilsClass from "../utils/HexMapControllerUtils"
 import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
@@ -48,7 +48,7 @@ export default class HexMapUpdaterClass {
         mine.state = newState
 
         if (mine.state != 'destroyed') {
-            this.renderer.renderStructure(mine)
+            this.renderer.spriteRenderer.renderStructure(mine)
         } else {
             let emptymine = this.config.emptymine(mine.position)
             this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
@@ -70,7 +70,7 @@ export default class HexMapUpdaterClass {
         base.state = newState
 
         if (base.state != 'destroyed') {
-            this.renderer.renderStructure(base)
+            this.renderer.spriteRenderer.renderStructure(base)
         } else {
             let rubblepile = this.config.rubblepile(base.position)
             this.utils.updateTerrain(base.position.q, base.position.r, rubblepile)
@@ -159,7 +159,7 @@ export default class HexMapUpdaterClass {
         }
 
         if (target.type == 'base') {
-            this.renderer.renderStructure(target)
+            this.renderer.spriteRenderer.renderStructure(target)
             this.updateBase(target)
         }
 

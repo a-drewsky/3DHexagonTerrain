@@ -1,130 +1,56 @@
-export default class HexMapViewMapRendererClass {
+import HexMapViewUtilsClass from "../utils/HexMapViewUtils"
 
-    constructor(hexMapData, camera, settings, shadowRotationDims, images, utils, canvas) {
+export default class HexMapRendererMapClass {
+
+    constructor(hexMapData, camera, settings, images) {
 
         this.hexMapData = hexMapData
         this.camera = camera
         this.lineWidth = settings.HEXMAP_LINE_WIDTH
         this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-        this.shadowRotationDims = shadowRotationDims
-        this.renderCanvasDims = null
-
-        this.shadowMap = new Map();
+        this.drawCanvas = null
 
         this.images = images
-        this.utils = utils
+        this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
+        
 
-        this.canvasDims = {
-            width: canvas.width,
-            height: canvas.height
-        }
+      //starts at top position and rotates clockwise
+      this.shadowRotationDims = {
+        0: { q: 0.25 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 0.9, right: 0.9, offset: 0.7 },
+        1: { q: 0.5 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 1, right: 0.8, offset: 0.6 },
+        2: { q: 0.5 * settings.SHADOW_SIZE, r: -0.25 * settings.SHADOW_SIZE, left: 0.9, right: 0.7, offset: 0.5 },
+        3: { q: 0.5 * settings.SHADOW_SIZE, r: 0 * settings.SHADOW_SIZE, left: 0.8, right: 0.6, offset: 0.4 },
+        4: { q: 0.25 * settings.SHADOW_SIZE, r: 0.25 * settings.SHADOW_SIZE, left: 0.7, right: 0.5, offset: 0.5 },
+        5: { q: 0 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.6, right: 0.4, offset: 0.6 },
+        6: { q: -0.25 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.5, right: 0.5, offset: 0.7 },
+        7: { q: -0.5 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.4, right: 0.6, offset: 0.8 },
+        8: { q: -0.5 * settings.SHADOW_SIZE, r: 0.25 * settings.SHADOW_SIZE, left: 0.5, right: 0.7, offset: 0.9 },
+        9: { q: -0.5 * settings.SHADOW_SIZE, r: 0 * settings.SHADOW_SIZE, left: 0.6, right: 0.8, offset: 1 },
+        10: { q: -0.25 * settings.SHADOW_SIZE, r: -0.25 * settings.SHADOW_SIZE, left: 0.7, right: 0.9, offset: 0.9 },
+        11: { q: 0 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 0.8, right: 1, offset: 0.8 },
+     }
 
     }
 
-    prerender = (renderCanvasDims) => {
+    prerender = (drawCanvas) => {
 
-        this.renderCanvasDims = renderCanvasDims
+        this.drawCanvas = drawCanvas
 
         //render camera rotations
         for (let i = 0; i < 12; i++) {
             this.camera.rotation = i;
+            this.hexMapData.setMapPos(i, drawCanvas);
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            this.setMapPos(rotatedMap, renderCanvasDims);
             if (i % 2 == 1) {
                 let tablePosition = this.utils.getTablePosition();
-                this.drawGroundShadowLayer(rotatedMap, renderCanvasDims, tablePosition)
+                this.drawGroundShadowLayer(rotatedMap, drawCanvas, tablePosition)
                 for (let j = 1; j <= this.hexMapData.maxHeight; j++) {
-                    this.drawShadowLayer(j, rotatedMap, renderCanvasDims);
+                    this.drawShadowLayer(j, rotatedMap, drawCanvas);
                 }
             }
         }
 
-        // for (let [key, value] of this.hexMapData.getMap()) {
-        //     this.renderTileStack(value)
-        // }
-
-    }
-
-    setMapPos = (rotatedMap, renderCanvasDims) => {
-
-        //Set map hyp
-        let keys = [...rotatedMap.keys()].map(key => this.hexMapData.split(key))
-
-        let mapWidthMax = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-        let mapHeightMax = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
-        let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r)));
-        let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish)));
-
-        let mapWidth = Math.max(mapWidthMax, mapWidthMin)
-        let mapHeight = Math.max(mapHeightMax, mapHeightMin)
-
-        let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
-
-
-        //Set the hexmap position to the center of the canvas
-
-        let renderHexMapPos = {
-            x: 0,
-            y: 0
-        }
-
-        switch (this.camera.rotation) {
-            case 0:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
-                break;
-            case 1:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
-                break;
-            case 2:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
-                break;
-            case 3:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
-                break;
-            case 4:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
-                break;
-            case 5:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
-                break;
-            case 6:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
-                break;
-            case 7:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
-                break;
-            case 8:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
-                break;
-            case 9:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
-                break;
-            case 10:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
-                break;
-            case 11:
-                renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-                renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
-                break;
-        }
-
-
-        this.hexMapData.posMap.set(this.camera.rotation, {
-            x: renderHexMapPos.x,
-            y: renderHexMapPos.y
-        })
     }
 
     renderTileStack = (tile) => {
@@ -203,7 +129,7 @@ export default class HexMapViewMapRendererClass {
                     tilePos.x -= this.hexMapData.size
                     tilePos.y -= this.hexMapData.size * this.hexMapData.squish
 
-                    if (this.shadowMap.has(tile.height + ',' + rotation)) stackctx.drawImage(this.shadowMap.get(tile.height + ',' + rotation), -tilePos.x, -tilePos.y, this.renderCanvasDims.width, this.renderCanvasDims.height)
+                    if (this.hexMapData.shadowMap.has(tile.height + ',' + rotation)) stackctx.drawImage(this.hexMapData.shadowMap.get(tile.height + ',' + rotation), -tilePos.x, -tilePos.y, this.drawCanvas.width, this.drawCanvas.height)
 
                     stackctx.restore()
 
@@ -220,11 +146,11 @@ export default class HexMapViewMapRendererClass {
 
     }
 
-    drawShadowLayer = (height, rotatedMap, renderCanvasDims) => {
+    drawShadowLayer = (height, rotatedMap, drawCanvas) => {
 
         let shadowCanvas = document.createElement('canvas');
-        shadowCanvas.width = renderCanvasDims.width;
-        shadowCanvas.height = renderCanvasDims.height;
+        shadowCanvas.width = drawCanvas.width;
+        shadowCanvas.height = drawCanvas.height;
         let shadowctx = shadowCanvas.getContext("2d");
 
         //set shadowctx properties
@@ -297,15 +223,15 @@ export default class HexMapViewMapRendererClass {
         shadowctx.fillStyle = 'rgba(25,25,25,0.3)';
         shadowctx.fill();
 
-        this.shadowMap.set(this.hexMapData.join(height, this.camera.rotation), shadowCanvas)
+        this.hexMapData.shadowMap.set(this.hexMapData.join(height, this.camera.rotation), shadowCanvas)
 
     }
 
-    drawGroundShadowLayer = (rotatedMap, renderCanvasDims, tablePosition) => {
+    drawGroundShadowLayer = (rotatedMap, drawCanvas, tablePosition) => {
 
         let shadowCanvas = document.createElement('canvas');
-        shadowCanvas.width = renderCanvasDims.width;
-        shadowCanvas.height = renderCanvasDims.height;
+        shadowCanvas.width = drawCanvas.width;
+        shadowCanvas.height = drawCanvas.height;
         let shadowctx = shadowCanvas.getContext("2d");
 
         //set shadowctx properties
@@ -388,7 +314,7 @@ export default class HexMapViewMapRendererClass {
         shadowctx.fill();
         shadowctx.restore();
 
-        this.shadowMap.set(this.hexMapData.join(0, this.camera.rotation), shadowCanvas)
+        this.hexMapData.shadowMap.set(this.hexMapData.join(0, this.camera.rotation), shadowCanvas)
 
     }
 

@@ -46,9 +46,8 @@ export default class GameMainClass {
       this.setUiComponents = setUiComponents
 
       this.updateUi = () => {
-         console.log(this.uiComponents)
          this.setUiComponents(this.uiComponents)
-      } 
+      }
 
       //win condition
       this.setWinCondition = setWinCondition;
@@ -80,7 +79,7 @@ export default class GameMainClass {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       for (let [key, value] of this.gameManager.objectMap) {
-         if(value.clear) value.clear();
+         if (value.clear) value.clear();
       }
    }
 
@@ -95,17 +94,17 @@ export default class GameMainClass {
    mouseMove = (x, y) => {
       this.inputController.mouseMove(x, y);
    }
-   
+
    mouseWheel = (deltaY) => {
       this.inputController.mouseWheel(deltaY);
    }
 
    keyDown = (key) => {
-      
+
    }
 
    keyUp = (key) => {
-      
+
    }
 
    uiInput = (input) => {
@@ -128,14 +127,8 @@ export default class GameMainClass {
 
    createGame = async () => {
 
-      let promise = new Promise((resolve, reject) => {
-         //Clear previous game
-         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-         setTimeout(() => resolve("done!"), 100)
-      });
-
-      await promise;
+      //Clear previous game
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       //Create game objects
       this.gameManager.createObjects();
@@ -148,9 +141,10 @@ export default class GameMainClass {
 
    //UPDATE FUNCTION
    update = () => {
+      if (this.gameManager.state.current != this.gameManager.state.play) return
       //update game objects
       for (let [key, value] of this.gameManager.objectMap) {
-         if(this.gameManager.state.current == this.gameManager.state.play) value.update(value.state);
+         value.update();
       }
    }
    //END UPDATE FUNCTION
@@ -160,7 +154,7 @@ export default class GameMainClass {
    draw = () => {
 
       this.fps++
-      if(Date.now() - this.fpsTime >= 1000){
+      if (Date.now() - this.fpsTime >= 1000) {
          this.fpsCount = this.fps
          this.fpsTime = Date.now()
          this.fps = 0

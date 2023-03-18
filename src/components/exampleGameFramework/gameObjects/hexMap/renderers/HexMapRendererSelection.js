@@ -1,11 +1,13 @@
-export default class HexMapViewSelectionRendererClass {
+import HexMapViewUtilsClass from "../utils/HexMapViewUtils"
 
-    constructor(hexMapData, camera, images, utils) {
+export default class HexMapRendererSelectionsClass {
+
+    constructor(hexMapData, camera, settings, images) {
 
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images.highlight
-        this.utils = utils
+        this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
 
     }
 

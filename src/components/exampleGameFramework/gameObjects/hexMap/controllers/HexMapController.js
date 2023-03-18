@@ -1,8 +1,8 @@
 
-import HexMapControllerUtilsClass from './HexMapControllerUtils';
+import HexMapControllerUtilsClass from '../utils/HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
 import HexMapPathFinderClass from "../utils/HexMapPathFinder"
-import HexMapViewUtilsClass from '../view/HexMapViewUtils';
+import HexMapViewUtilsClass from '../utils/HexMapViewUtils';
 import HexMapConfigClass from '../config/hexMapConfig';
 
 import HexMapControllerMouseClass from './HexMapControllerMouse';
@@ -25,8 +25,7 @@ export default class HexMapControllerClass {
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, this.camera)
 
         this.viewUtils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
-
-        this.renderer = renderer
+        
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer, globalState);
 
         this.config = new HexMapConfigClass()

@@ -1,4 +1,4 @@
-import HexMapViewSpritesRendererClass from "./HexMapViewSpritesRenderer"
+import HexMapRendererSpritesClass from "../renderers/HexMapRendererSprites"
 
 export default class HexMapViewSpritesClass {
 
@@ -14,7 +14,7 @@ export default class HexMapViewSpritesClass {
       this.travelTime = settings.TRAVEL_TIME
       this.jumpAmount = settings.JUMP_AMOUNT
 
-      this.renderer = new HexMapViewSpritesRendererClass(hexMapData, camera, images, settings);
+      this.renderer = new HexMapRendererSpritesClass(hexMapData, camera, images, settings);
 
       this.canvasDims = {
          width: canvas.width,
@@ -86,7 +86,6 @@ export default class HexMapViewSpritesClass {
          }
 
          height = this.hexMapData.getEntry(unitObject.position.q, unitObject.position.r).height
-
          spriteList.push({
             id: i,
             q: keyObj.q,
@@ -134,7 +133,6 @@ export default class HexMapViewSpritesClass {
          if (spriteList[i].modifierPos == 'bottom') continue
 
          let spriteObject
-
          if (spriteList[i].type == 'unit') {
             this.drawUnitShadow(drawctx, spriteList[i])
             continue
@@ -380,7 +378,7 @@ export default class HexMapViewSpritesClass {
 
       let spriteObject = this.hexMapData.unitList[spriteReference.id]
 
-      if (!spriteObject.renderShadowImages || spriteObject.renderShadowImages.length == 0) return
+      if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) return
 
       let keyObj = {
          q: spriteReference.q,
@@ -406,7 +404,7 @@ export default class HexMapViewSpritesClass {
 
       if (this.utils.onScreenCheck(shadowPos, shadowSize, this.canvasDims) == false) return
       drawctx.drawImage(
-         spriteObject.renderShadowImages[this.camera.rotation],
+         spriteObject.shadowImages[this.camera.rotation],
          shadowPos.x,
          shadowPos.y,
          shadowSize.width,
@@ -417,8 +415,6 @@ export default class HexMapViewSpritesClass {
    drawUnitShadow = (drawctx, spriteReference) => {
 
       let spriteObject = this.hexMapData.unitList[spriteReference.id]
-
-      if (!spriteObject.images || spriteObject.images.length == 0) return
 
       if (spriteObject.destination == null) {
          this.drawStaticUnitShadow(drawctx, spriteReference)
@@ -509,7 +505,7 @@ export default class HexMapViewSpritesClass {
 
       if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
       drawctx.drawImage(
-         spriteObject.renderImages[spriteObject.frame][this.camera.rotation],
+         spriteObject.images[spriteObject.frame][this.camera.rotation],
          spritePos.x,
          spritePos.y,
          spriteSize.width,
@@ -656,27 +652,6 @@ export default class HexMapViewSpritesClass {
 
       this.drawStaticUnit(drawctx, spriteReference)
 
-   }
-
-   prerenderTerrain = (terrainObject) => {
-
-      if (terrainObject == null) return
-
-      if (terrainObject.type == 'modifier') this.renderer.renderModifier(terrainObject)
-      else this.renderer.renderStructure(terrainObject)
-
-   }
-
-   prerenderUnits = () => {
-      for (let i = 0; i < this.hexMapData.unitList.length; i++) {
-
-         let unitObject = this.hexMapData.unitList[i]
-
-         if (unitObject == null) continue
-
-         this.renderer.renderUnit(unitObject)
-
-      }
    }
 
 }

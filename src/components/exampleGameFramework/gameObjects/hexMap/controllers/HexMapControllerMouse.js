@@ -10,7 +10,7 @@ export default class HexMapControllerMouseClass {
     }
     
     endUnitTurn = () => {
-        let unit = this.hexMapData.getSelectedUnitToRotate()
+        let unit = this.hexMapData.selections.getSelectedUnitToRotate()
 
         this.utils.setUnitIdle(unit)
     }
@@ -42,7 +42,7 @@ export default class HexMapControllerMouseClass {
 
         if (tile != null) {
             let unit = this.config.unit(tile.position)
-            this.renderer.renderUnit(unit)
+            this.renderer.spriteRenderer.renderUnit(unit)
             this.hexMapData.unitList.push(unit)
         }
 
@@ -60,7 +60,7 @@ export default class HexMapControllerMouseClass {
 
         let path = this.hexMapData.selections.path
 
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.selections.getSelectedUnit()
 
         if (unit.position.q == hoverTile.q && unit.position.r == hoverTile.r) {
             this.hexMapData.selections.path = []
@@ -121,7 +121,7 @@ export default class HexMapControllerMouseClass {
     setUnitMouseDirection = (x, y) => {
 
 
-        let unit = this.hexMapData.getSelectedUnitToRotate()
+        let unit = this.hexMapData.selections.getSelectedUnitToRotate()
 
         if (unit == null) return
 
@@ -130,7 +130,7 @@ export default class HexMapControllerMouseClass {
         if (!tileClicked) return
 
         this.utils.setUnitDirection(unit, tileClicked)
-        this.renderer.renderUnit(unit)
+        this.renderer.spriteRenderer.renderUnit(unit)
 
     }
 
@@ -149,7 +149,7 @@ export default class HexMapControllerMouseClass {
     }
 
     selectMovement = (tileClicked, tile, x, y) => {
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.selections.getSelectedUnit()
 
         if (unit == null) return
 

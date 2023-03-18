@@ -1,8 +1,8 @@
-import HexMapViewMapRendererClass from "./HexMapViewMapRenderer";
+import HexMapRendererMapClass from "../renderers/HexMapRendererMap";
 
 export default class HexMapViewMapClass {
 
-    constructor(hexMapData, camera, settings, shadowRotationDims, images, utils, canvas) {
+    constructor(hexMapData, camera, settings, images, utils, canvas) {
 
         this.hexMapData = hexMapData
         this.camera = camera
@@ -15,11 +15,9 @@ export default class HexMapViewMapClass {
             height: canvas.height
         }
 
-        this.renderer = new HexMapViewMapRendererClass(hexMapData, camera, settings, shadowRotationDims, images, utils, canvas)
-
     }
 
-    draw = (drawctx, drawGroundShadow) => {
+    draw = (drawctx) => {
 
         let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
 
@@ -27,7 +25,9 @@ export default class HexMapViewMapClass {
 
         let position = this.camera.position
 
-        if(drawGroundShadow) drawctx.drawImage(this.renderer.shadowMap.get(0 + ',' + this.camera.rotation), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width))
+        let filteredMapLength = [...rotatedMap].filter(([key, value]) => !this.hexMapData.getEntry(value.q, value.r).images || this.hexMapData.getEntry(value.q, value.r).images.length == 0).length
+
+        if(filteredMapLength == 0) drawctx.drawImage(this.hexMapData.shadowMap.get(0 + ',' + this.camera.rotation), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width))
 
         for (let [key, value] of rotatedMap) {
 
@@ -48,7 +48,6 @@ export default class HexMapViewMapClass {
     }
 
     renderTileStack = (tileObj) => {
-        console.log("ACT")
         this.renderer.renderTileStack(tileObj)
     }
 

@@ -1,8 +1,8 @@
-import HexMapViewUtilsClass from "./HexMapViewUtils";
+import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
 
-export default class HexMapViewSpritesRendererClass {
+export default class HexMapRendererSpritesClass {
 
-    constructor(hexMapData, camera, images, settings) {
+    constructor(hexMapData, camera, settings, images) {
 
         this.hexMapData = hexMapData
         this.camera = camera
@@ -12,6 +12,28 @@ export default class HexMapViewSpritesRendererClass {
 
         this.modifierSettings = settings.MODIFIERS
 
+    }
+
+
+    prerenderTerrain = (terrainObject) => {
+
+        if (terrainObject == null) return
+
+        if (terrainObject.type == 'modifier') this.renderModifier(terrainObject)
+        else this.renderStructure(terrainObject)
+
+    }
+
+    prerenderUnits = () => {
+        for (let i = 0; i < this.hexMapData.unitList.length; i++) {
+
+            let unitObject = this.hexMapData.unitList[i]
+
+            if (unitObject == null) continue
+
+            this.renderUnit(unitObject)
+
+        }
     }
 
     renderModifier = (terrainObject) => {
@@ -73,7 +95,7 @@ export default class HexMapViewSpritesRendererClass {
         let currentIndex = Math.floor(Math.random() * positions.length)
         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * sprites.modifierImages.length) })
         positions.splice(currentIndex, 1)
-        
+
         let chance = this.modifierSettings[terrainObject.sprite].secondSpriteChance
         let roll = Math.random()
         while (roll > chance && positions.length > 0) {
@@ -244,68 +266,68 @@ export default class HexMapViewSpritesRendererClass {
 
         let imageList = []
 
-        if(terrainObject.type == 'base' || terrainObject.type == 'resource' || terrainObject.type == 'prop' || terrainObject.type == 'flag'){
+        if (terrainObject.type == 'base' || terrainObject.type == 'resource' || terrainObject.type == 'prop' || terrainObject.type == 'flag') {
 
 
             for (let i = 0; i < sprite[terrainObject.state].images.length; i++) {
                 let imageList = []
                 for (let rotation = 0; rotation < 12; rotation++) {
                     if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
-    
+
                         let spriteRotation = terrainObject.rotation + rotation
                         if (rotation % 2 == 1) spriteRotation--
                         if (spriteRotation > 11) spriteRotation -= 12
-    
+
                         //create canvas
                         let tempCanvas = document.createElement('canvas')
                         tempCanvas.width = canvasSize.width
                         tempCanvas.height = canvasSize.height
                         let tempctx = tempCanvas.getContext('2d')
-    
+
                         tempctx.drawImage(sprite[terrainObject.state].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
-    
+
                         if (terrainObject.type == 'resource') {
                             tempCanvas = this.utils.addResourceBar(tempCanvas, sprite.spriteSize, terrainObject)
                         }
-        
+
                         if (terrainObject.type == 'base') {
                             tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, terrainObject)
                         }
-    
+
                         imageList[rotation] = tempCanvas
-    
+
                     } else {
                         imageList[rotation] = null
                     }
                 }
-    
+
                 terrainObject.images[i] = imageList
             }
         } else {
 
             for (let rotation = 0; rotation < 12; rotation++) {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
-    
+
                     this.camera.rotation = rotation;
-    
+
                     //create canvas
                     let tempCanvas = document.createElement('canvas')
                     tempCanvas.width = canvasSize.width
                     tempCanvas.height = canvasSize.height
                     let tempctx = tempCanvas.getContext('2d')
-    
+
                     tempctx.drawImage(sprite.images[terrainObject.state][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
-    
+
                     if (terrainObject.type == 'resource') {
                         tempCanvas = this.utils.addResourceBar(tempCanvas, sprite.spriteSize, terrainObject)
                     }
-    
+
                     if (terrainObject.type == 'base') {
                         tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, terrainObject)
                     }
-    
+
                     imageList[rotation] = tempCanvas
-    
+
                 } else {
                     imageList[rotation] = null
                 }
@@ -394,7 +416,7 @@ export default class HexMapViewSpritesRendererClass {
                 }
             }
 
-            unitObject.renderImages[i] = imageList
+            unitObject.images[i] = imageList
         }
 
         //prerender shadow images
@@ -417,23 +439,23 @@ export default class HexMapViewSpritesRendererClass {
                 }
             }
 
-            unitObject.renderShadowImages = imageList
+            unitObject.shadowImages = imageList
 
         }
 
 
         //crop and darken
-        for (let i = 0; i < unitObject.renderImages[0].length; i++) {
-            if (unitObject.renderImages[0][i] == null) continue
+        for (let i = 0; i < unitObject.images[0].length; i++) {
+            if (unitObject.images[0][i] == null) continue
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
 
             for (let j = 0; j < sprite.idle.images.length; j++) {
-                let croppedImage = this.utils.cropOutTiles(unitObject.renderImages[j][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
+                let croppedImage = this.utils.cropOutTiles(unitObject.images[j][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
                 let darkenedImage = this.utils.darkenSprite(croppedImage, unitObject)
-                unitObject.renderImages[j][i] = darkenedImage
+                unitObject.images[j][i] = darkenedImage
             }
 
         }

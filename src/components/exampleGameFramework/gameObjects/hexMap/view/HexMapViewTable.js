@@ -1,6 +1,6 @@
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, camera, settings, shadowRotationDims, utils) {
+   constructor(hexMapData, camera, settings, utils) {
 
       this.hexMapData = hexMapData;
       this.camera = camera;
@@ -8,9 +8,23 @@ export default class HexMapViewTableClass {
       this.tableColors = settings.TEMP_TABLE_COLORS;
       this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
       this.tableHeight = settings.TABLE_HEIGHT
-      this.shadowRotationDims = shadowRotationDims
 
       this.utils = utils
+
+      this.rotationAlpha = {
+         0: 1,
+         1: 0.9,
+         2: 0.8,
+         3: 0.7,
+         4: 0.6,
+         5: 0.5,
+         6: 0.4,
+         7: 0.5,
+         8: 0.6,
+         9: 0.7,
+         10: 0.8,
+         11: 0.9,
+      }
 
    }
 
@@ -47,8 +61,8 @@ export default class HexMapViewTableClass {
          tempTablePosition.shift();
          tempTablePosition.shift();
 
-         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
-         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shadowRotation].wallBot}%)`
+         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shadowRotation]}%)`
+         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shadowRotation]}%)`
 
 
 
@@ -73,8 +87,8 @@ export default class HexMapViewTableClass {
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
 
-         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
+         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          drawctx.beginPath();
          drawctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);
@@ -88,8 +102,8 @@ export default class HexMapViewTableClass {
          shiftedShadowRotation += 3;
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
-         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
-         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.shadowRotationDims[shiftedShadowRotation].wallBot}%)`
+         drawctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
+         drawctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          drawctx.beginPath();
          drawctx.moveTo(tempTablePosition[2].x, tempTablePosition[2].y);
