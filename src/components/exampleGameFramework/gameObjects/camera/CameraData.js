@@ -25,6 +25,10 @@ export default class CameraDataClass {
         this.anchorPoint = null;
         this.mouseAnchorPoint = null;
 
+        this.clickDist = 20
+        this.clickPos = null
+        this.clickMovePos = null
+
         this.maxZoom = settings.MAX_ZOOM;
         this.zoomAmount = settings.ZOOM_AMOUNT;
         this.rotationAmount = settings.ROTATION_AMOUNT;

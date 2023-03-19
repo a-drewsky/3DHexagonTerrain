@@ -1,8 +1,8 @@
 import HexMapViewMapClass from "./HexMapViewMap";
-import HexMapViewSpritesClass from "./HexMapViewSprites";
+import HexMapViewSpritesClass from "./sprites/HexMapViewSprites";
 import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
 import HexMapViewTableClass from "./HexMapViewTable";
-import HexMapViewSelectionClass from "./HexMapViewSelection";
+import HexMapViewSelectionClass from "./HexMapViewHighlights";
 
 export default class HexMapViewClass {
 

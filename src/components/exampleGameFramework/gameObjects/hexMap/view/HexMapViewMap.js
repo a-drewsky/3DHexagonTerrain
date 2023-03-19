@@ -47,8 +47,4 @@ export default class HexMapViewMapClass {
 
     }
 
-    renderTileStack = (tileObj) => {
-        this.renderer.renderTileStack(tileObj)
-    }
-
 }

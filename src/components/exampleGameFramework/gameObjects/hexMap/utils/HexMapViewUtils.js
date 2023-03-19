@@ -62,22 +62,38 @@ export default class HexMapViewUtilsClass {
 
     }
 
+    calcHoverSelection = () => {
+        if (this.hexMapData.state.current == this.hexMapData.state.selectTile) return 'hover_select'
+        if (this.hexMapData.state.current == this.hexMapData.state.chooseRotation) return 'hover_select'
+        else if (this.hexMapData.state.current == this.hexMapData.state.placeUnit) return 'hover_place'
+        else return null
+    }
+
+    calcUnitSelection = () => {
+        if (this.hexMapData.state.current == this.hexMapData.state.chooseRotation) return 'rotate'
+        if (this.hexMapData.state.current == this.hexMapData.state.selectMovement) return 'unit'
+        if (this.hexMapData.state.current == this.hexMapData.state.selectAction) return 'unit'
+        else return null
+    }
+
     getSelectionArr = () => {
-        let selectionList = Object.entries(this.hexMapData.selections)
+        let selectionList = this.hexMapData.selections
 
         let filteredSelectionList = []
 
-        for(let sel of selectionList){
-            if(sel[1] == null) continue
-            if(Array.isArray(sel[1])){
-                for(let arrSel of sel[1]){
-                    filteredSelectionList.push({position: arrSel, selection: sel[0]})
-                }
-                continue
+        if (selectionList.hover !== null && this.calcHoverSelection() !== null) filteredSelectionList.push({ position: selectionList.hover, selection: this.calcHoverSelection() })
+        if (selectionList.unit !== null && this.calcUnitSelection() !== null) filteredSelectionList.push({ position: selectionList.unit, selection: this.calcUnitSelection() })
+        if (selectionList.tile !== null) filteredSelectionList.push({ position: selectionList.tile, selection: 'tile' })
+        if (selectionList.target !== null) filteredSelectionList.push({ position: selectionList.target, selection: 'target' })
+
+        for (let item of selectionList.path) {
+            filteredSelectionList.push({ position: item, selection: 'path' })
+        }
+
+        for (let selList in selectionList.pathing) {
+            for (let item of selectionList.pathing[selList]) {
+                filteredSelectionList.push({ position: item, selection: selList })
             }
-
-            filteredSelectionList.push({position: sel[1], selection: sel[0]})
-
         }
         return filteredSelectionList
     }
@@ -300,9 +316,9 @@ export default class HexMapViewUtilsClass {
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
-            if(!cropListTileRef) continue
+            if (!cropListTileRef) continue
             let cropListTile = this.hexMapData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if(!cropListTile) continue
+            if (!cropListTile) continue
             if (cropListTile.height == tileHeight) {
 
                 let tilePos = {
@@ -364,10 +380,10 @@ export default class HexMapViewUtilsClass {
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
-            if(!cropListTileRef) continue
+            if (!cropListTileRef) continue
             let cropListTile = this.hexMapData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if(!cropListTile) continue
-            
+            if (!cropListTile) continue
+
             if (cropListTile.height > tileHeight) {
                 return true
             }
@@ -420,10 +436,10 @@ export default class HexMapViewUtilsClass {
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
-            if(!cropListTileRef) continue
+            if (!cropListTileRef) continue
             let cropListTile = this.hexMapData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if(!cropListTile) continue
-            
+            if (!cropListTile) continue
+
             if (cropListTile.height > tileHeight) {
                 //clip the hexagons in front of image
                 let clipXOffset;
@@ -543,10 +559,10 @@ export default class HexMapViewUtilsClass {
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
-            if(!cropListTileRef) continue
+            if (!cropListTileRef) continue
             let cropListTile = this.hexMapData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if(!cropListTile) continue
-            
+            if (!cropListTile) continue
+
             if (cropListTile.height > tileHeight) {
                 //clip the hexagons in front of image
                 let clipXOffset;
@@ -624,7 +640,7 @@ export default class HexMapViewUtilsClass {
 
     addHealthBar = (image, imageSize, object) => {
 
-        if(object.health==100) return image
+        if (object.health == 100) return image
 
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
@@ -633,7 +649,7 @@ export default class HexMapViewUtilsClass {
 
         tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
 
-        let healthBarIndex = 10 - Math.floor(object.health/10)
+        let healthBarIndex = 10 - Math.floor(object.health / 10)
 
         let healthBarSprite = this.images.ui.healthbar
 
@@ -643,7 +659,7 @@ export default class HexMapViewUtilsClass {
         }
 
         let healthbarPos = {
-            x: tempCanvas.width / 2 - healthbarSpriteSize.width/2,
+            x: tempCanvas.width / 2 - healthbarSpriteSize.width / 2,
             y: 0
         }
 
@@ -655,7 +671,7 @@ export default class HexMapViewUtilsClass {
 
     addResourceBar = (image, imageSize, object) => {
 
-        if(object.resources==100) return image
+        if (object.resources == 100) return image
 
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
@@ -664,7 +680,7 @@ export default class HexMapViewUtilsClass {
 
         tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
 
-        let resourceBarIndex = 10 - Math.floor(object.resources/10)
+        let resourceBarIndex = 10 - Math.floor(object.resources / 10)
 
         let resourceBarSprite = this.images.ui.resourcebar
 
@@ -674,7 +690,7 @@ export default class HexMapViewUtilsClass {
         }
 
         let resourcebarPos = {
-            x: tempCanvas.width / 2 - resourcebarSpriteSize.width/2,
+            x: tempCanvas.width / 2 - resourcebarSpriteSize.width / 2,
             y: 0
         }
 
@@ -724,9 +740,9 @@ export default class HexMapViewUtilsClass {
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
-            if(!cropListTileRef) continue
+            if (!cropListTileRef) continue
             let cropListTile = this.hexMapData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if(!cropListTile) continue
+            if (!cropListTile) continue
 
             if (cropListTile.height > tileHeight) {
                 //clip the hexagons in front of image
@@ -773,7 +789,7 @@ export default class HexMapViewUtilsClass {
                 } else {
                     let tempTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
                     let tempTile = this.hexMapData.getEntry(tempTileRef.q, tempTileRef.r)
-                    
+
                     height = tempTile.height - Math.min(...neighborHeights)
                 }
 
@@ -1032,6 +1048,11 @@ export default class HexMapViewUtilsClass {
             || spritePos.x > position.x + canvasDims.width + zoom
             || spritePos.y > position.y + canvasDims.height + zoom * (canvasDims.height / canvasDims.width)) return false;
 
+        return true
+    }
+
+    checkImagesLoaded = (spriteObject) => {
+        if (!spriteObject.images || spriteObject.images.length == 0) return false
         return true
     }
 

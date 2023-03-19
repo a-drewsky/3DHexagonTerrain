@@ -1,8 +1,9 @@
 import noise from "../../../utilities/perlin";
+import HexMapBuilderUtilsClass from "../utils/HexMapBuilderUtils";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, settings, config, utils) {
+   constructor(hexMapData, settings, config) {
       this.hexMapData = hexMapData;
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
@@ -16,15 +17,15 @@ export default class HexMapBuilderTerrainClass {
       this.biomeGenSettings = settings.BIOME_GENERATION
 
       this.config = config
-      this.utils = utils
+      
+      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
 
    }
 
    generateTerrain = (q, r, mapSize) => {
       let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
       this.generateModifiers(noiseFluctuation)
-      this.generateSavannaTrees()
-      this.generateLargeRocks()
+      this.generateProps()
       this.generateMainBases(q, r, mapSize)
       this.generateMines(q, r, mapSize)
       this.generateBases(q, r, mapSize)
@@ -169,41 +170,32 @@ export default class HexMapBuilderTerrainClass {
 
    }
 
-   generateSavannaTrees = () => {
+   generateProps = () => {
+
+      let thresholds = {
+         savannaTree: 0.95,
+         largeRock: 0.9
+      }
+
       for (let [key, value] of this.hexMapData.getMap()) {
          let keyObj = this.hexMapData.split(key);
 
-         let savannaTreeThreshold = 0.95
-
-         let spawnChance = Math.random();
-
-         if ((value.biome == 'savanna' || value.biome == 'savannahill') && spawnChance > savannaTreeThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
-
-            let terrain = this.config.savannaTree(keyObj)
-
-            this.utils.setStructure(keyObj.q, keyObj.r, terrain, value)
-
+         let spawnChance = {
+            savannaTree: Math.random(),
+            largeRock: Math.random()
          }
 
-      }
-   }
+         //generate savanna trees
+         if ((value.biome == 'savanna' || value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
+            let terrain = this.config.savannaTree(keyObj)
+            this.utils.setStructure(keyObj.q, keyObj.r, terrain, value)
+         }
 
-   generateLargeRocks = () => {
-      for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.hexMapData.split(key);
-
-         let replacesmallRockThreshold = 0.9
-
-         let spawnChance = Math.random();
-         
+         //generate large rocks
          let terrainIndex = this.hexMapData.getTerrainIndex(keyObj.q, keyObj.r);
-         
-         if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].name == 'Rocks' && spawnChance > replacesmallRockThreshold) {
-
+         if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
             let terrain = this.config.largeRock(keyObj)
-
             this.hexMapData.terrainList[terrainIndex] = terrain
-
          }
 
       }

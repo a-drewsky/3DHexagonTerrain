@@ -4,76 +4,34 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer, cameraController, camera, canvas, uiComponents, updateUi, globalState) {
+    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiComponents, updateUi, globalState) {
 
         this.hexMapData = hexMapData
         this.images = images
         this.renderer = renderer
         this.cameraController = cameraController
+        this.cameraData = cameraData
 
         this.travelTime = settings.TRAVEL_TIME
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.camera, canvas, images, uiComponents, updateUi, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiComponents, updateUi, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }
 
     update = () => {
 
-        if (this.hexMapData.state.current != 'selectAction' && this.hexMapData.clickPos !== null && this.collision.vectorDist(this.hexMapData.clickPos, this.hexMapData.clickMovePos) > this.hexMapData.clickDist) {
-            this.cameraController.mouseDown(this.hexMapData.clickMovePos.x, this.hexMapData.clickMovePos.y)
-            this.hexMapData.clickPos = null
-            this.hexMapData.clickMovePos = null
+        if (this.hexMapData.state.current != 'selectAction' && this.cameraData.clickPos !== null && this.collision.vectorDist(this.cameraData.clickPos, this.cameraData.clickMovePos) > this.cameraData.clickDist) {
+            this.cameraController.mouseDown(this.cameraData.clickMovePos.x, this.cameraData.clickMovePos.y)
+            this.cameraData.clickPos = null
+            this.cameraData.clickMovePos = null
         }
 
         for (let i in this.hexMapData.unitList) {
             let unit = this.hexMapData.unitList[i]
             this.updateUnit(unit)
-        }
-
-    }
-
-    updateMine = (mine) => {
-
-        let resources = mine.resources
-
-        let curState = mine.state
-
-        let newState = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
-
-        if (newState == curState) return
-
-        mine.state = newState
-
-        if (mine.state != 'destroyed') {
-            this.renderer.spriteRenderer.renderStructure(mine)
-        } else {
-            let emptymine = this.config.emptymine(mine.position)
-            this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
-        }
-
-    }
-
-    //move to base class
-    updateBase = (base) => {
-
-        let health = base.health
-
-        let curState = base.state
-
-        let newState = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
-
-        if (newState == curState) return
-
-        base.state = newState
-
-        if (base.state != 'destroyed') {
-            this.renderer.spriteRenderer.renderStructure(base)
-        } else {
-            let rubblepile = this.config.rubblepile(base.position)
-            this.utils.updateTerrain(base.position.q, base.position.r, rubblepile)
         }
 
     }
@@ -108,21 +66,6 @@ export default class HexMapUpdaterClass {
 
     }
 
-    endUnitDeath = (unit) => {
-        this.hexMapData.deleteUnit(unit.position.q, unit.position.r)
-        this.utils.resetHexMapState()
-    }
-
-    endUnitHit = (unit) => {
-        if (unit.health > 0) {
-            this.utils.setUnitIdle(unit)
-            return
-        }
-
-        this.utils.setUnitAnimation(unit, 'death')
-
-    }
-
     setUnitFrame = (unit) => {
         unit.frameCurTime = Date.now()
         if (unit.stateConfig[unit.state].rate == 'static') return
@@ -133,36 +76,6 @@ export default class HexMapUpdaterClass {
 
             if (unit.frame >= this.images.unit[unit.sprite][unit.state].images.length) unit.frame = 0
         }
-    }
-
-    collectMineResources = (mine) => {
-        mine.resources -= 25
-        this.hexMapData.resources++
-
-        this.utils.setResourceBar(this.hexMapData.resources)
-        this.updateMine(mine)
-    }
-
-    endUnitMining = (unit) => {
-        this.collectMineResources(unit.target)
-        this.utils.setUnitIdle(unit)
-    }
-
-    endUnitAttacking = (unit) => {
-
-        let target = unit.target
-        this.utils.setUnitIdle(unit)
-        target.health -= 25
-
-        if (target.type == 'unit') {
-            this.utils.setUnitAnimation(target, 'hit')
-        }
-
-        if (target.type == 'base') {
-            this.renderer.spriteRenderer.renderStructure(target)
-            this.updateBase(target)
-        }
-
     }
 
     updateUnitPath = (unit) => {
@@ -204,6 +117,91 @@ export default class HexMapUpdaterClass {
             }
 
         }
+    }
+
+    endUnitMining = (unit) => {
+        let target = unit.target
+        this.utils.setUnitIdle(unit)
+        this.updateMine(target)
+    }
+
+    endUnitAttacking = (unit) => {
+
+        let target = unit.target
+        this.utils.setUnitIdle(unit)
+        target.health -= 25
+
+        if (target.type == 'unit') {
+            this.utils.setUnitAnimation(target, 'hit')
+        }
+
+        if (target.type == 'base') {
+            this.updateBase(target)
+        }
+
+    }
+
+    endUnitHit = (unit) => {
+        if (unit.health > 0) {
+            this.utils.setUnitIdle(unit)
+            return
+        }
+
+        this.utils.setUnitAnimation(unit, 'death')
+
+    }
+
+    endUnitDeath = (unit) => {
+        this.hexMapData.deleteUnit(unit.position.q, unit.position.r)
+        this.utils.resetHexMapState()
+    }
+
+    updateMine = (mine) => {
+
+        mine.resources -= 25
+        this.hexMapData.resources++
+
+        this.utils.setResourceBar(this.hexMapData.resources)
+
+        let resources = mine.resources
+
+        let curState = mine.state
+
+        let newState = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
+
+        if (newState == curState) return
+
+        mine.state = newState
+
+        if (mine.state != 'destroyed') {
+            this.renderer.spriteRenderer.structures.render(mine)
+        } else {
+            let emptymine = this.config.emptymine(mine.position)
+            this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
+        }
+
+    }
+
+    //move to base class
+    updateBase = (base) => {
+
+        let health = base.health
+
+        let curState = base.state
+
+        let newState = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
+
+        if (newState == curState) return
+
+        base.state = newState
+
+        if (base.state != 'destroyed') {
+            this.renderer.spriteRenderer.structures.render(base)
+        } else {
+            let rubblepile = this.config.rubblepile(base.position)
+            this.utils.updateTerrain(base.position.q, base.position.r, rubblepile)
+        }
+
     }
 
 }

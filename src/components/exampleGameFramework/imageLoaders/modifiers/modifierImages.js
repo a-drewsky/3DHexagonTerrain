@@ -24,11 +24,11 @@ export default class ModifiersImagesClass {
             x: 0,
             y: 1
         }
-        this.fullImageSize = {
+        this.singleImageSize = {
             width: 1,
             height: 1.5
         }
-        this.fullImageOffset = {
+        this.singleImageOffset = {
             x: 0,
             y: 0.5
         }

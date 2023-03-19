@@ -60,11 +60,11 @@ export default class HexMapControllerUtilsClass {
     }
 
     setSelection = (q, r, selection) => {
-        if (Array.isArray(this.hexMapData.selections[selection])) {
-            this.hexMapData.selections[selection].push({ q: q, r: r })
-        } else {
-            this.hexMapData.selections[selection] = { q: q, r: r }
-        }
+        this.hexMapData.selections[selection] = { q: q, r: r }
+    }
+
+    setPathingSelections = (pathing) => {
+        this.hexMapData.selections.pathing = pathing
     }
 
     removeSelection = (q, r) => {
@@ -77,22 +77,21 @@ export default class HexMapControllerUtilsClass {
 
     resetSelected = () => {
         this.hexMapData.selections = {
-            info: null,
+            hover: null,
+            tile: null,
             unit: null,
             target: null,
             path: [],
-            movement: [],
-            action: [],
-            attack: [],
-            hover_select: null,
-            hover_place: null,
-
-        }
+            pathing: {
+               movement: [],
+               action: [],
+               attack: []
+            }
+         }
     }
 
     resetHover = () => {
-        this.hexMapData.selections['hover_select'] = null
-        this.hexMapData.selections['hover_place'] = null
+        this.hexMapData.selections['hover'] = null
     }
 
     clearContextMenu = () => {
@@ -148,10 +147,10 @@ export default class HexMapControllerUtilsClass {
     }
 
     checkValidPath = () => {
-        let unit = this.hexMapData.selections.getSelectedUnit()
+        let unit = this.hexMapData.getSelectedUnit()
         let path = [this.hexMapData.selections.unit, ...this.hexMapData.selections.path]
         let pathCost = this.pathFinder.pathCost(path)
-        if(pathCost <= unit.movementRange) return true
+        if (pathCost <= unit.movementRange) return true
         return false
     }
 
@@ -189,7 +188,7 @@ export default class HexMapControllerUtilsClass {
 
     findMoveSet = () => {
 
-        let unit = this.hexMapData.selections.getSelectedUnit()
+        let unit = this.hexMapData.getSelectedUnit()
 
         if (unit == null) return
 
@@ -199,34 +198,38 @@ export default class HexMapControllerUtilsClass {
 
         if (!moveSet) return
 
+        let pathing = {
+            movement: [],
+            action: [],
+            attack: []
+         }
+
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
 
-            this.setSelection(tile.position.q, tile.position.r, 'movement')
+            pathing.movement.push({q: tile.position.q, r: tile.position.r})
         }
 
-        //search for mines
+        //search for structures
         for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource') {
-                this.setSelection(tile.position.q, tile.position.r, 'action')
+            if ((this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource')
+            || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
+                pathing.action.push({q: tile.position.q, r: tile.position.r})
                 continue
             }
             if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
                 || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
-                this.setSelection(tile.position.q, tile.position.r, 'attack')
-                continue
-            }
-            if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
-                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
-                this.setSelection(tile.position.q, tile.position.r, 'action')
+                    pathing.attack.push({q: tile.position.q, r: tile.position.r})
                 continue
             }
         }
+        this.setPathingSelections(pathing)
     }
 
     updateTerrain = (q, r, terrain) => {
-        this.renderer.spriteRenderer.renderSingleImageModifier(terrain)
+        if(terrain.modifierType == 'singleImage')this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
+
         let terrainIndex = this.hexMapData.getTerrainIndex(q, r)
         this.hexMapData.terrainList[terrainIndex] = terrain
     }
@@ -237,7 +240,7 @@ export default class HexMapControllerUtilsClass {
 
         let startTile = this.hexMapData.getEntry(unit.position.q, unit.position.r)
 
-        let targetTile = this.hexMapData.selections.getSelectedTargetTile()
+        let targetTile = this.hexMapData.getSelectedTargetTile()
 
         if (targetTile == null) return
 
@@ -294,7 +297,7 @@ export default class HexMapControllerUtilsClass {
         unit.state = 'idle'
         unit.frame = 0
 
-        this.renderer.spriteRenderer.renderUnit(unit)
+        this.renderer.spriteRenderer.units.render(unit)
 
         this.resetHexMapState()
     }
@@ -325,13 +328,13 @@ export default class HexMapControllerUtilsClass {
     }
 
     getDistance = (pos1, pos2) => {
-        return (Math.abs(pos1.q - pos2.q) 
-          + Math.abs(pos1.q + pos1.r - pos2.q - pos2.r)
-          + Math.abs(pos1.r - pos2.r)) / 2
+        return (Math.abs(pos1.q - pos2.q)
+            + Math.abs(pos1.q + pos1.r - pos2.q - pos2.r)
+            + Math.abs(pos1.r - pos2.r)) / 2
     }
 
     getClosestPos = (pos, posMap) => {
-        let distMap = posMap.map( mapPos => mapPos===null ? Infinity : this.getDistance(pos, mapPos))
+        let distMap = posMap.map(mapPos => mapPos === null ? Infinity : this.getDistance(pos, mapPos))
 
         let index = distMap.indexOf(Math.min(...distMap))
         return posMap[index]
@@ -342,10 +345,10 @@ export default class HexMapControllerUtilsClass {
         //find closest neighbor to targetPos
 
         let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-        let rotatePosMap = directionMap.map(pos => pos===null ? null : { q: unit.position.q - pos.q, r: unit.position.r - pos.r })
-        
+        let rotatePosMap = directionMap.map(pos => pos === null ? null : { q: unit.position.q - pos.q, r: unit.position.r - pos.r })
+
         let closestPos
-        if(rotatePosMap.findIndex(pos => pos !== null && pos.q == targetPos.q && pos.r == targetPos.r ) != -1){
+        if (rotatePosMap.findIndex(pos => pos !== null && pos.q == targetPos.q && pos.r == targetPos.r) != -1) {
             closestPos = targetPos
         } else {
             closestPos = this.getClosestPos(targetPos, rotatePosMap)
@@ -393,9 +396,9 @@ export default class HexMapControllerUtilsClass {
         unit.state = 'idle'
         unit.frame = 0
 
-        this.renderer.spriteRenderer.renderUnit(unit)
+        this.renderer.spriteRenderer.units.render(unit)
 
-        this.setSelection(unit.position.q, unit.position.r, 'rotate')
+        this.setSelection(unit.position.q, unit.position.r, 'unit')
 
         this.hexMapData.state.current = this.hexMapData.state.chooseRotation
 
@@ -446,7 +449,7 @@ export default class HexMapControllerUtilsClass {
         let tileClicked = null
 
         for (let i = 0; i < testList.length; i++) {
-            
+
             let testTile = {
                 q: hexClicked.q + testList[i].q,
                 r: hexClicked.r + testList[i].r
@@ -508,7 +511,7 @@ export default class HexMapControllerUtilsClass {
                     height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[tileUnit.frame][this.camera.rotation].y / 32)
                 }
 
-                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[tileUnit.frame][this.camera.rotation].x / 32) * this.hexMapData.size * 2 
+                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[tileUnit.frame][this.camera.rotation].x / 32) * this.hexMapData.size * 2
                 spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[tileUnit.frame][this.camera.rotation].y / 32) * this.hexMapData.size * 2
 
                 if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
@@ -519,13 +522,13 @@ export default class HexMapControllerUtilsClass {
 
         }
 
-        if(tileClicked === null) return null
-        
+        if (tileClicked === null) return null
+
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
 
         let tileClickedObj = this.hexMapData.getEntry(rotatedTile.q, rotatedTile.r)
 
-        if(!tileClickedObj.images || tileClickedObj.images.length==0) return null
+        if (!tileClickedObj.images || tileClickedObj.images.length == 0) return null
 
         return rotatedTile
 
@@ -542,7 +545,7 @@ export default class HexMapControllerUtilsClass {
         let zoom = zoomLevel * zoomAmount
 
         let rotation = this.camera.rotation
-        if(newRotation !== undefined && newRotation !== null) rotation = newRotation
+        if (newRotation !== undefined && newRotation !== null) rotation = newRotation
 
         let centerPos = {
             x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.hexMapData.posMap.get(rotation).x,

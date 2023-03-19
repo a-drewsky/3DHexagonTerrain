@@ -1,5 +1,5 @@
 import HexMapRendererMapClass from "./HexMapRendererMap";
-import HexMapRendererSpritesClass from "./HexMapRendererSprites";
+import HexMapRendererSpritesClass from "./sprites/HexMapRendererSprites";
 import HexMapRendererSelectionsClass from "./HexMapRendererSelection";
 
 export default class HexMapRendererClass {

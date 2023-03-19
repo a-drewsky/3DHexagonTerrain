@@ -22,29 +22,17 @@ export default class HexMapDataClass {
       this.unitList = [];
 
       this.selections = {
-         info: null,
+         hover: null,
+         tile: null,
          unit: null,
          target: null,
-         rotate: null,
          path: [],
-         movement: [],
-         action: [],
-         attack: [],
-         hover_select: null,
-         hover_place: null
+         pathing: {
+            movement: [],
+            action: [],
+            attack: []
+         }
       }
-
-      // this.selections = {
-      //    hover: null,
-      //    tile: null,
-      //    unit: null,
-      //    pathing: {
-      //       path: [],
-      //       movement: [],
-      //       action: [],
-      //       attack: []
-      //    }
-      // }
 
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
@@ -58,11 +46,6 @@ export default class HexMapDataClass {
       this.sideLength = Math.PI / 3;
 
       this.maxHeight = null;
-
-      //should be camera data
-      this.clickDist = 20
-      this.clickPos = null
-      this.clickMovePos = null
 
       //will be player data
       this.resources = 0
@@ -304,11 +287,11 @@ export default class HexMapDataClass {
    }
 
    //return the selected unit tile or null
-   // getSelectedTargetTile = () => {
-   //    let selected = this.selections['target']
-   //    if (selected === null) return null
-   //    return this.getEntry(selected.q, selected.r)
-   // }
+   getSelectedTargetTile = () => {
+      let selected = this.selections['target']
+      if (selected === null) return null
+      return this.getEntry(selected.q, selected.r)
+   }
 
    //return the selected unit tile or null
    getSelectedUnit = () => {

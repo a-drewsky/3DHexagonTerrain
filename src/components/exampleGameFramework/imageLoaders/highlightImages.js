@@ -1,7 +1,7 @@
 import action from '../images/highlights/highlight_action.png'
 import attack from '../images/highlights/highlight_attack.png'
 import hover_select from '../images/highlights/highlight_hover_select.png'
-import info from '../images/highlights/highlight_info.png'
+import tile from '../images/highlights/highlight_info.png'
 import movement from '../images/highlights/highlight_movement.png'
 import path from '../images/highlights/highlight_path.png'
 import unit from '../images/highlights/highlight_unit.png'
@@ -16,7 +16,7 @@ export default class HighlighImagesClass {
 
             action: new Image(),
             attack: new Image(),
-            info: new Image(),
+            tile: new Image(),
             movement: new Image(),
             path: new Image(),
             unit: new Image(),
@@ -47,7 +47,7 @@ export default class HighlighImagesClass {
 
         this.action.src = action
         this.attack.src = attack
-        this.info.src = info
+        this.tile.src = tile
         this.movement.src = movement
         this.path.src = path
         this.unit.src = unit

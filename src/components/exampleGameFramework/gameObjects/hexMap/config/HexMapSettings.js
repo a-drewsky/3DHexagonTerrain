@@ -151,7 +151,7 @@ export default class HexMapSettingsClass {
                 minBiomeSmoothing: 10,
                 terrainGenThreshold: 0.45,
                 terrainGenMaxNeighbors: 1,
-                rockGenThreshold: 0.45
+                rockGenThreshold: 0.4
             },
             water: {
                 biomeGroup: ['frozenwater', 'playa'],

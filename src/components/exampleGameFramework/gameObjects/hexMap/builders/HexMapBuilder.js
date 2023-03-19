@@ -1,7 +1,7 @@
 import noise from "../../../utilities/perlin";
 import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 import HexMapConfigClass from "../config/hexMapConfig";
-import HexMapBuilderUtilsClass from "./HexMapBuilderUtils";
+import HexMapBuilderUtilsClass from "../utils/HexMapBuilderUtils";
 
 export default class HexMapBuilderClass {
 
@@ -26,7 +26,7 @@ export default class HexMapBuilderClass {
 
       this.config = new HexMapConfigClass()
       this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
-      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config, this.utils);
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
 
    }
 
