@@ -46,7 +46,7 @@ export default class HexMapDebugSmoothingClass {
 
     }
 
-    update = (state) => {
+    update = () => {
         this.view.update();
     }
 

@@ -159,6 +159,7 @@ export default class HexMapControllerUiClass {
 
         this.cameraController.rotateRight()
         this.utils.resetHover()
+        this.hexMapData.renderBackground = true
     }
 
     rotateLeft = () => {
@@ -213,6 +214,7 @@ export default class HexMapControllerUiClass {
 
         this.cameraController.rotateLeft()
         this.utils.resetHover()
+        this.hexMapData.renderBackground = true
     }
 
 }

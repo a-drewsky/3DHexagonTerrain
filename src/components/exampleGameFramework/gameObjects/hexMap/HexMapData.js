@@ -13,6 +13,8 @@ export default class HexMapDataClass {
       }
       this.state.current = this.state.selectTile
 
+      this.renderBackground = true
+
 
       this.tileMap = new Map();
       this.shadowMap = new Map();

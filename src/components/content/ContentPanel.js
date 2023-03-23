@@ -11,12 +11,11 @@ const ContentPanel = () => {
 
    //SETUP
    const canvas = useRef(null);
+   const bgCanvas = useRef(null);
 
    const [gameClass, setGameClass] = useState(null);
 
    const [gameImages, setGameImages] = useState(new GameImagesClass());
-
-   const [winCondition, setWinCondition] = useState(null);
 
    const [imagesLoaded, setImagesLoaded] = useState(false);
 
@@ -26,6 +25,12 @@ const ContentPanel = () => {
       },
       endGameMenu: {
          show: false
+      },
+      bgCanvas: {
+         x: 0,
+         y: 0,
+         width: 0,
+         height: 0
       },
       contextMenu: {
          show: false,
@@ -37,6 +42,8 @@ const ContentPanel = () => {
          resourceNum: 0
       }
    })
+
+   const [initialUi, setInitialUi] = useState({...uiComponents})
    //END SETUP
 
 
@@ -45,7 +52,13 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, endGameMenu, contextMenu, resourceBar }) => ({ pauseMenu: newUi.pauseMenu, endGameMenu: newUi.endGameMenu, contextMenu: newUi.contextMenu, resourceBar: newUi.resourceBar }));
+      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resourceBar }) => ({ 
+         pauseMenu: newUi.pauseMenu, 
+         endGameMenu: newUi.endGameMenu,
+         bgCanvas: newUi.bgCanvas,
+         contextMenu: newUi.contextMenu, 
+         resourceBar: newUi.resourceBar 
+      }));
    }
 
 
@@ -58,40 +71,22 @@ const ContentPanel = () => {
       setGameClass(null);
       let newGameClass = new GameMainClass(
          canvas.current,
+         bgCanvas.current,
          gameImages,
-         setWinCondition,
+         uiComponents,
          updateUi,
          {
             mapSize: sizeSetting
          }
       );
-
       setGameClass(newGameClass);
-      newGameClass.createGame();
-
-      setWinCondition(null);
+      newGameClass.startGame();
    }
 
    const endGame = () => {
       if (gameClass) gameClass.clear();
       setGameClass(null);
-      setUiComponents({
-         pauseMenu: {
-            show: false
-         },
-         endGameMenu: {
-            show: false
-         },
-         contextMenu: {
-            show: false,
-            x: 0,
-            y: 0,
-            buttonList: []
-         },
-         resourceBar: {
-            resourceNum: 0
-         }
-      })
+      setUiComponents(initialUi)
    }
 
    const restartGame = () => {
@@ -162,16 +157,6 @@ const ContentPanel = () => {
 
    return (
       <>
-         {/*WIN CONDITION TEXT*/}
-         {
-            (winCondition != null)
-            &&
-            <>
-               <h1>{winCondition}</h1>
-            </>
-         }
-         {/*END WIN CONDITION TEXT*/}
-
          {/*LOADING TEXT*/}
          {
             (imagesLoaded == false)
@@ -184,9 +169,17 @@ const ContentPanel = () => {
 
 
          {/*CANVAS*/}
-         <div className={(winCondition != null || gameClass == null || imagesLoaded == false) && 'd-none'}>
+         <div className={(gameClass == null || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
                <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
+               <canvas
+                     ref={bgCanvas}
+                     width={0}
+                     height={0}
+                     style={
+                        { imageRendering: 'crisp-edges', touchAction: 'none', width: uiComponents.bgCanvas.width, height: uiComponents.bgCanvas.height, left: uiComponents.bgCanvas.x, top: uiComponents.bgCanvas.y, position: 'absolute' }
+                     }
+                  />
                   <canvas
                      ref={canvas}
                      width={Math.min(window.innerWidth, 1000)}
@@ -198,7 +191,7 @@ const ContentPanel = () => {
 
                      onWheel={mouseWheel}
                      style={
-                        { imageRendering: 'crisp-edges', touchAction: 'none', width: '100%', height: '100%', position: 'absolute' }
+                        { imageRendering: 'crisp-edges', touchAction: 'none', width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'absolute' }
                      }
                   />
 

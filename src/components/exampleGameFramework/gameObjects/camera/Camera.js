@@ -11,13 +11,4 @@ export default class CameraClass {
 
     }
 
-    update = (state) => {
-        this.data.position.x += this.data.velocity.x * this.data.cameraSpeed
-        this.data.position.y += this.data.velocity.y * this.data.cameraSpeed
-    }
-
-    draw = () => {
-        
-    }
-
 }

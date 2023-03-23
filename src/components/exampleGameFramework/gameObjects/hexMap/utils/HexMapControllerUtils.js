@@ -4,7 +4,7 @@ import CollisionClass from "../../../utilities/collision"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, camera, canvas, images, uiComponents, updateUi, renderer, globalState) {
+    constructor(hexMapData, camera, canvas, images, uiComponents, renderer, globalState) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
@@ -12,8 +12,6 @@ export default class HexMapControllerUtilsClass {
         this.globalState = globalState
 
         this.uiComponents = uiComponents
-
-        this.updateUi = updateUi
 
         this.renderer = renderer
 
@@ -83,11 +81,11 @@ export default class HexMapControllerUtilsClass {
             target: null,
             path: [],
             pathing: {
-               movement: [],
-               action: [],
-               attack: []
+                movement: [],
+                action: [],
+                attack: []
             }
-         }
+        }
     }
 
     resetHover = () => {
@@ -99,8 +97,6 @@ export default class HexMapControllerUtilsClass {
         this.uiComponents.contextMenu.x = null
         this.uiComponents.contextMenu.y = null
         this.uiComponents.contextMenu.buttonList = []
-
-        this.updateUi()
     }
 
     setContextMenu = (x, y, buttonList) => {
@@ -108,13 +104,10 @@ export default class HexMapControllerUtilsClass {
         this.uiComponents.contextMenu.x = x
         this.uiComponents.contextMenu.y = y
         this.uiComponents.contextMenu.buttonList = buttonList
-
-        this.updateUi()
     }
 
     setResourceBar = (resourceNum) => {
         this.uiComponents.resourceBar.resourceNum = resourceNum
-        this.updateUi()
     }
 
     findPath = (startTile, targetTile) => {
@@ -202,25 +195,25 @@ export default class HexMapControllerUtilsClass {
             movement: [],
             action: [],
             attack: []
-         }
+        }
 
         for (let tileObj of moveSet) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
 
-            pathing.movement.push({q: tile.position.q, r: tile.position.r})
+            pathing.movement.push({ q: tile.position.q, r: tile.position.r })
         }
 
         //search for structures
         for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
             if ((this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource')
-            || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
-                pathing.action.push({q: tile.position.q, r: tile.position.r})
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
+                pathing.action.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
             if (this.hexMapData.getUnit(tile.position.q, tile.position.r) != null
                 || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
-                    pathing.attack.push({q: tile.position.q, r: tile.position.r})
+                pathing.attack.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
         }
@@ -228,7 +221,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     updateTerrain = (q, r, terrain) => {
-        if(terrain.modifierType == 'singleImage')this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
+        if (terrain.modifierType == 'singleImage') this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
 
         let terrainIndex = this.hexMapData.getTerrainIndex(q, r)
         this.hexMapData.terrainList[terrainIndex] = terrain
@@ -410,7 +403,6 @@ export default class HexMapControllerUtilsClass {
 
         this.globalState.current = this.globalState.pause
         this.uiComponents.endGameMenu.show = true
-        this.updateUi()
     }
 
     getSelectedTile = (x, y) => {

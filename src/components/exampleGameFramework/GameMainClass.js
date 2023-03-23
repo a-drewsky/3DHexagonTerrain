@@ -10,7 +10,7 @@ import SettingsClass from './utilities/gameSettings';
 
 export default class GameMainClass {
 
-   constructor(canvas, images, setWinCondition, setUiComponents, settings) {
+   constructor(canvas, bgCanvas, images, uiComponents, setUiComponents, settings) {
 
       //canvas
       this.canvas = canvas;
@@ -22,35 +22,18 @@ export default class GameMainClass {
       this.ctx.lineWidth = 1;
       this.ctx.imageSmoothingEnabled = false;
 
+      this.bgCanvas = bgCanvas
+
       //loading
       this.loaded = false;
 
-      this.uiComponents = {
-         pauseMenu: {
-            show: false
-         },
-         endGameMenu: {
-            show: false
-         },
-         contextMenu: {
-            show: false,
-            x: 0,
-            y: 0,
-            buttonList: []
-         },
-         resourceBar: {
-            resourceNum: 0
-         }
-      }
+      this.uiComponents = uiComponents
 
       this.setUiComponents = setUiComponents
 
       this.updateUi = () => {
          this.setUiComponents(this.uiComponents)
       }
-
-      //win condition
-      this.setWinCondition = setWinCondition;
 
       //settings
       this.globalSettings = new SettingsClass(settings);
@@ -59,28 +42,17 @@ export default class GameMainClass {
       this.images = images;
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.globalSettings, this.images, this.uiComponents, this.updateUi);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.bgCanvas, this.globalSettings, this.images, this.uiComponents, this.updateUi);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);
 
-      //Draw interval that is activated when the game finishes loading
-      this.updateInterval = null;
-
-      this.fps = 0;
-      this.fpsCount = 0;
-      this.fpsTime = Date.now();
-
    }
 
-   //TOP LEVEL CONTROLLERS
    clear = () => {
-      clearInterval(this.updateInterval);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      for (let [key, value] of this.gameManager.objectMap) {
-         if (value.clear) value.clear();
-      }
+      this.gameManager.clear()
    }
 
    mouseDown = (x, y) => {
@@ -110,70 +82,19 @@ export default class GameMainClass {
    uiInput = (input) => {
       this.inputController.uiInput(input)
    }
-   //END TOP LEVEL CONTROLLERS
 
 
-   //SETUP FUNCTIONS
    startGame = () => {
-      console.log("start")
-      this.gameManager.state.current = this.gameManager.state.play
-      this.updateInterval = setInterval(() => {
-         this.update()
-         this.draw()
-      }, 1000 / 60);
-      this.loaded = true;
-   }
-
-
-   createGame = async () => {
 
       //Clear previous game
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      //Create game objects
-      this.gameManager.createObjects();
+      this.gameManager.createGame();
 
-      this.startGame();
+      this.gameManager.startGame();
 
-   }
-   //END SETUP FUNCTIONS
-
-
-   //UPDATE FUNCTION
-   update = () => {
-      if (this.gameManager.state.current != this.gameManager.state.play) return
-      //update game objects
-      for (let [key, value] of this.gameManager.objectMap) {
-         value.update();
-      }
-   }
-   //END UPDATE FUNCTION
-
-
-   //DRAW FUNCTION
-   draw = () => {
-
-      this.fps++
-      if (Date.now() - this.fpsTime >= 1000) {
-         this.fpsCount = this.fps
-         this.fpsTime = Date.now()
-         this.fps = 0
-      }
-
-      //clear the canvas
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-      //draw game objects
-      for (let [key, value] of this.gameManager.objectMap) {
-         if (value.state != 'disabled') value.draw(value.state);
-      }
-
-      //draw fps
-      this.ctx.font = '30px Arial'
-      this.ctx.fillStyle = 'yellow'
-      this.ctx.fillText(this.fpsCount, this.canvas.width - 100, 100)
+      this.loaded = true
 
    }
-   //END DRAW FUNCTION
 
 }

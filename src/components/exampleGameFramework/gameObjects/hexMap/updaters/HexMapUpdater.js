@@ -4,7 +4,7 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiComponents, updateUi, globalState) {
+    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiComponents, globalState) {
 
         this.hexMapData = hexMapData
         this.images = images
@@ -16,7 +16,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiComponents, updateUi, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiComponents, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }

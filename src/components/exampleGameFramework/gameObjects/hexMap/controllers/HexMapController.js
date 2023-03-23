@@ -9,7 +9,7 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, cameraController, cameraData, canvas, images, settings, uiComponents, updateUi, renderer, globalState) {
+    constructor(hexMapData, cameraController, cameraData, canvas, images, settings, uiComponents, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -21,13 +21,9 @@ export default class HexMapControllerClass {
 
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, cameraData)
         
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, cameraData, canvas, images, uiComponents, updateUi, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, cameraData, canvas, images, uiComponents, renderer, globalState);
 
         this.config = new HexMapConfigClass()
-
-        this.uiComponents = uiComponents
-
-        this.updateUi = updateUi
 
         this.cameraController = cameraController
 

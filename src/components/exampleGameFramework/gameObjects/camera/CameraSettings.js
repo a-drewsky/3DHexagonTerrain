@@ -2,7 +2,7 @@ export default class CameraSettingsClass{
 
     constructor(){
 
-        this.MAX_ZOOM = 5;
+        this.MAX_ZOOM = 100;
 
         this.ZOOM_AMOUNT = 50;
 

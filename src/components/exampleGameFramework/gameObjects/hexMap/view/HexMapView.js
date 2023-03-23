@@ -1,12 +1,11 @@
 import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./sprites/HexMapViewSprites";
 import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
-import HexMapViewTableClass from "./HexMapViewTable";
 import HexMapViewSelectionClass from "./HexMapViewHighlights";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, settings, images) {
+   constructor(ctx, canvas, camera, hexMapData, settings, images, renderer, setBgCanvas) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -14,6 +13,9 @@ export default class HexMapViewClass {
 
       this.drawCanvas = null;
       this.drawctx = null;
+
+      this.renderer = renderer
+      this.setBgCanvas = setBgCanvas
 
       //Settings
       this.lineWidth = settings.HEXMAP_LINE_WIDTH;
@@ -29,7 +31,6 @@ export default class HexMapViewClass {
       this.images = images;
 
       this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
-      this.tableView = new HexMapViewTableClass(hexMapData, camera, settings, this.utils);
       this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.images, this.utils, canvas);
       this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);
       this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, settings, images);
@@ -40,7 +41,11 @@ export default class HexMapViewClass {
 
       this.drawctx.clearRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
-      this.tableView.draw(this.drawctx)
+      if (this.hexMapData.renderBackground == true) {
+         let tempCanvas = this.renderer.tableRenderer.render()
+         this.setBgCanvas.image(tempCanvas)
+         this.hexMapData.renderBackground = false
+      }
 
       this.mapView.draw(this.drawctx)
 
@@ -66,6 +71,11 @@ export default class HexMapViewClass {
       if (this.camera.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
       if (this.camera.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
       if (this.camera.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+
+      //set background
+      let scale = this.canvas.width / (this.canvas.width + zoom)
+      this.setBgCanvas.position(this.camera.position.x * -1 * scale, this.camera.position.y * -1 * scale)
+      this.setBgCanvas.zoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
    }
 
    clear = () => {
@@ -90,6 +100,9 @@ export default class HexMapViewClass {
       this.drawCanvas.width = renderCanvasDims.width;
       this.drawCanvas.height = renderCanvasDims.height;
       this.drawctx = this.drawCanvas.getContext("2d");
+
+      this.setBgCanvas.size(renderCanvasDims.width, renderCanvasDims.height)
+      this.setBgCanvas.zoom(renderCanvasDims.width, renderCanvasDims.height)
    }
 
    initializeCamera = () => {
