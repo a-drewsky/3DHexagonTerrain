@@ -1,15 +1,16 @@
 import HexMapViewSpritesModifiersClass from "./HexMapViewSpritesModifiers"
 import HexMapViewSpritesStructuresClass from "./HexMapViewSpritesStructures"
 import HexMapViewSpritesUnitsClass from "./HexMapViewSpritesUnits"
+import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
 
 export default class HexMapViewSpritesClass {
 
-   constructor(hexMapData, camera, images, utils, canvas, settings) {
+   constructor(hexMapData, camera, images, canvas, settings) {
 
       this.hexMapData = hexMapData
       this.camera = camera
       this.images = images
-      this.utils = utils
+      this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
 
       this.shadowSize = settings.SHADOW_SIZE
 
@@ -21,9 +22,9 @@ export default class HexMapViewSpritesClass {
          height: canvas.height
       }
 
-      this.modifiers = new HexMapViewSpritesModifiersClass(hexMapData, camera, images, utils, this.canvasDims)
-      this.structures = new HexMapViewSpritesStructuresClass(hexMapData, camera, images, utils, this.canvasDims)
-      this.units = new HexMapViewSpritesUnitsClass(hexMapData, camera, images, utils, this.canvasDims, this.travelTime, this.jumpAmount)
+      this.modifiers = new HexMapViewSpritesModifiersClass(hexMapData, camera, images, this.canvasDims)
+      this.structures = new HexMapViewSpritesStructuresClass(hexMapData, camera, images, this.canvasDims)
+      this.units = new HexMapViewSpritesUnitsClass(hexMapData, camera, settings, images, this.canvasDims, this.travelTime, this.jumpAmount)
 
    }
 
@@ -32,11 +33,11 @@ export default class HexMapViewSpritesClass {
       let spriteList = []
 
       //terrain objects
-      for (let i = 0; i < this.hexMapData.terrainList.length; i++) {
-         let terrainObject = this.hexMapData.terrainList[i]
+      for (let i = 0; i < this.hexMapData.objects.terrainList.length; i++) {
+         let terrainObject = this.hexMapData.objects.terrainList[i]
          if (terrainObject == null) continue
 
-         let keyObj = this.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+         let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
          let height = this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height
 
@@ -76,17 +77,17 @@ export default class HexMapViewSpritesClass {
       }
 
       //units
-      for (let i = 0; i < this.hexMapData.unitList.length; i++) {
-         let unitObject = this.hexMapData.unitList[i]
+      for (let i = 0; i < this.hexMapData.objects.unitList.length; i++) {
+         let unitObject = this.hexMapData.objects.unitList[i]
          if (unitObject == null) continue
 
          let keyObj
          let height
 
          if (unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / this.travelTime > 0.5) {
-            keyObj = this.utils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.camera.rotation)
+            keyObj = this.hexMapData.utils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.camera.rotation)
          } else {
-            keyObj = this.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
+            keyObj = this.hexMapData.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
          }
 
          height = this.hexMapData.getEntry(unitObject.position.q, unitObject.position.r).height
@@ -141,7 +142,7 @@ export default class HexMapViewSpritesClass {
             this.units.drawShadow(drawctx, spriteList[i])
             continue
          }
-         else spriteObject = this.hexMapData.terrainList[spriteList[i].id]
+         else spriteObject = this.hexMapData.objects.terrainList[spriteList[i].id]
 
          if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) continue
 
@@ -154,7 +155,7 @@ export default class HexMapViewSpritesClass {
 
          let shadowSize
 
-         let shadowPos = this.utils.hexPositionToXYPosition(keyObj, spriteList[i].height)
+         let shadowPos = this.commonUtils.hexPositionToXYPosition(keyObj, spriteList[i].height)
 
          if (spriteObject.type == 'modifier') {
             shadowSize = {
@@ -174,7 +175,7 @@ export default class HexMapViewSpritesClass {
             shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
          }
 
-         if (this.utils.onScreenCheck(shadowPos, shadowSize, this.canvasDims) == false) continue
+         if (this.commonUtils.onScreenCheck(shadowPos, shadowSize, this.canvasDims) == false) continue
 
          drawctx.drawImage(
             spriteObject.shadowImages[0][this.camera.rotation],

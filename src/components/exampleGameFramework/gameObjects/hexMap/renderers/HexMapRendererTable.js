@@ -1,4 +1,4 @@
-import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
+import HexMapRendererUtilsClass from "../utils/HexMapRendererUtils";
 
 export default class HexMapRendererTableClass {
 
@@ -12,7 +12,7 @@ export default class HexMapRendererTableClass {
       this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
       this.tableHeight = settings.TABLE_HEIGHT
 
-      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
+      this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
 
       this.rotationAlpha = {
          0: 1,
@@ -33,11 +33,6 @@ export default class HexMapRendererTableClass {
 
    prerender = (drawCanvas) => {
       this.drawCanvas = drawCanvas
-
-        //render camera rotations
-        for (let i = 0; i < 12; i++) {
-            
-        }
    }
 
    render = () => {

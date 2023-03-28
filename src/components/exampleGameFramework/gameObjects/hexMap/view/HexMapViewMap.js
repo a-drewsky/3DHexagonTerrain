@@ -1,14 +1,16 @@
 import HexMapRendererMapClass from "../renderers/HexMapRendererMap";
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
+
 
 export default class HexMapViewMapClass {
 
-    constructor(hexMapData, camera, settings, images, utils, canvas) {
+    constructor(hexMapData, camera, images, canvas) {
 
         this.hexMapData = hexMapData
         this.camera = camera
 
         this.images = images
-        this.utils = utils
+        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
 
         this.canvasDims = {
             width: canvas.width,
@@ -31,14 +33,14 @@ export default class HexMapViewMapClass {
 
         for (let [key, value] of rotatedMap) {
 
-            let keyObj = this.hexMapData.split(key)
+            let keyObj = this.hexMapData.utils.split(key)
             let tileObj = this.hexMapData.getEntry(value.q, value.r)
 
             if(!tileObj.images || tileObj.images.length == 0) continue
 
-            let tilePos = this.utils.hexPositionToXYPosition(keyObj, tileObj.height)
+            let tilePos = this.commonUtils.hexPositionToXYPosition(keyObj, tileObj.height)
 
-            if (this.utils.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.camera.rotation].width, height: tileObj.images[this.camera.rotation].height }, this.canvasDims) == true) {
+            if (this.commonUtils.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.camera.rotation].width, height: tileObj.images[this.camera.rotation].height }, this.canvasDims) == true) {
                 drawctx.drawImage(tileObj.images[this.camera.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.camera.rotation].width, tileObj.images[this.camera.rotation].height)
             }
 

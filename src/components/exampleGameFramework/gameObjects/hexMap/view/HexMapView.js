@@ -1,11 +1,10 @@
 import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./sprites/HexMapViewSprites";
-import HexMapViewUtilsClass from "../utils/HexMapViewUtils";
 import HexMapViewSelectionClass from "./HexMapViewHighlights";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, settings, images, renderer, setBgCanvas) {
+   constructor(ctx, canvas, camera, hexMapData, settings, images, renderer, uiController) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -15,7 +14,7 @@ export default class HexMapViewClass {
       this.drawctx = null;
 
       this.renderer = renderer
-      this.setBgCanvas = setBgCanvas
+      this.uiController = uiController
 
       //Settings
       this.lineWidth = settings.HEXMAP_LINE_WIDTH;
@@ -30,9 +29,8 @@ export default class HexMapViewClass {
 
       this.images = images;
 
-      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
-      this.mapView = new HexMapViewMapClass(hexMapData, camera, settings, this.images, this.utils, canvas);
-      this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, this.utils, canvas, settings);
+      this.mapView = new HexMapViewMapClass(hexMapData, camera, this.images, canvas);
+      this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, canvas, settings);
       this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, settings, images);
 
    }
@@ -43,7 +41,7 @@ export default class HexMapViewClass {
 
       if (this.hexMapData.renderBackground == true) {
          let tempCanvas = this.renderer.tableRenderer.render()
-         this.setBgCanvas.image(tempCanvas)
+         this.uiController.setBgCanvasImage(tempCanvas)
          this.hexMapData.renderBackground = false
       }
 
@@ -62,20 +60,6 @@ export default class HexMapViewClass {
          this.ctx.fillStyle = 'black'
          this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
       }
-   }
-
-   update = () => {
-      //check camera
-      let zoom = this.camera.zoom * this.camera.zoomAmount
-      if (this.camera.position.x + zoom / 2 < 0 - this.canvas.width / 2) this.camera.position.x = 0 - this.canvas.width / 2 - zoom / 2
-      if (this.camera.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.camera.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
-      if (this.camera.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.camera.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
-      if (this.camera.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.camera.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
-
-      //set background
-      let scale = this.canvas.width / (this.canvas.width + zoom)
-      this.setBgCanvas.position(this.camera.position.x * -1 * scale, this.camera.position.y * -1 * scale)
-      this.setBgCanvas.zoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
    }
 
    clear = () => {
@@ -101,8 +85,8 @@ export default class HexMapViewClass {
       this.drawCanvas.height = renderCanvasDims.height;
       this.drawctx = this.drawCanvas.getContext("2d");
 
-      this.setBgCanvas.size(renderCanvasDims.width, renderCanvasDims.height)
-      this.setBgCanvas.zoom(renderCanvasDims.width, renderCanvasDims.height)
+      this.uiController.setBgCanvasSize(renderCanvasDims.width, renderCanvasDims.height)
+      this.uiController.setBgCanvasZoom(renderCanvasDims.width, renderCanvasDims.height)
    }
 
    initializeCamera = () => {
@@ -142,7 +126,7 @@ export default class HexMapViewClass {
             break;
       }
 
-      let camPos = this.utils.rotateTile(camQ, camR, this.camera.rotation)
+      let camPos = this.hexMapData.utils.rotateTile(camQ, camR, this.camera.rotation)
 
       let mappos = this.hexMapData.posMap.get(this.camera.rotation)
 

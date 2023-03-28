@@ -1,5 +1,5 @@
 import HexMapRendererSelectionsClass from "../renderers/HexMapRendererSelection"
-import HexMapViewUtilsClass from "../utils/HexMapViewUtils"
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
 
 export default class HexMapViewSelectionClass {
 
@@ -7,7 +7,7 @@ export default class HexMapViewSelectionClass {
 
       this.hexMapData = hexMapData
       this.camera = camera
-      this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
+      this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
       this.renderer = new HexMapRendererSelectionsClass(hexMapData, camera, settings, images)
 
    }
@@ -16,7 +16,7 @@ export default class HexMapViewSelectionClass {
 
       //draw highlight for selected tile
 
-      let selectionArr = this.utils.getSelectionArr()
+      let selectionArr = this.hexMapData.getSelectionArr()
 
       for (let i = 0; i < selectionArr.length; i++) {
 
@@ -29,7 +29,7 @@ export default class HexMapViewSelectionClass {
 
          let value = this.hexMapData.getEntry(keyObj.q, keyObj.r)
 
-         let tilePos = this.utils.hexPositionToXYPosition(this.utils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height)
+         let tilePos = this.commonUtils.hexPositionToXYPosition(this.hexMapData.utils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height)
 
          if (!value.selectionImages[selectionObj.selection] || !value.selectionImages[selectionObj.selection][this.camera.rotation]) {
             this.renderer.renderSelectionImage(value, selectionObj.selection)

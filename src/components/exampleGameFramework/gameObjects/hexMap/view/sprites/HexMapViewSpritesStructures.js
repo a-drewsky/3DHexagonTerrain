@@ -1,17 +1,19 @@
+import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+
 export default class HexMapViewSpritesStructuresClass {
 
-    constructor(hexMapData, camera, images, utils, canvasDims) {
+    constructor(hexMapData, camera, images, canvasDims) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images
-        this.utils = utils
+        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
         this.canvasDims = canvasDims
     }
 
    draw = (drawctx, spriteReference) => {
-      let spriteObject = this.hexMapData.terrainList[spriteReference.id]
+      let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
 
-      if (this.utils.checkImagesLoaded(spriteObject) == false) return
+      if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
       let keyObj = {
          q: spriteReference.q,
@@ -22,7 +24,7 @@ export default class HexMapViewSpritesStructuresClass {
 
       let spriteSize
 
-      let spritePos = this.utils.hexPositionToXYPosition(keyObj, spriteReference.height)
+      let spritePos = this.commonUtils.hexPositionToXYPosition(keyObj, spriteReference.height)
 
       spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -32,7 +34,7 @@ export default class HexMapViewSpritesStructuresClass {
       spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
       spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-      if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+      if (this.commonUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
       drawctx.drawImage(
          spriteObject.images[0][this.camera.rotation],
          spritePos.x,

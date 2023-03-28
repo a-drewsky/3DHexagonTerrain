@@ -1,24 +1,21 @@
-export default class HexMapRendererSpritesUnitsClass {
+export default class BaseUnitRendererClass {
 
-    constructor(hexMapData, camera, images, utils){
+    constructor(hexMapData, camera, imageObject){
         this.hexMapData = hexMapData
         this.camera = camera
-        this.images = images
-        this.utils = utils
+        this.imageObject = imageObject
     }
 
     render = (unitObject) => {
 
         let initRotation = this.camera.rotation
 
-        let sprite = this.images[unitObject.type][unitObject.sprite]
-
         let canvasSize = {
-            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
-            height: this.hexMapData.size * 2 * sprite.spriteSize.height
+            width: this.hexMapData.size * 2 * this.imageObject.spriteSize.width,
+            height: this.hexMapData.size * 2 * this.imageObject.spriteSize.height
         }
 
-        for (let i = 0; i < sprite.idle.images.length; i++) {
+        for (let i = 0; i < this.imageObject.idle.images.length; i++) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
@@ -33,9 +30,9 @@ export default class HexMapRendererSpritesUnitsClass {
                     tempCanvas.height = canvasSize.height
                     let tempctx = tempCanvas.getContext('2d')
 
-                    tempctx.drawImage(sprite.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                    tempctx.drawImage(this.imageObject.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
-                    tempCanvas = this.utils.addHealthBar(tempCanvas, sprite.spriteSize, unitObject)
+                    tempCanvas = this.utils.addHealthBar(tempCanvas, this.imageObject.spriteSize, unitObject)
 
                     imageList[rotation] = tempCanvas
 
@@ -48,7 +45,7 @@ export default class HexMapRendererSpritesUnitsClass {
         }
 
         //prerender shadow images
-        if (sprite.shadowImages) {
+        if (this.imageObject.shadowImages) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
@@ -58,7 +55,7 @@ export default class HexMapRendererSpritesUnitsClass {
                     let keyObj = this.hexMapData.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
 
 
-                    let shadowImage = this.utils.cropStructureShadow(sprite.shadowImages[rotation], sprite.shadowSize, sprite.shadowOffset, keyObj, rotatedMap)
+                    let shadowImage = this.utils.cropStructureShadow(this.imageObject.shadowImages[rotation], this.imageObject.shadowSize, this.imageObject.shadowOffset, keyObj, rotatedMap)
 
                     imageList[rotation] = shadowImage
 
@@ -80,8 +77,8 @@ export default class HexMapRendererSpritesUnitsClass {
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
             let keyObj = this.hexMapData.utils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
 
-            for (let j = 0; j < sprite.idle.images.length; j++) {
-                let croppedImage = this.utils.cropOutTiles(unitObject.images[j][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
+            for (let j = 0; j < this.imageObject.idle.images.length; j++) {
+                let croppedImage = this.utils.cropOutTiles(unitObject.images[j][i], this.imageObject.spriteSize, this.imageObject.spriteOffset, keyObj, rotatedMap)
                 let darkenedImage = this.utils.darkenSprite(croppedImage, unitObject)
                 unitObject.images[j][i] = darkenedImage
             }

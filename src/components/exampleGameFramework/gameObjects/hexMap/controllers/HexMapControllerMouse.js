@@ -1,10 +1,11 @@
 export default class HexMapControllerMouseClass {
 
-    constructor(hexMapData, renderer, pathFinder, utils, config) {
+    constructor(hexMapData, renderer, pathFinder, utils, uiController, config) {
         this.hexMapData = hexMapData
         this.renderer = renderer
         this.pathFinder = pathFinder
         this.utils = utils
+        this.uiController = uiController
         this.config = config
 
     }
@@ -21,7 +22,7 @@ export default class HexMapControllerMouseClass {
             case 'placeUnit':
             case 'selectTile':
             case 'chooseRotation':
-                this.utils.setSelection(tileObj.position.q, tileObj.position.r, 'hover')
+                this.hexMapData.selections.setSelection(tileObj.position.q, tileObj.position.r, 'hover')
                 return
             case 'selectMovement':
             case 'animation':
@@ -31,15 +32,17 @@ export default class HexMapControllerMouseClass {
     }
 
     selectTile = (tileClicked, tile) => {
-        this.utils.resetSelected()
+        this.hexMapData.selections.resetSelected()
 
-        if (this.hexMapData.getUnit(tileClicked.q, tileClicked.r) != null) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'unit')
+        if (this.hexMapData.objects.getUnit(tileClicked.q, tileClicked.r) != null) {
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'unit')
+            let unit = this.hexMapData.objects.getUnit(tile.position.q, tile.position.r)
+            this.hexMapData.objects.selectedUnit = unit
             this.utils.findMoveSet()
             this.hexMapData.state.current = this.hexMapData.state.selectMovement
         }
         else {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'tile')
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'tile')
             this.hexMapData.state.current = this.hexMapData.state.selectTile
         }
     }
@@ -49,12 +52,12 @@ export default class HexMapControllerMouseClass {
         if (tile != null) {
             let unit = this.config.unit(tile.position)
             this.renderer.spriteRenderer.units.render(unit)
-            this.hexMapData.unitList.push(unit)
+            this.hexMapData.objects.unitList.push(unit)
         }
 
         this.hexMapData.state.current = this.hexMapData.state.selectTile
 
-        this.utils.resetSelected()
+        this.hexMapData.selections.resetSelected()
 
     }
 
@@ -66,7 +69,7 @@ export default class HexMapControllerMouseClass {
 
         let path = this.hexMapData.selections.path
 
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.objects.selectedUnit
 
         if (unit.position.q == hoverTile.q && unit.position.r == hoverTile.r) {
             this.hexMapData.selections.path = []
@@ -127,7 +130,7 @@ export default class HexMapControllerMouseClass {
     setUnitMouseDirection = (x, y) => {
 
 
-        let unit = this.hexMapData.selectedUnit
+        let unit = this.hexMapData.objects.selectedUnit
 
         if (unit == null) return
 
@@ -141,64 +144,62 @@ export default class HexMapControllerMouseClass {
     }
 
     selectMovement = (tileClicked, tile, x, y) => {
-        let unit = this.hexMapData.getSelectedUnit()
+        let unit = this.hexMapData.objects.selectedUnit
 
         if (unit == null) return
-
-        if (this.utils.getSelection(tile.position.q, tile.position.r) == 'unit') return
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.movementRange)
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.position)
-        let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'resource')
-        let flagMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'flag')
-        let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.getUnit(tileObj.tile.q, tileObj.tile.r) != null
-            || (this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'base'))
+        let mineMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'resource')
+        let flagMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'flag')
+        let attackMoveSet = moveSetPlus1.filter(tileObj => this.hexMapData.objects.getUnit(tileObj.tile.q, tileObj.tile.r) != null
+            || (this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r) != null && this.hexMapData.objects.getTerrain(tileObj.tile.q, tileObj.tile.r).type == 'base'))
 
         if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
-            this.hexMapData.selectedUnit = unit
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'target')
+            this.hexMapData.objects.selectedUnit = unit
             this.hexMapData.state.current = this.hexMapData.state.selectAction
 
-            this.utils.setContextMenu(x, y, ['btnMine', 'btnCancel'])
+            this.uiController.setContextMenu(x, y, ['btnMine', 'btnCancel'])
             return
         }
 
         if (flagMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
-            this.hexMapData.selectedUnit = unit
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'target')
+            this.hexMapData.objects.selectedUnit = unit
             this.hexMapData.state.current = this.hexMapData.state.selectAction
 
-            this.utils.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
+            this.uiController.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
             return
         }
 
         if (attackMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
-            this.hexMapData.selectedUnit = unit
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'target')
+            this.hexMapData.objects.selectedUnit = unit
             this.hexMapData.state.current = this.hexMapData.state.selectAction
 
-            this.utils.setContextMenu(x, y, ['btnAttack', 'btnCancel'])
+            this.uiController.setContextMenu(x, y, ['btnAttack', 'btnCancel'])
             return
         }
 
         if (moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'target')
-            this.hexMapData.selectedUnit = unit
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'target')
+            this.hexMapData.objects.selectedUnit = unit
             this.hexMapData.state.current = this.hexMapData.state.selectAction
 
-            this.utils.setContextMenu(x, y, ['btnMove', 'btnCancel'])
+            this.uiController.setContextMenu(x, y, ['btnMove', 'btnCancel'])
             return
         }
 
-        this.utils.resetSelected()
-        let newUnit = this.hexMapData.getUnit(tile.position.q, tile.position.r)
+        this.hexMapData.selections.resetSelected()
+        let newUnit = this.hexMapData.objects.getUnit(tile.position.q, tile.position.r)
         if (newUnit == null) {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'tile')
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'tile')
             this.hexMapData.state.current = this.hexMapData.state.selectTile
         }
         else {
-            this.utils.setSelection(tile.position.q, tile.position.r, 'unit')
+            this.hexMapData.selections.setSelection(tile.position.q, tile.position.r, 'unit')
             this.utils.findMoveSet()
             this.hexMapData.state.current = this.hexMapData.state.selectMovement
         }
@@ -206,9 +207,8 @@ export default class HexMapControllerMouseClass {
     }
     
     endUnitTurn = () => {
-        let unit = this.hexMapData.getSelectedUnit()
-
-        this.utils.setUnitIdle(unit)
+        this.utils.setUnitIdle(this.hexMapData.objects.selectedUnit)
+        this.hexMapData.objects.selectedUnit = null
     }
 
 }

@@ -1,18 +1,20 @@
+import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+
 export default class HexMapViewSpritesModifiersClass {
 
-    constructor(hexMapData, camera, images, utils, canvasDims) {
+    constructor(hexMapData, camera, images, canvasDims) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images
-        this.utils = utils
+        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
         this.canvasDims = canvasDims
     }
 
     drawSingleImage = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
 
-        if (this.utils.checkImagesLoaded(spriteObject) == false) return
+        if (this.CommonUtils.checkImagesLoaded(spriteObject) == false) return
 
         let keyObj = {
             q: spriteReference.q,
@@ -21,7 +23,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.utils.hexPositionToXYPosition(keyObj, spriteReference.height)
+        let spritePos = this.commonUtils.hexPositionToXYPosition(keyObj, spriteReference.height)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * this.images.modifier.singleImageSize.width,
@@ -32,7 +34,7 @@ export default class HexMapViewSpritesModifiersClass {
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.images.modifier.singleImageOffset.y * this.hexMapData.size * 2
 
 
-        if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+        if (this.commonUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
         drawctx.drawImage(
             spriteObject.images[spriteObject.state][this.camera.rotation].top,
             spritePos.x,
@@ -45,9 +47,9 @@ export default class HexMapViewSpritesModifiersClass {
 
     drawTop = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
 
-        if (this.utils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
         if (spriteObject.modifierType == 'singleImage') {
             this.drawSingleImage(drawctx, spriteReference)
@@ -61,7 +63,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.utils.hexPositionToXYPosition(keyObj, spriteReference.height)
+        let spritePos = this.commonUtils.hexPositionToXYPosition(keyObj, spriteReference.height)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * this.images.modifier.size.width,
@@ -72,7 +74,7 @@ export default class HexMapViewSpritesModifiersClass {
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.images.modifier.offset.y * this.hexMapData.size * 2
 
 
-        if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+        if (this.commonUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
         drawctx.drawImage(
             spriteObject.images[spriteObject.state][this.camera.rotation].top,
             spritePos.x,
@@ -85,9 +87,9 @@ export default class HexMapViewSpritesModifiersClass {
 
     drawBottom = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
 
-        if (this.utils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
         if (spriteObject.modifierType == 'singleImage') {
             return
@@ -100,7 +102,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.utils.hexPositionToXYPosition(keyObj, spriteReference.height)
+        let spritePos = this.commonUtils.hexPositionToXYPosition(keyObj, spriteReference.height)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * this.images.modifier.size.width,
@@ -111,7 +113,7 @@ export default class HexMapViewSpritesModifiersClass {
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + this.images.modifier.offset.y * this.hexMapData.size * 2
 
 
-        if (this.utils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+        if (this.commonUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
         drawctx.drawImage(
             spriteObject.images[spriteObject.state][this.camera.rotation].bottom,
             spritePos.x,

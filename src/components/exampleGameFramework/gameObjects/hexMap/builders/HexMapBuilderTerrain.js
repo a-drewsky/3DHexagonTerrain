@@ -178,7 +178,7 @@ export default class HexMapBuilderTerrainClass {
       }
 
       for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.hexMapData.split(key);
+         let keyObj = this.hexMapData.utils.split(key);
 
          let spawnChance = {
             savannaTree: Math.random(),
@@ -192,10 +192,10 @@ export default class HexMapBuilderTerrainClass {
          }
 
          //generate large rocks
-         let terrainIndex = this.hexMapData.getTerrainIndex(keyObj.q, keyObj.r);
-         if (terrainIndex != -1 && this.hexMapData.terrainList[terrainIndex].name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
+         let terrainIndex = this.hexMapData.objects.getTerrainIndex(keyObj.q, keyObj.r);
+         if (terrainIndex != -1 && this.hexMapData.objects.terrainList[terrainIndex].name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
             let terrain = this.config.largeRock(keyObj)
-            this.hexMapData.terrainList[terrainIndex] = terrain
+            this.hexMapData.objects.terrainList[terrainIndex] = terrain
          }
 
       }
@@ -215,7 +215,7 @@ export default class HexMapBuilderTerrainClass {
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
       for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.hexMapData.split(key);
+         let keyObj = this.hexMapData.utils.split(key);
 
          //feature generation
          let tileTreeNoise = {
@@ -250,12 +250,12 @@ export default class HexMapBuilderTerrainClass {
                   continue;
             }
 
-            this.hexMapData.terrainList.push(terrain)
+            this.hexMapData.objects.terrainList.push(terrain)
 
          } else if (this.biomeGenSettings[value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[value.biome].rockGenThreshold) {
             let terrain = this.config.smallRocks(keyObj)
 
-            this.hexMapData.terrainList.push(terrain)
+            this.hexMapData.objects.terrainList.push(terrain)
          }
 
 

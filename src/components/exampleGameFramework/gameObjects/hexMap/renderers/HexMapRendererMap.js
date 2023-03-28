@@ -1,4 +1,5 @@
-import HexMapViewUtilsClass from "../utils/HexMapViewUtils"
+import HexMapRendererUtilsClass from "../utils/HexMapRendererUtils"
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
 
 export default class HexMapRendererMapClass {
 
@@ -12,7 +13,8 @@ export default class HexMapRendererMapClass {
         this.drawCanvas = null
 
         this.images = images
-        this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images)
+        this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
+        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
         
 
       //starts at top position and rotates clockwise
@@ -123,9 +125,9 @@ export default class HexMapRendererMapClass {
                     stackctx.save()
                     stackctx.clip()
 
-                    let rotTile = this.utils.rotateTile(tile.position.q, tile.position.r, rotation)
+                    let rotTile = this.hexMapData.utils.rotateTile(tile.position.q, tile.position.r, rotation)
 
-                    let tilePos = this.utils.hexPositionToXYPosition(rotTile, tile.height)
+                    let tilePos = this.commonUtils.hexPositionToXYPosition(rotTile, tile.height)
                     tilePos.x -= this.hexMapData.size
                     tilePos.y -= this.hexMapData.size * this.hexMapData.squish
 
@@ -192,7 +194,7 @@ export default class HexMapRendererMapClass {
 
             value = this.hexMapData.getEntry(value.q, value.r)
 
-            let keyObj = this.hexMapData.split(key);
+            let keyObj = this.hexMapData.utils.split(key);
 
             let xOffset;
             let yOffset;
@@ -223,7 +225,7 @@ export default class HexMapRendererMapClass {
         shadowctx.fillStyle = 'rgba(25,25,25,0.3)';
         shadowctx.fill();
 
-        this.hexMapData.shadowMap.set(this.hexMapData.join(height, this.camera.rotation), shadowCanvas)
+        this.hexMapData.shadowMap.set(this.hexMapData.utils.join(height, this.camera.rotation), shadowCanvas)
 
     }
 
@@ -285,7 +287,7 @@ export default class HexMapRendererMapClass {
 
             value = this.hexMapData.getEntry(value.q, value.r)
 
-            let keyObj = this.hexMapData.split(key);
+            let keyObj = this.hexMapData.utils.split(key);
 
             let xOffset;
             let yOffset;
@@ -314,7 +316,7 @@ export default class HexMapRendererMapClass {
         shadowctx.fill();
         shadowctx.restore();
 
-        this.hexMapData.shadowMap.set(this.hexMapData.join(0, this.camera.rotation), shadowCanvas)
+        this.hexMapData.shadowMap.set(this.hexMapData.utils.join(0, this.camera.rotation), shadowCanvas)
 
     }
 

@@ -1,111 +1,117 @@
 export default class HexMapControllerUiClass {
 
-    constructor(hexMapData, cameraController, camera, canvas, utils) {
+    constructor(hexMapData, cameraController, camera, canvas, utils, uiController) {
         this.hexMapData = hexMapData
         this.camera = camera
         this.canvas = canvas
         this.utils = utils
+        this.uiController = uiController
         this.cameraController = cameraController
     }
 
     move = () => {
-        if (this.hexMapData.selectedUnit != null) this.utils.lerpUnit(this.hexMapData.selectedUnit)
-        this.utils.resetSelected()
-        this.utils.clearContextMenu()
+        console.log(this.hexMapData.objects.selectedUnit)
+        if (this.hexMapData.objects.selectedUnit != null) this.utils.lerpUnit(this.hexMapData.objects.selectedUnit)
+        this.hexMapData.selections.resetSelected()
+        this.uiController.clearContextMenu()
     }
 
     mine = () => {
 
-        if (this.hexMapData.selectedUnit == null) return
+        if (this.hexMapData.objects.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
-        if (targetTile == null) return
+        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        console.log(selectionTarget)
+        if (selectionTarget == null) return
+        let targetTile = this.hexMapData.getEntry(selectionTarget.q, selectionTarget.r)
 
-        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
 
-        this.hexMapData.selectedUnit.target = targetStructure
+        this.hexMapData.objects.selectedUnit.target = targetStructure
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.mineOre(this.hexMapData.selectedUnit, targetTile)
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.mineOre(this.hexMapData.objects.selectedUnit, targetTile)
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.selectedUnit, targetTile, 'mine')
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'mine')
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         }
     }
 
     attack = () => {
 
-        if (this.hexMapData.selectedUnit == null) return
+        if (this.hexMapData.objects.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
-        if (targetTile == null) return
+        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        if (selectionTarget == null) return
+        let targetTile = this.hexMapData.getEntry(selectionTarget.q, selectionTarget.r)
 
         let targetObject
 
-        if (this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r) != null) {
-            targetObject = this.hexMapData.getUnit(targetTile.position.q, targetTile.position.r)
+        if (this.hexMapData.objects.getUnit(targetTile.position.q, targetTile.position.r) != null) {
+            targetObject = this.hexMapData.objects.getUnit(targetTile.position.q, targetTile.position.r)
         } else {
-            if (this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r) == null) return
-            targetObject = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+            if (this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r) == null) return
+            targetObject = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
         }
         if (targetObject == null) return
 
-        this.hexMapData.selectedUnit.target = targetObject
+        this.hexMapData.objects.selectedUnit.target = targetObject
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.attackUnit(this.hexMapData.selectedUnit)
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.attackUnit(this.hexMapData.objects.selectedUnit)
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.selectedUnit, targetTile, 'attack')
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'attack')
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         }
     }
 
     capture = () => {
 
-        if (this.hexMapData.selectedUnit == null) return
+        if (this.hexMapData.objects.selectedUnit == null) return
 
-        let targetTile = this.hexMapData.getSelectedTargetTile()
-        if (targetTile == null) return
+        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        if (selectionTarget == null) return
+        let targetTile = this.hexMapData.getEntry(selectionTarget.q, selectionTarget.r)
 
-        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
 
-        this.hexMapData.selectedUnit.target = targetStructure
+        this.hexMapData.objects.selectedUnit.target = targetStructure
 
-        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.selectedUnit.position.q, this.hexMapData.selectedUnit.position.r)
+        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.objects.selectedUnit.position.q, this.hexMapData.objects.selectedUnit.position.r)
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
-            this.utils.captureFlag(this.hexMapData.selectedUnit, targetTile)
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.captureFlag(this.hexMapData.objects.selectedUnit, targetTile)
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.selectedUnit, targetTile, 'capture')
-            this.utils.resetSelected()
-            this.utils.clearContextMenu()
+            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'capture')
+            this.hexMapData.selections.resetSelected()
+            this.uiController.clearContextMenu()
         }
     }
 
     setPlaceUnit = () => {
         if (this.hexMapData.state.current != 'selectTile') return
 
-        this.utils.resetSelected()
-        this.utils.resetHover()
+        this.hexMapData.selections.resetSelected()
+        this.hexMapData.selections.resetHover()
         this.hexMapData.state.current = this.hexMapData.state.placeUnit
     }
 
     cancel = () => {
-        this.utils.resetSelected()
+        this.hexMapData.selections.resetSelected()
 
         this.hexMapData.state.current = this.hexMapData.state.selectTile
 
-        this.utils.clearContextMenu()
+        this.uiController.clearContextMenu()
     }
     
     rotateRight = () => {
@@ -158,7 +164,7 @@ export default class HexMapControllerUiClass {
         }
 
         this.cameraController.rotateRight()
-        this.utils.resetHover()
+        this.hexMapData.selections.resetHover()
         this.hexMapData.renderBackground = true
     }
 
@@ -213,7 +219,7 @@ export default class HexMapControllerUiClass {
         }
 
         this.cameraController.rotateLeft()
-        this.utils.resetHover()
+        this.hexMapData.selections.resetHover()
         this.hexMapData.renderBackground = true
     }
 

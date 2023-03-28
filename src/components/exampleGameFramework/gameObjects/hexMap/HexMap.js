@@ -9,7 +9,7 @@ import CameraClass from "../camera/Camera"
 
 export default class HexMapClass {
 
-    constructor(ctx, canvas, images, settings, uiComponents, globalState, setBgCanvas) {
+    constructor(ctx, canvas, images, settings, uiController, globalState) {
 
         this.settings = new HexMapSettingsClass(settings)
 
@@ -19,13 +19,13 @@ export default class HexMapClass {
 
         this.renderer = new HexMapRendererClass(this.data, this.camera.data, this.settings, images)
 
-        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.settings, images, this.renderer, setBgCanvas)
+        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.settings, images, this.renderer, uiController)
 
         this.builder = new HexMapBuilderClass(this.data, this.settings)
 
-        this.controller = new HexMapControllerClass(this.data, this.camera.controller, this.camera.data, canvas, images, this.settings, uiComponents, this.renderer, setBgCanvas, globalState)
+        this.controller = new HexMapControllerClass(this.data, this.camera.controller, this.camera.data, canvas, images, this.settings, uiController, this.renderer, globalState)
 
-        this.updater = new HexMapUpdaterClass(this.data, images, this.settings, this.renderer, this.camera.controller, this.camera.data, canvas, uiComponents, globalState)
+        this.updater = new HexMapUpdaterClass(this.data, images, this.settings, this.renderer, this.camera.controller, this.camera.data, canvas, uiController, globalState)
 
         this.images = images
     }
@@ -38,12 +38,12 @@ export default class HexMapClass {
         this.data.setRotatedMapList()
         this.view.initializeCanvas()
         this.renderer.prerender(this.view.drawCanvas)
+        this.updater.prerender(this.view.drawCanvas)
         this.view.initializeCamera()
 
     }
 
     update = (state) => {
-        this.view.update();
         this.renderer.update();
         this.updater.update();
     }

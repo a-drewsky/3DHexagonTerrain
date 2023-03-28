@@ -9,7 +9,7 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, cameraController, cameraData, canvas, images, settings, uiComponents, renderer, globalState) {
+    constructor(hexMapData, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -21,7 +21,7 @@ export default class HexMapControllerClass {
 
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, cameraData)
         
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, cameraData, canvas, images, uiComponents, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, cameraData, canvas, images, uiController, renderer, globalState);
 
         this.config = new HexMapConfigClass()
 
@@ -29,9 +29,9 @@ export default class HexMapControllerClass {
 
         this.cameraData = cameraData;
 
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, renderer, this.pathFinder, this.utils, this.config)
+        this.mouseController = new HexMapControllerMouseClass(hexMapData, renderer, this.pathFinder, this.utils, uiController, this.config)
 
-        this.uiController = new HexMapControllerUiClass(hexMapData, cameraController, cameraData, canvas, this.utils)
+        this.uiController = new HexMapControllerUiClass(hexMapData, cameraController, cameraData, canvas, this.utils, uiController)
 
     }
 
@@ -91,7 +91,7 @@ export default class HexMapControllerClass {
             this.cameraData.clickMovePos.y = y
         }
 
-        this.utils.resetHover()
+        this.hexMapData.selections.resetHover()
 
         switch (this.hexMapData.state.current) {
             case 'selectTile':
@@ -113,7 +113,7 @@ export default class HexMapControllerClass {
 
     zoom = (deltaY) => {
         this.cameraController.zoom(deltaY)
-        this.utils.resetHover()
+        this.hexMapData.selections.resetHover()
     }
 
 }

@@ -1,3 +1,7 @@
+import HexMapObjectClass from "./HexMapObjects";
+import HexMapSelectionsClass from "./HexMapSelections";
+import HexMapDataUtilsClass from "./utils/HexMapDataUtils";
+
 export default class HexMapDataClass {
 
    constructor(settings, canvas) {
@@ -8,38 +12,26 @@ export default class HexMapDataClass {
          placeUnit: 'placeUnit',
          chooseRotation: 'chooseRotation',
          selectAction: 'selectAction',
-         animation: 'animation',
-         current: null
+         animation: 'animation'
       }
       this.state.current = this.state.selectTile
 
       this.renderBackground = true
 
+      this.utils = new HexMapDataUtilsClass()
+      this.objects = new HexMapObjectClass(this.utils)
+      this.selections = new HexMapSelectionsClass()
 
       this.tileMap = new Map();
       this.shadowMap = new Map();
       this.posMap = new Map();
       this.rotatedMapList = []
-      this.terrainList = [];
-      this.unitList = [];
-
-      this.selections = {
-         hover: null,
-         tile: null,
-         unit: null,
-         target: null,
-         path: [],
-         pathing: {
-            movement: [],
-            action: [],
-            attack: []
-         }
-      }
 
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
       this.tileHeight = settings.TILE_HEIGHT;
       this.shadowRotation = settings.SHADOW_ROTATION;
+      this.maxHeight = null;
 
       this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
       this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
@@ -47,11 +39,8 @@ export default class HexMapDataClass {
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
       this.sideLength = Math.PI / 3;
 
-      this.maxHeight = null;
-
       //will be player data
       this.resources = 0
-      this.selectedUnit = null
    }
 
 
@@ -76,40 +65,13 @@ export default class HexMapDataClass {
    }
 
    setRotatedMapList = () => {
-      let rotateTile = (q, r, rotation) => {
-
-
-         let s = -q - r;
-         let angle = rotation * 15;
-         if (rotation % 2 == 1) angle -= 15;
-
-         let newQ = q;
-         let newR = r;
-         let newS = s;
-
-         for (let i = 0; i < angle; i += 30) {
-            q = -newR;
-            r = -newS;
-            s = -newQ;
-
-            newQ = q;
-            newR = r;
-            newS = s;
-         }
-
-         return {
-            q: newQ,
-            r: newR
-         }
-
-      }
 
       for (let i = 0; i < 12; i++) {
          //Rotate the hexmap and set the rotatedMap object
          let sortedArr = this.getKeys();
 
          for (let j = 0; j < sortedArr.length; j++) {
-            let rotatedTile = rotateTile(sortedArr[j].q, sortedArr[j].r, i)
+            let rotatedTile = this.utils.rotateTile(sortedArr[j].q, sortedArr[j].r, i)
             sortedArr[j] = {
                rotPosQ: rotatedTile.q,
                rotPosR: rotatedTile.r,
@@ -123,7 +85,7 @@ export default class HexMapDataClass {
          let rotatedMap = new Map();
 
          for (let j = 0; j < sortedArr.length; j++) {
-            rotatedMap.set(this.join(sortedArr[j].rotPosQ, sortedArr[j].rotPosR), {q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR});
+            rotatedMap.set(this.utils.join(sortedArr[j].rotPosQ, sortedArr[j].rotPosR), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR });
          }
 
          this.rotatedMapList[i] = rotatedMap
@@ -133,7 +95,7 @@ export default class HexMapDataClass {
    setMapPos = (rotation, renderCanvasDims) => {
 
       //Set map hyp
-      let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.split(key))
+      let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.utils.split(key))
 
       let mapWidthMax = Math.max(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r));
       let mapHeightMax = Math.max(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish));
@@ -149,78 +111,114 @@ export default class HexMapDataClass {
       //Set the hexmap position to the center of the canvas
 
       let renderHexMapPos = {
-          x: 0,
-          y: 0
+         x: 0,
+         y: 0
       }
 
       switch (rotation) {
-          case 0:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
-              break;
-          case 1:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
-              break;
-          case 2:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
-              break;
-          case 3:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
-              break;
-          case 4:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
-              break;
-          case 5:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
-              break;
-          case 6:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
-              break;
-          case 7:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
-              break;
-          case 8:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
-              break;
-          case 9:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
-              break;
-          case 10:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
-              break;
-          case 11:
-              renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-              renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
-              break;
+         case 0:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+            break;
+         case 1:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+            break;
+         case 2:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+            break;
+         case 3:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+            break;
+         case 4:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+            break;
+         case 5:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+            break;
+         case 6:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+            break;
+         case 7:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+            break;
+         case 8:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+            break;
+         case 9:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+            break;
+         case 10:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+            break;
+         case 11:
+            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+            break;
       }
 
 
       this.posMap.set(rotation, {
-          x: renderHexMapPos.x,
-          y: renderHexMapPos.y
+         x: renderHexMapPos.x,
+         y: renderHexMapPos.y
       })
-  }
+   }
    //END SET METHODS
 
 
    //GET METHODS
    //get an entry in the tileMap (returns a hex tile object)
+   getSelectionArr = () => {
+      let hoverSelection = () => {
+         if (this.state.current == this.state.selectTile) return 'hover_select'
+         if (this.state.current == this.state.chooseRotation) return 'hover_select'
+         else if (this.state.current == this.state.placeUnit) return 'hover_place'
+         else return null
+      }
+
+      let unitSelection = () => {
+         if (this.state.current == this.state.chooseRotation) return 'rotate'
+         if (this.state.current == this.state.selectMovement) return 'unit'
+         if (this.state.current == this.state.selectAction) return 'unit'
+         else return null
+      }
+
+      let selectionList = this.selections
+
+      let filteredSelectionList = []
+
+      if (selectionList.hover !== null && hoverSelection() !== null) filteredSelectionList.push({ position: selectionList.hover, selection: hoverSelection() })
+      if (selectionList.unit !== null && unitSelection() !== null) filteredSelectionList.push({ position: selectionList.unit, selection: unitSelection() })
+      if (selectionList.tile !== null) filteredSelectionList.push({ position: selectionList.tile, selection: 'tile' })
+      if (selectionList.target !== null) filteredSelectionList.push({ position: selectionList.target, selection: 'target' })
+
+      for (let item of selectionList.path) {
+         filteredSelectionList.push({ position: item, selection: 'path' })
+      }
+
+      for (let selList in selectionList.pathing) {
+         for (let item of selectionList.pathing[selList]) {
+            filteredSelectionList.push({ position: item, selection: selList })
+         }
+      }
+      return filteredSelectionList
+   }
+
    getEntry = (q, r) => {
       return this.tileMap.get(q + "," + r);
    }
 
    getEntryRotated = (q, r, rotation) => {
-      let rotatedTile = this.rotatedMapList[rotation].get(this.join(q, r))
+      let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(q, r))
       return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
    }
 
@@ -236,7 +234,7 @@ export default class HexMapDataClass {
 
    //returns all keys for the tileMap
    getKeys = () => {
-      return [...this.tileMap.keys()].map(key => this.split(key))
+      return [...this.tileMap.keys()].map(key => this.utils.split(key))
    }
 
    getValues = () => {
@@ -248,106 +246,45 @@ export default class HexMapDataClass {
       return [...this.tileMap.keys()]
    }
 
-   //return index of terrain at tile (q, r) or -1 if the tile has no terrain
-   getTerrainIndex = (q, r) => {
-      return this.terrainList.findIndex(terrain => terrain.position.q == q && terrain.position.r == r)
-   }
-
-   //return terrain at tile (q, r) or null if the tile has no terrain
-   getTerrain = (q, r) => {
-      let index = this.terrainList.findIndex(terrain => terrain.position.q == q && terrain.position.r == r)
-      if (index == -1) return null
-      return this.terrainList[index]
-   }
-
-   //return terrain at tile (q, r) or null if the tile has no terrain
-   getUnit = (q, r) => {
-      let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
-      if (index == -1) return null
-      return this.unitList[index]
-   }
-
-   //delete unit at position (q, r)
-   deleteUnit = (q, r) => {
-      let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
-      if (index == -1) return
-      this.unitList.splice(index, 1)
-   }
-
-   //return the selected tile or null
-   getSelectedTile = () => {
-      let selected = this.selections['tile']
-      if (selected === null) return null
-      return this.getEntry(selected.q, selected.r)
-   }
-
-   //return the selected unit tile or null
-   getSelectedUnitTile = () => {
-      let selected = this.selections['unit']
-      if (selected === null) return null
-      return this.getEntry(selected.q, selected.r)
-   }
-
-   //return the selected unit tile or null
-   getSelectedTargetTile = () => {
-      let selected = this.selections['target']
-      if (selected === null) return null
-      return this.getEntry(selected.q, selected.r)
-   }
-
-   //return the selected unit tile or null
-   getSelectedUnit = () => {
-      let selected = this.selections['unit']
-      if (selected === null) return null
-      return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
-   }
-
-   //return the selected unit tile or null
-   // getSelectedUnitToRotate = () => {
-   //    let selected = this.selections['rotate']
-   //    if (selected === null) return null
-   //    return this.unitList.find(unit => unit.position.q == selected.q && unit.position.r == selected.r)
-   // }
-
    //returns keys of all neighbors adjacent to (q, r)
    getNeighborKeys = (q, r) => {
       let neighbors = [];
 
-      if (this.hasEntry(q, r - 1)) neighbors.push(this.join(q, r - 1));
-      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.join(q + 1, r - 1));
-      if (this.hasEntry(q + 1, r)) neighbors.push(this.join(q + 1, r));
-      if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
-      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
-      if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
+      if (this.hasEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
+      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
+      if (this.hasEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
+      if (this.hasEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
+      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
+      if (this.hasEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
 
-      return neighbors.map(key => this.split(key));
+      return neighbors.map(key => this.utils.split(key));
    }
 
    //returns keys of all neighbors adjacent to (q, r)
    getDoubleNeighborKeys = (q, r) => {
       let neighbors = [];
 
-      if (this.hasEntry(q, r - 1)) neighbors.push(this.join(q, r - 1));
-      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.join(q + 1, r - 1));
-      if (this.hasEntry(q + 1, r)) neighbors.push(this.join(q + 1, r));
-      if (this.hasEntry(q, r + 1)) neighbors.push(this.join(q, r + 1));
-      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.join(q - 1, r + 1));
-      if (this.hasEntry(q - 1, r)) neighbors.push(this.join(q - 1, r));
+      if (this.hasEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
+      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
+      if (this.hasEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
+      if (this.hasEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
+      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
+      if (this.hasEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
 
-      if (this.hasEntry(q, r - 2)) neighbors.push(this.join(q, r - 2));
-      if (this.hasEntry(q + 1, r - 2)) neighbors.push(this.join(q + 1, r - 2));
-      if (this.hasEntry(q + 2, r - 2)) neighbors.push(this.join(q + 2, r - 2));
-      if (this.hasEntry(q + 2, r - 1)) neighbors.push(this.join(q + 2, r - 1));
-      if (this.hasEntry(q + 2, r)) neighbors.push(this.join(q + 2, r));
-      if (this.hasEntry(q + 1, r + 1)) neighbors.push(this.join(q + 1, r + 1));
-      if (this.hasEntry(q, r + 2)) neighbors.push(this.join(q, r + 2));
-      if (this.hasEntry(q - 1, r + 2)) neighbors.push(this.join(q - 1, r + 2));
-      if (this.hasEntry(q - 2, r + 2)) neighbors.push(this.join(q - 2, r + 2));
-      if (this.hasEntry(q - 2, r + 1)) neighbors.push(this.join(q - 2, r + 1));
-      if (this.hasEntry(q - 2, r)) neighbors.push(this.join(q - 2, r));
-      if (this.hasEntry(q - 1, r - 1)) neighbors.push(this.join(q - 1, r - 1));
+      if (this.hasEntry(q, r - 2)) neighbors.push(this.utils.join(q, r - 2));
+      if (this.hasEntry(q + 1, r - 2)) neighbors.push(this.utils.join(q + 1, r - 2));
+      if (this.hasEntry(q + 2, r - 2)) neighbors.push(this.utils.join(q + 2, r - 2));
+      if (this.hasEntry(q + 2, r - 1)) neighbors.push(this.utils.join(q + 2, r - 1));
+      if (this.hasEntry(q + 2, r)) neighbors.push(this.utils.join(q + 2, r));
+      if (this.hasEntry(q + 1, r + 1)) neighbors.push(this.utils.join(q + 1, r + 1));
+      if (this.hasEntry(q, r + 2)) neighbors.push(this.utils.join(q, r + 2));
+      if (this.hasEntry(q - 1, r + 2)) neighbors.push(this.utils.join(q - 1, r + 2));
+      if (this.hasEntry(q - 2, r + 2)) neighbors.push(this.utils.join(q - 2, r + 2));
+      if (this.hasEntry(q - 2, r + 1)) neighbors.push(this.utils.join(q - 2, r + 1));
+      if (this.hasEntry(q - 2, r)) neighbors.push(this.utils.join(q - 2, r));
+      if (this.hasEntry(q - 1, r - 1)) neighbors.push(this.utils.join(q - 1, r - 1));
 
-      return neighbors.map(key => this.split(key));
+      return neighbors.map(key => this.utils.split(key));
    }
 
    //returns keys of all neighbors adjacent to (q, r) that have 6 neighbors
@@ -423,53 +360,7 @@ export default class HexMapDataClass {
    //CHECK METHODS
    //check if hexmap has an entry (returns a boolean)
    hasEntry = (q, r) => {
-      return this.tileMap.has([q, r].join(','));
+      return this.tileMap.has(this.utils.join(q, r));
    }
    //END CHECK METHODS
-
-
-   //HELPER METHODS
-   //converts key string to key object (returns a key object)
-   split = (key) => {
-      let nums = key.split(',').map(Number);
-      return {
-         q: nums[0],
-         r: nums[1]
-      }
-   }
-
-   //converts a key object to a key string (returns a key string)
-   join = (q, r) => {
-      return [q, r].join(',')
-   }
-
-   //round floating hex coords to nearest integer hex coords
-   roundToNearestHex = (q, r) => {
-      let fracQ = q;
-      let fracR = r;
-      let fracS = -1 * q - r
-
-      let roundQ = Math.round(fracQ);
-      let roundR = Math.round(fracR);
-      let roundS = Math.round(fracS);
-
-      let diffQ = Math.abs(roundQ - fracQ);
-      let diffR = Math.abs(roundR - fracR);
-      let diffS = Math.abs(roundS - fracS);
-
-      if (diffQ > diffR && diffQ > diffS) {
-         roundQ = -1 * roundR - roundS
-      } else if (diffR > diffS) {
-         roundR = -1 * roundQ - roundS
-      } else {
-         roundS = -1 * roundQ - roundR
-      }
-
-      return {
-         q: roundQ,
-         r: roundR
-      }
-
-   }
-   //END HELPER METHODS
 }

@@ -4,33 +4,55 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiComponents, globalState) {
+    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
 
         this.hexMapData = hexMapData
         this.images = images
         this.renderer = renderer
         this.cameraController = cameraController
         this.cameraData = cameraData
+        this.canvas = canvas
+        this.drawCanvas = null
+
+        this.uiController = uiController
 
         this.travelTime = settings.TRAVEL_TIME
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiComponents, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiController, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }
 
+    prerender = (drawCanvas) => {
+        this.drawCanvas = drawCanvas
+    }
+
     update = () => {
 
+        //check camera
+        let zoom = this.cameraData.zoom * this.cameraData.zoomAmount
+        if (this.cameraData.position.x + zoom / 2 < 0 - this.canvas.width / 2) this.cameraData.position.x = 0 - this.canvas.width / 2 - zoom / 2
+        if (this.cameraData.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.cameraData.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
+        if (this.cameraData.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.cameraData.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+        if (this.cameraData.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.cameraData.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+
+        //set background
+        let scale = this.canvas.width / (this.canvas.width + zoom)
+        this.uiController.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
+        this.uiController.setBgCanvasZoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
+
+        //update mouse
         if (this.hexMapData.state.current != 'selectAction' && this.cameraData.clickPos !== null && this.collision.vectorDist(this.cameraData.clickPos, this.cameraData.clickMovePos) > this.cameraData.clickDist) {
             this.cameraController.mouseDown(this.cameraData.clickMovePos.x, this.cameraData.clickMovePos.y)
             this.cameraData.clickPos = null
             this.cameraData.clickMovePos = null
         }
 
-        for (let i in this.hexMapData.unitList) {
-            let unit = this.hexMapData.unitList[i]
+        //update units
+        for (let i in this.hexMapData.objects.unitList) {
+            let unit = this.hexMapData.objects.unitList[i]
             this.updateUnit(unit)
         }
 
@@ -152,7 +174,7 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitDeath = (unit) => {
-        this.hexMapData.deleteUnit(unit.position.q, unit.position.r)
+        this.hexMapData.objects.deleteUnit(unit.position.q, unit.position.r)
         this.utils.resetHexMapState()
     }
 
@@ -161,7 +183,7 @@ export default class HexMapUpdaterClass {
         mine.resources -= 25
         this.hexMapData.resources++
 
-        this.utils.setResourceBar(this.hexMapData.resources)
+        this.uiController.setResourceBar(this.hexMapData.resources)
 
         let resources = mine.resources
 

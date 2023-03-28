@@ -1,4 +1,4 @@
-import HexMapViewUtilsClass from "../../utils/HexMapViewUtils";
+import HexMapRendererUtilsClass from "../../utils/HexMapRendererUtils";
 import HexMapRendererSpritesModifiersClass from "./HexMapRendererSpritesModifiers";
 import HexMapRendererSpritesStructuresClass from "./HexMapRendererSpritesStructures";
 import HexMapRendererSpritesUnitsClass from "./HexMapRendererSpritesUnits";
@@ -10,7 +10,7 @@ export default class HexMapRendererSpritesClass {
         this.hexMapData = hexMapData
         this.camera = camera
         this.images = images
-        this.utils = new HexMapViewUtilsClass(hexMapData, camera, settings, images);
+        this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images);
 
 
         this.modifiers = new HexMapRendererSpritesModifiersClass(hexMapData, camera, settings, images, this.utils)
@@ -30,9 +30,9 @@ export default class HexMapRendererSpritesClass {
     }
 
     prerenderUnits = () => {
-        for (let i = 0; i < this.hexMapData.unitList.length; i++) {
+        for (let i = 0; i < this.hexMapData.objects.unitList.length; i++) {
 
-            let unitObject = this.hexMapData.unitList[i]
+            let unitObject = this.hexMapData.objects.unitList[i]
 
             if (unitObject == null) continue
 

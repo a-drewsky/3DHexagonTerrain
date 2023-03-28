@@ -1,6 +1,6 @@
 import HexMapClass from "./gameObjects/hexMap/HexMap"
 import HexMapDebugSmoothingClass from "./gameObjects/hexMap/debug/HexMapDebugSmoothing";
-
+import UiControllerClass from "./UiController";
 
 export default class GameManagerClass {
 
@@ -8,19 +8,14 @@ export default class GameManagerClass {
 
         this.ctx = ctx;
         this.canvas = canvas;
-        this.bgCanvas = bgCanvas
 
         this.settings = settings;
         this.images = images;
 
         this.hexMap = null
 
-        this.setBgCanvas = {
-            size: this.setBgCanvasSize,
-            zoom: this.setBgCanvasZoom,
-            position: this.setBgCanvasPosition,
-            image: this.setBgCanvasImage
-        }
+        this.updateUi = updateUi
+        this.uiController = new UiControllerClass(uiComponents, bgCanvas)
 
         //create all state objects like this
         this.state = {
@@ -29,9 +24,6 @@ export default class GameManagerClass {
             current: 'prerendering'
         }
         this.state.current = this.state.play
-
-        this.uiComponents = uiComponents
-        this.updateUi = updateUi
 
         //Draw interval that is activated when the game finishes loading
         this.updateInterval = null;
@@ -56,10 +48,8 @@ export default class GameManagerClass {
                 this.canvas,
                 this.images,
                 this.settings,
-                this.uiComponents,
+                this.uiController,
                 this.state,
-                this.setBgCanvas,
-                this.setBgCanvas
             )
         }
 
@@ -68,27 +58,6 @@ export default class GameManagerClass {
         this.hexMap.prerender();
         console.log("DONE PRERENDERING")
 
-    }
-
-    setBgCanvasZoom = (width, height) => {
-        this.uiComponents.bgCanvas.width = width
-        this.uiComponents.bgCanvas.height = height
-    }
-
-    setBgCanvasSize = (width, height) => {
-        this.bgCanvas.width = width
-        this.bgCanvas.height = height
-    }
-
-    setBgCanvasImage = (canvas) => {
-        let bgctx = this.bgCanvas.getContext('2d')
-        bgctx.clearRect(0, 0, this.bgCanvas.width, this.bgCanvas.height)
-        bgctx.drawImage(canvas, 0, 0, this.bgCanvas.width, this.bgCanvas.height)
-    }
-
-    setBgCanvasPosition = (x, y) => {
-        this.uiComponents.bgCanvas.x = x
-        this.uiComponents.bgCanvas.y = y
     }
 
     clear = () => {
@@ -137,14 +106,12 @@ export default class GameManagerClass {
 
     setStatePause = () => {
         this.state.current = this.state.pause
-        this.uiComponents.pauseMenu.show = true
-        this.updateUi()
+        this.uiController.setPauseMenu(true)
     }
 
     setStatePlay = () => {
         this.state.current = this.state.play
-        this.uiComponents.pauseMenu.show = false
-        this.updateUi()
+        this.uiController.setPauseMenu(false)
     }
 
 }
