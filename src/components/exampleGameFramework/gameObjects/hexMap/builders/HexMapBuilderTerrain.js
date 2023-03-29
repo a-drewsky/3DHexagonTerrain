@@ -17,7 +17,7 @@ export default class HexMapBuilderTerrainClass {
       this.biomeGenSettings = settings.BIOME_GENERATION
 
       this.config = config
-      
+
       this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
 
    }
@@ -192,10 +192,10 @@ export default class HexMapBuilderTerrainClass {
          }
 
          //generate large rocks
-         let terrainIndex = this.hexMapData.objects.getTerrainIndex(keyObj.q, keyObj.r);
-         if (terrainIndex != -1 && this.hexMapData.objects.terrainList[terrainIndex].name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
+         let terrain = this.hexMapData.getTerrain(keyObj.q, keyObj.r);
+         if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
             let terrain = this.config.largeRock(keyObj)
-            this.hexMapData.objects.terrainList[terrainIndex] = terrain
+            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
          }
 
       }
@@ -250,12 +250,12 @@ export default class HexMapBuilderTerrainClass {
                   continue;
             }
 
-            this.hexMapData.objects.terrainList.push(terrain)
+            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
 
          } else if (this.biomeGenSettings[value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[value.biome].rockGenThreshold) {
             let terrain = this.config.smallRocks(keyObj)
 
-            this.hexMapData.objects.terrainList.push(terrain)
+            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
          }
 
 

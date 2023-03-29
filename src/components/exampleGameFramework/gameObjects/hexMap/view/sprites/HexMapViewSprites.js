@@ -33,52 +33,50 @@ export default class HexMapViewSpritesClass {
       let spriteList = []
 
       //terrain objects
-      for (let i = 0; i < this.hexMapData.objects.terrainList.length; i++) {
-         let terrainObject = this.hexMapData.objects.terrainList[i]
-         if (terrainObject == null) continue
-
-         let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
-
-         let height = this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height
+      for (let [key, value] of this.hexMapData.getMap()){
+         if(value.terrain == null) continue
+         let keyObj = this.hexMapData.utils.rotateTile(value.position.q, value.position.r, this.camera.rotation)
+         let height = this.hexMapData.getEntry(value.position.q, value.position.r).height
 
          //modifier top or bottom
-         if (terrainObject.type == 'modifier') {
+         if (value.terrain.type == 'modifier') {
 
             spriteList.push({
-               id: i,
+               id: value.position,
                q: keyObj.q,
                r: keyObj.r,
                height: height,
-               type: terrainObject.type,
+               type: value.terrain.type,
                modifierPos: 'top'
             })
 
             spriteList.push({
-               id: i,
+               id: value.position,
                q: keyObj.q,
                r: keyObj.r,
                height: height,
-               type: terrainObject.type,
+               type: value.terrain.type,
                modifierPos: 'bottom'
             })
 
          } else {
 
             spriteList.push({
-               id: i,
+               id: value.position,
                q: keyObj.q,
                r: keyObj.r,
                height: height,
-               type: terrainObject.type,
+               type: value.terrain.type,
                modifierPos: null
             })
 
          }
+
       }
 
       //units
-      for (let i = 0; i < this.hexMapData.objects.unitList.length; i++) {
-         let unitObject = this.hexMapData.objects.unitList[i]
+      for (let i = 0; i < this.hexMapData.units.unitList.length; i++) {
+         let unitObject = this.hexMapData.units.unitList[i]
          if (unitObject == null) continue
 
          let keyObj
@@ -137,12 +135,11 @@ export default class HexMapViewSpritesClass {
 
          if (spriteList[i].modifierPos == 'bottom') continue
 
-         let spriteObject
          if (spriteList[i].type == 'unit') {
             this.units.drawShadow(drawctx, spriteList[i])
             continue
          }
-         else spriteObject = this.hexMapData.objects.terrainList[spriteList[i].id]
+         let spriteObject = this.hexMapData.getEntry(spriteList[i].id.q, spriteList[i].id.r).terrain
 
          if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) continue
 

@@ -51,8 +51,8 @@ export default class HexMapUpdaterClass {
         }
 
         //update units
-        for (let i in this.hexMapData.objects.unitList) {
-            let unit = this.hexMapData.objects.unitList[i]
+        for (let i in this.hexMapData.units.unitList) {
+            let unit = this.hexMapData.units.unitList[i]
             this.updateUnit(unit)
         }
 
@@ -174,7 +174,7 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitDeath = (unit) => {
-        this.hexMapData.objects.deleteUnit(unit.position.q, unit.position.r)
+        this.hexMapData.units.deleteUnit(unit.position.q, unit.position.r)
         this.utils.resetHexMapState()
     }
 

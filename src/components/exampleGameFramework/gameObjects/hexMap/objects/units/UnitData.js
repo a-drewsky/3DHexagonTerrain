@@ -1,4 +1,4 @@
-export default class BaseUnitDataClass {
+export default class UnitDataClass {
 
     constructor(pos){
         

@@ -1,4 +1,4 @@
-import HexMapObjectClass from "./HexMapObjects";
+import HexMapDataUnitsClass from "./HexMapDataUnits";
 import HexMapSelectionsClass from "./HexMapSelections";
 import HexMapDataUtilsClass from "./utils/HexMapDataUtils";
 
@@ -19,7 +19,7 @@ export default class HexMapDataClass {
       this.renderBackground = true
 
       this.utils = new HexMapDataUtilsClass()
-      this.objects = new HexMapObjectClass(this.utils)
+      this.units = new HexMapDataUnitsClass()
       this.selections = new HexMapSelectionsClass()
 
       this.tileMap = new Map();
@@ -53,6 +53,10 @@ export default class HexMapDataClass {
    //delete an entry in the tileMap (void)
    deleteEntry = (q, r) => {
       this.tileMap.delete(q + "," + r);
+   }
+
+   setTerrain = (q, r, terrain) => {
+      this.getEntry(q, r).terrain = terrain
    }
 
    setDimensions = (x, y) => {
@@ -220,6 +224,11 @@ export default class HexMapDataClass {
    getEntryRotated = (q, r, rotation) => {
       let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(q, r))
       return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
+   }
+
+   //return index of terrain at tile (q, r) or -1 if the tile has no terrain
+   getTerrain = (q, r) => {
+      return this.getEntry(q, r).terrain
    }
 
    //returns the tileMap

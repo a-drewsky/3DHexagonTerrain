@@ -12,9 +12,9 @@ export default class HexMapViewSpritesModifiersClass {
 
     drawSingleImage = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.getEntry(spriteReference.id.q, spriteReference.id.r).terrain
 
-        if (this.CommonUtils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
         let keyObj = {
             q: spriteReference.q,
@@ -47,7 +47,7 @@ export default class HexMapViewSpritesModifiersClass {
 
     drawTop = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.getEntry(spriteReference.id.q, spriteReference.id.r).terrain
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
@@ -87,7 +87,7 @@ export default class HexMapViewSpritesModifiersClass {
 
     drawBottom = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
+        let spriteObject = this.hexMapData.getEntry(spriteReference.id.q, spriteReference.id.r).terrain
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 

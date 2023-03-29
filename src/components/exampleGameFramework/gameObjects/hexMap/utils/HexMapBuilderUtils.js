@@ -50,8 +50,8 @@ export default class HexMapBuilderUtilsClass {
     isValidStructureTile = (tilePosQ, tilePosR, selectedTile) => {
         if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
 
-        let terrainIndex = this.hexMapData.objects.getTerrainIndex(tilePosQ, tilePosR)
-        if (terrainIndex != -1 && this.hexMapData.objects.terrainList[terrainIndex].type != 'modifier') return false
+        let terrain = this.hexMapData.getTerrain(tilePosQ, tilePosR)
+        if (terrain != null && terrain.type != 'modifier') return false
 
         let doubleTileNeighbors = this.hexMapData.getDoubleNeighborKeys(tilePosQ, tilePosR)
 
@@ -61,20 +61,15 @@ export default class HexMapBuilderUtilsClass {
         if (tileNeighbors.length != 6) return false
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
-            let terrainIndex = this.hexMapData.objects.getTerrainIndex(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
-            if (terrainIndex != -1 && this.hexMapData.objects.terrainList[terrainIndex].type != 'modifier') return false
+            let nieghborTerrain = this.hexMapData.getTerrain(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
+            if (nieghborTerrain != null && nieghborTerrain.type != 'modifier') return false
         }
 
         return true
     }
 
     setStructure = (q, r, terrain) => {
-        let curTerrain = this.hexMapData.objects.getTerrainIndex(q, r)
-        if (curTerrain != -1) {
-            this.hexMapData.objects.terrainList[curTerrain] = terrain
-        } else {
-            this.hexMapData.objects.terrainList.push(terrain)
-        }
+        this.hexMapData.setTerrain(q, r, terrain)
     }
 
     setMainBase = (q, r) => {
@@ -112,13 +107,7 @@ export default class HexMapBuilderUtilsClass {
             else if(posName.q == 'm1' && posName.r == 0) terrain.rotation = 9
             else if(posName.q == 0 && posName.r == 'm1') terrain.rotation = 11
 
-            let curTerrainIndex = this.hexMapData.objects.getTerrainIndex(tileToSetKey.q, tileToSetKey.r)
-
-            if (curTerrainIndex != -1) {
-                this.hexMapData.objects.terrainList[curTerrainIndex] = terrain
-            } else {
-                this.hexMapData.objects.terrainList.push(terrain)
-            }
+            this.hexMapData.setTerrain(tileToSetKey.q, tileToSetKey.r, terrain)
 
         }
 
@@ -133,13 +122,7 @@ export default class HexMapBuilderUtilsClass {
 
         let terrain = this.config.flag(tileToSetKey)
 
-        let curTerrainIndex = this.hexMapData.objects.getTerrainIndex(terrain.position.q, terrain.position.r)
-
-        if (curTerrainIndex != -1) {
-            this.hexMapData.objects.terrainList[curTerrainIndex] = terrain
-        } else {
-            this.hexMapData.objects.terrainList.push(terrain)
-        }
+        this.hexMapData.setTerrain(tileToSetKey.q, tileToSetKey.r, terrain)
 
     }
 

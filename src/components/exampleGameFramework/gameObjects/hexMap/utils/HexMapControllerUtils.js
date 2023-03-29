@@ -52,7 +52,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     checkValidPath = () => {
-        let unit = this.hexMapData.objects.selectedUnit
+        let unit = this.hexMapData.units.selectedUnit
         let path = [unit.position, ...this.hexMapData.selections.path]
         let pathCost = this.pathFinder.pathCost(path)
         if (pathCost <= unit.movementRange) return true
@@ -62,7 +62,7 @@ export default class HexMapControllerUtilsClass {
 
     findMoveSet = () => {
 
-        let unit = this.hexMapData.objects.selectedUnit
+        let unit = this.hexMapData.units.selectedUnit
 
         if (unit == null) return
 
@@ -87,13 +87,13 @@ export default class HexMapControllerUtilsClass {
         //search for structures
         for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if ((this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r).type == 'resource')
-                || (this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
+            if ((this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource')
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
                 pathing.action.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
-            if (this.hexMapData.objects.getUnit(tile.position.q, tile.position.r) != null
-                || (this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.objects.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
+            if (this.hexMapData.units.getUnit(tile.position.q, tile.position.r) != null
+                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
                 pathing.attack.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
@@ -104,8 +104,7 @@ export default class HexMapControllerUtilsClass {
     updateTerrain = (q, r, terrain) => {
         if (terrain.modifierType == 'singleImage') this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
 
-        let terrainIndex = this.hexMapData.objects.getTerrainIndex(q, r)
-        this.hexMapData.objects.terrainList[terrainIndex] = terrain
+        this.hexMapData.setTerrain(q, r, terrain)
     }
 
     lerpUnit = (unit) => {
@@ -341,8 +340,8 @@ export default class HexMapControllerUtilsClass {
                 continue
             }
 
-            let tileTerrain = this.hexMapData.objects.getTerrain(rotatedTile.position.q, rotatedTile.position.r)
-            let tileUnit = this.hexMapData.objects.getUnit(rotatedTile.position.q, rotatedTile.position.r)
+            let tileTerrain = this.hexMapData.getTerrain(rotatedTile.position.q, rotatedTile.position.r)
+            let tileUnit = this.hexMapData.units.getUnit(rotatedTile.position.q, rotatedTile.position.r)
 
             if (tileTerrain && tileTerrain.type != 'modifier') {
 

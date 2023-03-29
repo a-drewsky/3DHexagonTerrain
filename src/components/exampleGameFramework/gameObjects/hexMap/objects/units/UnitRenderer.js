@@ -1,4 +1,4 @@
-export default class BaseUnitRendererClass {
+export default class UnitRendererClass {
 
     constructor(hexMapData, camera, imageObject){
         this.hexMapData = hexMapData

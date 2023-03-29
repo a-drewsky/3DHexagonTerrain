@@ -16,7 +16,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     draw = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.unitList[spriteReference.id]
+        let spriteObject = this.hexMapData.units.unitList[spriteReference.id]
 
         if (spriteObject.stateConfig[spriteObject.state].type == 'moving') {
             this.drawMovingUnit(drawctx, spriteReference, spriteObject)
@@ -34,7 +34,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     drawStaticShadow = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.unitList[spriteReference.id]
+        let spriteObject = this.hexMapData.units.unitList[spriteReference.id]
 
         if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) return
 
@@ -72,7 +72,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     drawShadow = (drawctx, spriteReference) => {
 
-        let spriteObject = this.hexMapData.objects.unitList[spriteReference.id]
+        let spriteObject = this.hexMapData.units.unitList[spriteReference.id]
 
         if (spriteObject.destination == null) {
             this.drawStaticShadow(drawctx, spriteReference)
@@ -140,7 +140,7 @@ export default class HexMapViewSpritesUnitsClass {
     }
 
     drawStaticUnit = (drawctx, spriteReference) => {
-        let spriteObject = this.hexMapData.objects.unitList[spriteReference.id]
+        let spriteObject = this.hexMapData.units.unitList[spriteReference.id]
 
         let keyObj = {
             q: spriteReference.q,

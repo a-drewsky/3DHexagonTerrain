@@ -30,9 +30,9 @@ export default class HexMapRendererSpritesClass {
     }
 
     prerenderUnits = () => {
-        for (let i = 0; i < this.hexMapData.objects.unitList.length; i++) {
+        for (let i = 0; i < this.hexMapData.units.unitList.length; i++) {
 
-            let unitObject = this.hexMapData.objects.unitList[i]
+            let unitObject = this.hexMapData.units.unitList[i]
 
             if (unitObject == null) continue
 

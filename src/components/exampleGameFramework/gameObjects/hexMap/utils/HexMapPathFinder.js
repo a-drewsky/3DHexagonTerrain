@@ -40,16 +40,16 @@ export default class HexMapPathFinderClass {
     }
 
     isValid = (q, r) => {
-        let terrain = this.hexMapData.objects.getTerrain(q, r)
+        let terrain = this.hexMapData.getTerrain(q, r)
         if(terrain != null && terrain.type != 'modifier') return false
-        let unit = this.hexMapData.objects.getUnit(q, r)
+        let unit = this.hexMapData.units.getUnit(q, r)
         if(unit != null) return false
         return true
     }
 
     getTileCost = (tile) => {
         if(this.hexMapData.getEntry(tile.q, tile.r).biome == 'water') return 2
-        let terrain = this.hexMapData.objects.getTerrain(tile.q, tile.r)
+        let terrain = this.hexMapData.getTerrain(tile.q, tile.r)
         if(terrain != null && terrain.name == 'Forest') return 1
         return 0
     }

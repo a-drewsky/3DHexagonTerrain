@@ -11,7 +11,7 @@ export default class HexMapViewSpritesStructuresClass {
     }
 
    draw = (drawctx, spriteReference) => {
-      let spriteObject = this.hexMapData.objects.terrainList[spriteReference.id]
+      let spriteObject = this.hexMapData.getEntry(spriteReference.id.q, spriteReference.id.r).terrain
 
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 

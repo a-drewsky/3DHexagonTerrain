@@ -81,7 +81,8 @@ export default class HexMapConfigClass {
             highBiome: null,
             veryhighBiome: null,
             images: [],
-            selectionImages: []
+            selectionImages: [],
+            terrain: null
         }
     }
 

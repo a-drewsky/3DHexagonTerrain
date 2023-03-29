@@ -10,32 +10,32 @@ export default class HexMapControllerUiClass {
     }
 
     move = () => {
-        console.log(this.hexMapData.objects.selectedUnit)
-        if (this.hexMapData.objects.selectedUnit != null) this.utils.lerpUnit(this.hexMapData.objects.selectedUnit)
+        console.log(this.hexMapData.units.selectedUnit)
+        if (this.hexMapData.units.selectedUnit != null) this.utils.lerpUnit(this.hexMapData.units.selectedUnit)
         this.hexMapData.selections.resetSelected()
         this.uiController.clearContextMenu()
     }
 
     mine = () => {
 
-        if (this.hexMapData.objects.selectedUnit == null) return
+        if (this.hexMapData.units.selectedUnit == null) return
 
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         console.log(selectionTarget)
         if (selectionTarget == null) return
         let targetTile = this.hexMapData.getEntry(selectionTarget.q, selectionTarget.r)
 
-        let targetStructure = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
 
-        this.hexMapData.objects.selectedUnit.target = targetStructure
+        this.hexMapData.units.selectedUnit.target = targetStructure
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.mineOre(this.hexMapData.objects.selectedUnit, targetTile)
+            this.utils.mineOre(this.hexMapData.units.selectedUnit, targetTile)
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'mine')
+            this.utils.lerpToTarget(this.hexMapData.units.selectedUnit, targetTile, 'mine')
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         }
@@ -43,7 +43,7 @@ export default class HexMapControllerUiClass {
 
     attack = () => {
 
-        if (this.hexMapData.objects.selectedUnit == null) return
+        if (this.hexMapData.units.selectedUnit == null) return
 
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         if (selectionTarget == null) return
@@ -51,22 +51,22 @@ export default class HexMapControllerUiClass {
 
         let targetObject
 
-        if (this.hexMapData.objects.getUnit(targetTile.position.q, targetTile.position.r) != null) {
-            targetObject = this.hexMapData.objects.getUnit(targetTile.position.q, targetTile.position.r)
+        if (this.hexMapData.units.getUnit(targetTile.position.q, targetTile.position.r) != null) {
+            targetObject = this.hexMapData.units.getUnit(targetTile.position.q, targetTile.position.r)
         } else {
-            if (this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r) == null) return
-            targetObject = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
+            if (this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r) == null) return
+            targetObject = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
         }
         if (targetObject == null) return
 
-        this.hexMapData.objects.selectedUnit.target = targetObject
+        this.hexMapData.units.selectedUnit.target = targetObject
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.attackUnit(this.hexMapData.objects.selectedUnit)
+            this.utils.attackUnit(this.hexMapData.units.selectedUnit)
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'attack')
+            this.utils.lerpToTarget(this.hexMapData.units.selectedUnit, targetTile, 'attack')
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         }
@@ -74,25 +74,25 @@ export default class HexMapControllerUiClass {
 
     capture = () => {
 
-        if (this.hexMapData.objects.selectedUnit == null) return
+        if (this.hexMapData.units.selectedUnit == null) return
 
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.hexMapData.getEntry(selectionTarget.q, selectionTarget.r)
 
-        let targetStructure = this.hexMapData.objects.getTerrain(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.hexMapData.getTerrain(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
 
-        this.hexMapData.objects.selectedUnit.target = targetStructure
+        this.hexMapData.units.selectedUnit.target = targetStructure
 
-        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.objects.selectedUnit.position.q, this.hexMapData.objects.selectedUnit.position.r)
+        let neighbors = this.hexMapData.getNeighborKeys(this.hexMapData.units.selectedUnit.position.q, this.hexMapData.units.selectedUnit.position.r)
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
-            this.utils.captureFlag(this.hexMapData.objects.selectedUnit, targetTile)
+            this.utils.captureFlag(this.hexMapData.units.selectedUnit, targetTile)
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.hexMapData.objects.selectedUnit, targetTile, 'capture')
+            this.utils.lerpToTarget(this.hexMapData.units.selectedUnit, targetTile, 'capture')
             this.hexMapData.selections.resetSelected()
             this.uiController.clearContextMenu()
         }

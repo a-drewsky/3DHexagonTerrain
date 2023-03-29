@@ -35,7 +35,7 @@ export default class HexMapRendererClass {
             let tileObj = this.hexMapData.getEntry(tileToRender.q, tileToRender.r)
             this.mapRenderer.renderTileStack(tileObj)
 
-            let terrainObj = this.hexMapData.objects.getTerrain(tileToRender.q, tileToRender.r)
+            let terrainObj = this.hexMapData.getTerrain(tileToRender.q, tileToRender.r)
 
             if (terrainObj !== null) {
                 this.spriteRenderer.prerenderTerrain(terrainObj);
