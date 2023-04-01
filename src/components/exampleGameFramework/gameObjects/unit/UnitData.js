@@ -1,6 +1,6 @@
 export default class UnitDataClass {
 
-    constructor(pos){
+    constructor(pos, hexMapData, imageObject){
         
         this.position = {
             q: pos.q,
@@ -16,6 +16,12 @@ export default class UnitDataClass {
         this.sprite = 'villager'
         this.images = []
         this.shadowImages = []
+        this.imageObject = imageObject
+
+        this.canvasSize = {
+           width: hexMapData.size * 2 * this.imageObject.spriteSize.width,
+           height: hexMapData.size * 2 * this.imageObject.spriteSize.height
+        }
 
 
         //stats
@@ -51,6 +57,18 @@ export default class UnitDataClass {
         }
         this.state.current = this.state.idle
 
+    }
+    
+    setFrame = () => {
+        this.frameCurTime = Date.now()
+        if (this.state.current.rate == 'static') return
+        if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
+            this.frameStartTime = Date.now()
+
+            this.frame++
+
+            if (this.frame >= this.images.unit[this.sprite][this.state.current.name].images.length) this.frame = 0
+        }
     }
 
 }

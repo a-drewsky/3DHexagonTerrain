@@ -5,13 +5,14 @@ import HexMapRendererTableClass from "./HexMapRendererTable";
 
 export default class HexMapRendererClass {
 
-    constructor(hexMapData, camera, settings, images) {
+    constructor(hexMapData, unitManager, camera, settings, images) {
         this.mapRenderer = new HexMapRendererMapClass(hexMapData, camera, settings, images)
-        this.spriteRenderer = new HexMapRendererSpritesClass(hexMapData, camera, settings, images)
+        this.spriteRenderer = new HexMapRendererSpritesClass(hexMapData, unitManager, camera, settings, images)
         this.selectionRenderer = new HexMapRendererSelectionsClass(hexMapData, camera, settings, images)
         this.tableRenderer = new HexMapRendererTableClass(hexMapData, camera, settings, images)
 
         this.hexMapData = hexMapData
+        this.unitManager = unitManager
 
         this.renderStack = []
     }

@@ -4,9 +4,10 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
+    constructor(hexMapData, unitManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
 
         this.hexMapData = hexMapData
+        this.unitManager = unitManager
         this.images = images
         this.renderer = renderer
         this.cameraController = cameraController
@@ -20,7 +21,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, this.cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, unitManager, this.cameraData, canvas, images, uiController, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }
@@ -51,8 +52,8 @@ export default class HexMapUpdaterClass {
         }
 
         //update units
-        for (let i in this.hexMapData.units.unitList) {
-            let unit = this.hexMapData.units.unitList[i]
+        for (let i in this.unitManager.unitList) {
+            let unit = this.unitManager.unitList[i]
             this.updateUnit(unit)
         }
 
@@ -62,11 +63,11 @@ export default class HexMapUpdaterClass {
 
         this.setUnitFrame(unit)
 
-        unit.animationCurTime = Date.now()
+        unit.data.animationCurTime = Date.now()
 
-        if (unit.stateConfig[unit.state].duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.stateConfig[unit.state].duration) return
+        if (unit.data.state.current.duration != 'continuous' && unit.data.animationCurTime - unit.data.animationStartTime < unit.data.state.current.duration) return
 
-        switch (unit.state) {
+        switch (unit.data.state.current.name) {
             case 'walk':
             case 'jump':
                 this.updateUnitPath(unit)
@@ -89,48 +90,48 @@ export default class HexMapUpdaterClass {
     }
 
     setUnitFrame = (unit) => {
-        unit.frameCurTime = Date.now()
-        if (unit.stateConfig[unit.state].rate == 'static') return
-        if (unit.frameCurTime - unit.frameStartTime > unit.stateConfig[unit.state].rate) {
-            unit.frameStartTime = Date.now()
+        unit.data.frameCurTime = Date.now()
+        if (unit.data.state.current.rate == 'static') return
+        if (unit.data.frameCurTime - unit.data.frameStartTime > unit.data.state.current.rate) {
+            unit.data.frameStartTime = Date.now()
 
-            unit.frame++
+            unit.data.frame++
 
-            if (unit.frame >= this.images.unit[unit.sprite][unit.state].images.length) unit.frame = 0
+            if (unit.data.frame >= this.images.unit[unit.data.sprite][unit.data.state.current.name].images.length) unit.data.frame = 0
         }
     }
 
     updateUnitPath = (unit) => {
 
-        unit.destinationCurTime = Date.now()
-        if (unit.destinationCurTime - unit.destinationStartTime >= this.travelTime) {
+        unit.data.destinationCurTime = Date.now()
+        if (unit.data.destinationCurTime - unit.data.destinationStartTime >= this.travelTime) {
 
-            unit.position = unit.destination
+            unit.data.position = unit.data.destination
 
-            unit.path.shift()
+            unit.data.path.shift()
 
-            if (unit.path.length > 0) {
-                unit.destination = unit.path[0]
-                unit.destinationCurTime = Date.now()
-                unit.destinationStartTime = Date.now()
+            if (unit.data.path.length > 0) {
+                unit.data.destination = unit.data.path[0]
+                unit.data.destinationCurTime = Date.now()
+                unit.data.destinationStartTime = Date.now()
 
-                this.utils.setUnitDirection(unit, unit.destination)
+                this.utils.setUnitDirection(unit, unit.data.destination)
 
-                if (unit.state != 'walk') {
+                if (unit.data.state.current.name != 'walk') {
                     this.utils.setUnitAnimation(unit, 'walk')
                 }
-                let startPosition = this.hexMapData.getEntry(unit.position.q, unit.position.r)
-                let nextPosition = this.hexMapData.getEntry(unit.destination.q, unit.destination.r)
+                let startPosition = this.hexMapData.getEntry(unit.data.position.q, unit.data.position.r)
+                let nextPosition = this.hexMapData.getEntry(unit.data.destination.q, unit.data.destination.r)
                 if (nextPosition.height != startPosition.height) {
                     this.utils.setUnitAnimation(unit, 'jump')
                 }
 
             } else {
-                unit.destination = null
-                unit.destinationCurTime = null
-                unit.destinationStartTime = null
+                unit.data.destination = null
+                unit.data.destinationCurTime = null
+                unit.data.destinationStartTime = null
 
-                if (unit.futureState == null) {
+                if (unit.data.futureState == null) {
                     this.utils.setChooseRotation(unit)
                 } else {
                     this.utils.setUnitFutureState(unit)
@@ -142,14 +143,14 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitMining = (unit) => {
-        let target = unit.target
+        let target = unit.data.target
         this.utils.setUnitIdle(unit)
         this.updateMine(target)
     }
 
     endUnitAttacking = (unit) => {
 
-        let target = unit.target
+        let target = unit.data.target
         this.utils.setUnitIdle(unit)
         target.health -= 25
 
@@ -164,7 +165,7 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitHit = (unit) => {
-        if (unit.health > 0) {
+        if (unit.data.health > 0) {
             this.utils.setUnitIdle(unit)
             return
         }
@@ -174,7 +175,7 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitDeath = (unit) => {
-        this.hexMapData.units.deleteUnit(unit.position.q, unit.position.r)
+        this.unitManager.deleteUnit(unit.data.position.q, unit.data.position.r)
         this.utils.resetHexMapState()
     }
 

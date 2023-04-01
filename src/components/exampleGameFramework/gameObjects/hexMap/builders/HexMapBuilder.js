@@ -2,6 +2,7 @@ import noise from "../../../utilities/perlin";
 import HexMapBuilderTerrainClass from "./HexMapBuilderTerrain";
 import HexMapConfigClass from "../config/hexMapConfig";
 import HexMapBuilderUtilsClass from "../utils/HexMapBuilderUtils";
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapBuilderClass {
 
@@ -27,6 +28,7 @@ export default class HexMapBuilderClass {
       this.config = new HexMapConfigClass()
       this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
       this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
+      this.commonUtils = new HexMapCommonUtilsClass()
 
    }
 
@@ -89,7 +91,7 @@ export default class HexMapBuilderClass {
 
       for (let [key, value] of this.hexMapData.getMap()) {
 
-         let keyObj = this.hexMapData.utils.split(key);
+         let keyObj = this.commonUtils.split(key);
 
          //elevation generation
          let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
@@ -191,19 +193,19 @@ export default class HexMapBuilderClass {
          keyStrSet.add(keyString)
 
          //get tile biome
-         let keyObj = this.hexMapData.utils.split(keyString);
+         let keyObj = this.commonUtils.split(keyString);
          let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
          let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
          neighborKeys = neighborKeys.filter(neighborKey => this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGenSettings[tileBiome].biomeGroup.includes(this.hexMapData.getEntry(neighborKey.q, neighborKey.r).biome))
-         neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.hexMapData.utils.join(neighborKey.q, neighborKey.r)))
+         neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey.q, neighborKey.r)))
 
 
          if (neighborKeys.length == 0) return keyStrSet
 
          for (let i = 0; i < neighborKeys.length; i++) {
             //recursion
-            let keyStr = this.hexMapData.utils.join(neighborKeys[i].q, neighborKeys[i].r)
+            let keyStr = this.commonUtils.join(neighborKeys[i].q, neighborKeys[i].r)
             keyStrSet = getBiomeSet(keyStr, keyStrSet)
          }
 
@@ -212,7 +214,7 @@ export default class HexMapBuilderClass {
       }
 
       let smoothTile = (keyString) => {
-         let keyObj = this.hexMapData.utils.split(keyString);
+         let keyObj = this.commonUtils.split(keyString);
          let tileBiome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
 
@@ -255,7 +257,7 @@ export default class HexMapBuilderClass {
       while (keyStrings.length > 0) {
 
          //get biome
-         let keyObj = this.hexMapData.utils.split(keyStrings[0])
+         let keyObj = this.commonUtils.split(keyStrings[0])
          let biome = this.hexMapData.getEntry(keyObj.q, keyObj.r).biome
 
          //get tile set
@@ -265,7 +267,7 @@ export default class HexMapBuilderClass {
 
          //remove set from keyStrings
          for (let i = 0; i < keyStrArr.length; i++) {
-            let keyStrArrObj = this.hexMapData.utils.split(keyStrArr[i])
+            let keyStrArrObj = this.commonUtils.split(keyStrArr[i])
             let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
             if (keyStrArrObjBiome == biome) {
@@ -277,7 +279,7 @@ export default class HexMapBuilderClass {
          //Check size of biome set and fix tiles if neccessary
          if (keyStrArr.length < this.biomeGenSettings[biome].minBiomeSmoothing) {
             while (keyStrArr.length > 0) {
-               let keyStrArrObj = this.hexMapData.utils.split(keyStrArr[0])
+               let keyStrArrObj = this.commonUtils.split(keyStrArr[0])
                let keyStrArrObjBiome = this.hexMapData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
 
@@ -300,7 +302,7 @@ export default class HexMapBuilderClass {
          reduced = false
          for (let [key, value] of this.hexMapData.getMap()) {
 
-            let keyObj = this.hexMapData.utils.split(key);
+            let keyObj = this.commonUtils.split(key);
             let tile = this.hexMapData.getEntry(keyObj.q, keyObj.r)
             let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
 

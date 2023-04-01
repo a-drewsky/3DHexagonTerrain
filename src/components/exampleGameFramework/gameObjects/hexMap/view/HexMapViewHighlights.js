@@ -7,7 +7,7 @@ export default class HexMapViewSelectionClass {
 
       this.hexMapData = hexMapData
       this.camera = camera
-      this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
+      this.commonUtils = new HexMapCommonUtilsClass()
       this.renderer = new HexMapRendererSelectionsClass(hexMapData, camera, settings, images)
 
    }
@@ -29,7 +29,7 @@ export default class HexMapViewSelectionClass {
 
          let value = this.hexMapData.getEntry(keyObj.q, keyObj.r)
 
-         let tilePos = this.commonUtils.hexPositionToXYPosition(this.hexMapData.utils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height)
+         let tilePos = this.hexMapData.hexPositionToXYPosition(this.commonUtils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height, this.camera.rotation)
 
          if (!value.selectionImages[selectionObj.selection] || !value.selectionImages[selectionObj.selection][this.camera.rotation]) {
             this.renderer.renderSelectionImage(value, selectionObj.selection)

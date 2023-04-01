@@ -1,3 +1,5 @@
+import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+
 export default class HexMapRendererSpritesStructuresClass{
 
     constructor(hexMapData, camera, images, utils){
@@ -5,6 +7,7 @@ export default class HexMapRendererSpritesStructuresClass{
         this.camera = camera
         this.images = images
         this.utils = utils
+        this.commonUtils = new HexMapCommonUtilsClass()
     }
 
     render = (terrainObject) => {
@@ -99,7 +102,7 @@ export default class HexMapRendererSpritesStructuresClass{
 
                     this.camera.rotation = rotation;
                     let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-                    let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+                    let keyObj = this.commonUtils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
                     let shadowImage = this.utils.cropStructureShadow(sprite.shadowImages[rotation], sprite.shadowSize, sprite.shadowOffset, keyObj, rotatedMap)
@@ -123,7 +126,7 @@ export default class HexMapRendererSpritesStructuresClass{
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+            let keyObj = this.commonUtils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
             let croppedImage = this.utils.cropOutTiles(terrainObject.images[0][i], sprite.spriteSize, sprite.spriteOffset, keyObj, rotatedMap)
             let darkenedImage = this.utils.darkenSprite(croppedImage, terrainObject)

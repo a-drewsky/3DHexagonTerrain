@@ -1,5 +1,5 @@
-import HexMapRendererMapClass from "../renderers/HexMapRendererMap";
 import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
+import HexMapViewUtilsClass from "../utils/HexMapViewUtils"
 
 
 export default class HexMapViewMapClass {
@@ -10,7 +10,8 @@ export default class HexMapViewMapClass {
         this.camera = camera
 
         this.images = images
-        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
+        this.commonUtils = new HexMapCommonUtilsClass()
+        this.viewUtils = new HexMapViewUtilsClass(camera)
 
         this.canvasDims = {
             width: canvas.width,
@@ -33,14 +34,14 @@ export default class HexMapViewMapClass {
 
         for (let [key, value] of rotatedMap) {
 
-            let keyObj = this.hexMapData.utils.split(key)
+            let keyObj = this.commonUtils.split(key)
             let tileObj = this.hexMapData.getEntry(value.q, value.r)
 
             if(!tileObj.images || tileObj.images.length == 0) continue
 
-            let tilePos = this.commonUtils.hexPositionToXYPosition(keyObj, tileObj.height)
+            let tilePos = this.hexMapData.hexPositionToXYPosition(keyObj, tileObj.height, this.camera.rotation)
 
-            if (this.commonUtils.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.camera.rotation].width, height: tileObj.images[this.camera.rotation].height }, this.canvasDims) == true) {
+            if (this.viewUtils.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.camera.rotation].width, height: tileObj.images[this.camera.rotation].height }, this.canvasDims) == true) {
                 drawctx.drawImage(tileObj.images[this.camera.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.camera.rotation].width, tileObj.images[this.camera.rotation].height)
             }
 

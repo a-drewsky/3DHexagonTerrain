@@ -1,12 +1,5 @@
 export default class HexMapCommonUtilsClass {
 
-    constructor(hexMapData, camera) {
-
-        this.hexMapData = hexMapData
-        this.camera = camera
-
-    }
-
     //round floating hex coords to nearest integer hex coords
     roundToNearestHex = (q, r) => {
         let fracQ = q;
@@ -36,43 +29,46 @@ export default class HexMapCommonUtilsClass {
 
     }
 
-    hexPositionToXYPosition = (keyObj, tileHeight) => {
-        let xOffset;
-        let yOffset;
-
-        if (this.camera.rotation % 2 == 1) {
-            xOffset = this.hexMapData.flatTopVecQ.x * keyObj.q + this.hexMapData.flatTopVecR.x * keyObj.r;
-            yOffset = this.hexMapData.flatTopVecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * keyObj.r * this.hexMapData.squish;
-        } else {
-            xOffset = this.hexMapData.VecQ.x * keyObj.q + this.hexMapData.VecR.x * keyObj.r;
-            yOffset = this.hexMapData.VecQ.y * keyObj.q * this.hexMapData.squish + this.hexMapData.VecR.y * keyObj.r * this.hexMapData.squish;
-        }
-
-        return {
-            x: this.hexMapData.posMap.get(this.camera.rotation).x + xOffset,
-            y: this.hexMapData.posMap.get(this.camera.rotation).y + yOffset - tileHeight * this.hexMapData.tileHeight
-        }
-
-    }
-
-    onScreenCheck = (spritePos, spriteSize, canvasDims) => {
-
-        let zoom = this.camera.zoomAmount * this.camera.zoom
-
-        let position = this.camera.position
-
-        //check if sprite is on screen
-        if (spritePos.x < position.x - spriteSize.width
-            || spritePos.y < position.y - spriteSize.height
-            || spritePos.x > position.x + canvasDims.width + zoom
-            || spritePos.y > position.y + canvasDims.height + zoom * (canvasDims.height / canvasDims.width)) return false;
-
-        return true
-    }
-
     checkImagesLoaded = (spriteObject) => {
         if (!spriteObject.images || spriteObject.images.length == 0) return false
         return true
+    }
+
+    split = (key) => {
+        let nums = key.split(',').map(Number);
+        return {
+            q: nums[0],
+            r: nums[1]
+        }
+    }
+
+    join = (q, r) => {
+        return [q, r].join(',')
+    }
+
+    rotateTile = (q, r, rotation) => {
+        let s = -q - r;
+        let angle = rotation * 15;
+        if (rotation % 2 == 1) angle -= 15;
+
+        let newQ = q;
+        let newR = r;
+        let newS = s;
+
+        for (let i = 0; i < angle; i += 30) {
+            q = -newR;
+            r = -newS;
+            s = -newQ;
+
+            newQ = q;
+            newR = r;
+            newS = s;
+        }
+
+        return {
+            q: newQ,
+            r: newR
+        }
     }
 
 }

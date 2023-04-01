@@ -20,7 +20,7 @@ export default class HexMapSelectionsClass {
     getSelection = (q, r) => {
         if(this.hover && this.hover.q == q && this.hover.r == r) return 'hover'
         if(this.tile && this.tile.q == q && this.tile.r == r) return 'tile'
-        if(this.unit && this.unit.q == q && this.unit.r == r) return 'unit'
+        if(this.unit && this.unit.data.q == q && this.unit.data.r == r) return 'unit'
         if(this.target && this.target.q == q && this.target.r == r) return 'target'
         if(this.path.some(val => val.q == q && val.r == r)) return 'path'
         if(this.pathing.movement.some(val => val.q == q && val.r == r)) return 'movement'

@@ -1,3 +1,5 @@
+import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+
 export default class HexMapRendererSpritesModifiersClass {
 
     constructor(hexMapData, camera, settings, images, utils){
@@ -7,6 +9,7 @@ export default class HexMapRendererSpritesModifiersClass {
         this.utils = utils
 
         this.modifierSettings = settings.MODIFIERS
+        this.commonUtils = new HexMapCommonUtilsClass()
     }
 
     render = (terrainObject) => {
@@ -197,7 +200,7 @@ export default class HexMapRendererSpritesModifiersClass {
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+            let keyObj = this.commonUtils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
             let shadowImage = this.utils.cropStructureShadow(terrainObject.shadowImages[0][i], this.images.modifier.shadowSize, this.images.modifier.shadowOffset, keyObj, rotatedMap, true)
@@ -211,7 +214,7 @@ export default class HexMapRendererSpritesModifiersClass {
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+            let keyObj = this.commonUtils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
             let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifier.size, this.images.modifier.offset, keyObj, rotatedMap, true)
@@ -273,7 +276,7 @@ export default class HexMapRendererSpritesModifiersClass {
 
             this.camera.rotation = i;
             let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.hexMapData.utils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
+            let keyObj = this.commonUtils.rotateTile(terrainObject.position.q, terrainObject.position.r, this.camera.rotation)
 
 
             let croppedImageTop = this.utils.cropOutTiles(terrainObject.images[0][i].top, this.images.modifier.singleImageSize, this.images.modifier.singleImageOffset, keyObj, rotatedMap, true)

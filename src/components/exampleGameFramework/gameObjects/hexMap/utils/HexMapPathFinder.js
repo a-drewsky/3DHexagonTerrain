@@ -1,8 +1,9 @@
 export default class HexMapPathFinderClass {
 
-    constructor(hexMapData, camera) {
+    constructor(hexMapData, unitManager, camera) {
 
         this.hexMapData = hexMapData
+        this.unitManager = unitManager
         this.camera = camera
 
     }
@@ -42,7 +43,7 @@ export default class HexMapPathFinderClass {
     isValid = (q, r) => {
         let terrain = this.hexMapData.getTerrain(q, r)
         if(terrain != null && terrain.type != 'modifier') return false
-        let unit = this.hexMapData.units.getUnit(q, r)
+        let unit = this.unitManager.getUnit(q, r)
         if(unit != null) return false
         return true
     }

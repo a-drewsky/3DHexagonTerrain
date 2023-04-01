@@ -1,13 +1,13 @@
 import HexMapRendererUtilsClass from "../../utils/HexMapRendererUtils";
 import HexMapRendererSpritesModifiersClass from "./HexMapRendererSpritesModifiers";
 import HexMapRendererSpritesStructuresClass from "./HexMapRendererSpritesStructures";
-import HexMapRendererSpritesUnitsClass from "./HexMapRendererSpritesUnits";
 
 export default class HexMapRendererSpritesClass {
 
-    constructor(hexMapData, camera, settings, images) {
+    constructor(hexMapData, unitManager, camera, settings, images) {
 
         this.hexMapData = hexMapData
+        this.unitManager = unitManager
         this.camera = camera
         this.images = images
         this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images);
@@ -15,7 +15,6 @@ export default class HexMapRendererSpritesClass {
 
         this.modifiers = new HexMapRendererSpritesModifiersClass(hexMapData, camera, settings, images, this.utils)
         this.structures = new HexMapRendererSpritesStructuresClass(hexMapData, camera, images, this.utils)
-        this.units = new HexMapRendererSpritesUnitsClass(hexMapData, camera, images, this.utils)
 
     }
 
@@ -27,18 +26,6 @@ export default class HexMapRendererSpritesClass {
         if (terrainObject.type == 'modifier') this.modifiers.render(terrainObject)
         else this.structures.render(terrainObject)
 
-    }
-
-    prerenderUnits = () => {
-        for (let i = 0; i < this.hexMapData.units.unitList.length; i++) {
-
-            let unitObject = this.hexMapData.units.unitList[i]
-
-            if (unitObject == null) continue
-
-            this.units.render(unitObject)
-
-        }
     }
 
 }

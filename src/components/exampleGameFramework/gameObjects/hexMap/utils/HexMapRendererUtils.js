@@ -11,7 +11,7 @@ export default class HexMapRendererUtilsClass {
 
         this.images = images
 
-        this.commonUtils = new HexMapCommonUtilsClass(hexMapData, camera)
+        this.commonUtils = new HexMapCommonUtilsClass()
 
         this.shadowPositions = {
             0: {
@@ -78,17 +78,17 @@ export default class HexMapRendererUtilsClass {
         let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
 
         let tableDims = {
-            q1: this.hexMapData.utils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).q,
-            r1: this.hexMapData.utils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).r,
+            q1: this.commonUtils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).q,
+            r1: this.commonUtils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).r,
 
-            q2: this.hexMapData.utils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).q,
-            r2: this.hexMapData.utils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).r,
+            q2: this.commonUtils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).q,
+            r2: this.commonUtils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).r,
 
-            q3: this.hexMapData.utils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).q,
-            r3: this.hexMapData.utils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).r,
+            q3: this.commonUtils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).q,
+            r3: this.commonUtils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).r,
 
-            q4: this.hexMapData.utils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).q,
-            r4: this.hexMapData.utils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).r
+            q4: this.commonUtils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).q,
+            r4: this.commonUtils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).r
         }
 
         let hexVecQ = this.camera.rotation % 2 == 0 ? { ...this.hexMapData.VecQ } : { ...this.hexMapData.flatTopVecQ }
@@ -236,8 +236,8 @@ export default class HexMapRendererUtilsClass {
         let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
         let tile = this.hexMapData.getEntry(tileRef.q, tileRef.r)
         let tileHeight = tile.height
-        let ogPos = this.commonUtils.hexPositionToXYPosition(keyObj, tileHeight)
-        let newPos = this.commonUtils.hexPositionToXYPosition(tileObj, tileHeight)
+        let ogPos = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        let newPos = this.hexMapData.hexPositionToXYPosition(tileObj, tileHeight, this.camera.rotation)
 
         let diff = {
             x: newPos.x - ogPos.x,
@@ -310,7 +310,7 @@ export default class HexMapRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.commonUtils.hexPositionToXYPosition(keyObj, tileHeight)
+        zeroPoint = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -357,7 +357,7 @@ export default class HexMapRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.commonUtils.hexPositionToXYPosition(keyObj, tileHeight)
+        zeroPoint = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -440,7 +440,7 @@ export default class HexMapRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.commonUtils.hexPositionToXYPosition(keyObj, tileHeight)
+        zeroPoint = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -522,7 +522,7 @@ export default class HexMapRendererUtilsClass {
         let tileHeight = height
         let zeroPoint
 
-        zeroPoint = this.commonUtils.hexPositionToXYPosition(keyObj, tileHeight)
+        zeroPoint = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1

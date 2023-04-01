@@ -1,6 +1,5 @@
-import HexMapDataUnitsClass from "./HexMapDataUnits";
-import HexMapSelectionsClass from "./HexMapSelections";
-import HexMapDataUtilsClass from "./utils/HexMapDataUtils";
+import HexMapSelectionsClass from "./HexMapDataSelections";
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapDataClass {
 
@@ -18,10 +17,6 @@ export default class HexMapDataClass {
 
       this.renderBackground = true
 
-      this.utils = new HexMapDataUtilsClass()
-      this.units = new HexMapDataUnitsClass()
-      this.selections = new HexMapSelectionsClass()
-
       this.tileMap = new Map();
       this.shadowMap = new Map();
       this.posMap = new Map();
@@ -38,6 +33,9 @@ export default class HexMapDataClass {
       this.flatTopVecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
       this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
       this.sideLength = Math.PI / 3;
+
+      this.utils = new HexMapCommonUtilsClass()
+      this.selections = new HexMapSelectionsClass()
 
       //will be player data
       this.resources = 0
@@ -372,4 +370,24 @@ export default class HexMapDataClass {
       return this.tileMap.has(this.utils.join(q, r));
    }
    //END CHECK METHODS
+
+   //HELPER METHODS
+   hexPositionToXYPosition = (keyObj, tileHeight, rotation) => {
+      let xOffset;
+      let yOffset;
+
+      if (rotation % 2 == 1) {
+         xOffset = this.flatTopVecQ.x * keyObj.q + this.flatTopVecR.x * keyObj.r;
+         yOffset = this.flatTopVecQ.y * keyObj.q * this.squish + this.flatTopVecR.y * keyObj.r * this.squish;
+      } else {
+         xOffset = this.VecQ.x * keyObj.q + this.VecR.x * keyObj.r;
+         yOffset = this.VecQ.y * keyObj.q * this.squish + this.VecR.y * keyObj.r * this.squish;
+      }
+
+      return {
+         x: this.posMap.get(rotation).x + xOffset,
+         y: this.posMap.get(rotation).y + yOffset - tileHeight * this.tileHeight
+      }
+
+   }
 }

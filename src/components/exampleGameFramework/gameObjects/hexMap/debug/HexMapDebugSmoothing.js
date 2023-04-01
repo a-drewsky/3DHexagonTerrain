@@ -1,4 +1,4 @@
-import HexMapDataClass from "../HexMapData"
+import HexMapDataClass from "../data/HexMapData"
 import HexMapBuilderClass from "../builders/HexMapBuilder"
 import HexMapControllerClass from "../controllers/HexMapController"
 import HexMapViewClass from "../view/HexMapView"

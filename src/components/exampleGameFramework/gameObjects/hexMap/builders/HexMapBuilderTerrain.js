@@ -1,5 +1,6 @@
 import noise from "../../../utilities/perlin";
 import HexMapBuilderUtilsClass from "../utils/HexMapBuilderUtils";
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapBuilderTerrainClass {
 
@@ -19,6 +20,7 @@ export default class HexMapBuilderTerrainClass {
       this.config = config
 
       this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
+      this.commonUtils = new HexMapCommonUtilsClass()
 
    }
 
@@ -178,7 +180,7 @@ export default class HexMapBuilderTerrainClass {
       }
 
       for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.hexMapData.utils.split(key);
+         let keyObj = this.commonUtils.split(key);
 
          let spawnChance = {
             savannaTree: Math.random(),
@@ -215,7 +217,7 @@ export default class HexMapBuilderTerrainClass {
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
       for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.hexMapData.utils.split(key);
+         let keyObj = this.commonUtils.split(key);
 
          //feature generation
          let tileTreeNoise = {

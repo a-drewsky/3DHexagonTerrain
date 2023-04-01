@@ -1,4 +1,5 @@
 import HexMapRendererUtilsClass from "../utils/HexMapRendererUtils"
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
 
 export default class HexMapRendererSelectionsClass {
 
@@ -8,6 +9,7 @@ export default class HexMapRendererSelectionsClass {
         this.camera = camera
         this.images = images.highlight
         this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
+        this.commonUtils = new HexMapCommonUtilsClass()
 
     }
 
@@ -35,7 +37,7 @@ export default class HexMapRendererSelectionsClass {
 
         //crop image
         let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
-        let keyObj = this.hexMapData.utils.rotateTile(tileObj.position.q, tileObj.position.r, this.camera.rotation)
+        let keyObj = this.commonUtils.rotateTile(tileObj.position.q, tileObj.position.r, this.camera.rotation)
 
         let croppedImage = this.utils.cropOutTiles(tileObj.selectionImages[selection][this.camera.rotation], { width: 1, height: 1 }, { x: 0, y: 0 }, keyObj, rotatedMap)
         tileObj.selectionImages[selection][this.camera.rotation] = croppedImage

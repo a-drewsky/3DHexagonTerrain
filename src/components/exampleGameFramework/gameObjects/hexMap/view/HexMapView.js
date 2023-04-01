@@ -1,14 +1,16 @@
 import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./sprites/HexMapViewSprites";
 import HexMapViewSelectionClass from "./HexMapViewHighlights";
+import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, settings, images, renderer, uiController) {
+   constructor(ctx, canvas, camera, hexMapData, unitManager, settings, images, renderer, uiController) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
       this.hexMapData = hexMapData;
+      this.unitManager = unitManager
 
       this.drawCanvas = null;
       this.drawctx = null;
@@ -30,8 +32,9 @@ export default class HexMapViewClass {
       this.images = images;
 
       this.mapView = new HexMapViewMapClass(hexMapData, camera, this.images, canvas);
-      this.spriteView = new HexMapViewSpritesClass(hexMapData, camera, images, canvas, settings);
+      this.spriteView = new HexMapViewSpritesClass(hexMapData, unitManager, camera, images, canvas, settings);
       this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, settings, images);
+      this.commonUtils = new HexMapCommonUtilsClass()
 
    }
 
@@ -126,7 +129,7 @@ export default class HexMapViewClass {
             break;
       }
 
-      let camPos = this.hexMapData.utils.rotateTile(camQ, camR, this.camera.rotation)
+      let camPos = this.commonUtils.rotateTile(camQ, camR, this.camera.rotation)
 
       let mappos = this.hexMapData.posMap.get(this.camera.rotation)
 
