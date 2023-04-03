@@ -4,9 +4,9 @@ import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
 
 export default class HexMapViewSpritesUnitsClass {
 
-    constructor(hexMapData, unitManager, camera, settings, images, canvasDims, travelTime, jumpAmount) {
+    constructor(hexMapData, spriteManager, camera, settings, images, canvasDims, travelTime, jumpAmount) {
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
         this.camera = camera
         this.images = images
         this.rendererUtils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
@@ -19,7 +19,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     draw = (drawctx, spriteReference) => {
 
-        let spriteObject = this.unitManager.unitList[spriteReference.id]
+        let spriteObject = this.spriteManager.units.unitList[spriteReference.id]
 
         if (spriteObject.data.state.current.type == 'moving') {
             this.drawMovingUnit(drawctx, spriteReference, spriteObject)
@@ -37,7 +37,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     drawStaticShadow = (drawctx, spriteReference) => {
 
-        let spriteObject = this.unitManager.unitList[spriteReference.id]
+        let spriteObject = this.spriteManager.units.unitList[spriteReference.id]
 
         if (!spriteObject.data.shadowImages || spriteObject.data.shadowImages.length == 0) return
 
@@ -75,7 +75,7 @@ export default class HexMapViewSpritesUnitsClass {
 
     drawShadow = (drawctx, spriteReference) => {
 
-        let spriteObject = this.unitManager.unitList[spriteReference.id]
+        let spriteObject = this.spriteManager.units.unitList[spriteReference.id]
 
         if (spriteObject.data.destination == null) {
             this.drawStaticShadow(drawctx, spriteReference)
@@ -143,7 +143,7 @@ export default class HexMapViewSpritesUnitsClass {
     }
 
     drawStaticUnit = (drawctx, spriteReference) => {
-        let spriteObject = this.unitManager.unitList[spriteReference.id]
+        let spriteObject = this.spriteManager.units.unitList[spriteReference.id]
 
         let keyObj = {
             q: spriteReference.q,

@@ -3,8 +3,9 @@ import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
 
 export default class HexMapViewSpritesStructuresClass {
 
-    constructor(hexMapData, camera, images, canvasDims) {
+    constructor(hexMapData, spriteManager, camera, images, canvasDims) {
         this.hexMapData = hexMapData
+        this.spriteManager = spriteManager
         this.camera = camera
         this.images = images
         this.commonUtils = new HexMapCommonUtilsClass()
@@ -13,7 +14,7 @@ export default class HexMapViewSpritesStructuresClass {
     }
 
    draw = (drawctx, spriteReference) => {
-      let spriteObject = this.hexMapData.getEntry(spriteReference.id.q, spriteReference.id.r).terrain
+      let spriteObject = this.spriteManager.structures.getStructure(spriteReference.id.q, spriteReference.id.r)
 
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
@@ -22,7 +23,7 @@ export default class HexMapViewSpritesStructuresClass {
          r: spriteReference.r
       }
 
-      let sprite = this.images[spriteObject.type][spriteObject.sprite]
+      let sprite = this.images[spriteObject.data.type][spriteObject.data.sprite]
 
       let spriteSize
 
@@ -38,7 +39,7 @@ export default class HexMapViewSpritesStructuresClass {
 
       if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
       drawctx.drawImage(
-         spriteObject.images[0][this.camera.rotation],
+         spriteObject.data.images[0][this.camera.rotation],
          spritePos.x,
          spritePos.y,
          spriteSize.width,

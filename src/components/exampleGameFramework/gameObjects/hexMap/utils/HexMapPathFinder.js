@@ -1,9 +1,9 @@
 export default class HexMapPathFinderClass {
 
-    constructor(hexMapData, unitManager, camera) {
+    constructor(hexMapData, spriteManager, camera) {
 
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
         this.camera = camera
 
     }
@@ -41,17 +41,17 @@ export default class HexMapPathFinderClass {
     }
 
     isValid = (q, r) => {
-        let terrain = this.hexMapData.getTerrain(q, r)
-        if(terrain != null && terrain.type != 'modifier') return false
-        let unit = this.unitManager.getUnit(q, r)
+        let terrain = this.spriteManager.structures.getStructure(q, r)
+        if(terrain != null && terrain.data.type != 'modifier') return false
+        let unit = this.spriteManager.units.getUnit(q, r)
         if(unit != null) return false
         return true
     }
 
     getTileCost = (tile) => {
         if(this.hexMapData.getEntry(tile.q, tile.r).biome == 'water') return 2
-        let terrain = this.hexMapData.getTerrain(tile.q, tile.r)
-        if(terrain != null && terrain.name == 'Forest') return 1
+        let terrain = this.spriteManager.structures.getStructure(tile.q, tile.r)
+        if(terrain != null && terrain.data.name == 'Forest') return 1
         return 0
     }
 

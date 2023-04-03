@@ -1,11 +1,11 @@
 import noise from "../../../utilities/perlin";
-import HexMapBuilderUtilsClass from "../utils/HexMapBuilderUtils";
 import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, settings, config) {
+   constructor(hexMapData, spriteManager, utils, settings, config) {
       this.hexMapData = hexMapData;
+      this.spriteManager = spriteManager
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
       this.cellSize = settings.CELL_SIZE
@@ -17,9 +17,9 @@ export default class HexMapBuilderTerrainClass {
 
       this.biomeGenSettings = settings.BIOME_GENERATION
 
-      this.config = config
+      // this.config = config
 
-      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
+      this.utils = utils
       this.commonUtils = new HexMapCommonUtilsClass()
 
    }
@@ -73,11 +73,7 @@ export default class HexMapBuilderTerrainClass {
 
             this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
-
-            let terrain = this.config.bunker(selectedTilePos)
-
-            selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
-            this.utils.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
+            this.spriteManager.structures.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
 
          }
       }
@@ -160,11 +156,7 @@ export default class HexMapBuilderTerrainClass {
                if (closeSection) mineType = closeSpriteList[Math.floor(Math.random() * closeSpriteList.length)]
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
-
-               let terrain = this.config[mineType](selectedTilePos)
-
-               selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
-               this.utils.setStructure(selectedTilePos.q, selectedTilePos.r, terrain, selectedTile)
+               this.spriteManager.structures.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
             }
 
          }
@@ -189,15 +181,13 @@ export default class HexMapBuilderTerrainClass {
 
          //generate savanna trees
          if ((value.biome == 'savanna' || value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
-            let terrain = this.config.savannaTree(keyObj)
-            this.utils.setStructure(keyObj.q, keyObj.r, terrain, value)
+            this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'savannaTree')
          }
 
          //generate large rocks
-         let terrain = this.hexMapData.getTerrain(keyObj.q, keyObj.r);
+         let terrain = this.spriteManager.structures.getStructure(keyObj.q, keyObj.r)
          if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
-            let terrain = this.config.largeRock(keyObj)
-            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
+            this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'largeRock')
          }
 
       }
@@ -233,31 +223,26 @@ export default class HexMapBuilderTerrainClass {
 
          if (tileTreeNoise[value.biome] > this.biomeGenSettings[value.biome].terrainGenThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
 
-            let terrain
-
             switch (value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  terrain = this.config.oakTrees(keyObj)
+                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'oakTrees')
                   break;
                case 'tundra':
                case 'snowhill':
-                  terrain = this.config.spruceTrees(keyObj)
+                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
                   break;
                case 'desert':
                case 'sandhill':
-                  terrain = this.config.cacti(keyObj)
+                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'cacti')
                   break;
                default:
                   continue;
             }
 
-            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
 
          } else if (this.biomeGenSettings[value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[value.biome].rockGenThreshold) {
-            let terrain = this.config.smallRocks(keyObj)
-
-            this.hexMapData.setTerrain(keyObj.q, keyObj.r, terrain)
+            this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'smallRocks')
          }
 
 

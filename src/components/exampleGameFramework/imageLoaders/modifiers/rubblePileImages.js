@@ -1,8 +1,8 @@
-import ModifierImageLoaderClass from './modifierImageLoader'
+import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
 import rubble_pile from '../../images/modifiers/rubble_pile.png'
 
-export default class RubblePileImagesClass extends ModifierImageLoaderClass {
+export default class RubblePileImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 

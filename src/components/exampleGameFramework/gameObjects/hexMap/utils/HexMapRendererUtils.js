@@ -136,9 +136,9 @@ export default class HexMapRendererUtilsClass {
         return tempCanvas
     }
 
-    darkenSprite = (croppedImage, terrainObject) => {
+    darkenSprite = (croppedImage, structureData) => {
 
-        let shadowHeight = terrainObject.tileHeight + 1
+        let shadowHeight = structureData.height + 1
 
         let distance = 0
         let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
@@ -151,16 +151,16 @@ export default class HexMapRendererUtilsClass {
                 let startingPoint = shadowPosition.startingPoints[i]
 
                 if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
-                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
+                    if (this.hexMapData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
 
                         croppedImage = this.darkenImage(croppedImage)
                         cropped = true
                         break;
                     }
                 } else {
-                    if (this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.hexMapData.getEntry(terrainObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, terrainObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(terrainObject.position.q, terrainObject.position.r).height + shadowHeight) {
+                    if (this.hexMapData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.hexMapData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.hexMapData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight) {
 
                         croppedImage = this.darkenImage(croppedImage)
                         cropped = true
@@ -184,8 +184,8 @@ export default class HexMapRendererUtilsClass {
         return croppedImage;
     }
 
-    darkenSpriteJump = (croppedImage, terrainObject, closestTile, height) => {
-        let shadowHeight = terrainObject.tileHeight + 1
+    darkenSpriteJump = (croppedImage, structureData, closestTile, height) => {
+        let shadowHeight = structureData.height + 1
 
         let distance = 0
         let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]

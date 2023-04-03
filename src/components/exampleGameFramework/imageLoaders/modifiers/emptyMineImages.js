@@ -1,8 +1,8 @@
-import ModifierImageLoaderClass from './modifierImageLoader'
+import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
 import empty_mine from '../../images/modifiers/empty_mine.png'
 
-export default class EmptyMineImagesClass extends ModifierImageLoaderClass {
+export default class EmptyMineImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 

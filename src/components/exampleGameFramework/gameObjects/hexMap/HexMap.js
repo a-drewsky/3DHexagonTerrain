@@ -6,7 +6,7 @@ import HexMapSettingsClass from "./config/HexMapSettings"
 import HexMapRendererClass from "./renderers/HexMapRenderer"
 import HexMapUpdaterClass from "./updaters/HexMapUpdater"
 import CameraClass from "../camera/Camera"
-import HexMapUnitManagerClass from "./HexMapUnitManager"
+import HexMapSpriteManagerClass from "./managers/HexMapSpriteManager"
 
 export default class HexMapClass {
 
@@ -18,17 +18,17 @@ export default class HexMapClass {
 
         this.data = new HexMapDataClass(this.settings, canvas)
 
-        this.unitManager = new HexMapUnitManagerClass(this.data, this.camera.data, this.images, this.settings)
+        this.spriteManager = new HexMapSpriteManagerClass(this.data, this.camera.data, this.images, this.settings)
 
-        this.renderer = new HexMapRendererClass(this.data, this.unitManager, this.camera.data, this.settings, images)
+        this.renderer = new HexMapRendererClass(this.data, this.spriteManager, this.camera.data, this.settings, images)
 
-        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.unitManager, this.settings, images, this.renderer, uiController)
+        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.spriteManager, this.settings, images, this.renderer, uiController)
 
-        this.builder = new HexMapBuilderClass(this.data, this.settings)
+        this.builder = new HexMapBuilderClass(this.data, this.spriteManager, this.settings)
 
-        this.controller = new HexMapControllerClass(this.data, this.unitManager, this.camera.controller, this.camera.data, canvas, images, this.settings, uiController, this.renderer, globalState)
+        this.controller = new HexMapControllerClass(this.data, this.spriteManager, this.camera.controller, this.camera.data, canvas, images, this.settings, uiController, this.renderer, globalState)
 
-        this.updater = new HexMapUpdaterClass(this.data, this.unitManager, images, this.settings, this.renderer, this.camera.controller, this.camera.data, canvas, uiController, globalState)
+        this.updater = new HexMapUpdaterClass(this.data, this.spriteManager, images, this.settings, this.renderer, this.camera.controller, this.camera.data, canvas, uiController, globalState)
 
     }
 

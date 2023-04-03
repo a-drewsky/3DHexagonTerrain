@@ -6,9 +6,10 @@ import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, settings) {
+   constructor(hexMapData, spriteManager, settings) {
 
       this.hexMapData = hexMapData;
+      this.spriteManager = spriteManager
 
       this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
       this.lowTerrainGenerationRanges = settings.LOW_TERRAIN_GENERATION_RANGES
@@ -26,8 +27,8 @@ export default class HexMapBuilderClass {
       this.mapSizeSettings = settings.MAP_SIZES
 
       this.config = new HexMapConfigClass()
-      this.utils = new HexMapBuilderUtilsClass(hexMapData, settings, this.config)
-      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, settings, this.config);
+      this.utils = new HexMapBuilderUtilsClass(hexMapData, spriteManager, settings, this.config)
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, spriteManager, this.utils, settings, this.config);
       this.commonUtils = new HexMapCommonUtilsClass()
 
    }

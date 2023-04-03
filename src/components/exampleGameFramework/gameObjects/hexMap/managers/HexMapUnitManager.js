@@ -1,4 +1,4 @@
-import UnitClass from '../unit/Unit'
+import UnitClass from '../../unit/Unit'
 
 export default class HexMapUnitManagerClass {
 
@@ -17,6 +17,12 @@ export default class HexMapUnitManagerClass {
         let index = this.unitList.findIndex(unit => unit.data.position.q == q && unit.data.position.r == r)
         if (index == -1) return null
         return this.unitList[index]
+    }
+
+    hasUnit = (q, r) => {
+        let index = this.unitList.findIndex(unit => unit.data.position.q == q && unit.data.position.r == r)
+        if (index == -1) return false
+        return true
     }
 
     //delete unit at position (q, r)

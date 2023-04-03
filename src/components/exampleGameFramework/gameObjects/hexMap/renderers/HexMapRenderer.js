@@ -5,14 +5,14 @@ import HexMapRendererTableClass from "./HexMapRendererTable";
 
 export default class HexMapRendererClass {
 
-    constructor(hexMapData, unitManager, camera, settings, images) {
+    constructor(hexMapData, spriteManager, camera, settings, images) {
         this.mapRenderer = new HexMapRendererMapClass(hexMapData, camera, settings, images)
-        this.spriteRenderer = new HexMapRendererSpritesClass(hexMapData, unitManager, camera, settings, images)
+        // this.spriteRenderer = new HexMapRendererSpritesClass(hexMapData, spriteManager, camera, settings, images)
         this.selectionRenderer = new HexMapRendererSelectionsClass(hexMapData, camera, settings, images)
         this.tableRenderer = new HexMapRendererTableClass(hexMapData, camera, settings, images)
 
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
 
         this.renderStack = []
     }
@@ -36,10 +36,8 @@ export default class HexMapRendererClass {
             let tileObj = this.hexMapData.getEntry(tileToRender.q, tileToRender.r)
             this.mapRenderer.renderTileStack(tileObj)
 
-            let terrainObj = this.hexMapData.getTerrain(tileToRender.q, tileToRender.r)
-
-            if (terrainObj !== null) {
-                this.spriteRenderer.prerenderTerrain(terrainObj);
+            if (this.spriteManager.structures.hasStructure(tileToRender.q, tileToRender.r)) {
+                this.spriteManager.structures.getStructure(tileToRender.q, tileToRender.r).renderer.render()
             }
 
             if (this.renderStack.length == 0) console.log("done rendering")

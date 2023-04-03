@@ -53,10 +53,6 @@ export default class HexMapDataClass {
       this.tileMap.delete(q + "," + r);
    }
 
-   setTerrain = (q, r, terrain) => {
-      this.getEntry(q, r).terrain = terrain
-   }
-
    setDimensions = (x, y) => {
       this.x = x;
       this.y = y;
@@ -222,11 +218,6 @@ export default class HexMapDataClass {
    getEntryRotated = (q, r, rotation) => {
       let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(q, r))
       return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
-   }
-
-   //return index of terrain at tile (q, r) or -1 if the tile has no terrain
-   getTerrain = (q, r) => {
-      return this.getEntry(q, r).terrain
    }
 
    //returns the tileMap

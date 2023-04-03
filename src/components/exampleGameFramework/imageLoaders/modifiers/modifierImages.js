@@ -16,39 +16,6 @@ export default class ModifiersImagesClass {
         this.rubble_pile = new RubblePileImagesClass()
         this.empty_mine = new EmptyMineImagesClass()
 
-        this.size = {
-            width: 1,
-            height: 2
-        }
-        this.offset = {
-            x: 0,
-            y: 1
-        }
-        this.singleImageSize = {
-            width: 1,
-            height: 1.5
-        }
-        this.singleImageOffset = {
-            x: 0,
-            y: 0.5
-        }
-        this.modifierSize = {
-            width: 1,
-            height: 1.5
-        }
-        this.shadowSpriteSize = {
-            width: 1,
-            height: 1.5
-        }
-        this.shadowSize = {
-            width: 2,
-            height: 2
-        }
-        this.shadowOffset = {
-            x: 0.5,
-            y: 1
-        }
-
     }
 
     loadImages = (startGame) => {

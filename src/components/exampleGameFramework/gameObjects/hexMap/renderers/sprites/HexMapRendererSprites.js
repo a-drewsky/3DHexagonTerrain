@@ -4,10 +4,10 @@ import HexMapRendererSpritesStructuresClass from "./HexMapRendererSpritesStructu
 
 export default class HexMapRendererSpritesClass {
 
-    constructor(hexMapData, unitManager, camera, settings, images) {
+    constructor(hexMapData, spriteManager, camera, settings, images) {
 
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
         this.camera = camera
         this.images = images
         this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images);
@@ -19,13 +19,13 @@ export default class HexMapRendererSpritesClass {
     }
 
 
-    prerenderTerrain = (terrainObject) => {
+    // prerenderTerrain = (terrainObject) => {
 
-        if (terrainObject == null) return
+    //     if (terrainObject == null) return
 
-        if (terrainObject.type == 'modifier') this.modifiers.render(terrainObject)
-        else this.structures.render(terrainObject)
+    //     if (terrainObject.type == 'modifier') this.modifiers.render(terrainObject)
+    //     else this.structures.render(terrainObject)
 
-    }
+    // }
 
 }

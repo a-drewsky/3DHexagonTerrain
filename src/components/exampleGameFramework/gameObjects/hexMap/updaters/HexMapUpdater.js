@@ -4,10 +4,10 @@ import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, unitManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
+    constructor(hexMapData, spriteManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
 
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
         this.images = images
         this.renderer = renderer
         this.cameraController = cameraController
@@ -21,7 +21,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, unitManager, this.cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, this.cameraData, canvas, images, uiController, renderer, globalState);
         this.config = new HexMapConfigClass()
 
     }
@@ -52,8 +52,8 @@ export default class HexMapUpdaterClass {
         }
 
         //update units
-        for (let i in this.unitManager.unitList) {
-            let unit = this.unitManager.unitList[i]
+        for (let i in this.spriteManager.units.unitList) {
+            let unit = this.spriteManager.units.unitList[i]
             this.updateUnit(unit)
         }
 
@@ -152,13 +152,13 @@ export default class HexMapUpdaterClass {
 
         let target = unit.data.target
         this.utils.setUnitIdle(unit)
-        target.health -= 25
+        target.data.health -= 25
 
-        if (target.type == 'unit') {
+        if (target.data.type == 'unit') {
             this.utils.setUnitAnimation(target, 'hit')
         }
 
-        if (target.type == 'base') {
+        if (target.data.type == 'bunker') {
             this.updateBase(target)
         }
 
@@ -175,32 +175,33 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitDeath = (unit) => {
-        this.unitManager.deleteUnit(unit.data.position.q, unit.data.position.r)
+        this.spriteManager.units.deleteUnit(unit.data.position.q, unit.data.position.r)
         this.utils.resetHexMapState()
     }
 
     updateMine = (mine) => {
 
-        mine.resources -= 25
+        mine.data.resources -= 25
         this.hexMapData.resources++
 
         this.uiController.setResourceBar(this.hexMapData.resources)
 
-        let resources = mine.resources
+        let resources = mine.data.resources
 
-        let curState = mine.state
+        let curState = mine.data.state.current
 
-        let newState = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
+        let newStateName = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
 
-        if (newState == curState) return
+        if (newStateName == curState.name) return
 
-        mine.state = newState
+        mine.data.state.current = mine.data.state[newStateName]
 
-        if (mine.state != 'destroyed') {
-            this.renderer.spriteRenderer.structures.render(mine)
+        if (mine.data.state.current.name != 'destroyed') {
+            mine.renderer.render()
         } else {
-            let emptymine = this.config.emptymine(mine.position)
-            this.utils.updateTerrain(mine.position.q, mine.position.r, emptymine)
+            let newModifier = this.spriteManager.structures.setModifier(mine.data.position.q, mine.data.position.r, 'emptymine')
+            console.log(newModifier)
+            newModifier.renderer.render()
         }
 
     }
@@ -208,21 +209,24 @@ export default class HexMapUpdaterClass {
     //move to base class
     updateBase = (base) => {
 
-        let health = base.health
+        console.log(base)
 
-        let curState = base.state
+        let health = base.data.health
 
-        let newState = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
+        let curState = base.data.state.current
 
-        if (newState == curState) return
+        let newStateName = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
 
-        base.state = newState
+        if (newStateName == curState.name) return
+        
+        base.data.state.current = base.data.state[newStateName]
 
-        if (base.state != 'destroyed') {
-            this.renderer.spriteRenderer.structures.render(base)
+        if (base.data.state.current.name != 'destroyed') {
+            base.renderer.render()
         } else {
-            let rubblepile = this.config.rubblepile(base.position)
-            this.utils.updateTerrain(base.position.q, base.position.r, rubblepile)
+            let newStructure = this.spriteManager.structures.setModifier(base.data.position.q, base.data.position.r, 'rubblepile')
+            console.log(newStructure)
+            newStructure.renderer.render()
         }
 
     }

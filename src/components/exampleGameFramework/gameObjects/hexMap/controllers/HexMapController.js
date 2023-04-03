@@ -9,11 +9,11 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, unitManager, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
+    constructor(hexMapData, spriteManager, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
 
         this.canvas = canvas
 
@@ -21,9 +21,9 @@ export default class HexMapControllerClass {
 
         this.collision = new CollisionClass();
 
-        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, unitManager, cameraData)
+        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, spriteManager, cameraData)
         
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, unitManager, cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, cameraData, canvas, images, uiController, renderer, globalState);
 
         this.config = new HexMapConfigClass()
 
@@ -31,9 +31,9 @@ export default class HexMapControllerClass {
 
         this.cameraData = cameraData;
 
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, unitManager, renderer, this.pathFinder, this.utils, uiController, this.config)
+        this.mouseController = new HexMapControllerMouseClass(hexMapData, spriteManager, renderer, this.pathFinder, this.utils, uiController, this.config)
 
-        this.uiController = new HexMapControllerUiClass(hexMapData, unitManager, cameraController, cameraData, canvas, this.utils, uiController)
+        this.uiController = new HexMapControllerUiClass(hexMapData, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
 
     }
 

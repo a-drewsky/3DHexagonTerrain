@@ -2,9 +2,9 @@ import ImageLoaderClass from '../ImageLoader'
 
 import shadow_sheet from '../../images/shadows/base_shadow_sheet.png'
 
-import base_sheet from '../../images/bases/mainBase/main_base_sheet.png'
+import bunker_sheet from '../../images/bases/base/base_sheet.png'
 
-export default class MainBaseImagesClass extends ImageLoaderClass {
+export default class DefaultBunkerImagesClass extends ImageLoaderClass {
 
     constructor() {
 
@@ -48,8 +48,7 @@ export default class MainBaseImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: base_sheet,
-                spriteCount: 5,
+                image: bunker_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

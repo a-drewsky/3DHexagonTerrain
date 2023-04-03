@@ -5,9 +5,9 @@ import HexMapCommonUtilsClass from "./HexMapCommonUtils"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, unitManager, camera, canvas, images, uiController, renderer, globalState) {
+    constructor(hexMapData, spriteManager, camera, canvas, images, uiController, renderer, globalState) {
         this.hexMapData = hexMapData
-        this.unitManager = unitManager
+        this.spriteManager = spriteManager
         this.camera = camera
         this.canvas = canvas
         this.images = images
@@ -17,7 +17,7 @@ export default class HexMapControllerUtilsClass {
 
         this.renderer = renderer
 
-        this.pathFinder = new HexMapPathFinderClass(hexMapData, unitManager, camera)
+        this.pathFinder = new HexMapPathFinderClass(hexMapData, spriteManager, camera)
         this.collision = new CollisionClass();
         this.commonUtils = new HexMapCommonUtilsClass()
 
@@ -53,7 +53,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     checkValidPath = () => {
-        let unit = this.unitManager.selectedUnit
+        let unit = this.spriteManager.units.selectedUnit
         let path = [unit.data.position, ...this.hexMapData.selections.path]
         let pathCost = this.pathFinder.pathCost(path)
         if (pathCost <= unit.data.stats.movement) return true
@@ -63,15 +63,13 @@ export default class HexMapControllerUtilsClass {
 
     findMoveSet = () => {
 
-        let unit = this.unitManager.selectedUnit
+        let unit = this.spriteManager.units.selectedUnit
 
         if (unit == null) return
 
         let moveSet = this.pathFinder.findMoveSet(unit.data.position, unit.data.stats.movement)
 
         let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.data.position)
-
-        console.log(moveSet)
 
         if (!moveSet) return
 
@@ -90,13 +88,13 @@ export default class HexMapControllerUtilsClass {
         //search for structures
         for (let tileObj of moveSetPlus1) {
             let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
-            if ((this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'resource')
-                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'flag')) {
+            if ((this.spriteManager.structures.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.getStructure(tile.position.q, tile.position.r).data.type == 'resource')
+                || (this.spriteManager.structures.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.getStructure(tile.position.q, tile.position.r).data.type == 'flag')) {
                 pathing.action.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
-            if (this.unitManager.getUnit(tile.position.q, tile.position.r) != null
-                || (this.hexMapData.getTerrain(tile.position.q, tile.position.r) !== null && this.hexMapData.getTerrain(tile.position.q, tile.position.r).type == 'base')) {
+            if (this.spriteManager.units.getUnit(tile.position.q, tile.position.r) != null
+                || (this.spriteManager.structures.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.getStructure(tile.position.q, tile.position.r).data.type == 'bunker')) {
                 pathing.attack.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
@@ -107,7 +105,7 @@ export default class HexMapControllerUtilsClass {
     updateTerrain = (q, r, terrain) => {
         if (terrain.modifierType == 'singleImage') this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
 
-        this.hexMapData.setTerrain(q, r, terrain)
+        this.spriteManager.structures.setStructure(q, r, terrain)
     }
 
     lerpUnit = (unit) => {
@@ -184,13 +182,13 @@ export default class HexMapControllerUtilsClass {
 
         switch (unit.data.futureState) {
             case 'mine':
-                this.mineOre(unit, unit.data.target)
+                this.mineOre(unit, unit.data.target.data)
                 break
             case 'attack':
-                this.attackUnit(unit, unit.data.target)
+                this.attackUnit(unit, unit.data.target.data)
                 break
             case 'capture':
-                this.captureFlag(unit, unit.data.target)
+                this.captureFlag(unit, unit.data.target.data)
                 break
 
         }
@@ -255,7 +253,7 @@ export default class HexMapControllerUtilsClass {
     attackUnit = (unit) => {
 
 
-        this.setUnitDirection(unit, unit.data.target.position)
+        this.setUnitDirection(unit, unit.data.target.data.position)
 
         this.setUnitAnimation(unit, 'attack')
     }
@@ -345,12 +343,18 @@ export default class HexMapControllerUtilsClass {
                 continue
             }
 
-            let tileTerrain = this.hexMapData.getTerrain(rotatedTile.position.q, rotatedTile.position.r)
-            let tileUnit = this.unitManager.getUnit(rotatedTile.position.q, rotatedTile.position.r)
+            let structureData = null
+            if(this.spriteManager.structures.hasStructure(rotatedTile.position.q, rotatedTile.position.r)){
+                structureData = this.spriteManager.structures.getStructure(rotatedTile.position.q, rotatedTile.position.r).data
+            }
+            let unitData = null
+            if(this.spriteManager.units.hasUnit(rotatedTile.position.q, rotatedTile.position.r)){
+                unitData = this.spriteManager.units.getUnit(rotatedTile.position.q, rotatedTile.position.r)
+            }
 
-            if (tileTerrain && tileTerrain.type != 'modifier') {
+            if (structureData && structureData.type != 'modifier') {
 
-                let spriteObj = this.images[tileTerrain.type][tileTerrain.sprite]
+                let spriteObj = this.images[structureData.type][structureData.sprite]
 
                 let spritePos = {
                     x: hexPos.x,
@@ -358,12 +362,12 @@ export default class HexMapControllerUtilsClass {
                 }
 
                 let spriteSize = {
-                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[tileTerrain.state][this.camera.rotation].x / 32 * 2),
-                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[tileTerrain.state][this.camera.rotation].y / 32)
+                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[structureData.state.current.name][this.camera.rotation].x / 32 * 2),
+                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[structureData.state.current.name][this.camera.rotation].y / 32)
                 }
 
-                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[tileTerrain.state][this.camera.rotation].x / 32) * this.hexMapData.size * 2
-                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[tileTerrain.state][this.camera.rotation].y / 32) * this.hexMapData.size * 2
+                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[structureData.state.current.name][this.camera.rotation].x / 32) * this.hexMapData.size * 2
+                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[structureData.state.current.name][this.camera.rotation].y / 32) * this.hexMapData.size * 2
 
                 if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
                     tileClicked = testTile
@@ -372,8 +376,8 @@ export default class HexMapControllerUtilsClass {
 
             }
 
-            if (tileUnit && tileUnit.state == 'idle') {
-                let spriteObj = this.images[tileUnit.type][tileUnit.sprite]
+            if (unitData && unitData.state == 'idle') {
+                let spriteObj = this.images[unitData.type][unitData.sprite]
 
                 let spritePos = {
                     x: hexPos.x,
@@ -381,12 +385,12 @@ export default class HexMapControllerUtilsClass {
                 }
 
                 let spriteSize = {
-                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[tileUnit.frame][this.camera.rotation].x / 32 * 2),
-                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[tileUnit.frame][this.camera.rotation].y / 32)
+                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[unitData.frame][this.camera.rotation].x / 32 * 2),
+                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[unitData.frame][this.camera.rotation].y / 32)
                 }
 
-                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[tileUnit.frame][this.camera.rotation].x / 32) * this.hexMapData.size * 2
-                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[tileUnit.frame][this.camera.rotation].y / 32) * this.hexMapData.size * 2
+                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[unitData.frame][this.camera.rotation].x / 32) * this.hexMapData.size * 2
+                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[unitData.frame][this.camera.rotation].y / 32) * this.hexMapData.size * 2
 
                 if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
                     tileClicked = testTile

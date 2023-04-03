@@ -1,7 +1,7 @@
 
 import TileImagesClass from './tileImages'
 import ModifierImagesClass from './modifiers/modifierImages'
-import BaseImagesClass from './bases/baseImages'
+import BunkerImagesClass from './bunker/bunkerImages'
 import PropImagesClass from './props/propImages'
 import ResourceImagesClass from './resources/resourceImages'
 import UnitImagesClass from './units/unitImages'
@@ -15,7 +15,7 @@ export default class GameImagesClass {
 
         this.tile = new TileImagesClass()
         this.modifier = new ModifierImagesClass()
-        this.base = new BaseImagesClass()
+        this.bunker = new BunkerImagesClass()
         this.prop = new PropImagesClass()
         this.resource = new ResourceImagesClass()
         this.unit = new UnitImagesClass()
@@ -34,7 +34,7 @@ export default class GameImagesClass {
         }
         this.tile.loadImages(testLoaded)
         this.modifier.loadImages(testLoaded)
-        this.base.loadImages(testLoaded)
+        this.bunker.loadImages(testLoaded)
         this.prop.loadImages(testLoaded)
         this.resource.loadImages(testLoaded)
         this.unit.loadImages(testLoaded)
