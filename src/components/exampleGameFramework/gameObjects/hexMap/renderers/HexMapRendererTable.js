@@ -2,7 +2,7 @@ import HexMapRendererUtilsClass from "../utils/HexMapRendererUtils";
 
 export default class HexMapRendererTableClass {
 
-   constructor(hexMapData, camera, settings, images) {
+   constructor(hexMapData, camera, settings) {
 
       this.hexMapData = hexMapData;
       this.camera = camera;
@@ -11,8 +11,6 @@ export default class HexMapRendererTableClass {
       this.tableColors = settings.TEMP_TABLE_COLORS;
       this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
       this.tableHeight = settings.TABLE_HEIGHT
-
-      this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
 
       this.rotationAlpha = {
          0: 1,
@@ -43,7 +41,7 @@ export default class HexMapRendererTableClass {
       let tempctx = tempCanvas.getContext('2d')
 
       //get table position
-      let tablePosition = this.utils.getTablePosition();
+      let tablePosition = this.hexMapData.getTablePosition(this.camera.rotation);
 
       tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l}%)`
       tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l}%)`

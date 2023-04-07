@@ -30,7 +30,7 @@ export default class HexMapViewMapClass {
 
         let filteredMapLength = [...rotatedMap].filter(([key, value]) => !this.hexMapData.getEntry(value.q, value.r).images || this.hexMapData.getEntry(value.q, value.r).images.length == 0).length
 
-        if(filteredMapLength == 0) drawctx.drawImage(this.hexMapData.shadowMap.get(0 + ',' + this.camera.rotation), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width))
+        // if(filteredMapLength == 0) drawctx.drawImage(this.hexMapData.shadowMap.get(0 + ',' + this.camera.rotation), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width), position.x, position.y, this.canvasDims.width + zoom, this.canvasDims.height + zoom * (this.canvasDims.height / this.canvasDims.width))
 
         for (let [key, value] of rotatedMap) {
 

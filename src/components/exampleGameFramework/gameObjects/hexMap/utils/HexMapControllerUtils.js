@@ -271,10 +271,14 @@ export default class HexMapControllerUtilsClass {
 
         unit.renderer.render()
 
-        this.hexMapData.selections.setSelection(unit.data.position.q, unit.data.position.r, 'unit')
+        this.setSelection(unit.data.position.q, unit.data.position.r, 'unit')
 
         this.hexMapData.state.current = this.hexMapData.state.chooseRotation
 
+    }
+
+    setSelection = (q, r, selection) => {
+        if(this.hexMapData.hasTileEntry(q, r)) this.hexMapData.selections.setSelection(q, r, selection)
     }
 
     captureFlag = (unit, targetTile) => {

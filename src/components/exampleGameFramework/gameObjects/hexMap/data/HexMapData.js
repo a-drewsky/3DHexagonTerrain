@@ -18,9 +18,11 @@ export default class HexMapDataClass {
       this.renderBackground = true
 
       this.tileMap = new Map();
-      this.shadowMap = new Map();
       this.posMap = new Map();
       this.rotatedMapList = []
+
+      //to be removed
+      this.shadowMap = new Map();
 
       this.size = canvas.width / settings.TILE_SIZE;
       this.squish = settings.HEXMAP_SQUISH;
@@ -90,85 +92,93 @@ export default class HexMapDataClass {
       }
    }
 
-   setMapPos = (rotation, renderCanvasDims) => {
+   setMapPos = (drawCanvas) => {
 
-      //Set map hyp
-      let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.utils.split(key))
+      for (let rotation = 0; rotation < 12; rotation++) {
 
-      let mapWidthMax = Math.max(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r));
-      let mapHeightMax = Math.max(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish));
-      let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r)));
-      let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish)));
+         //Set map hyp
+         let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.utils.split(key))
 
-      let mapWidth = Math.max(mapWidthMax, mapWidthMin)
-      let mapHeight = Math.max(mapHeightMax, mapHeightMin)
+         let mapWidthMax = Math.max(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r));
+         let mapHeightMax = Math.max(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish));
+         let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.VecQ.x * key.q + this.VecR.x * key.r)));
+         let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.VecQ.y * key.q * this.squish + this.VecR.y * key.r * this.squish)));
 
-      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+         let mapWidth = Math.max(mapWidthMax, mapWidthMin)
+         let mapHeight = Math.max(mapHeightMax, mapHeightMin)
+
+         let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight) - 250; //need a variable for this or something (must be half of value used for hyp in hex map view)
 
 
-      //Set the hexmap position to the center of the canvas
+         //Set the hexmap position to the center of the canvas
 
-      let renderHexMapPos = {
-         x: 0,
-         y: 0
+         let renderHexMapPos = {
+            x: 0,
+            y: 0
+         }
+
+         switch (rotation) {
+            case 0:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
+               break;
+            case 1:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+               break;
+            case 2:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
+               break;
+            case 3:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+               break;
+            case 4:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
+               break;
+            case 5:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+               break;
+            case 6:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
+               break;
+            case 7:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+               break;
+            case 8:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
+               break;
+            case 9:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+               break;
+            case 10:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
+               break;
+            case 11:
+               renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+               renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+               break;
+         }
+
+
+         this.posMap.set(rotation, {
+            x: renderHexMapPos.x,
+            y: renderHexMapPos.y
+         })
       }
+   }
 
-      switch (rotation) {
-         case 0:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 8)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 4.5)
-            break;
-         case 1:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
-            break;
-         case 2:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7.5)
-            break;
-         case 3:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
-            break;
-         case 4:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 12.5)
-            break;
-         case 5:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
-            break;
-         case 6:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 17)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19.5)
-            break;
-         case 7:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
-            break;
-         case 8:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 7)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 16.5)
-            break;
-         case 9:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
-            break;
-         case 10:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11.5)
-            break;
-         case 11:
-            renderHexMapPos.x = renderCanvasDims.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-            renderHexMapPos.y = renderCanvasDims.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
-            break;
-      }
+   setMaxHeight = () => {
+      this.haxHeight = Math.max(this.getTileMap().map(entry => entry.value.height))
 
-
-      this.posMap.set(rotation, {
-         x: renderHexMapPos.x,
-         y: renderHexMapPos.y
-      })
    }
    //END SET METHODS
 
@@ -221,7 +231,17 @@ export default class HexMapDataClass {
    }
 
    //returns the tileMap
-   getMap = () => {
+   getTileMap = () => {
+      let map = Array.from(this.tileMap, ([key, value]) => ({ key, value }));
+
+      let filteredMap = map.filter(entry => entry.value.groundShadowTile == false)
+
+      return filteredMap
+
+   }
+
+   //returns the tileMap
+   getFullMap = () => {
       return this.tileMap
    }
 
@@ -241,19 +261,20 @@ export default class HexMapDataClass {
 
    //return all key strings
    getKeyStrings = () => {
-      return [...this.tileMap.keys()]
+      let map = this.getTileMap()
+      return map.map(entry => entry.key)
    }
 
    //returns keys of all neighbors adjacent to (q, r)
    getNeighborKeys = (q, r) => {
       let neighbors = [];
 
-      if (this.hasEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
-      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
-      if (this.hasEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
-      if (this.hasEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
-      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
-      if (this.hasEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
+      if (this.hasTileEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
+      if (this.hasTileEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
+      if (this.hasTileEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
+      if (this.hasTileEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
+      if (this.hasTileEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
+      if (this.hasTileEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
 
       return neighbors.map(key => this.utils.split(key));
    }
@@ -262,25 +283,25 @@ export default class HexMapDataClass {
    getDoubleNeighborKeys = (q, r) => {
       let neighbors = [];
 
-      if (this.hasEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
-      if (this.hasEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
-      if (this.hasEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
-      if (this.hasEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
-      if (this.hasEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
-      if (this.hasEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
+      if (this.hasTileEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
+      if (this.hasTileEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
+      if (this.hasTileEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
+      if (this.hasTileEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
+      if (this.hasTileEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
+      if (this.hasTileEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
 
-      if (this.hasEntry(q, r - 2)) neighbors.push(this.utils.join(q, r - 2));
-      if (this.hasEntry(q + 1, r - 2)) neighbors.push(this.utils.join(q + 1, r - 2));
-      if (this.hasEntry(q + 2, r - 2)) neighbors.push(this.utils.join(q + 2, r - 2));
-      if (this.hasEntry(q + 2, r - 1)) neighbors.push(this.utils.join(q + 2, r - 1));
-      if (this.hasEntry(q + 2, r)) neighbors.push(this.utils.join(q + 2, r));
-      if (this.hasEntry(q + 1, r + 1)) neighbors.push(this.utils.join(q + 1, r + 1));
-      if (this.hasEntry(q, r + 2)) neighbors.push(this.utils.join(q, r + 2));
-      if (this.hasEntry(q - 1, r + 2)) neighbors.push(this.utils.join(q - 1, r + 2));
-      if (this.hasEntry(q - 2, r + 2)) neighbors.push(this.utils.join(q - 2, r + 2));
-      if (this.hasEntry(q - 2, r + 1)) neighbors.push(this.utils.join(q - 2, r + 1));
-      if (this.hasEntry(q - 2, r)) neighbors.push(this.utils.join(q - 2, r));
-      if (this.hasEntry(q - 1, r - 1)) neighbors.push(this.utils.join(q - 1, r - 1));
+      if (this.hasTileEntry(q, r - 2)) neighbors.push(this.utils.join(q, r - 2));
+      if (this.hasTileEntry(q + 1, r - 2)) neighbors.push(this.utils.join(q + 1, r - 2));
+      if (this.hasTileEntry(q + 2, r - 2)) neighbors.push(this.utils.join(q + 2, r - 2));
+      if (this.hasTileEntry(q + 2, r - 1)) neighbors.push(this.utils.join(q + 2, r - 1));
+      if (this.hasTileEntry(q + 2, r)) neighbors.push(this.utils.join(q + 2, r));
+      if (this.hasTileEntry(q + 1, r + 1)) neighbors.push(this.utils.join(q + 1, r + 1));
+      if (this.hasTileEntry(q, r + 2)) neighbors.push(this.utils.join(q, r + 2));
+      if (this.hasTileEntry(q - 1, r + 2)) neighbors.push(this.utils.join(q - 1, r + 2));
+      if (this.hasTileEntry(q - 2, r + 2)) neighbors.push(this.utils.join(q - 2, r + 2));
+      if (this.hasTileEntry(q - 2, r + 1)) neighbors.push(this.utils.join(q - 2, r + 1));
+      if (this.hasTileEntry(q - 2, r)) neighbors.push(this.utils.join(q - 2, r));
+      if (this.hasTileEntry(q - 1, r - 1)) neighbors.push(this.utils.join(q - 1, r - 1));
 
       return neighbors.map(key => this.utils.split(key));
    }
@@ -352,6 +373,59 @@ export default class HexMapDataClass {
 
       return arr[Math.floor(Math.random() * arr.length)]
    }
+
+   getTablePosition = (rotation) => {
+
+      let keys = this.getKeys();
+
+      let minR = Math.min(...keys.map(key => key.r));
+      let maxR = Math.max(...keys.map(key => key.r));
+      let minRminQ = Math.min(...keys.filter(key => key.r == minR).map(key => key.q));
+      let minRmaxQ = Math.max(...keys.filter(key => key.r == minR).map(key => key.q));
+      let maxRminQ = Math.min(...keys.filter(key => key.r == maxR).map(key => key.q));
+      let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
+
+      let tableDims = {
+         q1: this.utils.rotateTile(minRminQ - 1, minR - 2, rotation).q,
+         r1: this.utils.rotateTile(minRminQ - 1, minR - 2, rotation).r,
+
+         q2: this.utils.rotateTile(minRmaxQ + 3, minR - 2, rotation).q,
+         r2: this.utils.rotateTile(minRmaxQ + 3, minR - 2, rotation).r,
+
+         q3: this.utils.rotateTile(maxRmaxQ + 1, maxR + 2, rotation).q,
+         r3: this.utils.rotateTile(maxRmaxQ + 1, maxR + 2, rotation).r,
+
+         q4: this.utils.rotateTile(maxRminQ - 3, maxR + 2, rotation).q,
+         r4: this.utils.rotateTile(maxRminQ - 3, maxR + 2, rotation).r
+      }
+
+      let hexVecQ = rotation % 2 == 0 ? { ...this.VecQ } : { ...this.flatTopVecQ }
+      let hexVecR = rotation % 2 == 0 ? { ...this.VecR } : { ...this.flatTopVecR }
+
+      let tablePosition = [
+         {
+            x: this.posMap.get(rotation).x + hexVecQ.x * tableDims.q1 + hexVecR.x * tableDims.r1,
+            y: this.posMap.get(rotation).y + hexVecQ.y * tableDims.q1 * this.squish + hexVecR.y * tableDims.r1 * this.squish
+         },
+
+         {
+            x: this.posMap.get(rotation).x + hexVecQ.x * tableDims.q2 + hexVecR.x * tableDims.r2,
+            y: this.posMap.get(rotation).y + hexVecQ.y * tableDims.q2 * this.squish + hexVecR.y * tableDims.r2 * this.squish
+         },
+
+         {
+            x: this.posMap.get(rotation).x + hexVecQ.x * tableDims.q3 + hexVecR.x * tableDims.r3,
+            y: this.posMap.get(rotation).y + hexVecQ.y * tableDims.q3 * this.squish + hexVecR.y * tableDims.r3 * this.squish
+         },
+
+         {
+            x: this.posMap.get(rotation).x + hexVecQ.x * tableDims.q4 + hexVecR.x * tableDims.r4,
+            y: this.posMap.get(rotation).y + hexVecQ.y * tableDims.q4 * this.squish + hexVecR.y * tableDims.r4 * this.squish
+         }
+      ]
+
+      return [...tablePosition];
+   }
    //END GET METHODS
 
 
@@ -359,6 +433,12 @@ export default class HexMapDataClass {
    //check if hexmap has an entry (returns a boolean)
    hasEntry = (q, r) => {
       return this.tileMap.has(this.utils.join(q, r));
+   }
+   hasTileEntry = (q, r) => {
+      if (!this.hasEntry(q, r)) return false
+      let tileObj = this.tileMap.get(this.utils.join(q, r));
+      if (tileObj.groundShadowTile == true) return false
+      return true
    }
    //END CHECK METHODS
 

@@ -57,6 +57,8 @@ export default class HexMapViewClass {
 
       if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
+      this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
+
       this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
@@ -79,8 +81,8 @@ export default class HexMapViewClass {
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
       let renderCanvasDims = {
-         width: mapHyp / this.hexMapData.squish + 200,
-         height: mapHyp + 200
+         width: mapHyp / this.hexMapData.squish + 500,
+         height: mapHyp + 500
       }
 
       this.drawCanvas = document.createElement('canvas')

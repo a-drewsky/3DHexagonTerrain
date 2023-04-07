@@ -171,8 +171,8 @@ export default class HexMapBuilderTerrainClass {
          largeRock: 0.9
       }
 
-      for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.commonUtils.split(key);
+      for (let entry of this.hexMapData.getTileMap()) {
+         let keyObj = this.commonUtils.split(entry.key);
 
          let spawnChance = {
             savannaTree: Math.random(),
@@ -180,13 +180,13 @@ export default class HexMapBuilderTerrainClass {
          }
 
          //generate savanna trees
-         if ((value.biome == 'savanna' || value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
+         if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
             this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'savannaTree')
          }
 
          //generate large rocks
          let terrain = this.spriteManager.structures.getStructure(keyObj.q, keyObj.r)
-         if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
+         if (terrain != null && terrain.data.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
             this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'largeRock')
          }
 
@@ -206,8 +206,8 @@ export default class HexMapBuilderTerrainClass {
 
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
-      for (let [key, value] of this.hexMapData.getMap()) {
-         let keyObj = this.commonUtils.split(key);
+      for (let entry of this.hexMapData.getTileMap()) {
+         let keyObj = this.commonUtils.split(entry.key);
 
          //feature generation
          let tileTreeNoise = {
@@ -221,9 +221,9 @@ export default class HexMapBuilderTerrainClass {
 
          let tileRockNoise = noise(rockSeeds[0] + keyObj.q / noiseFluctuation, rockSeeds[0] + keyObj.r / noiseFluctuation) * noise(rockSeeds[1] + keyObj.q / noiseFluctuation, rockSeeds[1] + keyObj.r / noiseFluctuation)
 
-         if (tileTreeNoise[value.biome] > this.biomeGenSettings[value.biome].terrainGenThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, value.biome)) {
+         if (tileTreeNoise[entry.value.biome] > this.biomeGenSettings[entry.value.biome].terrainGenThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
 
-            switch (value.biome) {
+            switch (entry.value.biome) {
                case 'woodlands':
                case 'grasshill':
                   this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'oakTrees')
@@ -241,7 +241,7 @@ export default class HexMapBuilderTerrainClass {
             }
 
 
-         } else if (this.biomeGenSettings[value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[value.biome].rockGenThreshold) {
+         } else if (this.biomeGenSettings[entry.value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[entry.value.biome].rockGenThreshold) {
             this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'smallRocks')
          }
 

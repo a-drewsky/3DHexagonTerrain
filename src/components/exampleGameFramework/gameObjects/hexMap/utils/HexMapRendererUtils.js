@@ -66,59 +66,6 @@ export default class HexMapRendererUtilsClass {
 
     }
 
-    getTablePosition = () => {
-
-        let keys = this.hexMapData.getKeys();
-
-        let minR = Math.min(...keys.map(key => key.r));
-        let maxR = Math.max(...keys.map(key => key.r));
-        let minRminQ = Math.min(...keys.filter(key => key.r == minR).map(key => key.q));
-        let minRmaxQ = Math.max(...keys.filter(key => key.r == minR).map(key => key.q));
-        let maxRminQ = Math.min(...keys.filter(key => key.r == maxR).map(key => key.q));
-        let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
-
-        let tableDims = {
-            q1: this.commonUtils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).q,
-            r1: this.commonUtils.rotateTile(minRminQ - 1, minR - 2, this.camera.rotation).r,
-
-            q2: this.commonUtils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).q,
-            r2: this.commonUtils.rotateTile(minRmaxQ + 3, minR - 2, this.camera.rotation).r,
-
-            q3: this.commonUtils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).q,
-            r3: this.commonUtils.rotateTile(maxRmaxQ + 1, maxR + 2, this.camera.rotation).r,
-
-            q4: this.commonUtils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).q,
-            r4: this.commonUtils.rotateTile(maxRminQ - 3, maxR + 2, this.camera.rotation).r
-        }
-
-        let hexVecQ = this.camera.rotation % 2 == 0 ? { ...this.hexMapData.VecQ } : { ...this.hexMapData.flatTopVecQ }
-        let hexVecR = this.camera.rotation % 2 == 0 ? { ...this.hexMapData.VecR } : { ...this.hexMapData.flatTopVecR }
-
-        let tablePosition = [
-            {
-                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q1 + hexVecR.x * tableDims.r1,
-                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q1 * this.hexMapData.squish + hexVecR.y * tableDims.r1 * this.hexMapData.squish
-            },
-
-            {
-                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q2 + hexVecR.x * tableDims.r2,
-                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q2 * this.hexMapData.squish + hexVecR.y * tableDims.r2 * this.hexMapData.squish
-            },
-
-            {
-                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q3 + hexVecR.x * tableDims.r3,
-                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q3 * this.hexMapData.squish + hexVecR.y * tableDims.r3 * this.hexMapData.squish
-            },
-
-            {
-                x: this.hexMapData.posMap.get(this.camera.rotation).x + hexVecQ.x * tableDims.q4 + hexVecR.x * tableDims.r4,
-                y: this.hexMapData.posMap.get(this.camera.rotation).y + hexVecQ.y * tableDims.q4 * this.hexMapData.squish + hexVecR.y * tableDims.r4 * this.hexMapData.squish
-            }
-        ]
-
-        return [...tablePosition];
-    }
-
     darkenImage = (image) => {
         let tempCanvas = document.createElement('canvas')
         tempCanvas.width = image.width

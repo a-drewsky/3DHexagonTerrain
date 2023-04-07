@@ -66,6 +66,8 @@ export default class HexMapBuilderClass {
 
    generateMap = (Qgen, Rgen) => {
 
+      let groundShadowDistance = 3 //make setting
+
       if (this.mirror) {
          for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
@@ -73,9 +75,25 @@ export default class HexMapBuilderClass {
             }
          }
       } else {
+         for (let r = -groundShadowDistance; r < 0; r++) {
+            for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
+               this.hexMapData.setEntry(q, r, this.config.groundShadowTile({ q: q, r: r }));
+            }
+         }
          for (let r = 0; r < Rgen; r++) {
+            for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < -1 * Math.floor(r / 2); q++) {
+               this.hexMapData.setEntry(q, r, this.config.groundShadowTile({ q: q, r: r }));
+            }
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
                this.hexMapData.setEntry(q, r, this.config.tile({ q: q, r: r }));
+            }
+            for (let q = Qgen - Math.floor(r / 2); q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
+               this.hexMapData.setEntry(q, r, this.config.groundShadowTile({ q: q, r: r }));
+            }
+         }
+         for (let r = Rgen; r < Rgen+groundShadowDistance; r++) {
+            for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
+               this.hexMapData.setEntry(q, r, this.config.groundShadowTile({ q: q, r: r }));
             }
          }
       }
@@ -90,9 +108,11 @@ export default class HexMapBuilderClass {
       let tempSeed1 = Math.random() * this.seedMultiplier
       let tempSeed2 = Math.random() * this.seedMultiplier
 
-      for (let [key, value] of this.hexMapData.getMap()) {
+      for (let entry of this.hexMapData.getTileMap()) {
 
-         let keyObj = this.commonUtils.split(key);
+         console.log(entry)
+
+         let keyObj = this.commonUtils.split(entry.key);
 
          //elevation generation
          let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
@@ -119,7 +139,7 @@ export default class HexMapBuilderClass {
 
       }
 
-      this.hexMapData.setMaxHeight(Math.max(...this.hexMapData.getValues().map(value => value.height)));
+      this.hexMapData.setMaxHeight();
    }
 
    generteTileBiomes = (tileObj, tileHeight, tileTemp) => {
@@ -301,9 +321,9 @@ export default class HexMapBuilderClass {
 
       while (reduced == true) {
          reduced = false
-         for (let [key, value] of this.hexMapData.getMap()) {
+         for (let entry of this.hexMapData.getTileMap()) {
 
-            let keyObj = this.commonUtils.split(key);
+            let keyObj = this.commonUtils.split(entry.key);
             let tile = this.hexMapData.getEntry(keyObj.q, keyObj.r)
             let neighborKeys = this.hexMapData.getNeighborKeys(keyObj.q, keyObj.r)
 

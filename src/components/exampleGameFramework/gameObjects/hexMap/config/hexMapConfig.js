@@ -82,7 +82,19 @@ export default class HexMapConfigClass {
             veryhighBiome: null,
             images: [],
             selectionImages: [],
-            terrain: null
+            groundShadowTile: false
+        }
+    }
+
+    groundShadowTile = (pos) => {
+        return {
+            position: {
+                q: pos.q,
+                r: pos.r
+            },
+            height: 0,
+            images: [],
+            groundShadowTile: true
         }
     }
 
