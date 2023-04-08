@@ -1,14 +1,15 @@
-import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
-import BunkerClass from "../../structures/bunker/Bunker"
-import FlagClass from "../../structures/flag/Flag"
-import ModifierClass from "../../structures/modifier/Modifier"
-import PropClass from "../../structures/prop/Prop"
-import ResourceClass from "../../structures/resource/Resource"
+import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
+import BunkerClass from "./bunker/Bunker"
+import FlagClass from "./flag/Flag"
+import ModifierClass from "./modifier/Modifier"
+import PropClass from "./prop/Prop"
+import ResourceClass from "./resource/Resource"
 
-export default class HexMapStructureManagerClass {
+export default class StructureManagerClass {
 
-    constructor(hexMapData, camera, images, settings) {
+    constructor(hexMapData, tileManager, camera, images, settings) {
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.camera = camera
         this.images = images
         this.settings = settings
@@ -23,31 +24,31 @@ export default class HexMapStructureManagerClass {
     // }
 
     setBunker = (q, r, structureName) => {
-        let newBunker = new BunkerClass({q: q, r: r}, structureName, this.hexMapData, this.camera, this.settings, this.images)
+        let newBunker = new BunkerClass({q: q, r: r}, structureName, this.hexMapData, this.tileManager, this.camera, this.settings, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newBunker)
         return newBunker
     }
 
     setFlag = (q, r, structureName) => {
-        let newFlag = new FlagClass({q: q, r: r}, structureName, this.hexMapData, this.camera, this.settings, this.images)
+        let newFlag = new FlagClass({q: q, r: r}, structureName, this.hexMapData, this.tileManager, this.camera, this.settings, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newFlag)
         return newFlag
     }
 
     setModifier = (q, r, structureName) => {
-        let newModifier = new ModifierClass({q: q, r: r}, structureName, this.hexMapData, this.camera, this.settings, this.images)
+        let newModifier = new ModifierClass({q: q, r: r}, structureName, this.hexMapData, this.tileManager, this.camera, this.settings, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newModifier)
         return newModifier
     }
 
     setProp = (q, r, structureName) => {
-        let newProp = new PropClass({q: q, r: r}, structureName, this.hexMapData, this.camera, this.settings, this.images)
+        let newProp = new PropClass({q: q, r: r}, structureName, this.hexMapData, this.tileManager, this.camera, this.settings, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newProp)
         return newProp
     }
 
     setResource = (q, r, structureName) => {
-        let newResource = new ResourceClass({q: q, r: r}, structureName, this.hexMapData, this.camera, this.settings, this.images)
+        let newResource = new ResourceClass({q: q, r: r}, structureName, this.hexMapData, this.tileManager, this.camera, this.settings, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newResource)
         return newResource
     }

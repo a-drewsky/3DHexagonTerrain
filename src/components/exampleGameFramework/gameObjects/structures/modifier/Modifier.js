@@ -4,9 +4,9 @@ import ModifierConfig from "./ModifierConfig";
 
 export default class ModifierClass{
 
-    constructor(pos, structureName, hexMapData, camera, settings, images){
+    constructor(pos, structureName, hexMapData, tileManager, camera, settings, images){
         this.data = new ModifierDataClass(pos, ModifierConfig[structureName], hexMapData, images.modifier)
-        this.renderer = new ModifierRendererClass(this.data, hexMapData, camera, settings, images)
+        this.renderer = new ModifierRendererClass(this.data, hexMapData, tileManager.data, camera, settings, images)
     }
 
 }

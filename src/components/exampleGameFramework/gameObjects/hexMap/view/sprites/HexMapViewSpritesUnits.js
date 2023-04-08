@@ -1,5 +1,5 @@
-import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
-import HexMapRendererUtilsClass from "../../utils/HexMapRendererUtils"
+import HexMapCommonUtilsClass from "../../../commonUtils/HexMapCommonUtils"
+import HexMapRendererUtilsClass from "../../../commonUtils/HexMapRendererUtils"
 import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
 
 export default class HexMapViewSpritesUnitsClass {
@@ -9,7 +9,7 @@ export default class HexMapViewSpritesUnitsClass {
         this.spriteManager = spriteManager
         this.camera = camera
         this.images = images
-        this.rendererUtils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
+        this.rendererUtils = new HexMapRendererUtilsClass(hexMapData, spriteManager.tiles.data, camera, settings, images)
         this.commonUtils = new HexMapCommonUtilsClass()
         this.viewUtils = new HexMapViewUtilsClass(camera)
         this.canvasDims = canvasDims
@@ -51,7 +51,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let shadowSize
 
-        let shadowPos = this.hexMapData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        let shadowPos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
 
 
         shadowSize = {
@@ -114,9 +114,9 @@ export default class HexMapViewSpritesUnitsClass {
         }
 
         let shadowSize
-        let tileHeight = this.hexMapData.getEntry(closestTile.q, closestTile.r).height
+        let tileHeight = this.spriteManager.tiles.data.getEntry(closestTile.q, closestTile.r).height
 
-        let shadowPos = this.hexMapData.hexPositionToXYPosition(pos, tileHeight, this.camera.rotation)
+        let shadowPos = this.spriteManager.tiles.data.hexPositionToXYPosition(pos, tileHeight, this.camera.rotation)
 
         shadowSize = {
             width: this.hexMapData.size * 2 * sprite.shadowSize.width,
@@ -130,7 +130,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let shadowImage = this.images.unit[spriteObject.data.sprite].shadowImages[this.camera.rotation]
 
-        shadowImage = this.rendererUtils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation])
+        shadowImage = this.rendererUtils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.spriteManager.tiles.data.rotatedMapList[this.camera.rotation])
 
         drawctx.drawImage(
             shadowImage,
@@ -154,7 +154,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let spriteSize
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -186,7 +186,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let sprite = this.images[spriteObject.data.type][spriteObject.data.sprite]
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(pos, height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(pos, height, this.camera.rotation)
 
         let spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -208,7 +208,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         //SHOULD BE HANDLED BY RENDERER
         spriteImage = this.rendererUtils.addHealthBar(spriteImage, sprite.spriteSize, spriteObject.data)
-        spriteImage = this.rendererUtils.cropOutTiles(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation])
+        spriteImage = this.rendererUtils.cropOutTiles(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.spriteManager.tiles.data.rotatedMapList[this.camera.rotation])
         spriteImage = this.rendererUtils.darkenSpriteJump(spriteImage, spriteObject.data, pos, height)
         drawctx.drawImage(
             spriteImage,
@@ -252,7 +252,7 @@ export default class HexMapViewSpritesUnitsClass {
             }
 
             //set height
-            let newHeight = this.hexMapData.getEntry(spriteObject.data.destination.q, spriteObject.data.destination.r).height
+            let newHeight = this.spriteManager.tiles.data.getEntry(spriteObject.data.destination.q, spriteObject.data.destination.r).height
 
             if (newHeight != height) {
                 let extraHeight = Math.sin(percent * Math.PI) * this.jumpAmount
@@ -266,7 +266,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let spriteSize
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(pos, height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(pos, height, this.camera.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -286,7 +286,7 @@ export default class HexMapViewSpritesUnitsClass {
 
         let spriteImage = sprite[spriteObject.data.state.current.name].images[spriteObject.data.frame][spriteRotation]
 
-        spriteImage = this.rendererUtils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.hexMapData.rotatedMapList[this.camera.rotation], height)
+        spriteImage = this.rendererUtils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.spriteManager.tiles.data.rotatedMapList[this.camera.rotation], height)
         spriteImage = this.rendererUtils.darkenSpriteJump(spriteImage, spriteObject.data, closestTile, height)
 
         drawctx.drawImage(

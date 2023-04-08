@@ -1,5 +1,5 @@
 import noise from "../../../utilities/perlin";
-import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
 
 export default class HexMapBuilderTerrainClass {
 
@@ -53,7 +53,7 @@ export default class HexMapBuilderTerrainClass {
             let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
             let selectedTilePos = cellTiles[selectedTileIndex]
             cellTiles.splice(selectedTileIndex, 1)
-            let selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+            let selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
             while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -61,7 +61,7 @@ export default class HexMapBuilderTerrainClass {
                selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
             }
 
             if (cellTiles.length == 0) break;
@@ -126,7 +126,7 @@ export default class HexMapBuilderTerrainClass {
                let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                let selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               let selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               let selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
                while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -134,7 +134,7 @@ export default class HexMapBuilderTerrainClass {
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
-                  selectedTile = this.hexMapData.getEntry(selectedTilePos.q, selectedTilePos.r)
+                  selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
                }
 
                if (cellTiles.length == 0) break;
@@ -171,7 +171,7 @@ export default class HexMapBuilderTerrainClass {
          largeRock: 0.9
       }
 
-      for (let entry of this.hexMapData.getTileMap()) {
+      for (let entry of this.spriteManager.tiles.data.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          let spawnChance = {
@@ -206,7 +206,7 @@ export default class HexMapBuilderTerrainClass {
 
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
-      for (let entry of this.hexMapData.getTileMap()) {
+      for (let entry of this.spriteManager.tiles.data.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          //feature generation

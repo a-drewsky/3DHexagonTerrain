@@ -1,9 +1,10 @@
-import UnitClass from '../../unit/Unit'
+import UnitClass from './Unit'
 
-export default class HexMapUnitManagerClass {
+export default class UnitManagerClass {
 
-    constructor(hexMapData, camera, images, settings) {
+    constructor(hexMapData, tileManager, camera, images, settings) {
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.camera = camera
         this.images = images
         this.settings = settings
@@ -33,7 +34,7 @@ export default class HexMapUnitManagerClass {
     }
 
     addUnit = (q, r, unitName) => {
-        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.camera, this.images, this.settings)
+        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.tileManager, this.camera, this.images, this.settings)
         newUnit.renderer.render()
         // newUnit.initialize(unitName)
         this.unitList.push(newUnit)

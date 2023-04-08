@@ -1,5 +1,4 @@
 import HexMapClass from "./gameObjects/hexMap/HexMap"
-import HexMapDebugSmoothingClass from "./gameObjects/hexMap/debug/HexMapDebugSmoothing";
 import UiControllerClass from "./UiController";
 
 export default class GameManagerClass {
@@ -35,23 +34,14 @@ export default class GameManagerClass {
 
     createGame = () => {
 
-        if (this.settings.DEBUG) {
-            this.hexMap = new HexMapDebugSmoothingClass(
-                this.ctx,
-                this.canvas,
-                this.images,
-                this.settings
-            )
-        } else {
-            this.hexMap = new HexMapClass(
-                this.ctx,
-                this.canvas,
-                this.images,
-                this.settings,
-                this.uiController,
-                this.state,
-            )
-        }
+        this.hexMap = new HexMapClass(
+            this.ctx,
+            this.canvas,
+            this.images,
+            this.settings,
+            this.uiController,
+            this.state,
+        )
 
         this.hexMap.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size);
         console.log("DONE BUILDING")

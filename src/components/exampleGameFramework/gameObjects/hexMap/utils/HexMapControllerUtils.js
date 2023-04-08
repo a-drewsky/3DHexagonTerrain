@@ -1,7 +1,7 @@
 
 import HexMapPathFinderClass from "./HexMapPathFinder"
 import CollisionClass from "../../../utilities/collision"
-import HexMapCommonUtilsClass from "./HexMapCommonUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
 
 export default class HexMapControllerUtilsClass {
 
@@ -43,7 +43,7 @@ export default class HexMapControllerUtilsClass {
         let target = targetTile
         let start = startTile
 
-        let neighbors = this.hexMapData.getNeighborKeys(target.q, target.r)
+        let neighbors = this.spriteManager.tiles.data.getNeighborKeys(target.q, target.r)
 
         let path = this.pathFinder.findClosestPath(start, target, neighbors)
 
@@ -80,14 +80,14 @@ export default class HexMapControllerUtilsClass {
         }
 
         for (let tileObj of moveSet) {
-            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            let tile = this.spriteManager.tiles.data.getEntry(tileObj.tile.q, tileObj.tile.r)
 
             pathing.movement.push({ q: tile.position.q, r: tile.position.r })
         }
 
         //search for structures
         for (let tileObj of moveSetPlus1) {
-            let tile = this.hexMapData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            let tile = this.spriteManager.tiles.data.getEntry(tileObj.tile.q, tileObj.tile.r)
             if ((this.spriteManager.structures.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.getStructure(tile.position.q, tile.position.r).data.type == 'resource')
                 || (this.spriteManager.structures.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.getStructure(tile.position.q, tile.position.r).data.type == 'flag')) {
                 pathing.action.push({ q: tile.position.q, r: tile.position.r })
@@ -112,11 +112,11 @@ export default class HexMapControllerUtilsClass {
 
         if (unit == null) return
 
-        let startTile = this.hexMapData.getEntry(unit.data.position.q, unit.data.position.r)
+        let startTile = this.spriteManager.tiles.data.getEntry(unit.data.position.q, unit.data.position.r)
 
         unit.data.path = this.hexMapData.selections.path
 
-        let nextPosition = this.hexMapData.getEntry(unit.data.path[0].q, unit.data.path[0].r)
+        let nextPosition = this.spriteManager.tiles.data.getEntry(unit.data.path[0].q, unit.data.path[0].r)
 
         unit.data.destination = unit.data.path[0]
 
@@ -140,11 +140,11 @@ export default class HexMapControllerUtilsClass {
 
         unit.data.futureState = futureState
 
-        let startPosition = this.hexMapData.getEntry(unit.data.position.q, unit.data.position.r)
+        let startPosition = this.spriteManager.tiles.data.getEntry(unit.data.position.q, unit.data.position.r)
 
         unit.data.path = this.hexMapData.selections.path
 
-        let nextPosition = this.hexMapData.getEntry(unit.data.path[0].q, unit.data.path[0].r)
+        let nextPosition = this.spriteManager.tiles.data.getEntry(unit.data.path[0].q, unit.data.path[0].r)
 
         unit.data.destination = unit.data.path[0]
 
@@ -278,7 +278,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     setSelection = (q, r, selection) => {
-        if(this.hexMapData.hasTileEntry(q, r)) this.hexMapData.selections.setSelection(q, r, selection)
+        if(this.spriteManager.tiles.data.hasTileEntry(q, r)) this.hexMapData.selections.setSelection(q, r, selection)
     }
 
     captureFlag = (unit, targetTile) => {
@@ -291,7 +291,7 @@ export default class HexMapControllerUtilsClass {
 
     getSelectedTile = (x, y) => {
 
-        let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+        let rotatedMap = this.spriteManager.tiles.data.rotatedMapList[this.camera.rotation]
 
         x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
         y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
@@ -305,9 +305,9 @@ export default class HexMapControllerUtilsClass {
         x += this.camera.position.x
         y += this.camera.position.y
 
-        x -= this.hexMapData.posMap.get(this.camera.rotation).x
+        x -= this.spriteManager.tiles.data.posMap.get(this.camera.rotation).x
 
-        y -= this.hexMapData.posMap.get(this.camera.rotation).y
+        y -= this.spriteManager.tiles.data.posMap.get(this.camera.rotation).y
 
 
         let hexClicked = {
@@ -334,9 +334,9 @@ export default class HexMapControllerUtilsClass {
 
             if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
 
-            let rotatedTile = this.hexMapData.getEntryRotated(testTile.q, testTile.r, this.camera.rotation)
+            let rotatedTile = this.spriteManager.tiles.data.getEntryRotated(testTile.q, testTile.r, this.camera.rotation)
 
-            let hexPos = this.hexMapData.hexPositionToXYPosition(testTile, rotatedTile.height, this.camera.rotation)
+            let hexPos = this.spriteManager.tiles.data.hexPositionToXYPosition(testTile, rotatedTile.height, this.camera.rotation)
 
             hexPos.x -= this.camera.position.x
             hexPos.y -= this.camera.position.y
@@ -408,7 +408,7 @@ export default class HexMapControllerUtilsClass {
 
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
 
-        let tileClickedObj = this.hexMapData.getEntry(rotatedTile.q, rotatedTile.r)
+        let tileClickedObj = this.spriteManager.tiles.data.getEntry(rotatedTile.q, rotatedTile.r)
 
         if (!tileClickedObj.images || tileClickedObj.images.length == 0) return null
 
@@ -430,8 +430,8 @@ export default class HexMapControllerUtilsClass {
         if (newRotation !== undefined && newRotation !== null) rotation = newRotation
 
         let centerPos = {
-            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.hexMapData.posMap.get(rotation).x,
-            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.hexMapData.posMap.get(rotation).y
+            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.spriteManager.tiles.data.posMap.get(rotation).x,
+            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.spriteManager.tiles.data.posMap.get(rotation).y
         }
 
 

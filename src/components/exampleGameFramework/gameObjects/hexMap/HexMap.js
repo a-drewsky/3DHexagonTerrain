@@ -37,7 +37,7 @@ export default class HexMapClass {
     }
 
     prerender = () => {
-        this.data.setRotatedMapList()
+        this.spriteManager.tiles.data.setRotatedMapList()
         this.view.initializeCanvas()
         this.renderer.prerender(this.view.drawCanvas)
         this.updater.prerender(this.view.drawCanvas)

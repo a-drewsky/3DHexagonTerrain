@@ -25,7 +25,7 @@ export default class HexMapPathFinderClass {
     }
 
     createNeighborNodes = (q, r) => {
-        let neighbors = this.hexMapData.getNeighborKeys(q, r)
+        let neighbors = this.spriteManager.tiles.data.getNeighborKeys(q, r)
 
         return neighbors.map(neighbor => this.createNode(neighbor.q, neighbor.r))
     }
@@ -37,7 +37,7 @@ export default class HexMapPathFinderClass {
     }
 
     getHeightDifference = (a, b) => {
-        return Math.abs(this.hexMapData.getEntry(a.q, a.r).height - this.hexMapData.getEntry(b.q, b.r).height)
+        return Math.abs(this.spriteManager.tiles.data.getEntry(a.q, a.r).height - this.spriteManager.tiles.data.getEntry(b.q, b.r).height)
     }
 
     isValid = (q, r) => {
@@ -49,7 +49,7 @@ export default class HexMapPathFinderClass {
     }
 
     getTileCost = (tile) => {
-        if(this.hexMapData.getEntry(tile.q, tile.r).biome == 'water') return 2
+        if(this.spriteManager.tiles.data.getEntry(tile.q, tile.r).biome == 'water') return 2
         let terrain = this.spriteManager.structures.getStructure(tile.q, tile.r)
         if(terrain != null && terrain.data.name == 'Forest') return 1
         return 0

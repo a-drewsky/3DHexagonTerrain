@@ -2,7 +2,6 @@
 import HexMapControllerUtilsClass from '../utils/HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
 import HexMapPathFinderClass from "../utils/HexMapPathFinder";
-import HexMapConfigClass from '../config/hexMapConfig';
 
 import HexMapControllerMouseClass from './HexMapControllerMouse';
 import HexMapControllerUiClass from './HexMapControllerUi';
@@ -24,8 +23,6 @@ export default class HexMapControllerClass {
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, spriteManager, cameraData)
         
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, cameraData, canvas, images, uiController, renderer, globalState);
-
-        this.config = new HexMapConfigClass()
 
         this.cameraController = cameraController
 
@@ -60,7 +57,7 @@ export default class HexMapControllerClass {
 
             if (!tileClicked) return
 
-            let tile = this.hexMapData.getEntry(tileClicked.q, tileClicked.r)
+            let tile = this.spriteManager.tiles.data.getEntry(tileClicked.q, tileClicked.r)
 
             switch (this.hexMapData.state.current) {
                 case 'selectTile':

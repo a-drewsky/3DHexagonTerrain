@@ -1,11 +1,19 @@
-import TileGroundShadowDataClass from "./TileGroundShadowData";
-import TileStackRendererClass from "./TileStackRenderer";
-
 export default class TileGroundShadowClass{
 
-    constructor(){
-        this.data = new TileGroundShadowDataClass()
-        this.renderer = new TileStackRendererClass()
+    constructor(pos, hexMapData){
+        this.position = {
+            q: pos.q,
+            r: pos.r
+        }
+        this.height = null
+        this.images = []
+
+        this.groundShadowTile = true
+
+        this.canvasSize = {
+            width: hexMapData.size * 2,
+            height: hexMapData.size * 2
+         }
     }
 
 }

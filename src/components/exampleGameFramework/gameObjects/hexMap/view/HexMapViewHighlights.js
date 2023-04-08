@@ -1,14 +1,13 @@
-import HexMapRendererSelectionsClass from "../renderers/HexMapRendererSelection"
-import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
 
 export default class HexMapViewSelectionClass {
 
-   constructor(hexMapData, camera, settings, images) {
+   constructor(hexMapData, spriteManager, camera, settings, images) {
 
       this.hexMapData = hexMapData
+      this.spriteManager = spriteManager
       this.camera = camera
       this.commonUtils = new HexMapCommonUtilsClass()
-      this.renderer = new HexMapRendererSelectionsClass(hexMapData, camera, settings, images)
 
    }
 
@@ -27,12 +26,12 @@ export default class HexMapViewSelectionClass {
             r: selectionObj.position.r
          }
 
-         let value = this.hexMapData.getEntry(keyObj.q, keyObj.r)
+         let value = this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r)
 
-         let tilePos = this.hexMapData.hexPositionToXYPosition(this.commonUtils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height, this.camera.rotation)
+         let tilePos = this.spriteManager.tiles.data.hexPositionToXYPosition(this.commonUtils.rotateTile(keyObj.q, keyObj.r, this.camera.rotation), value.height, this.camera.rotation)
 
          if (!value.selectionImages[selectionObj.selection] || !value.selectionImages[selectionObj.selection][this.camera.rotation]) {
-            this.renderer.renderSelectionImage(value, selectionObj.selection)
+            this.spriteManager.tiles.renderer.renderSelectionImage(value, selectionObj.selection)
          }
 
          let sprite = value.selectionImages[selectionObj.selection][this.camera.rotation]

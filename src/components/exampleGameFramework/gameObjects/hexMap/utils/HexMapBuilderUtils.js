@@ -19,7 +19,7 @@ export default class HexMapBuilderUtilsClass {
                 r: r + flatList[i].r
             }
 
-            let tileToSet = this.hexMapData.getEntry(tileToSetKey.q, tileToSetKey.r)
+            let tileToSet = this.spriteManager.tiles.data.getEntry(tileToSetKey.q, tileToSetKey.r)
 
             let tileBiome
 
@@ -36,7 +36,7 @@ export default class HexMapBuilderUtilsClass {
     }
 
     getAverageHeight = (q, r, tileList) => {
-        let heightList = tileList.map(tile => this.hexMapData.getEntry(q + tile.q, r + tile.r).height || null)
+        let heightList = tileList.map(tile => this.spriteManager.tiles.data.getEntry(q + tile.q, r + tile.r).height || null)
         heightList.filter(height => height != null)
 
         let terrainHeight = Math.floor(heightList.reduce((a, b) => a + b, 0) / heightList.length)
@@ -54,9 +54,9 @@ export default class HexMapBuilderUtilsClass {
         let terrain = this.spriteManager.structures.getStructure(tilePosQ, tilePosR)
         if (terrain != null && terrain.data.type != 'modifier') return false
 
-        let doubleTileNeighbors = this.hexMapData.getDoubleNeighborKeys(tilePosQ, tilePosR)
+        let doubleTileNeighbors = this.spriteManager.tiles.data.getDoubleNeighborKeys(tilePosQ, tilePosR)
 
-        let tileNeighbors = this.hexMapData.getNeighborKeys(tilePosQ, tilePosR)
+        let tileNeighbors = this.spriteManager.tiles.data.getNeighborKeys(tilePosQ, tilePosR)
 
 
         if (tileNeighbors.length != 6) return false
@@ -117,13 +117,13 @@ export default class HexMapBuilderUtilsClass {
 
         let maxNeighbors = this.biomeGenSettings[biome].terrainGenMaxNeighbors
 
-        let neighborKeys = this.hexMapData.getNeighborKeys(q, r)
+        let neighborKeys = this.spriteManager.tiles.data.getNeighborKeys(q, r)
 
         let terrainCount = 0;
 
 
         for (let i = 0; i < neighborKeys.length; i++) {
-            let tile = this.hexMapData.getEntry(neighborKeys[i].q, neighborKeys[i].r)
+            let tile = this.spriteManager.tiles.data.getEntry(neighborKeys[i].q, neighborKeys[i].r)
             if (tile.biome == biome && tile.terrain != null) terrainCount++
         }
 
@@ -142,7 +142,7 @@ export default class HexMapBuilderUtilsClass {
 
     cloneTile = (tileToClone, keyObj) => {
  
-       let newTile = this.config.tile(keyObj)
+       let newTile = this.spriteManager.tiles.data.setEntry(keyObj.q, keyObj.r)
  
        newTile.height = tileToClone.height
        newTile.biome = tileToClone.biome
@@ -151,8 +151,6 @@ export default class HexMapBuilderUtilsClass {
        newTile.midBiome = tileToClone.midBiome
        newTile.highBiome = tileToClone.highBiome
        newTile.veryhighBiome = tileToClone.veryhighBiome
- 
-       return newTile
     }
 
 }

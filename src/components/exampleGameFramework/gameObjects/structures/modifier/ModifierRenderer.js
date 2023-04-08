@@ -1,14 +1,15 @@
-import HexMapCommonUtilsClass from "../../hexMap/utils/HexMapCommonUtils"
-import HexMapRendererUtilsClass from "../../hexMap/utils/HexMapRendererUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
+import HexMapRendererUtilsClass from "../../commonUtils/HexMapRendererUtils"
 
 export default class ModifierRendererClass{
 
-    constructor(data, hexMapData, camera, settings, images){
+    constructor(data, hexMapData, tileManager, camera, settings, images){
         this.data = data
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.camera = camera
         this.images = images
-        this.utils = new HexMapRendererUtilsClass(hexMapData, camera, settings, images)
+        this.utils = new HexMapRendererUtilsClass(hexMapData, tileManager, camera, settings, images)
 
         this.modifierSettings = settings.MODIFIERS
         this.commonUtils = new HexMapCommonUtilsClass()
@@ -204,7 +205,7 @@ export default class ModifierRendererClass{
             if (this.data.shadowImages[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            let rotatedMap = this.tileManager.rotatedMapList[this.camera.rotation]
             let keyObj = this.commonUtils.rotateTile(this.data.position.q, this.data.position.r, this.camera.rotation)
 
 
@@ -218,7 +219,7 @@ export default class ModifierRendererClass{
             if (this.data.images[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            let rotatedMap = this.tileManager.rotatedMapList[this.camera.rotation]
             let keyObj = this.commonUtils.rotateTile(this.data.position.q, this.data.position.r, this.camera.rotation)
 
 
@@ -279,7 +280,7 @@ export default class ModifierRendererClass{
             if (this.data.images[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.hexMapData.rotatedMapList[this.camera.rotation]
+            let rotatedMap = this.tileManager.rotatedMapList[this.camera.rotation]
             let keyObj = this.commonUtils.rotateTile(this.data.position.q, this.data.position.r, this.camera.rotation)
 
 

@@ -1,7 +1,7 @@
 import HexMapViewSpritesModifiersClass from "./HexMapViewSpritesModifiers"
 import HexMapViewSpritesStructuresClass from "./HexMapViewSpritesStructures"
 import HexMapViewSpritesUnitsClass from "./HexMapViewSpritesUnits"
-import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+import HexMapCommonUtilsClass from "../../../commonUtils/HexMapCommonUtils"
 import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
 
 export default class HexMapViewSpritesClass {
@@ -38,7 +38,7 @@ export default class HexMapViewSpritesClass {
       //terrain objects
       for (let [key, value] of this.spriteManager.structures.getStructureMap()){
          let keyObj = this.commonUtils.rotateTile(value.data.position.q, value.data.position.r, this.camera.rotation)
-         let height = this.hexMapData.getEntry(value.data.position.q, value.data.position.r).height
+         let height = this.spriteManager.tiles.data.getEntry(value.data.position.q, value.data.position.r).height
 
          //modifier top or bottom
          if (value.data.type == 'modifier') {
@@ -90,7 +90,7 @@ export default class HexMapViewSpritesClass {
             keyObj = this.commonUtils.rotateTile(unitObject.data.position.q, unitObject.data.position.r, this.camera.rotation)
          }
 
-         height = this.hexMapData.getEntry(unitObject.data.position.q, unitObject.data.position.r).height
+         height = this.spriteManager.tiles.data.getEntry(unitObject.data.position.q, unitObject.data.position.r).height
          spriteList.push({
             id: i,
             q: keyObj.q,
@@ -153,7 +153,7 @@ export default class HexMapViewSpritesClass {
 
          let shadowSize
 
-         let shadowPos = this.hexMapData.hexPositionToXYPosition(keyObj, spriteList[i].height, this.camera.rotation)
+         let shadowPos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteList[i].height, this.camera.rotation)
 
          if (spriteObject.data.type == 'modifier') {
             shadowSize = {

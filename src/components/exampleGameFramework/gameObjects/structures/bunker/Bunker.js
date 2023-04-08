@@ -4,9 +4,9 @@ import BunkerConfig from "./BunkerConfig";
 
 export default class BunkerClass {
 
-    constructor(pos, structureName, hexMapData, camera, settings, images){
+    constructor(pos, structureName, hexMapData, tileManager, camera, settings, images){
         this.data = new BunkerDataClass(pos, BunkerConfig[structureName], hexMapData, images.bunker)
-        this.renderer = new StructureRendererClass(this.data, hexMapData, camera, settings, images)
+        this.renderer = new StructureRendererClass(this.data, hexMapData, tileManager.data, camera, settings, images)
     }
 
 }

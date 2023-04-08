@@ -1,7 +1,7 @@
 import HexMapViewMapClass from "./HexMapViewMap";
 import HexMapViewSpritesClass from "./sprites/HexMapViewSprites";
 import HexMapViewSelectionClass from "./HexMapViewHighlights";
-import HexMapCommonUtilsClass from "../utils/HexMapCommonUtils";
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
 
 export default class HexMapViewClass {
 
@@ -31,9 +31,9 @@ export default class HexMapViewClass {
 
       this.images = images;
 
-      this.mapView = new HexMapViewMapClass(hexMapData, camera, this.images, canvas);
+      this.mapView = new HexMapViewMapClass(hexMapData, spriteManager, camera, this.images, canvas);
       this.spriteView = new HexMapViewSpritesClass(hexMapData, spriteManager, camera, images, canvas, settings);
-      this.selectionView = new HexMapViewSelectionClass(hexMapData, camera, settings, images);
+      this.selectionView = new HexMapViewSelectionClass(hexMapData, spriteManager, camera, settings, images);
       this.commonUtils = new HexMapCommonUtilsClass()
 
    }
@@ -57,8 +57,6 @@ export default class HexMapViewClass {
 
       if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
-      this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
-
       this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.debug) {
@@ -67,22 +65,18 @@ export default class HexMapViewClass {
       }
    }
 
-   clear = () => {
-      this.hexMapData.shadowMap.clear();
-   }
-
    initializeCanvas = () => {
 
       //Set render canvas size
-      let keys = this.hexMapData.getKeys();
+      let keys = this.spriteManager.tiles.data.getKeys();
 
-      let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
-      let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
+      let mapWidth = Math.max(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r)) - Math.min(...keys.map(key => this.hexMapData.VecQ.x * key.q + this.hexMapData.VecR.x * key.r));
+      let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish)) - Math.min(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
       let renderCanvasDims = {
-         width: mapHyp / this.hexMapData.squish + 500,
-         height: mapHyp + 500
+         width: mapHyp / this.hexMapData.squish,
+         height: mapHyp
       }
 
       this.drawCanvas = document.createElement('canvas')
@@ -96,7 +90,7 @@ export default class HexMapViewClass {
 
    initializeCamera = () => {
 
-      let keys = this.hexMapData.getKeys();
+      let keys = this.spriteManager.tiles.data.getKeys();
 
       //set camera rotation
       this.camera.rotation = this.camera.initCameraRotation;
@@ -133,7 +127,7 @@ export default class HexMapViewClass {
 
       let camPos = this.commonUtils.rotateTile(camQ, camR, this.camera.rotation)
 
-      let mappos = this.hexMapData.posMap.get(this.camera.rotation)
+      let mappos = this.spriteManager.tiles.data.posMap.get(this.camera.rotation)
 
       //set the camera position
       let vecQ, vecR

@@ -1,6 +1,5 @@
 import CollisionClass from "../../../utilities/collision"
 import HexMapControllerUtilsClass from "../utils/HexMapControllerUtils"
-import HexMapConfigClass from "../config/hexMapConfig";
 
 export default class HexMapUpdaterClass {
 
@@ -22,7 +21,6 @@ export default class HexMapUpdaterClass {
 
         this.collision = new CollisionClass()
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, this.cameraData, canvas, images, uiController, renderer, globalState);
-        this.config = new HexMapConfigClass()
 
     }
 
@@ -120,8 +118,8 @@ export default class HexMapUpdaterClass {
                 if (unit.data.state.current.name != 'walk') {
                     this.utils.setUnitAnimation(unit, 'walk')
                 }
-                let startPosition = this.hexMapData.getEntry(unit.data.position.q, unit.data.position.r)
-                let nextPosition = this.hexMapData.getEntry(unit.data.destination.q, unit.data.destination.r)
+                let startPosition = this.spriteManager.tiles.data.getEntry(unit.data.position.q, unit.data.position.r)
+                let nextPosition = this.spriteManager.tiles.data.getEntry(unit.data.destination.q, unit.data.destination.r)
                 if (nextPosition.height != startPosition.height) {
                     this.utils.setUnitAnimation(unit, 'jump')
                 }

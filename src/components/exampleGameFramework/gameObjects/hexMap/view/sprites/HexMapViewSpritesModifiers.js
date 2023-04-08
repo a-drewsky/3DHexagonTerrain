@@ -1,4 +1,4 @@
-import HexMapCommonUtilsClass from "../../utils/HexMapCommonUtils"
+import HexMapCommonUtilsClass from "../../../commonUtils/HexMapCommonUtils"
 import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
 
 export default class HexMapViewSpritesModifiersClass {
@@ -26,7 +26,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.data.imageObject.singleImageSize.width,
@@ -66,7 +66,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.data.imageObject.spriteSize.width,
@@ -105,7 +105,7 @@ export default class HexMapViewSpritesModifiersClass {
 
         let spriteSize
 
-        let spritePos = this.hexMapData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.data.imageObject.spriteSize.width,
