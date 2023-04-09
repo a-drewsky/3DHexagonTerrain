@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import shadow_sheet from '../../images/shadows/base_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/base_shadow_sheet.png'
 
-import base_sheet from '../../images/bases/mainBase/main_base_sheet.png'
+import base_sheet from '../../../images/bases/mainBase/main_base_sheet.png'
 
 export default class MainBunkerImagesClass extends ImageLoaderClass {
 

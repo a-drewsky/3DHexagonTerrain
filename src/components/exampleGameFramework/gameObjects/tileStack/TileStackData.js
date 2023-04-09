@@ -4,8 +4,9 @@ import TileGroundShadowClass from './TileGroundShadow'
 
 export default class TileStackDataClass {
 
-    constructor(hexMapData) {
+    constructor(hexMapData, images) {
         this.hexMapData = hexMapData
+        this.images = images
 
         this.tileMap = new Map();
         this.posMap = new Map();
@@ -17,7 +18,7 @@ export default class TileStackDataClass {
 
     //Set an entry in the tileMap (void)
     setEntry = (q, r) => {
-        this.tileMap.set(q + ',' + r, new TileStackClass({q: q, r: r}, this.hexMapData));
+        this.tileMap.set(q + ',' + r, new TileStackClass({q: q, r: r}, this.hexMapData, this.images));
         return this.getEntry(q, r)
     }
     setShadowEntry = (q, r) => {

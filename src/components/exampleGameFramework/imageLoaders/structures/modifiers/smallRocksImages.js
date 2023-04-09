@@ -1,9 +1,9 @@
 import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
-import rock_1 from '../../images/modifiers/rock_01.png'
-import rock_2 from '../../images/modifiers/rock_02.png'
+import rock_1 from '../../../images/modifiers/rock_01.png'
+import rock_2 from '../../../images/modifiers/rock_02.png'
 
-import small_round_shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
+import small_round_shadow_sheet from '../../../images/shadows/small_round_shadow_sheet.png'
 
 export default class SmallRocksImagesClass extends ModifierImagesBaseDataClass {
 

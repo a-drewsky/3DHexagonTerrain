@@ -1,6 +1,6 @@
 import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
-import rubble_pile from '../../images/modifiers/rubble_pile.png'
+import rubble_pile from '../../../images/modifiers/rubble_pile.png'
 
 export default class RubblePileImagesClass extends ModifierImagesBaseDataClass {
 

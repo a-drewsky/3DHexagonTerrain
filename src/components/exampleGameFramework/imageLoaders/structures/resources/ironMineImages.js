@@ -1,14 +1,14 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import shadow_sheet from '../../images/shadows/base_shadow_sheet.png'
+import iron_mine_sheet from '../../../images/resources/iron_mine_sheet.png'
 
-import bunker_sheet from '../../images/bases/base/base_sheet.png'
+import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
 
-export default class DefaultBunkerImagesClass extends ImageLoaderClass {
+export default class IronMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super(shadow_sheet, true)
 
         this.spriteSize = {
             width: 1,
@@ -31,10 +31,10 @@ export default class DefaultBunkerImagesClass extends ImageLoaderClass {
         }
 
         this.padding = {
-            'health_lte_100': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
-            'health_lte_75': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
-            'health_lte_50': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}],
-            'health_lte_25': [null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}, null, {x: 0, y: 16}, null, {x: 0, y: 13}, null, {x: 0, y: 16}]
+            'resources_lte_100': [null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}],
+            'resources_lte_75': [null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}],
+            'resources_lte_50': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}],
+            'resources_lte_25': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}]  
         }
 
         this.rows = {
@@ -48,7 +48,7 @@ export default class DefaultBunkerImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: bunker_sheet,
+                image: iron_mine_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',
@@ -59,16 +59,16 @@ export default class DefaultBunkerImagesClass extends ImageLoaderClass {
         }
 
         this.animation_data = {
-            health_lte_100: [
+            resources_lte_100: [
                 'default_1'
             ],
-            health_lte_75: [
+            resources_lte_75: [
                 'default_2'
             ],
-            health_lte_50: [
+            resources_lte_50: [
                 'default_3'
             ],
-            health_lte_25: [
+            resources_lte_25: [
                 'default_4'
             ]
         }

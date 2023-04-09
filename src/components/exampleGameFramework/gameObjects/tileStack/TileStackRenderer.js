@@ -11,8 +11,6 @@ export default class TileStackRendererClass {
         this.lineWidth = settings.HEXMAP_LINE_WIDTH
         this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-        this.tileImageObject = images.tile
-        this.selectionImageObject = images.highlight
 
         this.utils = new HexMapRendererUtilsClass(hexMapData, this.tileData, camera, settings, images)
         this.commonUtils = new HexMapCommonUtilsClass()
@@ -119,7 +117,7 @@ export default class TileStackRendererClass {
                     }
 
                     stackctx.drawImage(
-                        this.tileImageObject[tileBiome][this.camera.rotation],
+                        tile.imageObject[tileBiome][this.camera.rotation],
                         0,
                         tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
                         this.hexMapData.size * 2,
@@ -291,17 +289,12 @@ export default class TileStackRendererClass {
     renderSelectionImage = (tileObj, selection) => {
 
         //assign image
-        let sprite = this.selectionImageObject[selection]
-
-        let canvasSize = {
-            width: this.hexMapData.size * 2,
-            height: this.hexMapData.size * 2
-        }
+        let sprite = tileObj.selectionImageObject[selection]
 
         //create canvas
         let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = canvasSize.width
-        tempCanvas.height = canvasSize.height
+        tempCanvas.width = tileObj.canvasSize.width
+        tempCanvas.height = tileObj.canvasSize.height
         let tempctx = tempCanvas.getContext('2d')
 
         tempctx.drawImage(sprite, 0, 0, tempCanvas.width, tempCanvas.height)

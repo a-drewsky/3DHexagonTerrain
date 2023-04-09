@@ -3,38 +3,38 @@ import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
 
 export default class UnitRendererClass {
 
-    constructor(data, hexMapData, tileManager, camera, settings, images){
-        this.data = data
+    constructor(unitData, hexMapData, tileData, camera, settings, images){
+        this.unitData = unitData
         this.hexMapData = hexMapData
-        this.tileManager = tileManager
+        this.tileData = tileData
         this.camera = camera
 
-        this.utils = new HexMapRendererUtilsClass(hexMapData, tileManager, camera, settings, images)
+        this.utils = new HexMapRendererUtilsClass(hexMapData, tileData, camera, settings, images)
         this.commonUtils = new HexMapCommonUtilsClass()
     }
 
-    render = () => {
+    render = (unit) => {
 
         let initRotation = this.camera.rotation
 
-        for (let i = 0; i < this.data.imageObject.idle.images.length; i++) {
+        for (let i = 0; i < unit.imageObject.idle.images.length; i++) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
 
-                    let spriteRotation = this.data.rotation + rotation
+                    let spriteRotation = unit.rotation + rotation
                     if (rotation % 2 == 1) spriteRotation--
                     if (spriteRotation > 11) spriteRotation -= 12
 
                     //create canvas
                     let tempCanvas = document.createElement('canvas')
-                    tempCanvas.width = this.data.canvasSize.width
-                    tempCanvas.height = this.data.canvasSize.height
+                    tempCanvas.width = unit.canvasSize.width
+                    tempCanvas.height = unit.canvasSize.height
                     let tempctx = tempCanvas.getContext('2d')
 
-                    tempctx.drawImage(this.data.imageObject.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                    tempctx.drawImage(unit.imageObject.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
-                    tempCanvas = this.utils.addHealthBar(tempCanvas, this.data.imageObject.spriteSize, this.data)
+                    tempCanvas = this.utils.addHealthBar(tempCanvas, unit.imageObject.spriteSize, unit)
 
                     imageList[rotation] = tempCanvas
 
@@ -43,21 +43,21 @@ export default class UnitRendererClass {
                 }
             }
 
-            this.data.images[i] = imageList
+            unit.images[i] = imageList
         }
 
         //prerender shadow images
-        if (this.data.imageObject.shadowImages) {
+        if (unit.imageObject.shadowImages) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
                 if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
 
                     this.camera.rotation = rotation;
-                    let rotatedMap = this.tileManager.rotatedMapList[this.camera.rotation]
-                    let keyObj = this.commonUtils.rotateTile(this.data.position.q, this.data.position.r, this.camera.rotation)
+                    let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
+                    let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.camera.rotation)
 
 
-                    let shadowImage = this.utils.cropStructureShadow(this.data.imageObject.shadowImages[rotation], this.data.imageObject.shadowSize, this.data.imageObject.shadowOffset, keyObj, rotatedMap)
+                    let shadowImage = this.utils.cropStructureShadow(unit.imageObject.shadowImages[rotation], unit.imageObject.shadowSize, unit.imageObject.shadowOffset, keyObj, rotatedMap)
 
                     imageList[rotation] = shadowImage
 
@@ -66,24 +66,24 @@ export default class UnitRendererClass {
                 }
             }
 
-            this.data.shadowImages = imageList
+            unit.shadowImages = imageList
 
         }
 
 
 
         //crop and darken
-        for (let i = 0; i < this.data.images[0].length; i++) {
-            if (this.data.images[0][i] == null) continue
+        for (let i = 0; i < unit.images[0].length; i++) {
+            if (unit.images[0][i] == null) continue
 
             this.camera.rotation = i;
-            let rotatedMap = this.tileManager.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(this.data.position.q, this.data.position.r, this.camera.rotation)
+            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
+            let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.camera.rotation)
 
-            for (let j = 0; j < this.data.imageObject.idle.images.length; j++) {
-                let croppedImage = this.utils.cropOutTiles(this.data.images[j][i], this.data.imageObject.spriteSize, this.data.imageObject.spriteOffset, keyObj, rotatedMap)
-                let darkenedImage = this.utils.darkenSprite(croppedImage, this.data)
-                this.data.images[j][i] = darkenedImage
+            for (let j = 0; j < unit.imageObject.idle.images.length; j++) {
+                let croppedImage = this.utils.cropOutTiles(unit.images[j][i], unit.imageObject.spriteSize, unit.imageObject.spriteOffset, keyObj, rotatedMap)
+                let darkenedImage = this.utils.darkenSprite(croppedImage, unit)
+                unit.images[j][i] = darkenedImage
             }
 
         }

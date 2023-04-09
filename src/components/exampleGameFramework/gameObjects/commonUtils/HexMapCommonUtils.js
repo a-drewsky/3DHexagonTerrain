@@ -30,7 +30,7 @@ export default class HexMapCommonUtilsClass {
     }
 
     checkImagesLoaded = (spriteObject) => {
-        if (!spriteObject.data.images || spriteObject.data.images.length == 0) return false
+        if (!spriteObject.images || spriteObject.images.length == 0) return false
         return true
     }
 

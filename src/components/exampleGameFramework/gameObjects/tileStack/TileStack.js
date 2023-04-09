@@ -1,6 +1,6 @@
 export default class TileStackClass {
 
-    constructor(pos, hexMapData){
+    constructor(pos, hexMapData, images){
         this.position = {
             q: pos.q,
             r: pos.r
@@ -12,6 +12,9 @@ export default class TileStackClass {
         this.midBiome = null
         this.highBiome = null
         this.veryhighBiome = null
+
+        this.imageObject = images.tile
+        this.selectionImageObject = images.highlight
         this.images = []
         this.selectionImages = []
 

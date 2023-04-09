@@ -1,6 +1,6 @@
 import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
-import empty_mine from '../../images/modifiers/empty_mine.png'
+import empty_mine from '../../../images/modifiers/empty_mine.png'
 
 export default class EmptyMineImagesClass extends ModifierImagesBaseDataClass {
 

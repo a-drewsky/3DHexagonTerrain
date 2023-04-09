@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import flag from '../../images/bases/mainBase/main_base_q0r0.png'
+import flag from '../../../images/bases/mainBase/main_base_q0r0.png'
 
-import shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/small_round_shadow_sheet.png'
 
 export default class DefaultFlagImagesClass extends ImageLoaderClass {
 

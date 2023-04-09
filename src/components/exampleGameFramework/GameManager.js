@@ -52,8 +52,6 @@ export default class GameManagerClass {
 
     clear = () => {
         clearInterval(this.updateInterval);
-
-        this.hexMap.clear();
     }
 
     startGame = () => {

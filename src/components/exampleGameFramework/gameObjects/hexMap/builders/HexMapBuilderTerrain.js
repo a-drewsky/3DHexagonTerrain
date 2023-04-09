@@ -73,7 +73,7 @@ export default class HexMapBuilderTerrainClass {
 
             this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
-            this.spriteManager.structures.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
+            this.spriteManager.structures.data.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
 
          }
       }
@@ -156,7 +156,7 @@ export default class HexMapBuilderTerrainClass {
                if (closeSection) mineType = closeSpriteList[Math.floor(Math.random() * closeSpriteList.length)]
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
-               this.spriteManager.structures.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
+               this.spriteManager.structures.data.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
             }
 
          }
@@ -181,13 +181,13 @@ export default class HexMapBuilderTerrainClass {
 
          //generate savanna trees
          if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
-            this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'savannaTree')
+            this.spriteManager.structures.data.setProp(keyObj.q, keyObj.r, 'savannaTree')
          }
 
          //generate large rocks
-         let terrain = this.spriteManager.structures.getStructure(keyObj.q, keyObj.r)
-         if (terrain != null && terrain.data.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
-            this.spriteManager.structures.setProp(keyObj.q, keyObj.r, 'largeRock')
+         let terrain = this.spriteManager.structures.data.getStructure(keyObj.q, keyObj.r)
+         if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
+            this.spriteManager.structures.data.setProp(keyObj.q, keyObj.r, 'largeRock')
          }
 
       }
@@ -226,15 +226,15 @@ export default class HexMapBuilderTerrainClass {
             switch (entry.value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'oakTrees')
+                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'oakTrees')
                   break;
                case 'tundra':
                case 'snowhill':
-                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
+                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
                   break;
                case 'desert':
                case 'sandhill':
-                  this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'cacti')
+                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'cacti')
                   break;
                default:
                   continue;
@@ -242,7 +242,7 @@ export default class HexMapBuilderTerrainClass {
 
 
          } else if (this.biomeGenSettings[entry.value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[entry.value.biome].rockGenThreshold) {
-            this.spriteManager.structures.setModifier(keyObj.q, keyObj.r, 'smallRocks')
+            this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'smallRocks')
          }
 
 

@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import savanna_tree from '../../images/props/savanna_tree.png'
+import savanna_tree from '../../../images/props/savanna_tree.png'
 
-import shadow_sheet from '../../images/shadows/savanna_tree_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/savanna_tree_shadow_sheet.png'
 
 
 export default class SavannaTreeImagesClass extends ImageLoaderClass {

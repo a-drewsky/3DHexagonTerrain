@@ -1,10 +1,10 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import iron_mine_sheet from '../../images/resources/iron_mine_sheet.png'
+import ruby_mine_sheet from '../../../images/resources/ruby_mine_sheet.png'
 
-import shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
 
-export default class IronMineImagesClass extends ImageLoaderClass {
+export default class RubyMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
@@ -48,7 +48,7 @@ export default class IronMineImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: iron_mine_sheet,
+                image: ruby_mine_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

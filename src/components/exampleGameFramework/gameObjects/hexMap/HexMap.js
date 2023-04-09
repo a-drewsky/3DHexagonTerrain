@@ -54,8 +54,4 @@ export default class HexMapClass {
         this.view.draw();
     }
 
-    clear = () => {
-        this.view.clear()
-    }
-
 }

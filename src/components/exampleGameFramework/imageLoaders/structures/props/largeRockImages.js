@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import large_rock from '../../images/props/large_rock.png'
+import large_rock from '../../../images/props/large_rock.png'
 
-import shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
 
 
 export default class LargeRockImagesClass extends ImageLoaderClass {

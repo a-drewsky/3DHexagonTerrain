@@ -50,8 +50,8 @@ export default class HexMapUpdaterClass {
         }
 
         //update units
-        for (let i in this.spriteManager.units.unitList) {
-            let unit = this.spriteManager.units.unitList[i]
+        for (let i in this.spriteManager.units.data.unitList) {
+            let unit = this.spriteManager.units.data.unitList[i]
             this.updateUnit(unit)
         }
 
@@ -61,11 +61,11 @@ export default class HexMapUpdaterClass {
 
         this.setUnitFrame(unit)
 
-        unit.data.animationCurTime = Date.now()
+        unit.animationCurTime = Date.now()
 
-        if (unit.data.state.current.duration != 'continuous' && unit.data.animationCurTime - unit.data.animationStartTime < unit.data.state.current.duration) return
+        if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
 
-        switch (unit.data.state.current.name) {
+        switch (unit.state.current.name) {
             case 'walk':
             case 'jump':
                 this.updateUnitPath(unit)
@@ -88,48 +88,48 @@ export default class HexMapUpdaterClass {
     }
 
     setUnitFrame = (unit) => {
-        unit.data.frameCurTime = Date.now()
-        if (unit.data.state.current.rate == 'static') return
-        if (unit.data.frameCurTime - unit.data.frameStartTime > unit.data.state.current.rate) {
-            unit.data.frameStartTime = Date.now()
+        unit.frameCurTime = Date.now()
+        if (unit.state.current.rate == 'static') return
+        if (unit.frameCurTime - unit.frameStartTime > unit.state.current.rate) {
+            unit.frameStartTime = Date.now()
 
-            unit.data.frame++
+            unit.frame++
 
-            if (unit.data.frame >= this.images.unit[unit.data.sprite][unit.data.state.current.name].images.length) unit.data.frame = 0
+            if (unit.frame >= unit.imageObject[unit.state.current.name].images.length) unit.frame = 0
         }
     }
 
     updateUnitPath = (unit) => {
 
-        unit.data.destinationCurTime = Date.now()
-        if (unit.data.destinationCurTime - unit.data.destinationStartTime >= this.travelTime) {
+        unit.destinationCurTime = Date.now()
+        if (unit.destinationCurTime - unit.destinationStartTime >= this.travelTime) {
 
-            unit.data.position = unit.data.destination
+            unit.position = unit.destination
 
-            unit.data.path.shift()
+            unit.path.shift()
 
-            if (unit.data.path.length > 0) {
-                unit.data.destination = unit.data.path[0]
-                unit.data.destinationCurTime = Date.now()
-                unit.data.destinationStartTime = Date.now()
+            if (unit.path.length > 0) {
+                unit.destination = unit.path[0]
+                unit.destinationCurTime = Date.now()
+                unit.destinationStartTime = Date.now()
 
-                this.utils.setUnitDirection(unit, unit.data.destination)
+                this.utils.setUnitDirection(unit, unit.destination)
 
-                if (unit.data.state.current.name != 'walk') {
+                if (unit.state.current.name != 'walk') {
                     this.utils.setUnitAnimation(unit, 'walk')
                 }
-                let startPosition = this.spriteManager.tiles.data.getEntry(unit.data.position.q, unit.data.position.r)
-                let nextPosition = this.spriteManager.tiles.data.getEntry(unit.data.destination.q, unit.data.destination.r)
+                let startPosition = this.spriteManager.tiles.data.getEntry(unit.position.q, unit.position.r)
+                let nextPosition = this.spriteManager.tiles.data.getEntry(unit.destination.q, unit.destination.r)
                 if (nextPosition.height != startPosition.height) {
                     this.utils.setUnitAnimation(unit, 'jump')
                 }
 
             } else {
-                unit.data.destination = null
-                unit.data.destinationCurTime = null
-                unit.data.destinationStartTime = null
+                unit.destination = null
+                unit.destinationCurTime = null
+                unit.destinationStartTime = null
 
-                if (unit.data.futureState == null) {
+                if (unit.futureState == null) {
                     this.utils.setChooseRotation(unit)
                 } else {
                     this.utils.setUnitFutureState(unit)
@@ -141,29 +141,29 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitMining = (unit) => {
-        let target = unit.data.target
+        let target = unit.target
         this.utils.setUnitIdle(unit)
         this.updateMine(target)
     }
 
     endUnitAttacking = (unit) => {
 
-        let target = unit.data.target
+        let target = unit.target
         this.utils.setUnitIdle(unit)
-        target.data.health -= 25
+        target.health -= 25
 
-        if (target.data.type == 'unit') {
+        if (target.type == 'unit') {
             this.utils.setUnitAnimation(target, 'hit')
         }
 
-        if (target.data.type == 'bunker') {
+        if (target.type == 'bunker') {
             this.updateBase(target)
         }
 
     }
 
     endUnitHit = (unit) => {
-        if (unit.data.health > 0) {
+        if (unit.health > 0) {
             this.utils.setUnitIdle(unit)
             return
         }
@@ -173,33 +173,32 @@ export default class HexMapUpdaterClass {
     }
 
     endUnitDeath = (unit) => {
-        this.spriteManager.units.deleteUnit(unit.data.position.q, unit.data.position.r)
+        this.spriteManager.units.data.deleteUnit(unit.position.q, unit.position.r)
         this.utils.resetHexMapState()
     }
 
     updateMine = (mine) => {
 
-        mine.data.resources -= 25
+        mine.resources -= 25
         this.hexMapData.resources++
 
         this.uiController.setResourceBar(this.hexMapData.resources)
 
-        let resources = mine.data.resources
+        let resources = mine.resources
 
-        let curState = mine.data.state.current
+        let curState = mine.state.current
 
         let newStateName = resources > 75 ? 'resources_lte_100' : resources > 50 ? 'resources_lte_75' : resources > 25 ? 'resources_lte_50' : resources > 0 ? 'resources_lte_25' : 'destroyed'
 
         if (newStateName == curState.name) return
 
-        mine.data.state.current = mine.data.state[newStateName]
+        mine.state.current = mine.state[newStateName]
 
-        if (mine.data.state.current.name != 'destroyed') {
-            mine.renderer.render()
+        if (mine.state.current.name != 'destroyed') {
+            this.spriteManager.structures.structureRenderer.render(mine)
         } else {
-            let newModifier = this.spriteManager.structures.setModifier(mine.data.position.q, mine.data.position.r, 'emptymine')
-            console.log(newModifier)
-            newModifier.renderer.render()
+            let newModifier = this.spriteManager.structures.data.setModifier(mine.position.q, mine.position.r, 'emptymine')
+            this.spriteManager.structures.modifierRenderer.render(newModifier)
         }
 
     }
@@ -209,22 +208,21 @@ export default class HexMapUpdaterClass {
 
         console.log(base)
 
-        let health = base.data.health
+        let health = base.health
 
-        let curState = base.data.state.current
+        let curState = base.state.current
 
         let newStateName = health > 75 ? 'health_lte_100' : health > 50 ? 'health_lte_75' : health > 25 ? 'health_lte_50' : health > 0 ? 'health_lte_25' : 'destroyed'
 
         if (newStateName == curState.name) return
         
-        base.data.state.current = base.data.state[newStateName]
+        base.state.current = base.state[newStateName]
 
-        if (base.data.state.current.name != 'destroyed') {
-            base.renderer.render()
+        if (base.state.current.name != 'destroyed') {
+            this.spriteManager.structures.structureRenderer.render(base)
         } else {
-            let newStructure = this.spriteManager.structures.setModifier(base.data.position.q, base.data.position.r, 'rubblepile')
-            console.log(newStructure)
-            newStructure.renderer.render()
+            let newModifier = this.spriteManager.structures.data.setModifier(base.position.q, base.position.r, 'rubblepile')
+            this.spriteManager.structures.modifierRenderer.render(newModifier)
         }
 
     }

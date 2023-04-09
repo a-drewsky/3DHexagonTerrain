@@ -51,8 +51,8 @@ export default class HexMapBuilderUtilsClass {
     isValidStructureTile = (tilePosQ, tilePosR, selectedTile) => {
         if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
 
-        let terrain = this.spriteManager.structures.getStructure(tilePosQ, tilePosR)
-        if (terrain != null && terrain.data.type != 'modifier') return false
+        let terrain = this.spriteManager.structures.data.getStructure(tilePosQ, tilePosR)
+        if (terrain != null && terrain.type != 'modifier') return false
 
         let doubleTileNeighbors = this.spriteManager.tiles.data.getDoubleNeighborKeys(tilePosQ, tilePosR)
 
@@ -62,8 +62,8 @@ export default class HexMapBuilderUtilsClass {
         if (tileNeighbors.length != 6) return false
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
-            let nieghborTerrain = this.spriteManager.structures.getStructure(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
-            if (nieghborTerrain != null && nieghborTerrain.data.type != 'modifier') return false
+            let nieghborTerrain = this.spriteManager.structures.data.getStructure(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
+            if (nieghborTerrain != null && nieghborTerrain.type != 'modifier') return false
         }
 
         return true
@@ -95,12 +95,12 @@ export default class HexMapBuilderUtilsClass {
             if (posName.r == -1) posName.r = 'm1'
             
             //set main base rotation
-            if(posName.q == 1 && posName.r == 'm1') this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_1')
-            else if(posName.q == 1 && posName.r == 0) this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_3')
-            else if(posName.q == 0 && posName.r == 1) this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_5')
-            else if(posName.q == 'm1' && posName.r == 1) this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_7')
-            else if(posName.q == 'm1' && posName.r == 0) this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_9')
-            else if(posName.q == 0 && posName.r == 'm1') this.spriteManager.structures.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_11')
+            if(posName.q == 1 && posName.r == 'm1') this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_1')
+            else if(posName.q == 1 && posName.r == 0) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_3')
+            else if(posName.q == 0 && posName.r == 1) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_5')
+            else if(posName.q == 'm1' && posName.r == 1) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_7')
+            else if(posName.q == 'm1' && posName.r == 0) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_9')
+            else if(posName.q == 0 && posName.r == 'm1') this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_11')
 
             
 
@@ -108,7 +108,7 @@ export default class HexMapBuilderUtilsClass {
 
         this.flattenTerrain(q, r, totalList, terrainHeight)
 
-        this.spriteManager.structures.setFlag(q, r, 'defaultFlag')
+        this.spriteManager.structures.data.setFlag(q, r, 'defaultFlag')
 
     }
 

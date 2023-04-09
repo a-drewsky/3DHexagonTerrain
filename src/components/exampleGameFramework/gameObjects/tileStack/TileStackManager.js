@@ -4,7 +4,7 @@ import TileStackRendererClass from './TileStackRenderer'
 export default class TileStackManagerClass {
 
     constructor(hexMapData, camera, images, settings) {
-        this.data = new TileStackDataClass(hexMapData)
+        this.data = new TileStackDataClass(hexMapData, images)
         this.renderer = new TileStackRendererClass(this.data, hexMapData, camera, images, settings)
     }
 

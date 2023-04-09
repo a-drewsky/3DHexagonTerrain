@@ -6,6 +6,7 @@ export default class TileGroundShadowClass{
             r: pos.r
         }
         this.height = null
+
         this.images = []
 
         this.groundShadowTile = true

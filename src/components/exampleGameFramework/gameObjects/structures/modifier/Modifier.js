@@ -1,12 +1,16 @@
-import ModifierDataClass from "./ModifierData";
-import ModifierRendererClass from "./ModifierRenderer";
-import ModifierConfig from "./ModifierConfig";
+import StructureClass from "../Structure"
+import ModifierConfig from "./ModifierConfig"
 
-export default class ModifierClass{
+export default class ModifierClass extends StructureClass{
 
-    constructor(pos, structureName, hexMapData, tileManager, camera, settings, images){
-        this.data = new ModifierDataClass(pos, ModifierConfig[structureName], hexMapData, images.modifier)
-        this.renderer = new ModifierRendererClass(this.data, hexMapData, tileManager.data, camera, settings, images)
+    constructor(pos, structureName, hexMapData, images){
+        super(pos, ModifierConfig[structureName], hexMapData, images.modifier)
+        this.type = 'modifier'
+        this.modifierType = ModifierConfig[structureName].modifierType
+        this.state = {
+            default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
+        }
+        this.state.current = this.state.default
     }
 
 }

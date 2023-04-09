@@ -1,12 +1,16 @@
-import FlagDataClass from "./FlagData";
-import StructureRendererClass from "../StructureRenderer";
+import StructureClass from "../Structure";
 import FlagConfig from "./FlagConfig";
 
-export default class FlagClass {
+export default class FlagClass extends StructureClass{
 
-    constructor(pos, structureName, hexMapData, tileManager, camera, settings, images){
-        this.data = new FlagDataClass(pos, FlagConfig[structureName], hexMapData, images.flag)
-        this.renderer = new StructureRendererClass(this.data, hexMapData, tileManager.data, camera, settings, images)
+    constructor(pos, structureName, hexMapData, images){
+        super(pos, FlagConfig[structureName], hexMapData, images.flag)
+        this.type = 'flag'
+        this.state = {
+            default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
+        }
+        this.state.current = this.state.default
+
     }
 
 }

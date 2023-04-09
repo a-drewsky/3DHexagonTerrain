@@ -1,10 +1,10 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import gold_mine_sheet from '../../images/resources/gold_mine_sheet.png'
+import copper_mine_sheet from '../../../images/resources/copper_mine_sheet.png'
 
-import shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
 
-export default class GoldMineImagesClass extends ImageLoaderClass {
+export default class CopperMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
@@ -48,7 +48,7 @@ export default class GoldMineImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: gold_mine_sheet,
+                image: copper_mine_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

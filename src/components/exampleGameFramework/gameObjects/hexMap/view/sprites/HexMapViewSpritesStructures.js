@@ -14,7 +14,7 @@ export default class HexMapViewSpritesStructuresClass {
     }
 
    draw = (drawctx, spriteReference) => {
-      let spriteObject = this.spriteManager.structures.getStructure(spriteReference.id.q, spriteReference.id.r)
+      let spriteObject = this.spriteManager.structures.data.getStructure(spriteReference.id.q, spriteReference.id.r)
 
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
@@ -23,7 +23,7 @@ export default class HexMapViewSpritesStructuresClass {
          r: spriteReference.r
       }
 
-      let sprite = this.images[spriteObject.data.type][spriteObject.data.sprite]
+      let sprite = spriteObject.imageObject
 
       let spriteSize
 
@@ -39,7 +39,7 @@ export default class HexMapViewSpritesStructuresClass {
 
       if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
       drawctx.drawImage(
-         spriteObject.data.images[0][this.camera.rotation],
+         spriteObject.images[0][this.camera.rotation],
          spritePos.x,
          spritePos.y,
          spriteSize.width,

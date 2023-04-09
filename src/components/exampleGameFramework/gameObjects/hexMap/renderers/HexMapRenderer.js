@@ -35,8 +35,11 @@ export default class HexMapRendererClass {
                 this.spriteManager.tiles.renderer.renderGroundShadowTile(tileObj)
             }
 
-            if (this.spriteManager.structures.hasStructure(tileToRender.position.q, tileToRender.position.r)) {
-                this.spriteManager.structures.getStructure(tileToRender.position.q, tileToRender.position.r).renderer.render()
+            if (this.spriteManager.structures.data.hasStructure(tileToRender.position.q, tileToRender.position.r)) {
+                let structure = this.spriteManager.structures.data.getStructure(tileToRender.position.q, tileToRender.position.r)
+                if(structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.render(structure)
+                else this.spriteManager.structures.structureRenderer.render(structure)
+                
             }
 
             if (this.renderStack.length == 0) console.log("done rendering")

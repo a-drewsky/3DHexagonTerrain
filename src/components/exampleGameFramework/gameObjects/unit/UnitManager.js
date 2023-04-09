@@ -1,43 +1,11 @@
-import UnitClass from './Unit'
+import UnitDataClass from "./UnitData"
+import UnitRendererClass from "./UnitRenderer"
 
 export default class UnitManagerClass {
 
-    constructor(hexMapData, tileManager, camera, images, settings) {
-        this.hexMapData = hexMapData
-        this.tileManager = tileManager
-        this.camera = camera
-        this.images = images
-        this.settings = settings
-
-        this.unitList = [];
-        this.selectedUnit = null
-    }
-
-    //return terrain at tile (q, r) or null if the tile has no terrain
-    getUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.data.position.q == q && unit.data.position.r == r)
-        if (index == -1) return null
-        return this.unitList[index]
-    }
-
-    hasUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.data.position.q == q && unit.data.position.r == r)
-        if (index == -1) return false
-        return true
-    }
-
-    //delete unit at position (q, r)
-    deleteUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.data.position.q == q && unit.data.position.r == r)
-        if (index == -1) return
-        this.unitList.splice(index, 1)
-    }
-
-    addUnit = (q, r, unitName) => {
-        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.tileManager, this.camera, this.images, this.settings)
-        newUnit.renderer.render()
-        // newUnit.initialize(unitName)
-        this.unitList.push(newUnit)
+    constructor(hexMapData, tileData, camera, images, settings){
+        this.data = new UnitDataClass(hexMapData, images)
+        this.renderer = new UnitRendererClass(this.data, hexMapData, tileData, camera, settings, images)
     }
 
 }

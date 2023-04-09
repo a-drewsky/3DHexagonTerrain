@@ -41,17 +41,17 @@ export default class HexMapPathFinderClass {
     }
 
     isValid = (q, r) => {
-        let terrain = this.spriteManager.structures.getStructure(q, r)
-        if(terrain != null && terrain.data.type != 'modifier') return false
-        let unit = this.spriteManager.units.getUnit(q, r)
+        let terrain = this.spriteManager.structures.data.getStructure(q, r)
+        if(terrain != null && terrain.type != 'modifier') return false
+        let unit = this.spriteManager.units.data.getUnit(q, r)
         if(unit != null) return false
         return true
     }
 
     getTileCost = (tile) => {
         if(this.spriteManager.tiles.data.getEntry(tile.q, tile.r).biome == 'water') return 2
-        let terrain = this.spriteManager.structures.getStructure(tile.q, tile.r)
-        if(terrain != null && terrain.data.name == 'Forest') return 1
+        let terrain = this.spriteManager.structures.data.getStructure(tile.q, tile.r)
+        if(terrain != null && terrain.name == 'Forest') return 1
         return 0
     }
 

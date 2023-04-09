@@ -1,10 +1,10 @@
 import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 
-import desert_tree_1 from '../../images/modifiers/desert_tree_01.png'
-import desert_tree_2 from '../../images/modifiers/desert_tree_02.png'
+import desert_tree_1 from '../../../images/modifiers/desert_tree_01.png'
+import desert_tree_2 from '../../../images/modifiers/desert_tree_02.png'
 
-import medium_round_shadow_sheet from '../../images/shadows/medium_round_shadow_sheet.png'
-import small_round_shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
+import medium_round_shadow_sheet from '../../../images/shadows/medium_round_shadow_sheet.png'
+import small_round_shadow_sheet from '../../../images/shadows/small_round_shadow_sheet.png'
 
 export default class DesertTreesImagesClass extends ModifierImagesBaseDataClass {
 

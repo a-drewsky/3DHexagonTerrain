@@ -1,10 +1,10 @@
-import ImageLoaderClass from '../ImageLoader'
+import ImageLoaderClass from '../../ImageLoader'
 
-import amethyst_mine_sheet from '../../images/resources/amethyst_mine_sheet.png'
+import gold_mine_sheet from '../../../images/resources/gold_mine_sheet.png'
 
-import shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
+import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
 
-export default class AmethystMineImagesClass extends ImageLoaderClass {
+export default class GoldMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
@@ -48,7 +48,7 @@ export default class AmethystMineImagesClass extends ImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: amethyst_mine_sheet,
+                image: gold_mine_sheet,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',
