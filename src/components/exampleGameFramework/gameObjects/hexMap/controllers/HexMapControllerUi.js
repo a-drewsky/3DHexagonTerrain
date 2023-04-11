@@ -1,7 +1,8 @@
 export default class HexMapControllerUiClass {
 
-    constructor(hexMapData, spriteManager, cameraController, camera, canvas, utils, uiController) {
+    constructor(hexMapData, tileManager, spriteManager, cameraController, camera, canvas, utils, uiController) {
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.spriteManager = spriteManager
         this.camera = camera
         this.canvas = canvas
@@ -24,7 +25,7 @@ export default class HexMapControllerUiClass {
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         console.log(selectionTarget)
         if (selectionTarget == null) return
-        let targetTile = this.spriteManager.tiles.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
         let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
@@ -48,7 +49,7 @@ export default class HexMapControllerUiClass {
 
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         if (selectionTarget == null) return
-        let targetTile = this.spriteManager.tiles.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
         let targetObject
 
@@ -79,14 +80,14 @@ export default class HexMapControllerUiClass {
 
         let selectionTarget = this.hexMapData.selections.getPosition('target')
         if (selectionTarget == null) return
-        let targetTile = this.spriteManager.tiles.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
         let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r)
         if (targetStructure == null) return
 
         this.spriteManager.units.data.selectedUnit.target = targetStructure
 
-        let neighbors = this.spriteManager.tiles.data.getNeighborKeys(this.spriteManager.units.data.selectedUnit.position.q, this.spriteManager.units.data.selectedUnit.position.r)
+        let neighbors = this.tileManager.data.getNeighborKeys(this.spriteManager.units.data.selectedUnit.position.q, this.spriteManager.units.data.selectedUnit.position.r)
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.utils.captureFlag(this.spriteManager.units.data.selectedUnit, targetTile)
@@ -140,8 +141,8 @@ export default class HexMapControllerUiClass {
                 let vecR = this.hexMapData.flatTopVecR;
 
                 this.camera.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
 
             } else {
@@ -157,8 +158,8 @@ export default class HexMapControllerUiClass {
                 let vecR = this.hexMapData.VecR;
 
                 this.camera.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
 
             }
@@ -195,8 +196,8 @@ export default class HexMapControllerUiClass {
                 let vecR = this.hexMapData.VecR;
 
                 this.camera.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
 
             } else {
@@ -212,8 +213,8 @@ export default class HexMapControllerUiClass {
                 let vecR = this.hexMapData.flatTopVecR;
 
                 this.camera.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.spriteManager.tiles.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
 
             }

@@ -1,7 +1,8 @@
 export default class HexMapControllerMouseClass {
 
-    constructor(hexMapData, spriteManager, renderer, pathFinder, utils, uiController, config) {
+    constructor(hexMapData, tileManager, spriteManager, renderer, pathFinder, utils, uiController, config) {
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.spriteManager = spriteManager
         this.renderer = renderer
         this.pathFinder = pathFinder
@@ -17,7 +18,7 @@ export default class HexMapControllerMouseClass {
 
         if (!hoverTile) return
 
-        let tileObj = this.spriteManager.tiles.data.getEntry(hoverTile.q, hoverTile.r)
+        let tileObj = this.tileManager.data.getEntry(hoverTile.q, hoverTile.r)
 
         switch (this.hexMapData.state.current) {
             case 'placeUnit':
@@ -87,8 +88,8 @@ export default class HexMapControllerMouseClass {
                 return
             } else {
                 let neighbors
-                if (path.length > 0) neighbors = this.spriteManager.tiles.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
-                else neighbors = this.spriteManager.tiles.data.getNeighborKeys(unit.position.q, unit.position.r)
+                if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
+                else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r)
 
                 if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
                     this.hexMapData.selections.path = this.utils.findClosestAdjacentPath(unit.position, hoverTile)
@@ -96,7 +97,7 @@ export default class HexMapControllerMouseClass {
                 }
             }
         } else if (path.length == 0) {
-            let neighbors = this.spriteManager.tiles.data.getNeighborKeys(unit.position.q, unit.position.r)
+            let neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r)
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
                 findNewPath = true
             } else {
@@ -107,7 +108,7 @@ export default class HexMapControllerMouseClass {
                 findNewPath = true
             }
         } else {
-            let neighbors = this.spriteManager.tiles.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
+            let neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
             neighbors.push(path[path.length - 1])
 
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {

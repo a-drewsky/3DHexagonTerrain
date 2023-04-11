@@ -5,9 +5,10 @@ import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
 
 export default class HexMapBuilderClass {
 
-   constructor(hexMapData, spriteManager, settings) {
+   constructor(hexMapData, tileManager, spriteManager, settings) {
 
       this.hexMapData = hexMapData;
+      this.tileManager = tileManager
       this.spriteManager = spriteManager
 
       this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
@@ -25,8 +26,8 @@ export default class HexMapBuilderClass {
 
       this.mapSizeSettings = settings.MAP_SIZES
 
-      this.utils = new HexMapBuilderUtilsClass(hexMapData, spriteManager, settings, this.config)
-      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, spriteManager, this.utils, settings, this.config);
+      this.utils = new HexMapBuilderUtilsClass(hexMapData, tileManager, spriteManager, settings, this.config)
+      this.builderTerrain = new HexMapBuilderTerrainClass(hexMapData, tileManager, spriteManager, this.utils, settings, this.config);
       this.commonUtils = new HexMapCommonUtilsClass()
 
    }
@@ -52,29 +53,29 @@ export default class HexMapBuilderClass {
       if (this.mirror) {
          for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-               this.spriteManager.tiles.data.setEntry(q, r);
+               this.tileManager.data.setEntry(q, r);
             }
          }
       } else {
          for (let r = -groundShadowDistance; r < 0; r++) {
             for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
-               this.spriteManager.tiles.data.setShadowEntry(q, r);
+               this.tileManager.data.setShadowEntry(q, r);
             }
          }
          for (let r = 0; r < Rgen; r++) {
             for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < -1 * Math.floor(r / 2); q++) {
-               this.spriteManager.tiles.data.setShadowEntry(q, r);
+               this.tileManager.data.setShadowEntry(q, r);
             }
             for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-               this.spriteManager.tiles.data.setEntry(q, r);
+               this.tileManager.data.setEntry(q, r);
             }
             for (let q = Qgen - Math.floor(r / 2); q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
-               this.spriteManager.tiles.data.setShadowEntry(q, r);
+               this.tileManager.data.setShadowEntry(q, r);
             }
          }
          for (let r = Rgen; r < Rgen+groundShadowDistance; r++) {
             for (let q = -1 * Math.floor(r / 2)-groundShadowDistance; q < Qgen - Math.floor(r / 2)+groundShadowDistance; q++) {
-               this.spriteManager.tiles.data.setShadowEntry(q, r);
+               this.tileManager.data.setShadowEntry(q, r);
             }
          }
       }
@@ -89,7 +90,7 @@ export default class HexMapBuilderClass {
       let tempSeed1 = Math.random() * this.seedMultiplier
       let tempSeed2 = Math.random() * this.seedMultiplier
 
-      for (let entry of this.spriteManager.tiles.data.getTileMap()) {
+      for (let entry of this.tileManager.data.getTileMap()) {
 
          console.log(entry)
 
@@ -116,11 +117,11 @@ export default class HexMapBuilderClass {
          //temp generation
          let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
 
-         this.generteTileBiomes(this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
+         this.generteTileBiomes(this.tileManager.data.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
 
       }
 
-      this.spriteManager.tiles.data.setMaxHeight();
+      this.tileManager.data.setMaxHeight();
    }
 
    generteTileBiomes = (tileObj, tileHeight, tileTemp) => {
@@ -188,7 +189,7 @@ export default class HexMapBuilderClass {
 
    smoothBiomes = () => {
       console.log(this.spriteManager)
-      let keyStrings = this.spriteManager.tiles.data.getKeyStrings();
+      let keyStrings = this.tileManager.data.getKeyStrings();
 
       let getBiomeSet = (keyString, keyStrSet) => {
 
@@ -196,10 +197,10 @@ export default class HexMapBuilderClass {
 
          //get tile biome
          let keyObj = this.commonUtils.split(keyString);
-         let tileBiome = this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r).biome
+         let tileBiome = this.tileManager.data.getEntry(keyObj.q, keyObj.r).biome
 
-         let neighborKeys = this.spriteManager.tiles.data.getNeighborKeys(keyObj.q, keyObj.r)
-         neighborKeys = neighborKeys.filter(neighborKey => this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGenSettings[tileBiome].biomeGroup.includes(this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r).biome))
+         let neighborKeys = this.tileManager.data.getNeighborKeys(keyObj.q, keyObj.r)
+         neighborKeys = neighborKeys.filter(neighborKey => this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGenSettings[tileBiome].biomeGroup.includes(this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).biome))
          neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey.q, neighborKey.r)))
 
 
@@ -217,17 +218,17 @@ export default class HexMapBuilderClass {
 
       let smoothTile = (keyString) => {
          let keyObj = this.commonUtils.split(keyString);
-         let tileBiome = this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r).biome
+         let tileBiome = this.tileManager.data.getEntry(keyObj.q, keyObj.r).biome
 
 
          //check if tile has non-similar biome neighbors
-         let neighborKeys = this.spriteManager.tiles.data.getNeighborKeys(keyObj.q, keyObj.r)
-         let tempMap = neighborKeys.map(key => this.spriteManager.tiles.data.getEntry(key.q, key.r).biome)
-         neighborKeys = neighborKeys.filter(neighborKey => this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
+         let neighborKeys = this.tileManager.data.getNeighborKeys(keyObj.q, keyObj.r)
+         let tempMap = neighborKeys.map(key => this.tileManager.data.getEntry(key.q, key.r).biome)
+         neighborKeys = neighborKeys.filter(neighborKey => this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
          if (neighborKeys.length == 0) return false
 
          //get array of neighbor biomes
-         let biomeArr = neighborKeys.map(neighborKey => this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r).biome)
+         let biomeArr = neighborKeys.map(neighborKey => this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).biome)
 
          //find the most common neighbor biome
          let modeMap = {};
@@ -247,9 +248,9 @@ export default class HexMapBuilderClass {
          }
 
          //clone a tile with most common biome
-         neighborKeys = neighborKeys.filter(neighborKey => this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
+         neighborKeys = neighborKeys.filter(neighborKey => this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
          let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
-         let tileToClone = this.spriteManager.tiles.data.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
+         let tileToClone = this.tileManager.data.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
          this.utils.cloneTile(tileToClone, keyObj)
 
          return true
@@ -259,7 +260,7 @@ export default class HexMapBuilderClass {
 
          //get biome
          let keyObj = this.commonUtils.split(keyStrings[0])
-         let biome = this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r).biome
+         let biome = this.tileManager.data.getEntry(keyObj.q, keyObj.r).biome
 
          //get tile set
          let keyStrSet = new Set()
@@ -269,7 +270,7 @@ export default class HexMapBuilderClass {
          //remove set from keyStrings
          for (let i = 0; i < keyStrArr.length; i++) {
             let keyStrArrObj = this.commonUtils.split(keyStrArr[i])
-            let keyStrArrObjBiome = this.spriteManager.tiles.data.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+            let keyStrArrObjBiome = this.tileManager.data.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
             if (keyStrArrObjBiome == biome) {
                let keyIndex = keyStrings.indexOf(keyStrArr[i]);
@@ -281,7 +282,7 @@ export default class HexMapBuilderClass {
          if (keyStrArr.length < this.biomeGenSettings[biome].minBiomeSmoothing) {
             while (keyStrArr.length > 0) {
                let keyStrArrObj = this.commonUtils.split(keyStrArr[0])
-               let keyStrArrObjBiome = this.spriteManager.tiles.data.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+               let keyStrArrObjBiome = this.tileManager.data.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
 
 
                if (keyStrArrObjBiome != biome) keyStrArr.shift()
@@ -301,16 +302,16 @@ export default class HexMapBuilderClass {
 
       while (reduced == true) {
          reduced = false
-         for (let entry of this.spriteManager.tiles.data.getTileMap()) {
+         for (let entry of this.tileManager.data.getTileMap()) {
 
             let keyObj = this.commonUtils.split(entry.key);
-            let tile = this.spriteManager.tiles.data.getEntry(keyObj.q, keyObj.r)
-            let neighborKeys = this.spriteManager.tiles.data.getNeighborKeys(keyObj.q, keyObj.r)
+            let tile = this.tileManager.data.getEntry(keyObj.q, keyObj.r)
+            let neighborKeys = this.tileManager.data.getNeighborKeys(keyObj.q, keyObj.r)
 
             let isCliff = false
 
             for (let neighborKey of neighborKeys) {
-               let neighborTile = this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r)
+               let neighborTile = this.tileManager.data.getEntry(neighborKey.q, neighborKey.r)
 
                if (tile.height - neighborTile.height > 2) {
                   isCliff = true
@@ -325,7 +326,7 @@ export default class HexMapBuilderClass {
             while (hasStep == false) {
 
                for (let neighborKey of neighborKeys) {
-                  let neighborTile = this.spriteManager.tiles.data.getEntry(neighborKey.q, neighborKey.r)
+                  let neighborTile = this.tileManager.data.getEntry(neighborKey.q, neighborKey.r)
 
                   if (tile.height - neighborTile.height > 0 && tile.height - neighborTile.height < 3) {
                      hasStep = true

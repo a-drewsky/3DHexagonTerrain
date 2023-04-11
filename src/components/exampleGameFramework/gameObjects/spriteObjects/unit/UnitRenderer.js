@@ -1,5 +1,5 @@
-import HexMapRendererUtilsClass from "../commonUtils/HexMapRendererUtils"
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
+import HexMapRendererUtilsClass from "../../commonUtils/HexMapRendererUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
 
 export default class UnitRendererClass {
 

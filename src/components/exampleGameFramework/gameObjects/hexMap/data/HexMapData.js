@@ -32,42 +32,5 @@ export default class HexMapDataClass {
         this.resources = 0
     }
 
-    //get an entry in the tileMap (returns a hex tile object)
-    getSelectionArr = () => {
-        let hoverSelection = () => {
-            if (this.state.current == this.state.selectTile) return 'hover_select'
-            if (this.state.current == this.state.chooseRotation) return 'hover_select'
-            else if (this.state.current == this.state.placeUnit) return 'hover_place'
-            else return null
-        }
-
-        let unitSelection = () => {
-            if (this.state.current == this.state.chooseRotation) return 'rotate'
-            if (this.state.current == this.state.selectMovement) return 'unit'
-            if (this.state.current == this.state.selectAction) return 'unit'
-            else return null
-        }
-
-        let selectionList = this.selections
-
-        let filteredSelectionList = []
-
-        if (selectionList.hover !== null && hoverSelection() !== null) filteredSelectionList.push({ position: selectionList.hover, selection: hoverSelection() })
-        if (selectionList.unit !== null && unitSelection() !== null) filteredSelectionList.push({ position: selectionList.unit, selection: unitSelection() })
-        if (selectionList.tile !== null) filteredSelectionList.push({ position: selectionList.tile, selection: 'tile' })
-        if (selectionList.target !== null) filteredSelectionList.push({ position: selectionList.target, selection: 'target' })
-
-        for (let item of selectionList.path) {
-            filteredSelectionList.push({ position: item, selection: 'path' })
-        }
-
-        for (let selList in selectionList.pathing) {
-            for (let item of selectionList.pathing[selList]) {
-                filteredSelectionList.push({ position: item, selection: selList })
-            }
-        }
-        return filteredSelectionList
-    }
-
 
 }

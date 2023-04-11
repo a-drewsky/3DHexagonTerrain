@@ -2,10 +2,11 @@ import HexMapRendererTableClass from "./HexMapRendererTable";
 
 export default class HexMapRendererClass {
 
-    constructor(hexMapData, spriteManager, camera, settings, images) {
-        this.tableRenderer = new HexMapRendererTableClass(hexMapData, spriteManager, camera, settings)
+    constructor(hexMapData, tileManager, spriteManager, camera, settings) {
+        this.tableRenderer = new HexMapRendererTableClass(hexMapData, tileManager, camera, settings)
 
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.spriteManager = spriteManager
 
         this.renderStack = []
@@ -15,9 +16,9 @@ export default class HexMapRendererClass {
 
         this.tableRenderer.prerender(drawCanvas);
 
-        this.spriteManager.tiles.data.setMapPos(drawCanvas);
+        this.tileManager.data.setMapPos(drawCanvas);
 
-        for (let [key, value] of this.spriteManager.tiles.data.getFullMap()) {
+        for (let [key, value] of this.tileManager.data.getFullMap()) {
             this.renderStack.push(value)
         }
 
@@ -28,11 +29,11 @@ export default class HexMapRendererClass {
         if (this.renderStack.length > 0) {
             let tileToRender = this.renderStack.pop()
             if (tileToRender.groundShadowTile == false) {
-                let tileObj = this.spriteManager.tiles.data.getEntry(tileToRender.position.q, tileToRender.position.r)
-                this.spriteManager.tiles.renderer.renderTileStack(tileObj)
+                let tileObj = this.tileManager.data.getEntry(tileToRender.position.q, tileToRender.position.r)
+                this.tileManager.renderer.renderTileStack(tileObj)
             } else {
-                let tileObj = this.spriteManager.tiles.data.getEntry(tileToRender.position.q, tileToRender.position.r)
-                this.spriteManager.tiles.renderer.renderGroundShadowTile(tileObj)
+                let tileObj = this.tileManager.data.getEntry(tileToRender.position.q, tileToRender.position.r)
+                this.tileManager.renderer.renderGroundShadowTile(tileObj)
             }
 
             if (this.spriteManager.structures.data.hasStructure(tileToRender.position.q, tileToRender.position.r)) {

@@ -3,8 +3,9 @@ import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
 
 export default class HexMapBuilderTerrainClass {
 
-   constructor(hexMapData, spriteManager, utils, settings, config) {
+   constructor(hexMapData, tileManager, spriteManager, utils, settings, config) {
       this.hexMapData = hexMapData;
+      this.tileManager = tileManager
       this.spriteManager = spriteManager
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
@@ -53,7 +54,7 @@ export default class HexMapBuilderTerrainClass {
             let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
             let selectedTilePos = cellTiles[selectedTileIndex]
             cellTiles.splice(selectedTileIndex, 1)
-            let selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+            let selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
             while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -61,7 +62,7 @@ export default class HexMapBuilderTerrainClass {
                selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+               selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
             }
 
             if (cellTiles.length == 0) break;
@@ -126,7 +127,7 @@ export default class HexMapBuilderTerrainClass {
                let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                let selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               let selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+               let selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
                while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -134,7 +135,7 @@ export default class HexMapBuilderTerrainClass {
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
-                  selectedTile = this.spriteManager.tiles.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+                  selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
                }
 
                if (cellTiles.length == 0) break;
@@ -171,7 +172,7 @@ export default class HexMapBuilderTerrainClass {
          largeRock: 0.9
       }
 
-      for (let entry of this.spriteManager.tiles.data.getTileMap()) {
+      for (let entry of this.tileManager.data.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          let spawnChance = {
@@ -206,7 +207,7 @@ export default class HexMapBuilderTerrainClass {
 
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
-      for (let entry of this.spriteManager.tiles.data.getTileMap()) {
+      for (let entry of this.tileManager.data.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          //feature generation

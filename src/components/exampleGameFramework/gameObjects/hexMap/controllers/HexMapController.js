@@ -8,10 +8,11 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, spriteManager, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 
+        this.tileManager = tileManager
         this.spriteManager = spriteManager
 
         this.canvas = canvas
@@ -20,17 +21,17 @@ export default class HexMapControllerClass {
 
         this.collision = new CollisionClass();
 
-        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, spriteManager, cameraData)
+        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, tileManager, spriteManager, cameraData)
         
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, renderer, globalState);
 
         this.cameraController = cameraController
 
         this.cameraData = cameraData;
 
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, spriteManager, renderer, this.pathFinder, this.utils, uiController, this.config)
+        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, renderer, this.pathFinder, this.utils, uiController, this.config)
 
-        this.uiController = new HexMapControllerUiClass(hexMapData, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
+        this.uiController = new HexMapControllerUiClass(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
 
     }
 
@@ -57,7 +58,7 @@ export default class HexMapControllerClass {
 
             if (!tileClicked) return
 
-            let tile = this.spriteManager.tiles.data.getEntry(tileClicked.q, tileClicked.r)
+            let tile = this.tileManager.data.getEntry(tileClicked.q, tileClicked.r)
 
             switch (this.hexMapData.state.current) {
                 case 'selectTile':

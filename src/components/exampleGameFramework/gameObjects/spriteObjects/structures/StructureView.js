@@ -1,20 +1,21 @@
-import HexMapCommonUtilsClass from "../../../commonUtils/HexMapCommonUtils"
-import HexMapViewUtilsClass from "../../utils/HexMapViewUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
+import HexMapViewUtilsClass from "../../hexMap/utils/HexMapViewUtils"
 
-export default class HexMapViewSpritesStructuresClass {
+export default class StructureViewClass{
 
-    constructor(hexMapData, spriteManager, camera, images, canvasDims) {
+    constructor(hexMapData, tileData, structureData, camera, images, canvas) {
         this.hexMapData = hexMapData
-        this.spriteManager = spriteManager
+        this.tileData = tileData
+        this.structureData = structureData
         this.camera = camera
         this.images = images
         this.commonUtils = new HexMapCommonUtilsClass()
         this.viewUtils = new HexMapViewUtilsClass(camera)
-        this.canvasDims = canvasDims
+        this.canvas = canvas
     }
 
    draw = (drawctx, spriteReference) => {
-      let spriteObject = this.spriteManager.structures.data.getStructure(spriteReference.id.q, spriteReference.id.r)
+      let spriteObject = this.structureData.getStructure(spriteReference.id.q, spriteReference.id.r)
 
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
@@ -27,7 +28,7 @@ export default class HexMapViewSpritesStructuresClass {
 
       let spriteSize
 
-      let spritePos = this.spriteManager.tiles.data.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+      let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
 
       spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -37,7 +38,7 @@ export default class HexMapViewSpritesStructuresClass {
       spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
       spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-      if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvasDims) == false) return
+      if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
       drawctx.drawImage(
          spriteObject.images[0][this.camera.rotation],
          spritePos.x,

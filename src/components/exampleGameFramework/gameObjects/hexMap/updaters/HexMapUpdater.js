@@ -3,9 +3,10 @@ import HexMapControllerUtilsClass from "../utils/HexMapControllerUtils"
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, spriteManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
 
         this.hexMapData = hexMapData
+        this.tileManager = tileManager
         this.spriteManager = spriteManager
         this.images = images
         this.renderer = renderer
@@ -20,7 +21,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, spriteManager, this.cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, this.cameraData, canvas, images, uiController, renderer, globalState);
 
     }
 
@@ -118,8 +119,8 @@ export default class HexMapUpdaterClass {
                 if (unit.state.current.name != 'walk') {
                     this.utils.setUnitAnimation(unit, 'walk')
                 }
-                let startPosition = this.spriteManager.tiles.data.getEntry(unit.position.q, unit.position.r)
-                let nextPosition = this.spriteManager.tiles.data.getEntry(unit.destination.q, unit.destination.r)
+                let startPosition = this.tileManager.data.getEntry(unit.position.q, unit.position.r)
+                let nextPosition = this.tileManager.data.getEntry(unit.destination.q, unit.destination.r)
                 if (nextPosition.height != startPosition.height) {
                     this.utils.setUnitAnimation(unit, 'jump')
                 }

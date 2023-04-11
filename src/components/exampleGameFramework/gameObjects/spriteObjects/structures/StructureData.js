@@ -1,4 +1,4 @@
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
+import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
 import BunkerClass from "./bunker/Bunker"
 import FlagClass from "./flag/Flag"
 import ModifierClass from "./modifier/Modifier"

@@ -1,9 +1,9 @@
 export default class HexMapRendererTableClass {
 
-   constructor(hexMapData, spriteManager, camera, settings) {
+   constructor(hexMapData, tileManager, camera, settings) {
 
       this.hexMapData = hexMapData;
-      this.spriteManager = spriteManager
+      this.tileManager = tileManager
       this.camera = camera;
       this.drawCanvas = null
 
@@ -40,7 +40,7 @@ export default class HexMapRendererTableClass {
       let tempctx = tempCanvas.getContext('2d')
 
       //get table position
-      let tablePosition = this.spriteManager.tiles.data.getTablePosition(this.camera.rotation);
+      let tablePosition = this.tileManager.data.getTablePosition(this.camera.rotation);
 
       tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l}%)`
       tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l}%)`

@@ -6,8 +6,8 @@ export default class StructureManagerClass {
 
     constructor(hexMapData, tileData, camera, images, settings){
         this.data = new StructureDataClass(hexMapData, images.structures)
-        this.structureRenderer = new StructureRendererClass(this.data, hexMapData, tileData, camera, settings, images.structures)
-        this.modifierRenderer = new ModifierRendererClass(this.data, hexMapData, tileData, camera, settings, images.structures)
+        this.structureRenderer = new StructureRendererClass(this.data, hexMapData, tileData, camera, settings, images)
+        this.modifierRenderer = new ModifierRendererClass(this.data, hexMapData, tileData, camera, settings, images)
     }
 
 }
