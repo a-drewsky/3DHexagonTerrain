@@ -1,5 +1,5 @@
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
-import HexMapRendererUtilsClass from "../../commonUtils/HexMapRendererUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 
 export default class ModifierRendererClass{
 
@@ -8,10 +8,10 @@ export default class ModifierRendererClass{
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.camera = camera
-        this.utils = new HexMapRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
 
         this.modifierSettings = settings.MODIFIERS
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.commonUtils = new CommonHexMapUtilsClass()
     }
 
     render = (modifier) => {

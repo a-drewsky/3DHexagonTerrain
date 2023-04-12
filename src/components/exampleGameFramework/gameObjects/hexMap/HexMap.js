@@ -1,5 +1,4 @@
 import HexMapDataClass from "./data/HexMapData"
-import HexMapBuilderClass from "./builders/HexMapBuilder"
 import HexMapControllerClass from "./controllers/HexMapController"
 import HexMapViewClass from "./view/HexMapView"
 import HexMapSettingsClass from "./config/HexMapSettings"
@@ -16,9 +15,10 @@ export default class HexMapClass {
 
         this.settings = new HexMapSettingsClass(settings)
         this.images = images
-        this.camera = new CameraClass(canvas)
 
         this.data = new HexMapDataClass(this.settings, canvas)
+
+        this.camera = new CameraClass(this.data, canvas)
 
         this.tileManager = new TileStackManagerClass(this.data, this.camera.data, this.images, this.settings, canvas)
         this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileManager.data, this.camera.data, this.images, canvas, this.settings)
@@ -27,28 +27,31 @@ export default class HexMapClass {
 
         this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.tileManager, this.spriteManager, this.settings, images, this.renderer, uiController)
 
-        this.builder = new HexMapBuilderClass(this.data, this.tileManager, this.spriteManager, this.settings)
+        this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.camera.controller, this.camera.data, canvas, images, uiController, this.renderer, globalState)
 
-        this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.camera.controller, this.camera.data, canvas, images, this.settings, uiController, this.renderer, globalState)
-
-        this.updater = new HexMapUpdaterClass(this.data, this.tileManager, this.spriteManager, images, this.settings, this.renderer, this.camera.controller, this.camera.data, canvas, uiController, globalState)
+        this.updater = new HexMapUpdaterClass(this.data, this.tileManager, this.spriteManager, images, this.settings, this.renderer, this.camera, canvas, uiController, globalState)
 
     }
 
-    build = (q, r, size) => {
-        this.builder.build(q, r, size);
+    build = (q, r, mapSize) => {
+        this.tileManager.builder.generateMap(q, r, mapSize)
+        this.tileManager.builder.generateBiomes(mapSize)
+        this.tileManager.builder.smoothBiomes()
+        this.spriteManager.structures.builder.generateTerrain(q, r, mapSize)
+        this.tileManager.builder.reduceTileHeights()
     }
 
     prerender = () => {
         this.tileManager.data.setRotatedMapList()
-        this.view.initializeCanvas()
-        this.renderer.prerender(this.view.drawCanvas)
-        this.updater.prerender(this.view.drawCanvas)
+        let drawCanvas = this.view.initializeCanvas()
+        this.renderer.prerender(drawCanvas)
+        this.updater.prerender(drawCanvas)
+        this.camera.prerender(drawCanvas)
         this.view.initializeCamera()
 
     }
 
-    update = (state) => {
+    update = () => {
         this.renderer.update();
         this.updater.update();
     }

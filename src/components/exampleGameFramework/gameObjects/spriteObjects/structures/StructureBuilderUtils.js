@@ -1,15 +1,13 @@
-export default class HexMapBuilderUtilsClass {
+export default class StructureBuilderUtilsClass {
 
-    constructor(hexMapData, tileManager, spriteManager, settings, config) {
+    constructor(hexMapData, tileData, structureData, settings) {
 
         this.hexMapData = hexMapData
-        this.tileManager = tileManager
-        this.spriteManager = spriteManager
+        this.tileData = tileData
+        this.structureData = structureData
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
 
         this.biomeGenSettings = settings.BIOME_GENERATION
-
-        this.config = config
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {
@@ -20,7 +18,7 @@ export default class HexMapBuilderUtilsClass {
                 r: r + flatList[i].r
             }
 
-            let tileToSet = this.tileManager.data.getEntry(tileToSetKey.q, tileToSetKey.r)
+            let tileToSet = this.tileData.getEntry(tileToSetKey.q, tileToSetKey.r)
 
             let tileBiome
 
@@ -37,7 +35,7 @@ export default class HexMapBuilderUtilsClass {
     }
 
     getAverageHeight = (q, r, tileList) => {
-        let heightList = tileList.map(tile => this.tileManager.data.getEntry(q + tile.q, r + tile.r).height || null)
+        let heightList = tileList.map(tile => this.tileData.getEntry(q + tile.q, r + tile.r).height || null)
         heightList.filter(height => height != null)
 
         let terrainHeight = Math.floor(heightList.reduce((a, b) => a + b, 0) / heightList.length)
@@ -52,18 +50,18 @@ export default class HexMapBuilderUtilsClass {
     isValidStructureTile = (tilePosQ, tilePosR, selectedTile) => {
         if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
 
-        let terrain = this.spriteManager.structures.data.getStructure(tilePosQ, tilePosR)
+        let terrain = this.structureData.getStructure(tilePosQ, tilePosR)
         if (terrain != null && terrain.type != 'modifier') return false
 
-        let doubleTileNeighbors = this.tileManager.data.getDoubleNeighborKeys(tilePosQ, tilePosR)
+        let doubleTileNeighbors = this.tileData.getDoubleNeighborKeys(tilePosQ, tilePosR)
 
-        let tileNeighbors = this.tileManager.data.getNeighborKeys(tilePosQ, tilePosR)
+        let tileNeighbors = this.tileData.getNeighborKeys(tilePosQ, tilePosR)
 
 
         if (tileNeighbors.length != 6) return false
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
-            let nieghborTerrain = this.spriteManager.structures.data.getStructure(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
+            let nieghborTerrain = this.structureData.getStructure(doubleTileNeighbors[i].q, doubleTileNeighbors[i].r)
             if (nieghborTerrain != null && nieghborTerrain.type != 'modifier') return false
         }
 
@@ -96,12 +94,12 @@ export default class HexMapBuilderUtilsClass {
             if (posName.r == -1) posName.r = 'm1'
             
             //set main base rotation
-            if(posName.q == 1 && posName.r == 'm1') this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_1')
-            else if(posName.q == 1 && posName.r == 0) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_3')
-            else if(posName.q == 0 && posName.r == 1) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_5')
-            else if(posName.q == 'm1' && posName.r == 1) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_7')
-            else if(posName.q == 'm1' && posName.r == 0) this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_9')
-            else if(posName.q == 0 && posName.r == 'm1') this.spriteManager.structures.data.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_11')
+            if(posName.q == 1 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_1')
+            else if(posName.q == 1 && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_3')
+            else if(posName.q == 0 && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_5')
+            else if(posName.q == 'm1' && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_7')
+            else if(posName.q == 'm1' && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_9')
+            else if(posName.q == 0 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'mainBunker_11')
 
             
 
@@ -109,7 +107,7 @@ export default class HexMapBuilderUtilsClass {
 
         this.flattenTerrain(q, r, totalList, terrainHeight)
 
-        this.spriteManager.structures.data.setFlag(q, r, 'defaultFlag')
+        this.structureData.setFlag(q, r, 'defaultFlag')
 
     }
 
@@ -118,40 +116,19 @@ export default class HexMapBuilderUtilsClass {
 
         let maxNeighbors = this.biomeGenSettings[biome].terrainGenMaxNeighbors
 
-        let neighborKeys = this.tileManager.data.getNeighborKeys(q, r)
+        let neighborKeys = this.tileData.getNeighborKeys(q, r)
 
         let terrainCount = 0;
 
 
         for (let i = 0; i < neighborKeys.length; i++) {
-            let tile = this.tileManager.data.getEntry(neighborKeys[i].q, neighborKeys[i].r)
+            let tile = this.tileData.getEntry(neighborKeys[i].q, neighborKeys[i].r)
             if (tile.biome == biome && tile.terrain != null) terrainCount++
         }
 
         if (terrainCount > maxNeighbors) return true
 
         return false
-    }
-
-    setTileBiome = (tile) => {
-       if (tile.height >= this.elevationRanges['verylow']) tile.biome = tile.verylowBiome
-       if (tile.height >= this.elevationRanges['low']) tile.biome = tile.lowBiome
-       if (tile.height >= this.elevationRanges['mid']) tile.biome = tile.midBiome
-       if (tile.height >= this.elevationRanges['high']) tile.biome = tile.highBiome
-       if (tile.height >= this.elevationRanges['veryhigh']) tile.biome = tile.veryhighBiome
-    }
-
-    cloneTile = (tileToClone, keyObj) => {
- 
-       let newTile = this.tileManager.data.setEntry(keyObj.q, keyObj.r)
- 
-       newTile.height = tileToClone.height
-       newTile.biome = tileToClone.biome
-       newTile.verylowBiome = tileToClone.verylowBiome
-       newTile.lowBiome = tileToClone.lowBiome
-       newTile.midBiome = tileToClone.midBiome
-       newTile.highBiome = tileToClone.highBiome
-       newTile.veryhighBiome = tileToClone.veryhighBiome
     }
 
 }

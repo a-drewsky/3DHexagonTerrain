@@ -1,5 +1,5 @@
-import HexMapRendererUtilsClass from "../../commonUtils/HexMapRendererUtils"
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
+import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class UnitRendererClass {
 
@@ -9,8 +9,8 @@ export default class UnitRendererClass {
         this.tileData = tileData
         this.camera = camera
 
-        this.utils = new HexMapRendererUtilsClass(hexMapData, tileData, camera, settings, images)
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.commonUtils = new CommonHexMapUtilsClass()
     }
 
     render = (unit) => {

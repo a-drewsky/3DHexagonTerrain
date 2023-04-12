@@ -1,5 +1,5 @@
-import HexMapRendererUtilsClass from "../commonUtils/HexMapRendererUtils"
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
+import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackRendererClass {
 
@@ -12,8 +12,8 @@ export default class TileStackRendererClass {
         this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
 
-        this.utils = new HexMapRendererUtilsClass(hexMapData, this.tileData, camera, settings, images)
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.utils = new CommonRendererUtilsClass(hexMapData, this.tileData, camera, settings, images)
+        this.commonUtils = new CommonHexMapUtilsClass()
 
 
         //starts at top position and rotates clockwise

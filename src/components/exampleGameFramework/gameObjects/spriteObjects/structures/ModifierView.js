@@ -1,5 +1,5 @@
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
-import HexMapViewUtilsClass from "../../hexMap/utils/HexMapViewUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonViewUtilsClass from "../../commonUtils/CommonViewUtils"
 
 export default class ModifierViewClass{
 
@@ -9,8 +9,8 @@ export default class ModifierViewClass{
         this.structureData = structureData
         this.camera = camera
         this.images = images
-        this.commonUtils = new HexMapCommonUtilsClass()
-        this.viewUtils = new HexMapViewUtilsClass(camera)
+        this.commonUtils = new CommonHexMapUtilsClass()
+        this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
     }
 

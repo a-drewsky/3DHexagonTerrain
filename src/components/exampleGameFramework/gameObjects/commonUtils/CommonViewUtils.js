@@ -1,4 +1,4 @@
-export default class HexMapViewUtilsClass {
+export default class CommonViewUtilsClass {
 
     constructor(camera){
         this.camera = camera

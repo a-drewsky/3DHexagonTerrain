@@ -1,5 +1,5 @@
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
-import HexMapViewUtilsClass from "../hexMap/utils/HexMapViewUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import CommonViewUtilsClass from "../commonUtils/CommonViewUtils"
 
 export default class TileStackViewClass {
 
@@ -10,8 +10,8 @@ export default class TileStackViewClass {
         this.tileRenderer = tileRenderer
         this.camera = camera
 
-        this.commonUtils = new HexMapCommonUtilsClass()
-        this.viewUtils = new HexMapViewUtilsClass(camera)
+        this.commonUtils = new CommonHexMapUtilsClass()
+        this.viewUtils = new CommonViewUtilsClass(camera)
 
         this.canvas = canvas
 

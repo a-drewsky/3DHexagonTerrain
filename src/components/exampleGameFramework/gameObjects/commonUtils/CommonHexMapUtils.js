@@ -1,4 +1,4 @@
-export default class HexMapCommonUtilsClass {
+export default class CommonHexMapUtilsClass {
 
     //round floating hex coords to nearest integer hex coords
     roundToNearestHex = (q, r) => {

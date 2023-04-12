@@ -1,7 +1,7 @@
 
 import HexMapPathFinderClass from "./HexMapPathFinder"
 import CollisionClass from "../../../utilities/collision"
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class HexMapControllerUtilsClass {
 
@@ -20,7 +20,7 @@ export default class HexMapControllerUtilsClass {
 
         this.pathFinder = new HexMapPathFinderClass(hexMapData, tileManager, spriteManager, camera)
         this.collision = new CollisionClass();
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.commonUtils = new CommonHexMapUtilsClass()
 
     }
 
@@ -269,8 +269,6 @@ export default class HexMapControllerUtilsClass {
 
         unit.state.current = unit.state.idle
         unit.frame = 0
-
-        console.log(this.renderer)
 
         this.spriteManager.units.renderer.render(unit)
 

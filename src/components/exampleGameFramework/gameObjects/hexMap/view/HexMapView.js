@@ -1,4 +1,4 @@
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils";
 
 export default class HexMapViewClass {
 
@@ -17,19 +17,14 @@ export default class HexMapViewClass {
       this.uiController = uiController
 
       //Settings
-      this.lineWidth = settings.HEXMAP_LINE_WIDTH;
-      this.shadowSize = settings.SHADOW_SIZE
-      this.tableHeight = settings.TABLE_HEIGHT;
       this.initCameraPosition = settings.INIT_CAMERA_POSITION;
-      this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER;
-      this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES;
 
       //Debug Settings
       this.debug = settings.DEBUG;
 
       this.images = images;
 
-      this.commonUtils = new HexMapCommonUtilsClass()
+      this.commonUtils = new CommonHexMapUtilsClass()
 
    }
 
@@ -71,18 +66,15 @@ export default class HexMapViewClass {
       let mapHeight = Math.max(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish)) - Math.min(...keys.map(key => this.hexMapData.VecQ.y * key.q * this.hexMapData.squish + this.hexMapData.VecR.y * key.r * this.hexMapData.squish));
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
-      let renderCanvasDims = {
-         width: mapHyp / this.hexMapData.squish,
-         height: mapHyp
-      }
-
       this.drawCanvas = document.createElement('canvas')
-      this.drawCanvas.width = renderCanvasDims.width;
-      this.drawCanvas.height = renderCanvasDims.height;
+      this.drawCanvas.width = mapHyp / this.hexMapData.squish;
+      this.drawCanvas.height = mapHyp;
       this.drawctx = this.drawCanvas.getContext("2d");
 
-      this.uiController.setBgCanvasSize(renderCanvasDims.width, renderCanvasDims.height)
-      this.uiController.setBgCanvasZoom(renderCanvasDims.width, renderCanvasDims.height)
+      this.uiController.setBgCanvasSize(this.drawCanvas.width, this.drawCanvas.height)
+      this.uiController.setBgCanvasZoom(this.drawCanvas.width, this.drawCanvas.height)
+
+      return this.drawCanvas
    }
 
    initializeCamera = () => {

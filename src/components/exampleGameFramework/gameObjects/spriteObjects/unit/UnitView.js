@@ -1,6 +1,6 @@
-import HexMapRendererUtilsClass from "../../commonUtils/HexMapRendererUtils"
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
-import HexMapViewUtilsClass from "../../hexMap/utils/HexMapViewUtils"
+import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonViewUtilsClass from "../../commonUtils/CommonViewUtils"
 
 export default class UnitViewClass{
 
@@ -10,9 +10,9 @@ export default class UnitViewClass{
         this.unitData = unitData
         this.camera = camera
         this.images = images
-        this.rendererUtils = new HexMapRendererUtilsClass(hexMapData, tileData, camera, settings, images)
-        this.commonUtils = new HexMapCommonUtilsClass()
-        this.viewUtils = new HexMapViewUtilsClass(camera)
+        this.rendererUtils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.commonUtils = new CommonHexMapUtilsClass()
+        this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
         
         this.travelTime = settings.TRAVEL_TIME

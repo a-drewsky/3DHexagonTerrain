@@ -1,4 +1,4 @@
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 import BunkerClass from "./bunker/Bunker"
 import FlagClass from "./flag/Flag"
 import ModifierClass from "./modifier/Modifier"
@@ -11,7 +11,7 @@ export default class StructureDataClass {
         this.hexMapData = hexMapData
         this.images = images
 
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.commonUtils = new CommonHexMapUtilsClass()
 
         this.structureMap = new Map()
     }

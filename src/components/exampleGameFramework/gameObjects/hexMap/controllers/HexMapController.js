@@ -8,7 +8,7 @@ import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, settings, uiController, renderer, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, uiController, renderer, globalState) {
 
         this.hexMapData = hexMapData;
 

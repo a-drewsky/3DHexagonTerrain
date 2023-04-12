@@ -1,12 +1,13 @@
 import noise from "../../../utilities/perlin";
-import HexMapCommonUtilsClass from "../../commonUtils/HexMapCommonUtils";
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils";
+import StructureBuilderUtilsClass from "./StructureBuilderUtils";
 
-export default class HexMapBuilderTerrainClass {
+export default class StructureBuilderClass {
 
-   constructor(hexMapData, tileManager, spriteManager, utils, settings, config) {
+   constructor(hexMapData, tileData, structureData, settings) {
       this.hexMapData = hexMapData;
-      this.tileManager = tileManager
-      this.spriteManager = spriteManager
+      this.tileData = tileData
+      this.structureData = structureData
 
       this.seedMultiplier = settings.SEED_MULTIPLIER
       this.cellSize = settings.CELL_SIZE
@@ -18,10 +19,8 @@ export default class HexMapBuilderTerrainClass {
 
       this.biomeGenSettings = settings.BIOME_GENERATION
 
-      // this.config = config
-
-      this.utils = utils
-      this.commonUtils = new HexMapCommonUtilsClass()
+      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData, tileData, structureData, settings)
+      this.commonUtils = new CommonHexMapUtilsClass()
 
    }
 
@@ -54,15 +53,15 @@ export default class HexMapBuilderTerrainClass {
             let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
             let selectedTilePos = cellTiles[selectedTileIndex]
             cellTiles.splice(selectedTileIndex, 1)
-            let selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+            let selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
-            while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
+            while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
                if (cellTiles.length == 0) break;
                selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+               selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
             }
 
             if (cellTiles.length == 0) break;
@@ -70,11 +69,11 @@ export default class HexMapBuilderTerrainClass {
             //flatten tiles
             let flatList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
 
-            let terrainHeight = this.utils.getAverageHeight(selectedTilePos.q, selectedTilePos.r, flatList)
+            let terrainHeight = this.structureBuilderUtils.getAverageHeight(selectedTilePos.q, selectedTilePos.r, flatList)
 
-            this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
+            this.structureBuilderUtils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
-            this.spriteManager.structures.data.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
+            this.structureData.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
 
          }
       }
@@ -88,13 +87,13 @@ export default class HexMapBuilderTerrainClass {
       let rPos = Math.floor(bufferSize + this.cellSize.r * 0.25)
       let qPos = Math.floor(this.cellSize.q * 0.75 - Math.floor(0.25 / 2))
 
-      this.utils.setMainBase(qPos, rPos)
+      this.structureBuilderUtils.setMainBase(qPos, rPos)
 
       //base 2
       rPos = Math.floor(bufferSize + this.cellSize.r * r - this.cellSize.r * 0.25)
       qPos = Math.floor(this.cellSize.q * 1 - Math.floor(rPos / 2))
 
-      this.utils.setMainBase(qPos, rPos)
+      this.structureBuilderUtils.setMainBase(qPos, rPos)
    }
 
    generateMines = (q, r, mapSize) => {
@@ -127,15 +126,15 @@ export default class HexMapBuilderTerrainClass {
                let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                let selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               let selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+               let selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
 
 
-               while (!this.utils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
+               while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
                   if (cellTiles.length == 0) break;
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
-                  selectedTile = this.tileManager.data.getEntry(selectedTilePos.q, selectedTilePos.r)
+                  selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
                }
 
                if (cellTiles.length == 0) break;
@@ -143,9 +142,9 @@ export default class HexMapBuilderTerrainClass {
                //flatten tiles
                let flatList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
 
-               let terrainHeight = this.utils.getAverageHeight(selectedTilePos.q, selectedTilePos.r, flatList)
+               let terrainHeight = this.structureBuilderUtils.getAverageHeight(selectedTilePos.q, selectedTilePos.r, flatList)
 
-               this.utils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
+               this.structureBuilderUtils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
                let closeSection = false
 
@@ -157,7 +156,7 @@ export default class HexMapBuilderTerrainClass {
                if (closeSection) mineType = closeSpriteList[Math.floor(Math.random() * closeSpriteList.length)]
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
-               this.spriteManager.structures.data.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
+               this.structureData.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
             }
 
          }
@@ -172,7 +171,7 @@ export default class HexMapBuilderTerrainClass {
          largeRock: 0.9
       }
 
-      for (let entry of this.tileManager.data.getTileMap()) {
+      for (let entry of this.tileData.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          let spawnChance = {
@@ -181,14 +180,14 @@ export default class HexMapBuilderTerrainClass {
          }
 
          //generate savanna trees
-         if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.utils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
-            this.spriteManager.structures.data.setProp(keyObj.q, keyObj.r, 'savannaTree')
+         if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
+            this.structureData.setProp(keyObj.q, keyObj.r, 'savannaTree')
          }
 
          //generate large rocks
-         let terrain = this.spriteManager.structures.data.getStructure(keyObj.q, keyObj.r)
+         let terrain = this.structureData.getStructure(keyObj.q, keyObj.r)
          if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
-            this.spriteManager.structures.data.setProp(keyObj.q, keyObj.r, 'largeRock')
+            this.structureData.setProp(keyObj.q, keyObj.r, 'largeRock')
          }
 
       }
@@ -207,7 +206,7 @@ export default class HexMapBuilderTerrainClass {
 
       let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
 
-      for (let entry of this.tileManager.data.getTileMap()) {
+      for (let entry of this.tileData.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
 
          //feature generation
@@ -222,20 +221,20 @@ export default class HexMapBuilderTerrainClass {
 
          let tileRockNoise = noise(rockSeeds[0] + keyObj.q / noiseFluctuation, rockSeeds[0] + keyObj.r / noiseFluctuation) * noise(rockSeeds[1] + keyObj.q / noiseFluctuation, rockSeeds[1] + keyObj.r / noiseFluctuation)
 
-         if (tileTreeNoise[entry.value.biome] > this.biomeGenSettings[entry.value.biome].terrainGenThreshold && !this.utils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
+         if (tileTreeNoise[entry.value.biome] > this.biomeGenSettings[entry.value.biome].terrainGenThreshold && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
 
             switch (entry.value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'oakTrees')
+                  this.structureData.setModifier(keyObj.q, keyObj.r, 'oakTrees')
                   break;
                case 'tundra':
                case 'snowhill':
-                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
+                  this.structureData.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
                   break;
                case 'desert':
                case 'sandhill':
-                  this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'cacti')
+                  this.structureData.setModifier(keyObj.q, keyObj.r, 'cacti')
                   break;
                default:
                   continue;
@@ -243,12 +242,11 @@ export default class HexMapBuilderTerrainClass {
 
 
          } else if (this.biomeGenSettings[entry.value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[entry.value.biome].rockGenThreshold) {
-            this.spriteManager.structures.data.setModifier(keyObj.q, keyObj.r, 'smallRocks')
+            this.structureData.setModifier(keyObj.q, keyObj.r, 'smallRocks')
          }
 
 
       }
 
    }
-
 }

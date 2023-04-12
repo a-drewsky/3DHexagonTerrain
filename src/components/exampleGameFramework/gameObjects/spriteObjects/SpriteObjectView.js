@@ -1,5 +1,5 @@
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils"
-import HexMapViewUtilsClass from "../hexMap/utils/HexMapViewUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import CommonViewUtilsClass from "../commonUtils/CommonViewUtils"
 import ModifierViewClass from "./structures/ModifierView"
 import StructureViewClass from "./structures/StructureView"
 import UnitViewClass from "./unit/UnitView"
@@ -14,8 +14,8 @@ export default class SpriteObjectViewClass{
         this.structureData = structureData
         this.camera = camera
         this.images = images
-        this.commonUtils = new HexMapCommonUtilsClass()
-        this.viewUtils = new HexMapViewUtilsClass(camera)
+        this.commonUtils = new CommonHexMapUtilsClass()
+        this.viewUtils = new CommonViewUtilsClass(camera)
   
         this.shadowSize = settings.SHADOW_SIZE
   

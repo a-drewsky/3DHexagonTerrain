@@ -1,6 +1,6 @@
-import HexMapCommonUtilsClass from "./HexMapCommonUtils"
+import CommonHexMapUtilsClass from "./CommonHexMapUtils"
 
-export default class HexMapRendererUtilsClass {
+export default class CommonRendererUtilsClass {
 
     constructor(hexMapData, tileData, camera, settings, images) {
 
@@ -12,7 +12,7 @@ export default class HexMapRendererUtilsClass {
 
         this.images = images
 
-        this.commonUtils = new HexMapCommonUtilsClass()
+        this.commonUtils = new CommonHexMapUtilsClass()
 
         this.shadowPositions = {
             0: {

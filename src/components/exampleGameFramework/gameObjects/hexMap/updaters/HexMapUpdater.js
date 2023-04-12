@@ -3,15 +3,14 @@ import HexMapControllerUtilsClass from "../utils/HexMapControllerUtils"
 
 export default class HexMapUpdaterClass {
 
-    constructor(hexMapData, tileManager, spriteManager, images, settings, renderer, cameraController, cameraData, canvas, uiController, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, images, settings, renderer, camera, canvas, uiController, globalState) {
 
         this.hexMapData = hexMapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
         this.images = images
         this.renderer = renderer
-        this.cameraController = cameraController
-        this.cameraData = cameraData
+        this.camera = camera
         this.canvas = canvas
         this.drawCanvas = null
 
@@ -21,7 +20,7 @@ export default class HexMapUpdaterClass {
         this.attackTime = settings.ATTACK_TIME
 
         this.collision = new CollisionClass()
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, this.cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, this.camera.data, canvas, images, uiController, renderer, globalState);
 
     }
 
@@ -31,23 +30,19 @@ export default class HexMapUpdaterClass {
 
     update = () => {
 
-        //check camera
-        let zoom = this.cameraData.zoom * this.cameraData.zoomAmount
-        if (this.cameraData.position.x + zoom / 2 < 0 - this.canvas.width / 2) this.cameraData.position.x = 0 - this.canvas.width / 2 - zoom / 2
-        if (this.cameraData.position.x + zoom / 2 > this.drawCanvas.width - this.canvas.width / 2) this.cameraData.position.x = this.drawCanvas.width - this.canvas.width / 2 - zoom / 2
-        if (this.cameraData.position.y + zoom / 2 * this.hexMapData.squish < 0 - this.canvas.height / 2) this.cameraData.position.y = 0 - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
-        if (this.cameraData.position.y + zoom / 2 * this.hexMapData.squish > this.drawCanvas.height - this.canvas.height / 2) this.cameraData.position.y = this.drawCanvas.height - this.canvas.height / 2 - zoom / 2 * this.hexMapData.squish
+        let zoom = this.camera.data.zoom * this.camera.data.zoomAmount
+        this.camera.updater.update()
 
         //set background
         let scale = this.canvas.width / (this.canvas.width + zoom)
-        this.uiController.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
+        this.uiController.setBgCanvasPosition(this.camera.data.position.x * -1 * scale, this.camera.data.position.y * -1 * scale)
         this.uiController.setBgCanvasZoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
 
         //update mouse
-        if (this.hexMapData.state.current != 'selectAction' && this.cameraData.clickPos !== null && this.collision.vectorDist(this.cameraData.clickPos, this.cameraData.clickMovePos) > this.cameraData.clickDist) {
-            this.cameraController.mouseDown(this.cameraData.clickMovePos.x, this.cameraData.clickMovePos.y)
-            this.cameraData.clickPos = null
-            this.cameraData.clickMovePos = null
+        if (this.hexMapData.state.current != 'selectAction' && this.camera.data.clickPos !== null && this.collision.vectorDist(this.camera.data.clickPos, this.camera.data.clickMovePos) > this.camera.data.clickDist) {
+            this.camera.controller.mouseDown(this.camera.data.clickMovePos.x, this.camera.data.clickMovePos.y)
+            this.camera.data.clickPos = null
+            this.camera.data.clickMovePos = null
         }
 
         //update units
@@ -60,9 +55,7 @@ export default class HexMapUpdaterClass {
 
     updateUnit = (unit) => {
 
-        this.setUnitFrame(unit)
-
-        unit.animationCurTime = Date.now()
+        unit.updateFrame()
 
         if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
 
@@ -86,18 +79,6 @@ export default class HexMapUpdaterClass {
 
         }
 
-    }
-
-    setUnitFrame = (unit) => {
-        unit.frameCurTime = Date.now()
-        if (unit.state.current.rate == 'static') return
-        if (unit.frameCurTime - unit.frameStartTime > unit.state.current.rate) {
-            unit.frameStartTime = Date.now()
-
-            unit.frame++
-
-            if (unit.frame >= unit.imageObject[unit.state.current.name].images.length) unit.frame = 0
-        }
     }
 
     updateUnitPath = (unit) => {

@@ -1,4 +1,4 @@
-import HexMapCommonUtilsClass from "../commonUtils/HexMapCommonUtils";
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
 import TileStackClass from "./TileStack";
 import TileGroundShadowClass from './TileGroundShadow'
 
@@ -13,7 +13,7 @@ export default class TileStackDataClass {
         this.rotatedMapList = []
         this.maxHeight = null;
 
-        this.utils = new HexMapCommonUtilsClass()
+        this.utils = new CommonHexMapUtilsClass()
     }
 
     //Set an entry in the tileMap (void)
