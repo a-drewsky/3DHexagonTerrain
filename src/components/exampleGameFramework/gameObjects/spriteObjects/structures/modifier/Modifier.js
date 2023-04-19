@@ -13,4 +13,12 @@ export default class ModifierClass extends StructureClass{
         this.state.current = this.state.default
     }
 
+    setState = (stateName) => {
+        this.state.current = this.state[stateName]
+    }
+
+    update = () => {
+
+    }
+
 }

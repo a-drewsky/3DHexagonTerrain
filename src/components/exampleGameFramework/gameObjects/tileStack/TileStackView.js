@@ -34,7 +34,7 @@ export default class TileStackViewClass {
                 drawctx.drawImage(tileObj.images[this.camera.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.camera.rotation].width, tileObj.images[this.camera.rotation].height)
             }
 
-            let tileSelection = this.hexMapData.selections.getSelection(value.q, value.r)
+            let tileSelection = this.hexMapData.getSelection(value.q, value.r)
 
             if(this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.state.current]
 

@@ -1,4 +1,4 @@
-export default class HexMapRendererTableClass {
+export default class HexMapViewTableClass {
 
    constructor(hexMapData, tileManager, camera, settings) {
 

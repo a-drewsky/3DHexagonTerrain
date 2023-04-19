@@ -12,9 +12,8 @@ export default class HexMapControllerUiClass {
     }
 
     move = () => {
-        console.log(this.spriteManager.units.data.selectedUnit)
-        if (this.spriteManager.units.data.selectedUnit != null) this.utils.lerpUnit(this.spriteManager.units.data.selectedUnit)
-        this.hexMapData.selections.resetSelected()
+        if (this.spriteManager.units.data.selectedUnit != null) this.spriteManager.units.data.selectedUnit.setMove()
+        this.hexMapData.resetSelected()
         this.uiController.clearContextMenu()
     }
 
@@ -22,7 +21,7 @@ export default class HexMapControllerUiClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        let selectionTarget = this.hexMapData.getSelectionPosition('target')
         console.log(selectionTarget)
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
@@ -33,12 +32,13 @@ export default class HexMapControllerUiClass {
         this.spriteManager.units.data.selectedUnit.target = targetStructure
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.mineOre(this.spriteManager.units.data.selectedUnit, targetTile)
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.setMine()
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.spriteManager.units.data.selectedUnit, targetTile, 'mine')
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.futureState = 'mine'
+            this.spriteManager.units.data.selectedUnit.setMove()
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
@@ -47,7 +47,7 @@ export default class HexMapControllerUiClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        let selectionTarget = this.hexMapData.getSelectionPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -64,12 +64,13 @@ export default class HexMapControllerUiClass {
         this.spriteManager.units.data.selectedUnit.target = targetObject
 
         if (this.hexMapData.selections.path.length == 0) {
-            this.utils.attackUnit(this.spriteManager.units.data.selectedUnit)
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.setAttack()
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.spriteManager.units.data.selectedUnit, targetTile, 'attack')
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.futureState = 'attack'
+            this.spriteManager.units.data.selectedUnit.setMove()
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
@@ -78,7 +79,7 @@ export default class HexMapControllerUiClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.selections.getPosition('target')
+        let selectionTarget = this.hexMapData.getSelectionPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -90,12 +91,13 @@ export default class HexMapControllerUiClass {
         let neighbors = this.tileManager.data.getNeighborKeys(this.spriteManager.units.data.selectedUnit.position.q, this.spriteManager.units.data.selectedUnit.position.r)
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
-            this.utils.captureFlag(this.spriteManager.units.data.selectedUnit, targetTile)
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.captureFlag(targetTile)
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
-            this.utils.lerpToTarget(this.spriteManager.units.data.selectedUnit, targetTile, 'capture')
-            this.hexMapData.selections.resetSelected()
+            this.spriteManager.units.data.selectedUnit.futureState = 'capture'
+            this.spriteManager.units.data.selectedUnit.setMove()
+            this.hexMapData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
@@ -103,15 +105,15 @@ export default class HexMapControllerUiClass {
     setPlaceUnit = () => {
         if (this.hexMapData.state.current != 'selectTile') return
 
-        this.hexMapData.selections.resetSelected()
-        this.hexMapData.selections.resetHover()
-        this.hexMapData.state.current = this.hexMapData.state.placeUnit
+        this.hexMapData.resetSelected()
+        this.hexMapData.resetHover()
+        this.hexMapData.setState('placeUnit')
     }
 
     cancel = () => {
-        this.hexMapData.selections.resetSelected()
+        this.hexMapData.resetSelected()
 
-        this.hexMapData.state.current = this.hexMapData.state.selectTile
+        this.hexMapData.setState('selectTile')
 
         this.uiController.clearContextMenu()
     }
@@ -166,7 +168,7 @@ export default class HexMapControllerUiClass {
         }
 
         this.cameraController.rotateRight()
-        this.hexMapData.selections.resetHover()
+        this.hexMapData.resetHover()
         this.hexMapData.renderBackground = true
     }
 
@@ -221,7 +223,7 @@ export default class HexMapControllerUiClass {
         }
 
         this.cameraController.rotateLeft()
-        this.hexMapData.selections.resetHover()
+        this.hexMapData.resetHover()
         this.hexMapData.renderBackground = true
     }
 

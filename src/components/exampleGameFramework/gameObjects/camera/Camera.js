@@ -9,7 +9,7 @@ export default class CameraClass {
         this.settings = new CameraSettingsClass();
         this.data = new CameraDataClass(this.settings);
         this.controller = new CameraControllerClass(this.data, canvas);
-        this.updater = new CameraUpdaterClass(hexMapData, this.data, canvas)
+        this.updater = new CameraUpdaterClass(hexMapData, this.data, this.controller, canvas)
     }
 
     prerender = (drawCanvas) => {

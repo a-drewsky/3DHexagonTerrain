@@ -78,8 +78,8 @@ export default class CameraDataClass {
         }
 
         this.mouseAnchorPoint = {
-            x: x,
-            y: y
+            x: this.clickMovePos.x,
+            y: this.clickMovePos.y
         }
     }
 

@@ -5,7 +5,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, tileManager, spriteManager, camera, canvas, images, uiController, renderer, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, camera, canvas, images, uiController, globalState) {
         this.hexMapData = hexMapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
@@ -15,8 +15,6 @@ export default class HexMapControllerUtilsClass {
         this.globalState = globalState
 
         this.uiController = uiController
-
-        this.renderer = renderer
 
         this.pathFinder = new HexMapPathFinderClass(hexMapData, tileManager, spriteManager, camera)
         this.collision = new CollisionClass();
@@ -100,194 +98,7 @@ export default class HexMapControllerUtilsClass {
                 continue
             }
         }
-        this.hexMapData.selections.setPathingSelections(pathing)
-    }
-
-    updateTerrain = (q, r, terrain) => {
-        if (terrain.modifierType == 'singleImage') this.renderer.spriteRenderer.modifiers.renderSingleImage(terrain)
-
-        this.spriteManager.structures.setStructure(q, r, terrain)
-    }
-
-    lerpUnit = (unit) => {
-
-        if (unit == null) return
-
-        let startTile = this.tileManager.data.getEntry(unit.position.q, unit.position.r)
-
-        unit.path = this.hexMapData.selections.path
-
-        let nextPosition = this.tileManager.data.getEntry(unit.path[0].q, unit.path[0].r)
-
-        unit.destination = unit.path[0]
-
-        unit.destinationStartTime = Date.now()
-        unit.destinationCurTime = Date.now()
-
-        this.setUnitDirection(unit, unit.destination)
-
-        if (nextPosition.height != startTile.height) {
-            this.setUnitAnimation(unit, 'jump')
-        } else {
-            this.setUnitAnimation(unit, 'walk')
-        }
-
-
-    }
-
-    lerpToTarget = (unit, target, futureState) => {
-
-        if (unit == null) return
-
-        unit.futureState = futureState
-
-        let startPosition = this.tileManager.data.getEntry(unit.position.q, unit.position.r)
-
-        unit.path = this.hexMapData.selections.path
-
-        let nextPosition = this.tileManager.data.getEntry(unit.path[0].q, unit.path[0].r)
-
-        unit.destination = unit.path[0]
-
-        unit.destinationStartTime = Date.now()
-        unit.destinationCurTime = Date.now()
-
-        this.setUnitDirection(unit, unit.destination)
-
-        if (nextPosition.height != startPosition.height) {
-            this.setUnitAnimation(unit, 'jump')
-        } else {
-            this.setUnitAnimation(unit, 'walk')
-        }
-    }
-
-    setUnitIdle = (unit) => {
-        unit.target = null
-        unit.animationCurTime = null
-        unit.animationStartTime = null
-
-        unit.state.current = unit.state.idle
-        unit.frame = 0
-
-        this.spriteManager.units.renderer.render(unit)
-
-        this.resetHexMapState()
-    }
-
-    resetHexMapState = () => {
-        this.hexMapData.selections.resetSelected()
-        this.hexMapData.state.current = this.hexMapData.state.selectTile
-    }
-
-    setUnitFutureState = (unit) => {
-
-        switch (unit.futureState) {
-            case 'mine':
-                this.mineOre(unit, unit.target)
-                break
-            case 'attack':
-                this.attackUnit(unit, unit.target)
-                break
-            case 'capture':
-                this.captureFlag(unit, unit.target)
-                break
-
-        }
-
-        unit.futureState = null
-        this.hexMapData.selections.resetSelected()
-
-    }
-
-    getDistance = (pos1, pos2) => {
-        return (Math.abs(pos1.q - pos2.q)
-            + Math.abs(pos1.q + pos1.r - pos2.q - pos2.r)
-            + Math.abs(pos1.r - pos2.r)) / 2
-    }
-
-    getClosestPos = (pos, posMap) => {
-        let distMap = posMap.map(mapPos => mapPos === null ? Infinity : this.getDistance(pos, mapPos))
-
-        let index = distMap.indexOf(Math.min(...distMap))
-        return posMap[index]
-    }
-
-    setUnitDirection = (unit, targetPos) => {
-
-        //find closest neighbor to targetPos
-
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-        let rotatePosMap = directionMap.map(pos => pos === null ? null : { q: unit.position.q - pos.q, r: unit.position.r - pos.r })
-
-        let closestPos
-        if (rotatePosMap.findIndex(pos => pos !== null && pos.q == targetPos.q && pos.r == targetPos.r) != -1) {
-            closestPos = targetPos
-        } else {
-            closestPos = this.getClosestPos(targetPos, rotatePosMap)
-        }
-
-        let direction = {
-            q: closestPos.q - unit.position.q,
-            r: closestPos.r - unit.position.r
-        }
-
-        unit.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
-    }
-
-    setUnitAnimation = (unit, state) => {
-        this.hexMapData.state.current = this.hexMapData.state.animation
-        unit.state.current = unit.state[state]
-        unit.frame = 0
-        unit.animationStartTime = Date.now()
-        unit.animationCurTime = Date.now()
-        unit.frameStartTime = Date.now()
-        unit.frameCurTime = Date.now()
-    }
-
-    mineOre = (unit, targetTile) => {
-
-        this.setUnitDirection(unit, targetTile.position)
-
-        this.setUnitAnimation(unit, 'mine')
-    }
-
-    attackUnit = (unit) => {
-
-        console.log(unit)
-
-
-        this.setUnitDirection(unit, unit.target.position)
-
-        this.setUnitAnimation(unit, 'attack')
-    }
-
-    setChooseRotation = (unit) => {
-
-        unit.target = null
-        unit.animationCurTime = null
-        unit.animationStartTime = null
-
-        unit.state.current = unit.state.idle
-        unit.frame = 0
-
-        this.spriteManager.units.renderer.render(unit)
-
-        this.setSelection(unit.position.q, unit.position.r, 'unit')
-
-        this.hexMapData.state.current = this.hexMapData.state.chooseRotation
-
-    }
-
-    setSelection = (q, r, selection) => {
-        if(this.tileManager.data.hasTileEntry(q, r)) this.hexMapData.selections.setSelection(q, r, selection)
-    }
-
-    captureFlag = (unit, targetTile) => {
-
-        this.setUnitDirection(unit, targetTile.position)
-
-        this.globalState.current = this.globalState.pause
-        this.uiController.setEndGameMenu(true)
+        this.hexMapData.setPathingSelections(pathing)
     }
 
     getSelectedTile = (x, y) => {

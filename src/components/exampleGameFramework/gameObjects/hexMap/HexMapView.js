@@ -1,8 +1,9 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils";
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
+import HexMapViewTableClass from "./HexMapViewTable";
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, tileManager, spriteManager, settings, images, renderer, uiController) {
+   constructor(ctx, canvas, camera, hexMapData, tileManager, spriteManager, settings, images, uiController) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -13,8 +14,9 @@ export default class HexMapViewClass {
       this.drawCanvas = null;
       this.drawctx = null;
 
-      this.renderer = renderer
       this.uiController = uiController
+
+      this.tableView = new HexMapViewTableClass(hexMapData, tileManager, camera, settings)
 
       //Settings
       this.initCameraPosition = settings.INIT_CAMERA_POSITION;
@@ -51,7 +53,7 @@ export default class HexMapViewClass {
 
    checkAndRenderBackground = () => {
       if (this.hexMapData.renderBackground == true) {
-         let tempCanvas = this.renderer.tableRenderer.render()
+         let tempCanvas = this.tableView.render()
          this.uiController.setBgCanvasImage(tempCanvas)
          this.hexMapData.renderBackground = false
       }
@@ -73,6 +75,8 @@ export default class HexMapViewClass {
 
       this.uiController.setBgCanvasSize(this.drawCanvas.width, this.drawCanvas.height)
       this.uiController.setBgCanvasZoom(this.drawCanvas.width, this.drawCanvas.height)
+
+      this.tableView.prerender(this.drawCanvas)
 
       return this.drawCanvas
    }

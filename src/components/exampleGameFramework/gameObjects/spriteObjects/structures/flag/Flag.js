@@ -13,4 +13,12 @@ export default class FlagClass extends StructureClass{
 
     }
 
+    setState = (stateName) => {
+        this.state.current = this.state[stateName]
+    }
+
+    update = () => {
+
+    }
+
 }

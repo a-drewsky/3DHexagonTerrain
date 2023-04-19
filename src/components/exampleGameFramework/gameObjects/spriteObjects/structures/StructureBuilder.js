@@ -24,7 +24,7 @@ export default class StructureBuilderClass {
 
    }
 
-   generateTerrain = (q, r, mapSize) => {
+   generateStructures = (q, r, mapSize) => {
       let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
       this.generateModifiers(noiseFluctuation)
       this.generateProps()

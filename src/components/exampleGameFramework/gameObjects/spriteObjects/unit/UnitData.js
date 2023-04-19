@@ -2,10 +2,13 @@ import UnitClass from "./Unit"
 
 export default class UnitDataClass {
 
-    constructor(hexMapData, images) {
+    constructor(hexMapData, tileData, images, settings, uiController, globalState) {
         this.hexMapData = hexMapData
-
+        this.tileData = tileData
         this.images = images
+        this.settings = settings
+        this.uiController = uiController
+        this.globalState = globalState
 
         this.unitList = [];
         this.selectedUnit = null
@@ -32,7 +35,7 @@ export default class UnitDataClass {
     }
 
     addUnit = (q, r) => {
-        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.images.unit)
+        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.tileData, this.images.unit, this.settings, this.uiController, this.globalState)
         this.unitList.push(newUnit)
         return this.getUnit(q, r)
     }

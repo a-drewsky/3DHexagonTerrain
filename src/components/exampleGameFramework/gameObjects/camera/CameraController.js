@@ -8,7 +8,8 @@ export default class CameraControllerClass {
     }
 
     mouseDown = (x, y) => {
-        this.cameraData.setAnchorPoint(x, y);
+        this.cameraData.clickPos = { x: x, y: y }
+        this.cameraData.clickMovePos = { x: x, y: y }
     }
 
     mouseUp = () => {

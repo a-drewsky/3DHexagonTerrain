@@ -8,7 +8,7 @@ export default class TileStackBuilderClass {
 
         this.hexMapData = hexMapData;
         this.tileData = tileData
-  
+
         this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
         this.lowTerrainGenerationRanges = settings.LOW_TERRAIN_GENERATION_RANGES
         this.maxElevation = settings.MAX_ELEVATION
@@ -22,11 +22,17 @@ export default class TileStackBuilderClass {
 
         this.cellSize = settings.CELL_SIZE
         this.mapSizeSettings = settings.MAP_SIZES
-  
+
         this.utils = new CommonBuilderUtilsClass(hexMapData, tileData, settings)
         this.commonUtils = new CommonHexMapUtilsClass()
-  
-     }
+
+    }
+
+    buildMap = (q, r, mapSize) => {
+        this.generateMap(q, r, mapSize)
+        this.generateBiomes(mapSize)
+        this.smoothBiomes()
+    }
 
     generateMap = (q, r, mapSize) => {
 

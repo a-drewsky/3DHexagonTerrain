@@ -71,4 +71,17 @@ export default class CommonHexMapUtilsClass {
         }
     }
 
+    getDistance = (pos1, pos2) => {
+        return (Math.abs(pos1.q - pos2.q)
+            + Math.abs(pos1.q + pos1.r - pos2.q - pos2.r)
+            + Math.abs(pos1.r - pos2.r)) / 2
+    }
+
+    getClosestPos = (pos, posMap) => {
+        let distMap = posMap.map(mapPos => mapPos === null ? Infinity : this.getDistance(pos, mapPos))
+
+        let index = distMap.indexOf(Math.min(...distMap))
+        return posMap[index]
+    }
+
 }

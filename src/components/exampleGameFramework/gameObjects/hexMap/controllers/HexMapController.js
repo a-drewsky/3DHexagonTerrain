@@ -1,14 +1,14 @@
 
-import HexMapControllerUtilsClass from '../utils/HexMapControllerUtils';
+import HexMapControllerUtilsClass from './HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
-import HexMapPathFinderClass from "../utils/HexMapPathFinder";
+import HexMapPathFinderClass from "./HexMapPathFinder";
 
 import HexMapControllerMouseClass from './HexMapControllerMouse';
 import HexMapControllerUiClass from './HexMapControllerUi';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, uiController, renderer, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, uiController, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -23,22 +23,20 @@ export default class HexMapControllerClass {
 
         this.pathFinder = new HexMapPathFinderClass(this.hexMapData, tileManager, spriteManager, cameraData)
         
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, renderer, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, globalState);
 
         this.cameraController = cameraController
 
         this.cameraData = cameraData;
 
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, renderer, this.pathFinder, this.utils, uiController, this.config)
+        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.pathFinder, this.utils, uiController, this.config)
 
         this.uiController = new HexMapControllerUiClass(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
 
     }
 
     mouseDown = (x, y) => {
-
-        this.cameraData.clickPos = { x: x, y: y }
-        this.cameraData.clickMovePos = { x: x, y: y }
+        this.cameraController.mouseDown(x, y)
     }
 
     mouseUp = () => {
@@ -91,7 +89,7 @@ export default class HexMapControllerClass {
             this.cameraData.clickMovePos.y = y
         }
 
-        this.hexMapData.selections.resetHover()
+        this.hexMapData.resetHover()
 
         switch (this.hexMapData.state.current) {
             case 'selectTile':
@@ -113,7 +111,7 @@ export default class HexMapControllerClass {
 
     zoom = (deltaY) => {
         this.cameraController.zoom(deltaY)
-        this.hexMapData.selections.resetHover()
+        this.hexMapData.resetHover()
     }
 
 }

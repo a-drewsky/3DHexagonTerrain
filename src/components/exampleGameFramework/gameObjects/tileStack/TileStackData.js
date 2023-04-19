@@ -25,6 +25,10 @@ export default class TileStackDataClass {
         this.tileMap.set(q + ',' + r, new TileGroundShadowClass({q: q, r: r}, this.hexMapData));
         return this.getEntry(q, r)
     }
+    
+    setSelection = (q, r, selection) => {
+        if(this.hasTileEntry(q, r)) this.hexMapData.setSelection(q, r, selection)
+    }
 
     //delete an entry in the tileMap (void)
     deleteEntry = (q, r) => {
@@ -159,11 +163,8 @@ export default class TileStackDataClass {
     //returns the tileMap
     getTileMap = () => {
         let map = Array.from(this.tileMap, ([key, value]) => ({ key, value }));
-
         let filteredMap = map.filter(entry => entry.value.groundShadowTile == false)
-
         return filteredMap
-
     }
 
     //returns the tileMap

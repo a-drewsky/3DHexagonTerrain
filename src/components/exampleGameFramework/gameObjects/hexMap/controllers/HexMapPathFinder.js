@@ -1,3 +1,5 @@
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+
 export default class HexMapPathFinderClass {
 
     constructor(hexMapData, tileManager, spriteManager, camera) {
@@ -6,6 +8,8 @@ export default class HexMapPathFinderClass {
         this.tileManager = tileManager
         this.spriteManager = spriteManager
         this.camera = camera
+
+        this.commonUtils = new CommonHexMapUtilsClass()
 
     }
 
@@ -29,12 +33,6 @@ export default class HexMapPathFinderClass {
         let neighbors = this.tileManager.data.getNeighborKeys(q, r)
 
         return neighbors.map(neighbor => this.createNode(neighbor.q, neighbor.r))
-    }
-
-    getDistance = (a, b) => {
-        return (Math.abs(a.q - b.q) 
-                + Math.abs(a.q + a.r - b.q - b.r)
-                + Math.abs(a.r - b.r)) / 2
     }
 
     getHeightDifference = (a, b) => {
@@ -137,6 +135,7 @@ export default class HexMapPathFinderClass {
 
         let newMoveSet = [...moveSet]
         
+        //path neighbors
         for(let node of moveSet){
             let tile = node.tile
 
@@ -147,6 +146,15 @@ export default class HexMapPathFinderClass {
                 if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q == neighborNode.tile.q && moveSetNode.tile.r == neighborNode.tile.r) != -1) continue
                 newMoveSet.push(neighborNode)
             }
+        }
+
+        //unit neighbors
+        let neighbors = this.createNeighborNodes(unitPos.q, unitPos.r)
+
+        for(let neighborNode of neighbors){
+            if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
+            if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q == neighborNode.tile.q && moveSetNode.tile.r == neighborNode.tile.r) != -1) continue
+            newMoveSet.push(neighborNode)
         }
 
         return newMoveSet
@@ -198,7 +206,7 @@ export default class HexMapPathFinderClass {
                     neighbor.connection = current
 
                     if (!inSearch) {
-                        neighbor.estimateCost = this.getDistance(neighbor.tile, targetNode.tile) + tileCost + this.getHeightDifference(neighbor.tile, targetNode.tile)
+                        neighbor.estimateCost = this.commonUtils.getDistance(neighbor.tile, targetNode.tile) + tileCost + this.getHeightDifference(neighbor.tile, targetNode.tile)
                         toSearch.push(neighbor)
                     }
                 }
@@ -260,7 +268,7 @@ export default class HexMapPathFinderClass {
                     neighbor.connection = current
 
                     if (!inSearch) {
-                        neighbor.estimateCost = this.getDistance(neighbor.tile, targetNode.tile) + tileCost + this.getHeightDifference(neighbor.tile, targetNode.tile)
+                        neighbor.estimateCost = this.commonUtils.getDistance(neighbor.tile, targetNode.tile) + tileCost + this.getHeightDifference(neighbor.tile, targetNode.tile)
                         toSearch.push(neighbor)
                     }
                 }

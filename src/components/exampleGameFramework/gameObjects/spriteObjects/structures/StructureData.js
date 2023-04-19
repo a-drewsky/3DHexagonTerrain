@@ -46,6 +46,11 @@ export default class StructureDataClass {
         return newResource
     }
 
+    destroyStructure = (structure) => {
+        console.log(structure)
+        this.setModifier(structure.position.q, structure.position.r, structure.destructionStructure)
+    }
+
     getStructure = (q, r) => {
         if(!this.hasStructure(q, r)) return null
         return this.structureMap.get(this.commonUtils.join(q, r))

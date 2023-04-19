@@ -72,8 +72,8 @@ export default class StructureRendererClass{
                     tempCanvas.width = canvasSize.width
                     tempCanvas.height = canvasSize.height
                     let tempctx = tempCanvas.getContext('2d')
-                    console.log(structure.images)
-                    tempctx.drawImage(structure.images[structure.state.current.name][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                    console.log(structure)
+                    tempctx.drawImage(structure.imageObject[structure.state.current.name][rotation], 0, 0, tempCanvas.width, tempCanvas.height)
 
                     if (structure.type == 'resource') {
                         tempCanvas = this.utils.addResourceBar(tempCanvas, structure.imageObject.spriteSize, structure)

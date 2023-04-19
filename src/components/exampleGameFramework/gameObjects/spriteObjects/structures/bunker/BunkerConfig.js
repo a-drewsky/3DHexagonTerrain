@@ -1,14 +1,14 @@
 export default class BunkerConfig {
 
     static bunker = {
-        name: 'Stronghold',
+        name: 'Bunker',
         sprite: 'bunker',
         height: 2,
         stats: {}
     }
 
     static mainBunker_1 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 1,
@@ -16,7 +16,7 @@ export default class BunkerConfig {
     }
 
     static mainBunker_3 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 3,
@@ -24,7 +24,7 @@ export default class BunkerConfig {
     }
 
     static mainBunker_5 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 5,
@@ -32,7 +32,7 @@ export default class BunkerConfig {
     }
 
     static mainBunker_7 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 7,
@@ -40,7 +40,7 @@ export default class BunkerConfig {
     }
 
     static mainBunker_9 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 9,
@@ -48,7 +48,7 @@ export default class BunkerConfig {
     }
 
     static mainBunker_11 = {
-        name: 'Main Base',
+        name: 'Main Bunker',
         sprite: `main_bunker`,
         height: 3,
         rotation: 11,
