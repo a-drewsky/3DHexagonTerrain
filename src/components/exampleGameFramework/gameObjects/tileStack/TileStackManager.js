@@ -5,11 +5,11 @@ import TileStackBuilderClass from './TileStackBuilder'
 
 export default class TileStackManagerClass {
 
-    constructor(hexMapData, camera, images, settings, canvas) {
+    constructor(hexMapData, camera, images, canvas) {
         this.data = new TileStackDataClass(hexMapData, images)
-        this.renderer = new TileStackRendererClass(this.data, hexMapData, camera, images, settings)
+        this.renderer = new TileStackRendererClass(this.data, hexMapData, camera, images)
         this.view = new TileStackViewClass(hexMapData, this.data, this.renderer, camera, canvas)
-        this.builder = new TileStackBuilderClass(hexMapData, this.data, settings)
+        this.builder = new TileStackBuilderClass(hexMapData, this.data)
     }
 
 

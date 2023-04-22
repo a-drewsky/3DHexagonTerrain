@@ -10,13 +10,10 @@ export default class UnitViewClass{
         this.unitData = unitData
         this.camera = camera
         this.images = images
-        this.rendererUtils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.rendererUtils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
         this.commonUtils = new CommonHexMapUtilsClass()
         this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
-        
-        this.travelTime = settings.TRAVEL_TIME
-        this.jumpAmount = settings.JUMP_AMOUNT
     }
 
     draw = (drawctx, spriteReference) => {
@@ -101,7 +98,7 @@ export default class UnitViewClass{
         if (spriteObject.destination != null) {
             let point1 = spriteObject.position
             let point2 = spriteObject.destination
-            let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / this.travelTime
+            let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / spriteObject.travelTime
             let lerpPos = {
                 q: point1.q + (point2.q - point1.q) * percent,
                 r: point1.r + (point2.r - point1.r) * percent
@@ -240,7 +237,7 @@ export default class UnitViewClass{
             //set pos
             let point1 = spriteObject.position
             let point2 = spriteObject.destination
-            let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / this.travelTime
+            let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / spriteObject.travelTime
             let lerpPos = {
                 q: point1.q + (point2.q - point1.q) * percent,
                 r: point1.r + (point2.r - point1.r) * percent
@@ -257,7 +254,7 @@ export default class UnitViewClass{
             let newHeight = this.tileData.getEntry(spriteObject.destination.q, spriteObject.destination.r).height
 
             if (newHeight != height) {
-                let extraHeight = Math.sin(percent * Math.PI) * this.jumpAmount
+                let extraHeight = Math.sin(percent * Math.PI) * spriteObject.jumpAmount
 
                 height = height + (newHeight - height) * percent + extraHeight
             }

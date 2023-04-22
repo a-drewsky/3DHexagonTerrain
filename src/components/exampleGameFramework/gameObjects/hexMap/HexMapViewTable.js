@@ -1,15 +1,21 @@
+
+import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../commonConstants/CommonConstants'
+
+const TABLE_HEIGHT = 40
+
+const TABLE_COLORS = {
+   fill: {h: 150, s: 30, l: 65},
+   stroke: {h: 150, s: 30, l: 55}
+}
+
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, tileManager, camera, settings) {
+   constructor(hexMapData, tileManager, camera) {
 
       this.hexMapData = hexMapData;
       this.tileManager = tileManager
       this.camera = camera;
       this.drawCanvas = null
-
-      this.tableColors = settings.TEMP_TABLE_COLORS;
-      this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
-      this.tableHeight = settings.TABLE_HEIGHT
 
       this.rotationAlpha = {
          0: 1,
@@ -42,8 +48,8 @@ export default class HexMapViewTableClass {
       //get table position
       let tablePosition = this.tileManager.data.getTablePosition(this.camera.rotation);
 
-      tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l}%)`
-      tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l}%)`
+      tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l}%)`
+      tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l}%)`
       tempctx.beginPath();
       tempctx.moveTo(tablePosition[0].x, tablePosition[0].y);
       tempctx.lineTo(tablePosition[1].x, tablePosition[1].y);
@@ -69,16 +75,16 @@ export default class HexMapViewTableClass {
          tempTablePosition.shift();
          tempTablePosition.shift();
 
-         tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shadowRotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shadowRotation]}%)`
 
 
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);
          tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y);
-         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + this.tableHeight);
-         tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y + this.tableHeight);
+         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + TABLE_HEIGHT);
+         tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y + TABLE_HEIGHT);
          tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y);
          tempctx.fill();
          tempctx.stroke();
@@ -95,14 +101,14 @@ export default class HexMapViewTableClass {
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
 
-         tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);
          tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y);
-         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + this.tableHeight);
-         tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y + this.tableHeight);
+         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + TABLE_HEIGHT);
+         tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y + TABLE_HEIGHT);
          tempctx.lineTo(tempTablePosition[0].x, tempTablePosition[0].y);
          tempctx.fill();
          tempctx.stroke();
@@ -110,14 +116,14 @@ export default class HexMapViewTableClass {
          shiftedShadowRotation += 3;
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 
-         tempctx.fillStyle = `hsl(${this.tableColors.fill.h}, ${this.tableColors.fill.s}%, ${this.tableColors.fill.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${this.tableColors.stroke.h}, ${this.tableColors.stroke.s}%, ${this.tableColors.stroke.l * this.sideColorMultiplier * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[2].x, tempTablePosition[2].y);
          tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y);
-         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + this.tableHeight);
-         tempctx.lineTo(tempTablePosition[2].x, tempTablePosition[2].y + this.tableHeight);
+         tempctx.lineTo(tempTablePosition[1].x, tempTablePosition[1].y + TABLE_HEIGHT);
+         tempctx.lineTo(tempTablePosition[2].x, tempTablePosition[2].y + TABLE_HEIGHT);
          tempctx.lineTo(tempTablePosition[2].x, tempTablePosition[2].y);
          tempctx.fill();
          tempctx.stroke();

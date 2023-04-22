@@ -1,14 +1,14 @@
 import CommonHexMapUtilsClass from "./CommonHexMapUtils"
 
+import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
+
 export default class CommonRendererUtilsClass {
 
-    constructor(hexMapData, tileData, camera, settings, images) {
+    constructor(hexMapData, tileData, camera, images) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.camera = camera
-
-        this.shadowSize = settings.SHADOW_SIZE
 
         this.images = images
 
@@ -100,7 +100,7 @@ export default class CommonRendererUtilsClass {
 
                 if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
                     if (this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
+                        && this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight + 1 / (SHADOW_SIZE / 2) * Math.sqrt(3)) {
 
                         croppedImage = this.darkenImage(croppedImage)
                         cropped = true
@@ -122,9 +122,9 @@ export default class CommonRendererUtilsClass {
             distance += 1;
 
             if (this.hexMapData.shadowRotation % 2 == 0) {
-                shadowHeight += 1 / (this.shadowSize / 2) * Math.sqrt(3);
+                shadowHeight += 1 / (SHADOW_SIZE / 2) * Math.sqrt(3);
             } else {
-                shadowHeight += 1 / (this.shadowSize / 2);
+                shadowHeight += 1 / (SHADOW_SIZE / 2);
             }
 
         }
@@ -147,7 +147,7 @@ export default class CommonRendererUtilsClass {
 
                 if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
                     if (this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight + 1 / (this.shadowSize / 2) * Math.sqrt(3)) {
+                        && this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight + 1 / (SHADOW_SIZE / 2) * Math.sqrt(3)) {
 
                         croppedImage = this.darkenImage(croppedImage)
                         cropped = true
@@ -169,9 +169,9 @@ export default class CommonRendererUtilsClass {
             distance += 1;
 
             if (this.hexMapData.shadowRotation % 2 == 0) {
-                shadowHeight += 1 / (this.shadowSize / 2) * Math.sqrt(3);
+                shadowHeight += 1 / (SHADOW_SIZE / 2) * Math.sqrt(3);
             } else {
-                shadowHeight += 1 / (this.shadowSize / 2);
+                shadowHeight += 1 / (SHADOW_SIZE / 2);
             }
 
         }

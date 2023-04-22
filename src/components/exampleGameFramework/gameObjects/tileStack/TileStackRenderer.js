@@ -1,35 +1,36 @@
 import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
+import { SHADOW_SIZE, HEXMAP_SIDE_COLOR_MULTIPLIER } from '../commonConstants/CommonConstants'
+
+const HEXMAP_LINE_WIDTH = 3
+
 export default class TileStackRendererClass {
 
-    constructor(tileData, hexMapData, camera, images, settings) {
+    constructor(tileData, hexMapData, camera, images) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.camera = camera
-        this.lineWidth = settings.HEXMAP_LINE_WIDTH
-        this.sideColorMultiplier = settings.HEXMAP_SIDE_COLOR_MULTIPLIER
-        this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, this.tileData, camera, settings, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, this.tileData, camera, images)
         this.commonUtils = new CommonHexMapUtilsClass()
 
 
         //starts at top position and rotates clockwise
         this.shadowRotationDims = {
-            0: { q: 0.25 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 0.9, right: 0.9, offset: 0.7 },
-            1: { q: 0.5 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 1, right: 0.8, offset: 0.6 },
-            2: { q: 0.5 * settings.SHADOW_SIZE, r: -0.25 * settings.SHADOW_SIZE, left: 0.9, right: 0.7, offset: 0.5 },
-            3: { q: 0.5 * settings.SHADOW_SIZE, r: 0 * settings.SHADOW_SIZE, left: 0.8, right: 0.6, offset: 0.4 },
-            4: { q: 0.25 * settings.SHADOW_SIZE, r: 0.25 * settings.SHADOW_SIZE, left: 0.7, right: 0.5, offset: 0.5 },
-            5: { q: 0 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.6, right: 0.4, offset: 0.6 },
-            6: { q: -0.25 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.5, right: 0.5, offset: 0.7 },
-            7: { q: -0.5 * settings.SHADOW_SIZE, r: 0.5 * settings.SHADOW_SIZE, left: 0.4, right: 0.6, offset: 0.8 },
-            8: { q: -0.5 * settings.SHADOW_SIZE, r: 0.25 * settings.SHADOW_SIZE, left: 0.5, right: 0.7, offset: 0.9 },
-            9: { q: -0.5 * settings.SHADOW_SIZE, r: 0 * settings.SHADOW_SIZE, left: 0.6, right: 0.8, offset: 1 },
-            10: { q: -0.25 * settings.SHADOW_SIZE, r: -0.25 * settings.SHADOW_SIZE, left: 0.7, right: 0.9, offset: 0.9 },
-            11: { q: 0 * settings.SHADOW_SIZE, r: -0.5 * settings.SHADOW_SIZE, left: 0.8, right: 1, offset: 0.8 },
+            0: { q: 0.25 * SHADOW_SIZE, r: -0.5 * SHADOW_SIZE, left: 0.9, right: 0.9, offset: 0.7 },
+            1: { q: 0.5 * SHADOW_SIZE, r: -0.5 * SHADOW_SIZE, left: 1, right: 0.8, offset: 0.6 },
+            2: { q: 0.5 * SHADOW_SIZE, r: -0.25 * SHADOW_SIZE, left: 0.9, right: 0.7, offset: 0.5 },
+            3: { q: 0.5 * SHADOW_SIZE, r: 0 * SHADOW_SIZE, left: 0.8, right: 0.6, offset: 0.4 },
+            4: { q: 0.25 * SHADOW_SIZE, r: 0.25 * SHADOW_SIZE, left: 0.7, right: 0.5, offset: 0.5 },
+            5: { q: 0 * SHADOW_SIZE, r: 0.5 * SHADOW_SIZE, left: 0.6, right: 0.4, offset: 0.6 },
+            6: { q: -0.25 * SHADOW_SIZE, r: 0.5 * SHADOW_SIZE, left: 0.5, right: 0.5, offset: 0.7 },
+            7: { q: -0.5 * SHADOW_SIZE, r: 0.5 * SHADOW_SIZE, left: 0.4, right: 0.6, offset: 0.8 },
+            8: { q: -0.5 * SHADOW_SIZE, r: 0.25 * SHADOW_SIZE, left: 0.5, right: 0.7, offset: 0.9 },
+            9: { q: -0.5 * SHADOW_SIZE, r: 0 * SHADOW_SIZE, left: 0.6, right: 0.8, offset: 1 },
+            10: { q: -0.25 * SHADOW_SIZE, r: -0.25 * SHADOW_SIZE, left: 0.7, right: 0.9, offset: 0.9 },
+            11: { q: 0 * SHADOW_SIZE, r: -0.5 * SHADOW_SIZE, left: 0.8, right: 1, offset: 0.8 },
         }
 
     }
@@ -103,16 +104,16 @@ export default class TileStackRendererClass {
                 for (let i = 1; i <= tile.height; i++) {
                     let tileBiome = tile.verylowBiome;
 
-                    if (i >= this.elevationRanges['low']) {
+                    if (i >= this.hexMapData.elevationRanges['low']) {
                         tileBiome = tile.lowBiome
                     }
-                    if (i >= this.elevationRanges['mid']) {
+                    if (i >= this.hexMapData.elevationRanges['mid']) {
                         tileBiome = tile.midBiome
                     }
-                    if (i >= this.elevationRanges['high']) {
+                    if (i >= this.hexMapData.elevationRanges['high']) {
                         tileBiome = tile.highBiome
                     }
-                    if (i >= this.elevationRanges['veryhigh']) {
+                    if (i >= this.hexMapData.elevationRanges['veryhigh']) {
                         tileBiome = tile.veryhighBiome
                     }
 
@@ -139,12 +140,12 @@ export default class TileStackRendererClass {
                         stackctx,
                         this.hexMapData.size,
                         this.hexMapData.size * this.hexMapData.squish + tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].left)})`,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].right)})`,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
-                        `hsla(220, 20%, 20%, ${this.sideColorMultiplier * (1 - this.shadowRotationDims[shadowRotation].offset)})`
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].left)})`,
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].right)})`,
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].offset)})`,
+                        `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].offset)})`
                     );
 
                 }
@@ -214,7 +215,7 @@ export default class TileStackRendererClass {
         shadowctx.lineCap = 'round';
         shadowctx.textAlign = 'center';
         shadowctx.textBaseline = 'middle'
-        shadowctx.lineWidth = this.lineWidth * (1 - this.camera.zoom / this.hexMapData.tileHeight);
+        shadowctx.lineWidth = HEXMAP_LINE_WIDTH * (1 - this.camera.zoom / this.hexMapData.tileHeight);
 
         let shadowDims;
 

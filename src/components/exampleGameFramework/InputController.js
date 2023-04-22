@@ -35,7 +35,7 @@ export default class InputControllerClass {
             this.gameManager.hexMap.controller.uiController.setPlaceUnit()
             return
          case 'switchView':
-            if (this.gameManager.hexMap.settings.DEBUG) this.gameManager.hexMap.switchView()
+            if (this.gameManager.userConstants.DEBUG) this.gameManager.hexMap.switchView()
             return
          case 'pause':
             this.gameManager.setStatePause()

@@ -1,8 +1,10 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
+import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
+
 export default class UnitClass {
 
-    constructor(pos, hexMapData, tileData, unitImages, settings, uiController, globalState) {
+    constructor(pos, hexMapData, tileData, unitImages, uiController, globalState) {
 
         this.position = {
             q: pos.q,
@@ -47,8 +49,8 @@ export default class UnitClass {
         this.futureState = null
 
         //settings
-        this.travelTime = settings.TRAVEL_TIME
-        this.attackTime = settings.ATTACK_TIME
+        this.travelTime = TRAVEL_TIME
+        this.jumpAmount = JUMP_AMOUNT
 
         //access data
         this.hexMapData = hexMapData

@@ -68,7 +68,8 @@ const ContentPanel = () => {
       if (gameClass && !gameClass.loaded) return;
 
       if (gameClass) gameClass.clear();
-      setGameClass(null);
+      setGameClass(undefined);
+      setUiComponents(initialUi)
       let newGameClass = new GameMainClass(
          canvas.current,
          bgCanvas.current,
@@ -85,7 +86,7 @@ const ContentPanel = () => {
 
    const endGame = () => {
       if (gameClass) gameClass.clear();
-      setGameClass(null);
+      setGameClass(undefined);
       setUiComponents(initialUi)
    }
 

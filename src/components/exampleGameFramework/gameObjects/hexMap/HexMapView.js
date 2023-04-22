@@ -1,9 +1,11 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
 import HexMapViewTableClass from "./HexMapViewTable";
 
+import { INIT_CAMERA_POSITION } from './HexMapConstants'
+
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, tileManager, spriteManager, settings, images, uiController) {
+   constructor(ctx, canvas, camera, hexMapData, tileManager, spriteManager, userConstants, images, uiController) {
       this.ctx = ctx;
       this.canvas = canvas;
       this.camera = camera;
@@ -16,13 +18,10 @@ export default class HexMapViewClass {
 
       this.uiController = uiController
 
-      this.tableView = new HexMapViewTableClass(hexMapData, tileManager, camera, settings)
-
-      //Settings
-      this.initCameraPosition = settings.INIT_CAMERA_POSITION;
+      this.tableView = new HexMapViewTableClass(hexMapData, tileManager, camera)
 
       //Debug Settings
-      this.debug = settings.DEBUG;
+      this.DEBUG = userConstants.DEBUG;
 
       this.images = images;
 
@@ -41,11 +40,11 @@ export default class HexMapViewClass {
       this.spriteManager.view.draw(this.drawctx)
 
 
-      if (this.debug) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
+      if (this.DEBUG) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
       this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
-      if (this.debug) {
+      if (this.DEBUG) {
          this.ctx.fillStyle = 'black'
          this.ctx.fillRect(this.canvas.width / 2 - 1, this.canvas.height / 2 - 1, 2, 2)
       }
@@ -103,7 +102,7 @@ export default class HexMapViewClass {
       let camQ
       let camR
 
-      switch (this.initCameraPosition) {
+      switch (INIT_CAMERA_POSITION) {
          case 'top':
             camQ = medQ + scalar / 2
             camR = medR - scalar

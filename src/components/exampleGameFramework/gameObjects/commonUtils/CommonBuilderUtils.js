@@ -1,9 +1,8 @@
 export default class CommonBuilderUtilsClass {
 
-    constructor(hexMapData, tileData, settings) {
+    constructor(hexMapData, tileData) {
         this.hexMapData = hexMapData
         this.tileData = tileData
-        this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
     }
 
     cloneTile = (tileToClone, keyObj) => {
@@ -20,11 +19,11 @@ export default class CommonBuilderUtilsClass {
     }
 
     setTileBiome = (tile) => {
-        if (tile.height >= this.elevationRanges['verylow']) tile.biome = tile.verylowBiome
-        if (tile.height >= this.elevationRanges['low']) tile.biome = tile.lowBiome
-        if (tile.height >= this.elevationRanges['mid']) tile.biome = tile.midBiome
-        if (tile.height >= this.elevationRanges['high']) tile.biome = tile.highBiome
-        if (tile.height >= this.elevationRanges['veryhigh']) tile.biome = tile.veryhighBiome
+        if (tile.height >= this.hexMapData.elevationRanges['verylow']) tile.biome = tile.verylowBiome
+        if (tile.height >= this.hexMapData.elevationRanges['low']) tile.biome = tile.lowBiome
+        if (tile.height >= this.hexMapData.elevationRanges['mid']) tile.biome = tile.midBiome
+        if (tile.height >= this.hexMapData.elevationRanges['high']) tile.biome = tile.highBiome
+        if (tile.height >= this.hexMapData.elevationRanges['veryhigh']) tile.biome = tile.veryhighBiome
     }
 
 }

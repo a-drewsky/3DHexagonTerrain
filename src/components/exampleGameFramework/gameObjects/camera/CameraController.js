@@ -30,23 +30,23 @@ export default class CameraControllerClass {
         );
     }
 
-    mouseWheel = (deltaY) => {
-        this.cameraData.clearAnchorPoint();
-        if (deltaY > 0) {
-            if (this.cameraData.zoom < this.cameraData.maxZoom) {
-                this.cameraData.zoom++;
-                return true;
-            }
-        } else {
-            if (this.cameraData.zoom > 0) {
-                this.cameraData.zoom--;
-                return true;
-            }
-        }
+    // mouseWheel = (deltaY) => {
+    //     this.cameraData.clearAnchorPoint();
+    //     if (deltaY > 0) {
+    //         if (this.cameraData.zoom < this.cameraData.maxZoom) {
+    //             this.cameraData.zoom++;
+    //             return true;
+    //         }
+    //     } else {
+    //         if (this.cameraData.zoom > 0) {
+    //             this.cameraData.zoom--;
+    //             return true;
+    //         }
+    //     }
 
-        return false;
+    //     return false;
 
-    }
+    // }
 
     keyDown = (key) => {
         this.cameraData.clearAnchorPoint();
@@ -100,6 +100,7 @@ export default class CameraControllerClass {
     }
 
     zoom = (deltaY) => {
+        console.log(deltaY)
         let zoomAmount = this.cameraData.zoomAmount
 
         let updatePosition = false

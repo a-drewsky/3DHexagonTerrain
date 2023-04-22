@@ -1,10 +1,9 @@
 export default class HexMapControllerMouseClass {
 
-    constructor(hexMapData, tileManager, spriteManager, pathFinder, utils, uiController, config) {
+    constructor(hexMapData, tileManager, spriteManager, utils, uiController, config) {
         this.hexMapData = hexMapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
-        this.pathFinder = pathFinder
         this.utils = utils
         this.uiController = uiController
         this.config = config
@@ -148,9 +147,9 @@ export default class HexMapControllerMouseClass {
 
         if (unit == null) return
 
-        let moveSet = this.pathFinder.findMoveSet(unit.position, unit.stats.movement)
+        let moveSet = this.utils.pathFinder.findMoveSet(unit.position, unit.stats.movement)
 
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.position)
+        let moveSetPlus1 = this.utils.pathFinder.findFullMoveSet(moveSet, unit.position)
         let mineMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'resource')
         let flagMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'flag')
         let attackMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.units.data.getUnit(tileObj.tile.q, tileObj.tile.r) != null

@@ -3,12 +3,12 @@ import UiControllerClass from "./UiController";
 
 export default class GameManagerClass {
 
-    constructor(ctx, canvas, bgCanvas, settings, images, uiComponents, updateUi) {
+    constructor(ctx, canvas, bgCanvas, userConstants, images, uiComponents, updateUi) {
 
         this.ctx = ctx;
         this.canvas = canvas;
 
-        this.settings = settings;
+        this.userConstants = userConstants;
         this.images = images;
 
         this.hexMap = null
@@ -38,12 +38,12 @@ export default class GameManagerClass {
             this.ctx,
             this.canvas,
             this.images,
-            this.settings,
+            this.userConstants,
             this.uiController,
             this.state,
         )
 
-        this.hexMap.build(this.settings.MAP_SIZE.q, this.settings.MAP_SIZE.r, this.settings.MAP_SIZE.size);
+        this.hexMap.build(this.userConstants.MAP_SIZE);
         console.log("DONE BUILDING")
         this.hexMap.prerender();
         console.log("DONE PRERENDERING")
@@ -51,6 +51,7 @@ export default class GameManagerClass {
     }
 
     clear = () => {
+        this.hexMap = null
         clearInterval(this.updateInterval);
     }
 

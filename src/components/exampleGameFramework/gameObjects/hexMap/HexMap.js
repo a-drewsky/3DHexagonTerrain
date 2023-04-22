@@ -11,21 +11,20 @@ import SpriteObjectManagerClass from "../spriteObjects/SpriteObjectManager"
 
 export default class HexMapClass {
 
-    constructor(ctx, canvas, images, settings, uiController, globalState) {
+    constructor(ctx, canvas, images, userConstants, uiController, globalState) {
 
-        this.settings = new HexMapSettingsClass(settings)
         this.images = images
 
-        this.data = new HexMapDataClass(this.settings, canvas)
+        this.data = new HexMapDataClass(canvas)
 
         this.camera = new CameraClass(this.data, canvas)
 
-        this.tileManager = new TileStackManagerClass(this.data, this.camera.data, this.images, this.settings, canvas)
-        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileManager.data, this.camera.data, this.images, canvas, this.settings, uiController, globalState)
+        this.tileManager = new TileStackManagerClass(this.data, this.camera.data, this.images, canvas)
+        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileManager.data, this.camera.data, this.images, canvas, uiController, globalState)
 
         this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
 
-        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.tileManager, this.spriteManager, this.settings, images, uiController)
+        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
 
         this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.camera.controller, this.camera.data, canvas, images, uiController, globalState)
 
@@ -33,9 +32,9 @@ export default class HexMapClass {
 
     }
 
-    build = (q, r, mapSize) => {
-        this.tileManager.builder.buildMap(q, r, mapSize)
-        this.spriteManager.structures.builder.generateStructures(q, r, mapSize)
+    build = (mapSizeConstant) => {
+        this.tileManager.builder.buildMap(mapSizeConstant)
+        this.spriteManager.structures.builder.generateStructures(mapSizeConstant)
         this.tileManager.builder.reduceTileHeights()
     }
 

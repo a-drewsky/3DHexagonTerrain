@@ -2,46 +2,36 @@ import noise from "../../utilities/perlin";
 import CommonBuilderUtilsClass from "../commonUtils/CommonBuilderUtils";
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
 
+import { MAX_ELEVATION, SAND_HILL_ELVATION_DIVISOR, ELEVATION_MULTIPLIER, TEMP_RANGES, WATER_TEMP_RANGES, LOW_TERRAIN_GENERATION_RANGES, MIRROR_MAP } from './TileStackConstants'
+
+import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../commonConstants/CommonConstants'
+
 export default class TileStackBuilderClass {
 
-    constructor(hexMapData, tileData, settings) {
+    constructor(hexMapData, tileData) {
 
         this.hexMapData = hexMapData;
         this.tileData = tileData
 
-        this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-        this.lowTerrainGenerationRanges = settings.LOW_TERRAIN_GENERATION_RANGES
-        this.maxElevation = settings.MAX_ELEVATION
-        this.elevationMultiplier = settings.ELEVATION_MULTIPLIER
-        this.seedMultiplier = settings.SEED_MULTIPLIER
-        this.tempRanges = settings.TEMP_RANGES
-        this.waterTempRanges = settings.WATER_TEMP_RANGES
-        this.sandHillElevationDivisor = settings.SAND_HILL_ELVATION_DIVISOR
-        this.mirror = settings.MIRROR_MAP
-        this.biomeGenSettings = settings.BIOME_GENERATION
-
-        this.cellSize = settings.CELL_SIZE
-        this.mapSizeSettings = settings.MAP_SIZES
-
-        this.utils = new CommonBuilderUtilsClass(hexMapData, tileData, settings)
+        this.utils = new CommonBuilderUtilsClass(hexMapData, tileData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
     }
 
-    buildMap = (q, r, mapSize) => {
-        this.generateMap(q, r, mapSize)
-        this.generateBiomes(mapSize)
+    buildMap = (mapSizeConstant) => {
+        this.generateMap(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
+        this.generateBiomes(mapSizeConstant.size)
         this.smoothBiomes()
     }
 
     generateMap = (q, r, mapSize) => {
 
-        let Qgen = q * this.cellSize.q
-        let Rgen = r * this.cellSize.r + this.mapSizeSettings[mapSize].bufferSize * 2
+        let Qgen = q * CELL_SIZE.q
+        let Rgen = r * CELL_SIZE.r + MAP_SIZES[mapSize].bufferSize * 2
 
         let groundShadowDistance = 3 //make setting
 
-        if (this.mirror) {
+        if (MIRROR_MAP) {
             for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
                 for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
                     this.tileData.setEntry(q, r);
@@ -75,13 +65,13 @@ export default class TileStackBuilderClass {
 
     generateBiomes = (mapSize) => {
 
-        let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
+        let noiseFluctuation = MAP_SIZES[mapSize].noiseFluctuation
 
         //set generation seeds
-        let elevationSeed1 = Math.random() * this.seedMultiplier
-        let elevationSeed2 = Math.random() * this.seedMultiplier
-        let tempSeed1 = Math.random() * this.seedMultiplier
-        let tempSeed2 = Math.random() * this.seedMultiplier
+        let elevationSeed1 = Math.random() * SEED_MULTIPLIER
+        let elevationSeed2 = Math.random() * SEED_MULTIPLIER
+        let tempSeed1 = Math.random() * SEED_MULTIPLIER
+        let tempSeed2 = Math.random() * SEED_MULTIPLIER
 
         for (let entry of this.tileData.getTileMap()) {
 
@@ -92,19 +82,19 @@ export default class TileStackBuilderClass {
             //elevation generation
             let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
 
-            let tileHeight = Math.ceil(tileHeightNoise * this.elevationMultiplier)
+            let tileHeight = Math.ceil(tileHeightNoise * ELEVATION_MULTIPLIER)
 
             let heightSet = false;
-            for (let i in this.lowTerrainGenerationRanges) {
-                if (tileHeight <= this.lowTerrainGenerationRanges[i]) {
+            for (let i in LOW_TERRAIN_GENERATION_RANGES) {
+                if (tileHeight <= LOW_TERRAIN_GENERATION_RANGES[i]) {
                     tileHeight = parseInt(i);
                     heightSet = true;
                     break;
                 }
             }
-            if (!heightSet) tileHeight -= this.lowTerrainGenerationRanges[4] - 4;
+            if (!heightSet) tileHeight -= LOW_TERRAIN_GENERATION_RANGES[4] - 4;
 
-            tileHeight = Math.min(tileHeight, this.maxElevation)
+            tileHeight = Math.min(tileHeight, MAX_ELEVATION)
 
 
             //temp generation
@@ -131,43 +121,43 @@ export default class TileStackBuilderClass {
 
 
         biome = 'water'
-        if (tileTemp < this.waterTempRanges['frozenwater']) biome = 'frozenwater'
-        if (tileTemp > this.waterTempRanges['water']) biome = 'playa'
+        if (tileTemp < WATER_TEMP_RANGES['frozenwater']) biome = 'frozenwater'
+        if (tileTemp > WATER_TEMP_RANGES['water']) biome = 'playa'
         tileVerylowBiome = biome
 
-        for (let range in this.tempRanges) {
-            if (tileTemp < this.tempRanges[range]) {
+        for (let range in TEMP_RANGES) {
+            if (tileTemp < TEMP_RANGES[range]) {
                 biome = range
                 break;
             }
         }
         tileLowBiome = biome
-        if (tileHeight >= this.elevationRanges['low']) tileVerylowBiome = biome
+        if (tileHeight >= this.hexMapData.elevationRanges['low']) tileVerylowBiome = biome
 
         biome = 'snowhill'
-        if (tileTemp > this.tempRanges['tundra']) biome = 'grasshill'
-        if (tileTemp > this.tempRanges['woodlands']) biome = 'savannahill'
-        if (tileTemp > this.tempRanges['savanna']) {
+        if (tileTemp > TEMP_RANGES['tundra']) biome = 'grasshill'
+        if (tileTemp > TEMP_RANGES['woodlands']) biome = 'savannahill'
+        if (tileTemp > TEMP_RANGES['savanna']) {
             biome = 'sandhill'
-            if (tileHeight >= this.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.elevationRanges['mid']) / this.sandHillElevationDivisor) //set sand hill elevation
+            if (tileHeight >= this.hexMapData.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.hexMapData.elevationRanges['mid']) / SAND_HILL_ELVATION_DIVISOR) //set sand hill elevation
         }
         tileMidBiome = biome
 
         biome = 'rockmountain'
-        if (tileTemp < this.tempRanges['tundra']) biome = 'snowmountain'
-        if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+        if (tileTemp < TEMP_RANGES['tundra']) biome = 'snowmountain'
+        if (tileTemp > TEMP_RANGES['savanna']) biome = 'sandhill'
         tileHighBiome = biome
 
         biome = 'snowmountain'
-        if (tileTemp > this.tempRanges['savanna']) biome = 'sandhill'
+        if (tileTemp > TEMP_RANGES['savanna']) biome = 'sandhill'
         tileVeryhighBiome = biome
 
 
-        if (tileHeight >= this.elevationRanges['verylow']) tileBiome = tileVerylowBiome
-        if (tileHeight >= this.elevationRanges['low']) tileBiome = tileLowBiome
-        if (tileHeight >= this.elevationRanges['mid']) tileBiome = tileMidBiome
-        if (tileHeight >= this.elevationRanges['high']) tileBiome = tileHighBiome
-        if (tileHeight >= this.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
+        if (tileHeight >= this.hexMapData.elevationRanges['verylow']) tileBiome = tileVerylowBiome
+        if (tileHeight >= this.hexMapData.elevationRanges['low']) tileBiome = tileLowBiome
+        if (tileHeight >= this.hexMapData.elevationRanges['mid']) tileBiome = tileMidBiome
+        if (tileHeight >= this.hexMapData.elevationRanges['high']) tileBiome = tileHighBiome
+        if (tileHeight >= this.hexMapData.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
 
 
         tileObj.height = tileHeight
@@ -192,7 +182,7 @@ export default class TileStackBuilderClass {
             let tileBiome = this.tileData.getEntry(keyObj.q, keyObj.r).biome
 
             let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r)
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || this.biomeGenSettings[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey.q, neighborKey.r).biome))
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey.q, neighborKey.r).biome))
             neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey.q, neighborKey.r)))
 
 
@@ -271,7 +261,7 @@ export default class TileStackBuilderClass {
             }
 
             //Check size of biome set and fix tiles if neccessary
-            if (keyStrArr.length < this.biomeGenSettings[biome].minBiomeSmoothing) {
+            if (keyStrArr.length < BIOME_CONSTANTS[biome].minBiomeSmoothing) {
                 while (keyStrArr.length > 0) {
                     let keyStrArrObj = this.commonUtils.split(keyStrArr[0])
                     let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome

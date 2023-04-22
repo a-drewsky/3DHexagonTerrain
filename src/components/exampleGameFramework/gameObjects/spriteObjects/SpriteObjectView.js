@@ -16,11 +16,6 @@ export default class SpriteObjectViewClass{
         this.images = images
         this.commonUtils = new CommonHexMapUtilsClass()
         this.viewUtils = new CommonViewUtilsClass(camera)
-  
-        this.shadowSize = settings.SHADOW_SIZE
-  
-        this.travelTime = settings.TRAVEL_TIME
-        this.jumpAmount = settings.JUMP_AMOUNT
 
         this.canvas = canvas
   
@@ -83,7 +78,7 @@ export default class SpriteObjectViewClass{
            let keyObj
            let height
   
-           if (unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / this.travelTime > 0.5) {
+           if (unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / unitObject.travelTime > 0.5) {
               keyObj = this.commonUtils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.camera.rotation)
            } else {
               keyObj = this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)

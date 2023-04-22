@@ -9,7 +9,7 @@ export default class UnitRendererClass {
         this.tileData = tileData
         this.camera = camera
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 

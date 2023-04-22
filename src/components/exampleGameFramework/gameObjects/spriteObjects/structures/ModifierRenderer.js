@@ -3,14 +3,13 @@ import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 
 export default class ModifierRendererClass{
 
-    constructor(structureData, hexMapData, tileData, camera, settings, images){
+    constructor(structureData, hexMapData, tileData, camera, images){
         this.structureData = structureData
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.camera = camera
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
 
-        this.modifierSettings = settings.MODIFIERS
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -77,14 +76,14 @@ export default class ModifierRendererClass{
         filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * modifier.imageObject.modifierImages.length) })
         positions.splice(currentIndex, 1)
 
-        let chance = this.modifierSettings[modifier.sprite].secondSpriteChance
+        let chance = modifier.secondSpriteChance
         let roll = Math.random()
         while (roll > chance && positions.length > 0) {
             currentIndex = Math.floor(Math.random() * positions.length)
             filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * modifier.imageObject.modifierImages.length) })
             positions.splice(currentIndex, 1)
 
-            chance += this.modifierSettings[modifier.sprite].spriteIncrementChance
+            chance += modifier.spriteIncrementChance
             roll = Math.random()
         }
 

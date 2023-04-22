@@ -2,47 +2,41 @@ import noise from "../../../utilities/perlin";
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils";
 import StructureBuilderUtilsClass from "./StructureBuilderUtils";
 
+import { SECOND_MINE_CHANCE, THIRD_MINE_CHACE } from './StructureConstants'
+
+import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../../commonConstants/CommonConstants'
+
 export default class StructureBuilderClass {
 
-   constructor(hexMapData, tileData, structureData, settings) {
+   constructor(hexMapData, tileData, structureData) {
       this.hexMapData = hexMapData;
       this.tileData = tileData
       this.structureData = structureData
 
-      this.seedMultiplier = settings.SEED_MULTIPLIER
-      this.cellSize = settings.CELL_SIZE
-      this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-      this.secondMineChance = settings.SECOND_MINE_CHANCE
-      this.thirdMineChace = settings.THIRD_MINE_CHACE
-
-      this.mapSizeSettings = settings.MAP_SIZES
-
-      this.biomeGenSettings = settings.BIOME_GENERATION
-
-      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData, tileData, structureData, settings)
+      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData, tileData, structureData)
       this.commonUtils = new CommonHexMapUtilsClass()
 
    }
 
-   generateStructures = (q, r, mapSize) => {
-      let noiseFluctuation = this.mapSizeSettings[mapSize].noiseFluctuation
+   generateStructures = (mapSizeConstant) => {
+      let noiseFluctuation = MAP_SIZES[mapSizeConstant.size].noiseFluctuation
       this.generateModifiers(noiseFluctuation)
       this.generateProps()
-      this.generateMainBases(q, r, mapSize)
-      this.generateMines(q, r, mapSize)
-      this.generateBases(q, r, mapSize)
+      this.generateMainBases(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
+      this.generateMines(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
+      this.generateBases(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
    }
 
    generateBases = (q, r, mapSize) => {
 
-      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
+      let bufferSize = MAP_SIZES[mapSize].bufferSize
 
       for (let rGen = 0; rGen < r; rGen++) {
          for (let qGen = 0; qGen < q; qGen++) {
             let cellTiles = []
 
-            for (let rPos = bufferSize + this.cellSize.r * rGen; rPos < bufferSize + this.cellSize.r * (rGen + 1); rPos++) {
-               for (let qPos = -1 * Math.floor(rPos / 2) + this.cellSize.q * qGen; qPos < this.cellSize.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
+            for (let rPos = bufferSize + CELL_SIZE.r * rGen; rPos < bufferSize + CELL_SIZE.r * (rGen + 1); rPos++) {
+               for (let qPos = -1 * Math.floor(rPos / 2) + CELL_SIZE.q * qGen; qPos < CELL_SIZE.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
                   cellTiles.push({
                      q: qPos,
                      r: rPos
@@ -81,24 +75,24 @@ export default class StructureBuilderClass {
    }
 
    generateMainBases = (q, r, mapSize) => {
-      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
+      let bufferSize = MAP_SIZES[mapSize].bufferSize
 
       //base 1
-      let rPos = Math.floor(bufferSize + this.cellSize.r * 0.25)
-      let qPos = Math.floor(this.cellSize.q * 0.75 - Math.floor(0.25 / 2))
+      let rPos = Math.floor(bufferSize + CELL_SIZE.r * 0.25)
+      let qPos = Math.floor(CELL_SIZE.q * 0.75 - Math.floor(0.25 / 2))
 
       this.structureBuilderUtils.setMainBase(qPos, rPos)
 
       //base 2
-      rPos = Math.floor(bufferSize + this.cellSize.r * r - this.cellSize.r * 0.25)
-      qPos = Math.floor(this.cellSize.q * 1 - Math.floor(rPos / 2))
+      rPos = Math.floor(bufferSize + CELL_SIZE.r * r - CELL_SIZE.r * 0.25)
+      qPos = Math.floor(CELL_SIZE.q * 1 - Math.floor(rPos / 2))
 
       this.structureBuilderUtils.setMainBase(qPos, rPos)
    }
 
    generateMines = (q, r, mapSize) => {
 
-      let bufferSize = this.mapSizeSettings[mapSize].bufferSize
+      let bufferSize = MAP_SIZES[mapSize].bufferSize
 
       let closeSpriteList = ['goldmine', 'coppermine']
 
@@ -108,8 +102,8 @@ export default class StructureBuilderClass {
          for (let qGen = 0; qGen < q; qGen++) {
             let cellTiles = []
 
-            for (let rPos = bufferSize + this.cellSize.r * rGen; rPos < bufferSize + this.cellSize.r * (rGen + 1); rPos++) {
-               for (let qPos = -1 * Math.floor(rPos / 2) + this.cellSize.q * qGen; qPos < this.cellSize.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
+            for (let rPos = bufferSize + CELL_SIZE.r * rGen; rPos < bufferSize + CELL_SIZE.r * (rGen + 1); rPos++) {
+               for (let qPos = -1 * Math.floor(rPos / 2) + CELL_SIZE.q * qGen; qPos < CELL_SIZE.q * (qGen + 1) - Math.floor(rPos / 2); qPos++) {
                   cellTiles.push({
                      q: qPos,
                      r: rPos
@@ -119,8 +113,8 @@ export default class StructureBuilderClass {
 
             let mineCount = 1;
 
-            if (Math.random() < this.secondMineChance) mineCount++
-            if (Math.random() < this.thirdMineChace) mineCount++
+            if (Math.random() < SECOND_MINE_CHANCE) mineCount++
+            if (Math.random() < THIRD_MINE_CHACE) mineCount++
 
             for (let i = 0; i < mineCount; i++) {
                let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
@@ -196,15 +190,15 @@ export default class StructureBuilderClass {
    generateModifiers = (noiseFluctuation) => {
 
       let treeSeeds = {
-         woodlands1: Math.random() * this.seedMultiplier,
-         woodlands2: Math.random() * this.seedMultiplier,
-         tundra1: Math.random() * this.seedMultiplier,
-         tundra2: Math.random() * this.seedMultiplier,
-         desert1: Math.random() * this.seedMultiplier,
-         desert2: Math.random() * this.seedMultiplier
+         woodlands1: Math.random() * SEED_MULTIPLIER,
+         woodlands2: Math.random() * SEED_MULTIPLIER,
+         tundra1: Math.random() * SEED_MULTIPLIER,
+         tundra2: Math.random() * SEED_MULTIPLIER,
+         desert1: Math.random() * SEED_MULTIPLIER,
+         desert2: Math.random() * SEED_MULTIPLIER
       }
 
-      let rockSeeds = [Math.random() * this.seedMultiplier, Math.random() * this.seedMultiplier]
+      let rockSeeds = [Math.random() * SEED_MULTIPLIER, Math.random() * SEED_MULTIPLIER]
 
       for (let entry of this.tileData.getTileMap()) {
          let keyObj = this.commonUtils.split(entry.key);
@@ -221,7 +215,7 @@ export default class StructureBuilderClass {
 
          let tileRockNoise = noise(rockSeeds[0] + keyObj.q / noiseFluctuation, rockSeeds[0] + keyObj.r / noiseFluctuation) * noise(rockSeeds[1] + keyObj.q / noiseFluctuation, rockSeeds[1] + keyObj.r / noiseFluctuation)
 
-         if (tileTreeNoise[entry.value.biome] > this.biomeGenSettings[entry.value.biome].terrainGenThreshold && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
+         if (tileTreeNoise[entry.value.biome] > BIOME_CONSTANTS[entry.value.biome].terrainGenThreshold && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
 
             switch (entry.value.biome) {
                case 'woodlands':
@@ -241,7 +235,7 @@ export default class StructureBuilderClass {
             }
 
 
-         } else if (this.biomeGenSettings[entry.value.biome].rockGenThreshold && tileRockNoise > this.biomeGenSettings[entry.value.biome].rockGenThreshold) {
+         } else if (BIOME_CONSTANTS[entry.value.biome].rockGenThreshold && tileRockNoise > BIOME_CONSTANTS[entry.value.biome].rockGenThreshold) {
             this.structureData.setModifier(keyObj.q, keyObj.r, 'smallRocks')
          }
 

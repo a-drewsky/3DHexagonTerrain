@@ -22,7 +22,9 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprite: 'small_rocks',
         height: 1,
-        stats: {}
+        stats: {},
+        secondSpriteChance: 0.4,
+        spriteIncrementChance: 0.2
     }
 
     static oakTrees = {
@@ -30,7 +32,9 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprite: 'woodland_trees',
         height: 2,
-        stats: {}
+        stats: {},
+        secondSpriteChance: 0.4,
+        spriteIncrementChance: 0.2
     }
 
     static spruceTrees = {
@@ -38,7 +42,9 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprite: 'tundra_trees',
         height: 2,
-        stats: {}
+        stats: {},
+        secondSpriteChance: 0.6,
+        spriteIncrementChance: 0.2
     }
 
     static cacti = {
@@ -46,7 +52,9 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprite: 'desert_trees',
         height: 2,
-        stats: {}
+        stats: {},
+        secondSpriteChance: 0.6,
+        spriteIncrementChance: 0.3
     }
 
 }

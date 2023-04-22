@@ -6,11 +6,11 @@ import GameManagerClass from './GameManager';
 import InputControllerClass from './InputController';
 
 //Import Settings Class
-import SettingsClass from './utilities/gameSettings';
+import UserConstantsClass from './UserConstants';
 
 export default class GameMainClass {
 
-   constructor(canvas, bgCanvas, images, uiComponents, setUiComponents, settings) {
+   constructor(canvas, bgCanvas, images, uiComponents, setUiComponents, userConstants) {
 
       //canvas
       this.canvas = canvas;
@@ -36,13 +36,13 @@ export default class GameMainClass {
       }
 
       //settings
-      this.globalSettings = new SettingsClass(settings);
+      this.userConstants = new UserConstantsClass(userConstants);
 
       //Images
       this.images = images;
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.bgCanvas, this.globalSettings, this.images, this.uiComponents, this.updateUi);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.bgCanvas, this.userConstants, this.images, this.uiComponents, this.updateUi);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);
@@ -51,8 +51,8 @@ export default class GameMainClass {
 
    clear = () => {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
       this.gameManager.clear()
+      this.gameManager = null
    }
 
    mouseDown = (x, y) => {

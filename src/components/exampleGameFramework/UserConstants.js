@@ -1,4 +1,4 @@
-export default class SettingsClass {
+export default class UserConstantsClass {
 
     constructor(externalSettings){
 

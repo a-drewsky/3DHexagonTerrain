@@ -1,7 +1,6 @@
 
 import HexMapControllerUtilsClass from './HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
-import HexMapPathFinderClass from "./HexMapPathFinder";
 
 import HexMapControllerMouseClass from './HexMapControllerMouse';
 import HexMapControllerUiClass from './HexMapControllerUi';
@@ -20,8 +19,6 @@ export default class HexMapControllerClass {
         this.images = images
 
         this.collision = new CollisionClass();
-
-        this.pathFinder = new HexMapPathFinderClass(this.hexMapData, tileManager, spriteManager, cameraData)
         
         this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, globalState);
 
@@ -29,7 +26,7 @@ export default class HexMapControllerClass {
 
         this.cameraData = cameraData;
 
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.pathFinder, this.utils, uiController, this.config)
+        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.utils, uiController, this.config)
 
         this.uiController = new HexMapControllerUiClass(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
 

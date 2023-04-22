@@ -3,12 +3,12 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class StructureRendererClass{
 
-    constructor(structureData, hexMapData, tileData, camera, settings, images){
+    constructor(structureData, hexMapData, tileData, camera, images){
         this.structureData = structureData
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.camera = camera
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, settings, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 

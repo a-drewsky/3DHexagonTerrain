@@ -1,13 +1,13 @@
+
+import { BIOME_CONSTANTS } from '../../commonConstants/CommonConstants'
+
 export default class StructureBuilderUtilsClass {
 
-    constructor(hexMapData, tileData, structureData, settings) {
+    constructor(hexMapData, tileData, structureData) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.structureData = structureData
-        this.elevationRanges = settings.HEXMAP_ELEVATION_RANGES
-
-        this.biomeGenSettings = settings.BIOME_GENERATION
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {
@@ -22,11 +22,11 @@ export default class StructureBuilderUtilsClass {
 
             let tileBiome
 
-            if (terrainHeight >= this.elevationRanges['verylow']) tileBiome = tileToSet.verylowBiome
-            if (terrainHeight >= this.elevationRanges['low']) tileBiome = tileToSet.lowBiome
-            if (terrainHeight >= this.elevationRanges['mid']) tileBiome = tileToSet.midBiome
-            if (terrainHeight >= this.elevationRanges['high']) tileBiome = tileToSet.highBiome
-            if (terrainHeight >= this.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
+            if (terrainHeight >= this.hexMapData.elevationRanges['verylow']) tileBiome = tileToSet.verylowBiome
+            if (terrainHeight >= this.hexMapData.elevationRanges['low']) tileBiome = tileToSet.lowBiome
+            if (terrainHeight >= this.hexMapData.elevationRanges['mid']) tileBiome = tileToSet.midBiome
+            if (terrainHeight >= this.hexMapData.elevationRanges['high']) tileBiome = tileToSet.highBiome
+            if (terrainHeight >= this.hexMapData.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
             tileToSet.height = terrainHeight
             tileToSet.biome = tileBiome
@@ -114,7 +114,7 @@ export default class StructureBuilderUtilsClass {
 
     maxNeighbors = (q, r, biome) => {
 
-        let maxNeighbors = this.biomeGenSettings[biome].terrainGenMaxNeighbors
+        let maxNeighbors = BIOME_CONSTANTS[biome].terrainGenMaxNeighbors
 
         let neighborKeys = this.tileData.getNeighborKeys(q, r)
 

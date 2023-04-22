@@ -4,7 +4,7 @@ import UnitRendererClass from "./UnitRenderer"
 export default class UnitManagerClass {
 
     constructor(hexMapData, tileData, camera, images, settings, uiController, globalState) {
-        this.data = new UnitDataClass(hexMapData, tileData, images, settings, uiController, globalState)
+        this.data = new UnitDataClass(hexMapData, tileData, images, uiController, globalState)
         this.renderer = new UnitRendererClass(this.data, hexMapData, tileData, camera, settings, images)
     }
 

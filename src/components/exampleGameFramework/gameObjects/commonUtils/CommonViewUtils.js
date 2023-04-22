@@ -4,7 +4,7 @@ export default class CommonViewUtilsClass {
         this.camera = camera
     }
 
-    onScreenCheck = (spritePos, spriteSize, canvasDims) => {
+    onScreenCheck = (spritePos, spriteSize, canvas) => {
 
         let zoom = this.camera.zoomAmount * this.camera.zoom
 
@@ -13,8 +13,8 @@ export default class CommonViewUtilsClass {
         //check if sprite is on screen
         if (spritePos.x < position.x - spriteSize.width
             || spritePos.y < position.y - spriteSize.height
-            || spritePos.x > position.x + canvasDims.width + zoom
-            || spritePos.y > position.y + canvasDims.height + zoom * (canvasDims.height / canvasDims.width)) return false;
+            || spritePos.x > position.x + canvas.width + zoom
+            || spritePos.y > position.y + canvas.height + zoom * (canvas.height / canvas.width)) return false;
 
         return true
     }

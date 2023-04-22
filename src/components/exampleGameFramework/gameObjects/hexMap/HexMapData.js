@@ -1,8 +1,10 @@
 import HexMapSelectionsClass from "./HexMapDataSelections";
 
+import {TILE_SIZE, HEXMAP_SQUISH, TILE_HEIGHT, SHADOW_ROTATION, HEXMAP_ELEVATION_RANGES} from './HexMapConstants'
+
 export default class HexMapDataClass {
 
-    constructor(settings, canvas) {
+    constructor(canvas) {
 
         this.state = {
             selectTile: 'selectTile',
@@ -16,10 +18,11 @@ export default class HexMapDataClass {
 
         this.renderBackground = true
 
-        this.size = canvas.width / settings.TILE_SIZE;
-        this.squish = settings.HEXMAP_SQUISH;
-        this.tileHeight = settings.TILE_HEIGHT;
-        this.shadowRotation = settings.SHADOW_ROTATION;
+        this.size = canvas.width / TILE_SIZE;
+        this.squish = HEXMAP_SQUISH;
+        this.tileHeight = TILE_HEIGHT;
+        this.shadowRotation = SHADOW_ROTATION;
+        this.elevationRanges = HEXMAP_ELEVATION_RANGES
 
         this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
         this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
