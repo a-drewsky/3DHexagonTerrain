@@ -17,6 +17,12 @@ export default class CameraControllerClass {
     }
 
     mouseMove = (x, y) => {
+
+        if (this.cameraData.clickMovePos !== null) {
+            this.cameraData.clickMovePos.x = x
+            this.cameraData.clickMovePos.y = y
+        }
+
         if (this.cameraData.anchorPoint == null) return;
 
         if (x < 0 || y < 0 || x > this.canvas.width || y > this.canvas.height) {
@@ -29,24 +35,6 @@ export default class CameraControllerClass {
             this.cameraData.anchorPoint.y - y + this.cameraData.mouseAnchorPoint.y
         );
     }
-
-    // mouseWheel = (deltaY) => {
-    //     this.cameraData.clearAnchorPoint();
-    //     if (deltaY > 0) {
-    //         if (this.cameraData.zoom < this.cameraData.maxZoom) {
-    //             this.cameraData.zoom++;
-    //             return true;
-    //         }
-    //     } else {
-    //         if (this.cameraData.zoom > 0) {
-    //             this.cameraData.zoom--;
-    //             return true;
-    //         }
-    //     }
-
-    //     return false;
-
-    // }
 
     keyDown = (key) => {
         this.cameraData.clearAnchorPoint();
@@ -106,16 +94,9 @@ export default class CameraControllerClass {
         let updatePosition = false
 
         this.cameraData.clearAnchorPoint();
-        if (deltaY > 0) {
-            if (this.cameraData.zoom < this.cameraData.maxZoom) {
-                this.cameraData.zoom++;
-                updatePosition = true;
-            }
-        } else {
-            if (this.cameraData.zoom > 0) {
-                this.cameraData.zoom--;
-                updatePosition = true;
-            }
+        if ((deltaY > 0 && this.cameraData.zoom < this.cameraData.maxZoom) || (deltaY < 0 && this.cameraData.zoom > 0)) {
+            this.cameraData.zoom += deltaY / 100
+            updatePosition = true;
         }
 
         if (updatePosition) {
@@ -128,21 +109,17 @@ export default class CameraControllerClass {
     }
 
     rotateRight = () => {
-        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
-            this.cameraData.clearAnchorPoint();
-            this.cameraData.rotation++
-            if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
-            this.cameraData.setVelocity();
-        }
+        this.cameraData.clearAnchorPoint();
+        this.cameraData.rotation += this.cameraData.rotationAmount
+        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
+        this.cameraData.setVelocity();
     }
 
     rotateLeft = () => {
-        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
-            this.cameraData.clearAnchorPoint();
-            this.cameraData.rotation--
-            if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
-            this.cameraData.setVelocity();
-        }
+        this.cameraData.clearAnchorPoint();
+        this.cameraData.rotation -= this.cameraData.rotationAmount
+        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
+        this.cameraData.setVelocity();
     }
 
 }

@@ -11,28 +11,28 @@ export default class InputControllerClass {
    uiInput = (input) => {
       switch (input) {
          case 'move':
-            this.gameManager.hexMap.controller.uiController.move();
+            this.gameManager.hexMap.controller.contextMenu('move');
             return
          case 'mine':
-            this.gameManager.hexMap.controller.uiController.mine();
+            this.gameManager.hexMap.controller.contextMenu('mine');
             return
          case 'attack':
-            this.gameManager.hexMap.controller.uiController.attack();
+            this.gameManager.hexMap.controller.contextMenu('attack');
             return
          case 'capture':
-            this.gameManager.hexMap.controller.uiController.capture();
+            this.gameManager.hexMap.controller.contextMenu('capture');
             return
          case 'cancel':
-            this.gameManager.hexMap.controller.uiController.cancel();
+            this.gameManager.hexMap.controller.contextMenu('cancel');
             return
          case 'rotateLeft':
-            this.gameManager.hexMap.controller.uiController.rotateLeft()
+            this.gameManager.hexMap.controller.rotateLeft()
             return
          case 'rotateRight':
-            this.gameManager.hexMap.controller.uiController.rotateRight()
+            this.gameManager.hexMap.controller.rotateRight()
             return
          case 'addUnit':
-            this.gameManager.hexMap.controller.uiController.setPlaceUnit()
+            this.gameManager.hexMap.controller.selectCard()
             return
          case 'switchView':
             if (this.gameManager.userConstants.DEBUG) this.gameManager.hexMap.switchView()

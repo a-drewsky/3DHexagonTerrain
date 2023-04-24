@@ -3,12 +3,11 @@ import UiControllerClass from "./UiController";
 
 export default class GameManagerClass {
 
-    constructor(ctx, canvas, bgCanvas, userConstants, images, uiComponents, updateUi) {
+    constructor(ctx, canvas, bgCanvas, images, uiComponents, updateUi) {
 
         this.ctx = ctx;
         this.canvas = canvas;
 
-        this.userConstants = userConstants;
         this.images = images;
 
         this.hexMap = null
@@ -32,18 +31,18 @@ export default class GameManagerClass {
         this.fpsTime = Date.now();
     }
 
-    createGame = () => {
+    createGame = (userConstants) => {
 
         this.hexMap = new HexMapClass(
             this.ctx,
             this.canvas,
             this.images,
-            this.userConstants,
+            userConstants,
             this.uiController,
             this.state,
         )
 
-        this.hexMap.build(this.userConstants.MAP_SIZE);
+        this.hexMap.build(userConstants.MAP_SIZE);
         console.log("DONE BUILDING")
         this.hexMap.prerender();
         console.log("DONE PRERENDERING")
@@ -51,6 +50,7 @@ export default class GameManagerClass {
     }
 
     clear = () => {
+        if(this.hexMap) this.hexMap.clear()
         this.hexMap = null
         clearInterval(this.updateInterval);
     }

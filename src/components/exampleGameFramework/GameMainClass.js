@@ -10,7 +10,7 @@ import UserConstantsClass from './UserConstants';
 
 export default class GameMainClass {
 
-   constructor(canvas, bgCanvas, images, uiComponents, setUiComponents, userConstants) {
+   constructor (canvas, bgCanvas, images, uiComponents, setUiComponents) {
 
       //canvas
       this.canvas = canvas;
@@ -35,24 +35,23 @@ export default class GameMainClass {
          this.setUiComponents(this.uiComponents)
       }
 
-      //settings
-      this.userConstants = new UserConstantsClass(userConstants);
-
       //Images
       this.images = images;
 
       //Game manager
-      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.bgCanvas, this.userConstants, this.images, this.uiComponents, this.updateUi);
+      this.gameManager = new GameManagerClass(this.ctx, this.canvas, this.bgCanvas, this.images, this.uiComponents, this.updateUi);
 
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);
+
+      console.log(this.gameManager)
 
    }
 
    clear = () => {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.gameManager.clear()
-      this.gameManager = null
+      this.loaded = false
    }
 
    mouseDown = (x, y) => {
@@ -84,12 +83,12 @@ export default class GameMainClass {
    }
 
 
-   startGame = () => {
+   startGame = (userConstants) => {
 
       //Clear previous game
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      this.gameManager.createGame();
+      this.gameManager.createGame(new UserConstantsClass(userConstants));
 
       this.gameManager.startGame();
 

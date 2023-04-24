@@ -31,13 +31,12 @@ export default class HexMapControllerMouseClass {
         }
     }
 
-    selectTile = (tileClicked, tile) => {
+    selectTile = (tile) => {
         this.hexMapData.resetSelected()
 
-        if (this.spriteManager.units.data.getUnit(tileClicked.q, tileClicked.r) != null) {
+        if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null) {
             this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'unit')
-            let unit = this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r)
-            this.spriteManager.units.data.selectedUnit = unit
+            this.spriteManager.units.data.selectUnit(tile.position.q, tile.position.r)
             this.utils.findMoveSet()
             this.hexMapData.setState('selectMovement')
         }
@@ -60,7 +59,7 @@ export default class HexMapControllerMouseClass {
 
     }
 
-    updateUnitPath = (x, y) => {
+    updatePathSelection = (x, y) => {
 
         let hoverTile = this.utils.getSelectedTile(x, y)
 
@@ -142,7 +141,7 @@ export default class HexMapControllerMouseClass {
 
     }
 
-    selectMovement = (tileClicked, tile, x, y) => {
+    selectMovement = (tile, x, y) => {
         let unit = this.spriteManager.units.data.selectedUnit
 
         if (unit == null) return
@@ -206,8 +205,7 @@ export default class HexMapControllerMouseClass {
     }
     
     endUnitTurn = () => {
-        this.spriteManager.units.data.selectedUnit.setIdle()
-        this.spriteManager.units.data.selectedUnit = null
+        this.spriteManager.units.data.unselectUnit()
     }
 
 }

@@ -17,12 +17,13 @@ export default class GameImagesClass {
 
     }
 
-    loadImages = (startGame) => {
+    loadImages = (setImagesLoaded) => {
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
             console.log(totalLoaded)
-            if(totalLoaded == 5) startGame()
+            console.log("loaded")
+            if(totalLoaded == 5) setImagesLoaded(true)
         }
         this.tile.loadImages(testLoaded)
         this.unit.loadImages(testLoaded)

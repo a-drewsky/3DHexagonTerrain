@@ -7,12 +7,12 @@ export default class HexMapDataClass {
     constructor(canvas) {
 
         this.state = {
-            selectTile: 'selectTile',
-            selectMovement: 'selectMovement',
-            placeUnit: 'placeUnit',
-            chooseRotation: 'chooseRotation',
-            selectAction: 'selectAction',
-            animation: 'animation'
+            selectTile: 'selectTile', //default
+            selectAction: 'selectAction', //waitForUiInput
+            animation: 'animation', //waitForAnimation
+            selectMovement: 'selectMovement', //movementSelection
+            chooseRotation: 'chooseRotation', //rotationSelection
+            placeUnit: 'placeUnit', //spritePlacement
         }
         this.state.current = this.state.selectTile
 

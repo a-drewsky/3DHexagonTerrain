@@ -32,6 +32,20 @@ export default class HexMapClass {
 
     }
 
+    clear = () => {
+        this.data = null
+        this.camera = null
+        this.tileManager.data.tileMap.clear()
+        this.tileManager = null
+        this.spriteManager.structures.data.structureMap.clear()
+        this.spriteManager.units.data.unitList = []
+        this.spriteManager = null
+        this.prerenderer = null
+        this.view = null
+        this.controller = null
+        this.uiUpdater = null
+    }
+
     build = (mapSizeConstant) => {
         this.tileManager.builder.buildMap(mapSizeConstant)
         this.spriteManager.structures.builder.generateStructures(mapSizeConstant)

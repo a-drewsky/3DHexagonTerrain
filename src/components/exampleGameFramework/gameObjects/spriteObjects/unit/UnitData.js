@@ -39,4 +39,13 @@ export default class UnitDataClass {
         return this.getUnit(q, r)
     }
 
+    selectUnit = (q, r) => {
+        this.selectedUnit = this.getUnit(q, r)
+    }
+
+    unselectUnit = () => {
+        this.selectedUnit.setIdle()
+        this.selectedUnit = null
+    }
+
 }

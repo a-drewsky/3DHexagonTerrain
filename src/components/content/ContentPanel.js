@@ -65,28 +65,14 @@ const ContentPanel = () => {
    //CREATE NEW GAME METHOD
    const startNewGame = (e) => {
       if(e) e.preventDefault();
-      if (gameClass && !gameClass.loaded) return;
 
-      if (gameClass) gameClass.clear();
-      setGameClass(undefined);
+      gameClass.clear();
       setUiComponents(initialUi)
-      let newGameClass = new GameMainClass(
-         canvas.current,
-         bgCanvas.current,
-         gameImages,
-         uiComponents,
-         updateUi,
-         {
-            mapSize: sizeSetting
-         }
-      );
-      setGameClass(newGameClass);
-      newGameClass.startGame();
+      gameClass.startGame({ mapSize: sizeSetting });
    }
 
    const endGame = () => {
       if (gameClass) gameClass.clear();
-      setGameClass(undefined);
       setUiComponents(initialUi)
    }
 
@@ -96,14 +82,9 @@ const ContentPanel = () => {
    }
    //END CREATE NEW GAME METHOD
 
-   const log = () => {
-      console.log("loaded")
-      setImagesLoaded(true)
-   }
-
-
    useEffect(() => {
-      gameImages.loadImages(log);
+      gameImages.loadImages(setImagesLoaded);
+      setGameClass(new GameMainClass(canvas.current,bgCanvas.current,gameImages,uiComponents,updateUi))
    }, [gameImages])
 
    useEffect(() => {
@@ -170,7 +151,7 @@ const ContentPanel = () => {
 
 
          {/*CANVAS*/}
-         <div className={(gameClass == null || imagesLoaded == false) && 'd-none'}>
+         <div className={(gameClass == null || gameClass.loaded == false || imagesLoaded == false) && 'd-none'}>
             <Row className='py-2'>
                <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
                <canvas
