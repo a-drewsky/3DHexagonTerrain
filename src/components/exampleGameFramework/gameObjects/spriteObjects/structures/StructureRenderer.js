@@ -92,6 +92,30 @@ export default class StructureRendererClass{
             structure.images[0] = imageList
         }
 
+        this.renderShadow(structure)
+
+
+        //crop and darken
+        for (let i = 0; i < structure.images[0].length; i++) {
+
+            if (structure.images[0][i] == null) continue
+
+            this.camera.rotation = i;
+            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
+            let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.camera.rotation)
+
+            let croppedImage = this.utils.cropOutTiles(structure.images[0][i], structure.imageObject.spriteSize, structure.imageObject.spriteOffset, keyObj, rotatedMap)
+            let darkenedImage = this.utils.darkenSprite(croppedImage, structure)
+            structure.images[0][i] = darkenedImage
+
+        }
+
+        this.camera.rotation = initRotation
+    }
+
+    renderShadow = (structure) => {
+
+        let initRotation = this.camera.rotation
 
         //prerender shadow images
         if (structure.imageObject.shadowImages) {
@@ -116,24 +140,9 @@ export default class StructureRendererClass{
             structure.shadowImages[0] = imageList
 
         }
-
-
-        //crop and darken
-        for (let i = 0; i < structure.images[0].length; i++) {
-
-            if (structure.images[0][i] == null) continue
-
-            this.camera.rotation = i;
-            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.camera.rotation)
-
-            let croppedImage = this.utils.cropOutTiles(structure.images[0][i], structure.imageObject.spriteSize, structure.imageObject.spriteOffset, keyObj, rotatedMap)
-            let darkenedImage = this.utils.darkenSprite(croppedImage, structure)
-            structure.images[0][i] = darkenedImage
-
-        }
-
+        
         this.camera.rotation = initRotation
+
     }
 
 }

@@ -1,7 +1,9 @@
 import HexMapDataClass from "./HexMapData"
 import HexMapControllerClass from "./controllers/HexMapController"
 import HexMapViewClass from "./HexMapView"
-import HexMapSettingsClass from "./HexMapSettings"
+import TileStackDataClass from '../tileStack/TileStackData'
+import StructureDataClass from '../spriteObjects/structures/StructureData'
+import UnitDataClass from "../spriteObjects/unit/UnitData"
 import HexMapprerendererClass from "./HexMapPrerenderer"
 import HexMapUiUpdaterClass from "./HexMapUiUpdater"
 import CameraClass from "../camera/Camera"
@@ -16,11 +18,14 @@ export default class HexMapClass {
         this.images = images
 
         this.data = new HexMapDataClass(canvas)
+        this.tileData = new TileStackDataClass(this.data, images)
+        this.structureData = new StructureDataClass(this.data, images.structures)
+        this.unitData = new UnitDataClass(this.data, this.tileData, images, uiController, globalState)
 
         this.camera = new CameraClass(this.data, canvas)
 
-        this.tileManager = new TileStackManagerClass(this.data, this.camera.data, this.images, canvas)
-        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileManager.data, this.camera.data, this.images, canvas, uiController, globalState)
+        this.tileManager = new TileStackManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.camera.data, this.images, canvas)
+        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.camera.data, this.images, canvas)
 
         this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
 
@@ -35,7 +40,7 @@ export default class HexMapClass {
     clear = () => {
         this.data = null
         this.camera = null
-        this.tileManager.data.tileMap.clear()
+        this.tileData.tileMap.clear()
         this.tileManager = null
         this.spriteManager.structures.data.structureMap.clear()
         this.spriteManager.units.data.unitList = []
@@ -53,12 +58,12 @@ export default class HexMapClass {
     }
 
     prerender = () => {
-        this.tileManager.data.setRotatedMapList()
+        this.tileData.setRotatedMapList()
         let drawCanvas = this.view.initializeCanvas()
         this.prerenderer.prerender(drawCanvas)
         this.uiUpdater.prerender(drawCanvas)
         this.camera.prerender(drawCanvas)
-        this.tileManager.data.setMapPos(drawCanvas);
+        this.tileData.setMapPos(drawCanvas);
         this.view.initializeCamera()
 
     }

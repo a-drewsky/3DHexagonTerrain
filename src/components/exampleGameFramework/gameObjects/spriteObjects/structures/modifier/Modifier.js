@@ -11,6 +11,8 @@ export default class ModifierClass extends StructureClass{
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
         }
         this.state.current = this.state.default
+
+        this.spritePositions = null
     }
 
     setState = (stateName) => {

@@ -20,6 +20,8 @@ export default class TileStackClass {
 
         this.groundShadowTile = false
 
+        this.rendered = false
+
         this.canvasSize = {
             width: hexMapData.size * 2,
             height: hexMapData.size * 2

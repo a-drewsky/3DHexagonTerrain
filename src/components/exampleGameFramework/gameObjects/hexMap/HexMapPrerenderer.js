@@ -35,6 +35,17 @@ export default class HexMapprerendererClass {
             let tileObj = this.tileManager.data.getEntry(tileToRender.position.q, tileToRender.position.r)
             this.tileManager.renderer.renderGroundShadowTile(tileObj)
         }
+        tileToRender.rendered = true
+
+        //check for structures
+        let neighborKeys = this.tileManager.data.getNeighborKeys(tileToRender.position.q, tileToRender.position.r)
+        for(let neighborKey of neighborKeys){
+            if(!this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).rendered) continue
+            if(!this.spriteManager.structures.data.hasStructure(neighborKey.q, neighborKey.r)) continue
+            let structure = this.spriteManager.structures.data.getStructure(neighborKey.q, neighborKey.r)
+            if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.renderShadows(structure)
+            else this.spriteManager.structures.structureRenderer.renderShadow(structure)
+        }
 
         if (this.spriteManager.structures.data.hasStructure(tileToRender.position.q, tileToRender.position.r)) {
             let structure = this.spriteManager.structures.data.getStructure(tileToRender.position.q, tileToRender.position.r)

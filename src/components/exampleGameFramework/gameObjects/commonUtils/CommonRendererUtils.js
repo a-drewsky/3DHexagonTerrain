@@ -206,6 +206,7 @@ export default class CommonRendererUtilsClass {
             if (!cropListTileRef) continue
             let cropListTile = this.tileData.getEntry(cropListTileRef.q, cropListTileRef.r)
             if (!cropListTile) continue
+            if (!cropListTile.rendered) continue
             if (cropListTile.height == tileHeight) {
 
                 let tilePos = {

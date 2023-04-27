@@ -7,10 +7,12 @@ const HEXMAP_LINE_WIDTH = 3
 
 export default class TileStackRendererClass {
 
-    constructor(tileData, hexMapData, camera, images) {
+    constructor(tileData, hexMapData, structureData, unitData, camera, images) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
+        this.structureData = structureData
+        this.unitData = unitData
         this.camera = camera
 
         this.utils = new CommonRendererUtilsClass(hexMapData, this.tileData, camera, images)
@@ -182,28 +184,24 @@ export default class TileStackRendererClass {
     drawShadows = (stackctx, tile) => {
 
 
-        let shadowImage = this.drawShadowImage(tile)
+        let tileShadows = this.drawTileShadows(tile)
 
         stackctx.beginPath();
-
-
         this.utils.clipFlatHexagonPath(
             stackctx,
             this.hexMapData.size,
             this.hexMapData.size * this.hexMapData.squish
         );
-
-
         stackctx.save();
         stackctx.clip();
 
-        stackctx.drawImage(shadowImage, 0, 0, this.hexMapData.size * 2, this.hexMapData.size * 2)
+        stackctx.drawImage(tileShadows, 0, 0, this.hexMapData.size * 2, this.hexMapData.size * 2)
 
         stackctx.restore();
 
     }
 
-    drawShadowImage = (tile) => {
+    drawTileShadows = (tile) => {
 
         let tileList = [{ q: -1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -2, r: 1 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -3, r: 2 }, { q: -2, r: 3 }, { q: -3, r: 3 }, { q: -4, r: 3 }, { q: -3, r: 4 }, { q: -4, r: 4 }, { q: -5, r: 4 }, { q: -4, r: 5 }, { q: -5, r: 5 }]
 
@@ -300,7 +298,7 @@ export default class TileStackRendererClass {
 
         tempctx.drawImage(sprite, 0, 0, tempCanvas.width, tempCanvas.height)
 
-        if(tileObj.selectionImages[selection] === undefined) tileObj.selectionImages[selection] = []
+        if (tileObj.selectionImages[selection] === undefined) tileObj.selectionImages[selection] = []
 
         tileObj.selectionImages[selection][this.camera.rotation] = tempCanvas
 
