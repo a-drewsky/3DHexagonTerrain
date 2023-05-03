@@ -108,13 +108,13 @@ export default class UnitRendererClass {
 
     renderActionSprite = (unit) => {
 
-        console.log("action")
-
         let sprite = unit.imageObject
 
         let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
 
-        let spritePos = this.tileData.hexPositionToXYPosition(unit.position, height, this.cameraData.rotation)
+        let pos = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+
+        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         let spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -142,17 +142,14 @@ export default class UnitRendererClass {
         tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
 
         this.utils.addHealthBar(tempCanvas, unit)
-        this.utils.cropOutTiles(tempCanvas, sprite.spriteOffset, unit.position, this.tileData.rotatedMapList[this.cameraData.rotation])
+        this.utils.cropOutTiles(tempCanvas, sprite.spriteOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
         this.utils.darkenSpriteJump(tempCanvas, unit, unit.position, height)
         unit.images = tempCanvas
     }
 
     renderMovingSprite = (unit) => {
 
-        let pos = {
-            q: unit.position.q,
-            r: unit.position.r
-        }
+        let pos = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
 
         let closestTile = {
             q: unit.position.q,
@@ -220,7 +217,7 @@ export default class UnitRendererClass {
 
         tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
 
-        this.utils.cropOutTilesJump(tempCanvas, sprite.spriteOffset, unit.position, this.tileData.rotatedMapList[this.cameraData.rotation], height)
+        this.utils.cropOutTilesJump(tempCanvas, sprite.spriteOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
         this.utils.darkenSpriteJump(tempCanvas, unit, closestTile, height)
         unit.images = tempCanvas
     }

@@ -1,14 +1,12 @@
 export default class HexMapControllerContextMenuClass {
 
-    constructor(hexMapData, tileManager, spriteManager, cameraController, camera, canvas, utils, uiController) {
+    constructor(hexMapData, tileManager, spriteManager, canvas, utils, uiController) {
         this.hexMapData = hexMapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
-        this.camera = camera
         this.canvas = canvas
         this.utils = utils
         this.uiController = uiController
-        this.cameraController = cameraController
     }
 
     select = (input) => {

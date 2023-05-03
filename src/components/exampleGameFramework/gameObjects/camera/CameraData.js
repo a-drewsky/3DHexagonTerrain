@@ -13,6 +13,7 @@ export default class CameraDataClass {
 
         this.hexMapData = hexMapData
         this.canvas = canvas
+        this.drawCanvas = null
 
         this.position = {
             x: 0,

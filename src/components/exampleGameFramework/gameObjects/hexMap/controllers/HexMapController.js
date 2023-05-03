@@ -7,7 +7,7 @@ import HexMapControllerContextMenuClass from './HexMapControllerContextMenu';
 
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, images, uiController, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, cameraManager, canvas, images, uiController, globalState) {
 
         this.hexMapData = hexMapData;
 
@@ -20,34 +20,32 @@ export default class HexMapControllerClass {
 
         this.collision = new CollisionClass();
 
-        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, globalState);
+        this.utils = new HexMapControllerUtilsClass(this.hexMapData, tileManager, spriteManager, cameraManager.data, canvas, images, uiController, globalState);
 
-        this.cameraController = cameraController
-
-        this.cameraData = cameraData;
+        this.cameraManager = cameraManager
 
         this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.utils, uiController, this.config)
 
-        this.contextMenuController = new HexMapControllerContextMenuClass(hexMapData, tileManager, spriteManager, cameraController, cameraData, canvas, this.utils, uiController)
+        this.contextMenuController = new HexMapControllerContextMenuClass(hexMapData, tileManager, spriteManager, canvas, this.utils, uiController)
 
     }
 
     mouseDown = (x, y) => {
-        this.cameraController.mouseDown(x, y)
+        this.cameraManager.controller.mouseDown(x, y)
     }
 
     mouseUp = () => {
 
-        this.cameraController.mouseUp()
+        this.cameraManager.controller.mouseUp()
 
-        if (this.cameraData.clickPos !== null) {
+        if (this.cameraManager.data.clickPos !== null) {
 
             let clickPos = {
-                x: this.cameraData.clickPos.x,
-                y: this.cameraData.clickPos.y
+                x: this.cameraManager.data.clickPos.x,
+                y: this.cameraManager.data.clickPos.y
             }
 
-            this.cameraData.clickPos = null
+            this.cameraManager.data.clickPos = null
 
             let tileSelected = this.utils.getSelectedTile(clickPos.x, clickPos.y)
 
@@ -59,7 +57,7 @@ export default class HexMapControllerClass {
     }
 
     zoom = (deltaY) => {
-        this.cameraController.zoom(deltaY)
+        this.cameraManager.controller.zoom(deltaY)
         this.hexMapData.resetHover()
     }
 
@@ -67,7 +65,7 @@ export default class HexMapControllerClass {
 
         let tile = this.tileManager.data.getEntry(tileSelected.q, tileSelected.r)
 
-        switch (this.hexMapData.state.current) {
+        switch (this.hexMapData.curState()) {
             case 'selectTile':
                 this.mouseController.selectTile(tile)
                 return
@@ -90,11 +88,11 @@ export default class HexMapControllerClass {
 
     mouseMove = (x, y) => {
 
-        this.cameraController.mouseMove(x, y)
+        this.cameraManager.controller.mouseMove(x, y)
 
         this.hexMapData.resetHover()
 
-        switch (this.hexMapData.state.current) {
+        switch (this.hexMapData.curState()) {
             case 'selectTile':
             case 'placeUnit':
             case 'animation':
@@ -118,7 +116,7 @@ export default class HexMapControllerClass {
     }
 
     selectCard = () => {
-        if (this.hexMapData.state.current != 'selectTile') return
+        if (this.hexMapData.curState() != 'selectTile') return
 
         this.hexMapData.resetSelected()
         this.hexMapData.resetHover()
@@ -127,13 +125,13 @@ export default class HexMapControllerClass {
 
     rotateRight = () => {
 
-        let zoomAmount = this.cameraData.zoomAmount
-        let zoomLevel = this.cameraData.zoom
+        let zoomAmount = this.cameraManager.data.zoomAmount
+        let zoomLevel = this.cameraManager.data.zoom
 
         let zoom = zoomLevel * zoomAmount
-        let newRotation = this.cameraData.rotation
+        let newRotation = this.cameraManager.data.rotation
 
-        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
+        for (let i = 0; i < this.cameraManager.data.rotationAmount; i++) {
             let centerHexPos = this.utils.getCenterHexPos(newRotation);
 
             newRotation++
@@ -147,7 +145,7 @@ export default class HexMapControllerClass {
                 let vecQ = this.hexMapData.flatTopVecQ;
                 let vecR = this.hexMapData.flatTopVecR;
 
-                this.cameraData.setCameraPos(
+                this.cameraManager.data.setCameraPos(
                     vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
                     vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
@@ -164,7 +162,7 @@ export default class HexMapControllerClass {
                 let vecQ = this.hexMapData.VecQ;
                 let vecR = this.hexMapData.VecR;
 
-                this.cameraData.setCameraPos(
+                this.cameraManager.data.setCameraPos(
                     vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
                     vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
@@ -172,21 +170,21 @@ export default class HexMapControllerClass {
             }
         }
 
-        this.cameraController.rotateRight()
+        this.cameraManager.controller.rotateRight()
         this.hexMapData.resetHover()
         this.hexMapData.renderBackground = true
     }
 
     rotateLeft = () => {
 
-        let zoomAmount = this.cameraData.zoomAmount
-        let zoomLevel = this.cameraData.zoom
+        let zoomAmount = this.cameraManager.data.zoomAmount
+        let zoomLevel = this.cameraManager.data.zoom
 
         let zoom = zoomLevel * zoomAmount
 
-        let newRotation = this.cameraData.rotation
+        let newRotation = this.cameraManager.data.rotation
 
-        for (let i = 0; i < this.cameraData.rotationAmount; i++) {
+        for (let i = 0; i < this.cameraManager.data.rotationAmount; i++) {
             let centerHexPos = this.utils.getCenterHexPos(newRotation);
 
             newRotation--
@@ -200,7 +198,7 @@ export default class HexMapControllerClass {
                 let vecQ = this.hexMapData.VecQ;
                 let vecR = this.hexMapData.VecR;
 
-                this.cameraData.setCameraPos(
+                this.cameraManager.data.setCameraPos(
                     vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
                     vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
@@ -217,7 +215,7 @@ export default class HexMapControllerClass {
                 let vecQ = this.hexMapData.flatTopVecQ;
                 let vecR = this.hexMapData.flatTopVecR;
 
-                this.cameraData.setCameraPos(
+                this.cameraManager.data.setCameraPos(
                     vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
                     vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
                 );
@@ -225,7 +223,7 @@ export default class HexMapControllerClass {
             }
         }
 
-        this.cameraController.rotateLeft()
+        this.cameraManager.controller.rotateLeft()
         this.hexMapData.resetHover()
         this.hexMapData.renderBackground = true
     }

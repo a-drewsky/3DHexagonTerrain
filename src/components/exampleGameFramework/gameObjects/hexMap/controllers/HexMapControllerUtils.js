@@ -5,18 +5,18 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData, tileManager, spriteManager, camera, canvas, images, uiController, globalState) {
+    constructor(hexMapData, tileManager, spriteManager, cameraData, canvas, images, uiController, globalState) {
         this.hexMapData = hexMapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
-        this.camera = camera
+        this.cameraData = cameraData
         this.canvas = canvas
         this.images = images
         this.globalState = globalState
 
         this.uiController = uiController
 
-        this.pathFinder = new HexMapPathFinderClass(hexMapData, tileManager, spriteManager, camera)
+        this.pathFinder = new HexMapPathFinderClass(hexMapData, tileManager, spriteManager)
         this.collision = new CollisionClass();
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -103,10 +103,10 @@ export default class HexMapControllerUtilsClass {
 
     getSelectedTile = (x, y) => {
 
-        let rotatedMap = this.tileManager.data.rotatedMapList[this.camera.rotation]
+        let rotatedMap = this.tileManager.data.rotatedMapList[this.cameraData.rotation]
 
-        x *= (this.canvas.width + this.camera.zoom * this.camera.zoomAmount) / this.canvas.width
-        y *= (this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
+        x *= (this.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount) / this.canvas.width
+        y *= (this.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.canvas.height / this.canvas.width)) / this.canvas.height
 
 
         let ogPos = {
@@ -114,12 +114,12 @@ export default class HexMapControllerUtilsClass {
             y: y
         }
 
-        x += this.camera.position.x
-        y += this.camera.position.y
+        x += this.cameraData.position.x
+        y += this.cameraData.position.y
 
-        x -= this.tileManager.data.posMap.get(this.camera.rotation).x
+        x -= this.tileManager.data.posMap.get(this.cameraData.rotation).x
 
-        y -= this.tileManager.data.posMap.get(this.camera.rotation).y
+        y -= this.tileManager.data.posMap.get(this.cameraData.rotation).y
 
 
         let hexClicked = {
@@ -146,12 +146,12 @@ export default class HexMapControllerUtilsClass {
 
             if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
 
-            let rotatedTile = this.tileManager.data.getEntryRotated(testTile.q, testTile.r, this.camera.rotation)
+            let rotatedTile = this.tileManager.data.getEntryRotated(testTile.q, testTile.r, this.cameraData.rotation)
 
-            let hexPos = this.tileManager.data.hexPositionToXYPosition(testTile, rotatedTile.height, this.camera.rotation)
+            let hexPos = this.tileManager.data.hexPositionToXYPosition(testTile, rotatedTile.height, this.cameraData.rotation)
 
-            hexPos.x -= this.camera.position.x
-            hexPos.y -= this.camera.position.y
+            hexPos.x -= this.cameraData.position.x
+            hexPos.y -= this.cameraData.position.y
 
 
             if (this.collision.pointHex(ogPos.x, ogPos.y, hexPos.x, hexPos.y, this.hexMapData.size, this.hexMapData.squish)) {
@@ -178,12 +178,12 @@ export default class HexMapControllerUtilsClass {
                 }
 
                 let spriteSize = {
-                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[structureData.state.current.name][this.camera.rotation].x / 32 * 2),
-                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[structureData.state.current.name][this.camera.rotation].y / 32)
+                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].x / 32 * 2),
+                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].y / 32)
                 }
 
-                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[structureData.state.current.name][this.camera.rotation].x / 32) * this.hexMapData.size * 2
-                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[structureData.state.current.name][this.camera.rotation].y / 32) * this.hexMapData.size * 2
+                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].x / 32) * this.hexMapData.size * 2
+                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].y / 32) * this.hexMapData.size * 2
 
                 if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
                     tileClicked = testTile
@@ -201,12 +201,12 @@ export default class HexMapControllerUtilsClass {
                 }
 
                 let spriteSize = {
-                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[unitData.frame][this.camera.rotation].x / 32 * 2),
-                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[unitData.frame][this.camera.rotation].y / 32)
+                    width: this.hexMapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[unitData.frame][this.cameraData.rotation].x / 32 * 2),
+                    height: this.hexMapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[unitData.frame][this.cameraData.rotation].y / 32)
                 }
 
-                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[unitData.frame][this.camera.rotation].x / 32) * this.hexMapData.size * 2
-                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[unitData.frame][this.camera.rotation].y / 32) * this.hexMapData.size * 2
+                spritePos.x -= this.hexMapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[unitData.frame][this.cameraData.rotation].x / 32) * this.hexMapData.size * 2
+                spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[unitData.frame][this.cameraData.rotation].y / 32) * this.hexMapData.size * 2
 
                 if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
                     tileClicked = testTile
@@ -230,20 +230,20 @@ export default class HexMapControllerUtilsClass {
 
     getCenterHexPos = (newRotation) => {
 
-        let zoomAmount = this.camera.zoomAmount
-        let zoomLevel = this.camera.zoom
+        let zoomAmount = this.cameraData.zoomAmount
+        let zoomLevel = this.cameraData.zoom
 
         let size = this.hexMapData.size;
         let squish = this.hexMapData.squish;
 
         let zoom = zoomLevel * zoomAmount
 
-        let rotation = this.camera.rotation
+        let rotation = this.cameraData.rotation
         if (newRotation !== undefined && newRotation !== null) rotation = newRotation
 
         let centerPos = {
-            x: this.camera.position.x + zoom / 2 + this.canvas.width / 2 - this.tileManager.data.posMap.get(rotation).x,
-            y: this.camera.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.tileManager.data.posMap.get(rotation).y
+            x: this.cameraData.position.x + zoom / 2 + this.canvas.width / 2 - this.tileManager.data.posMap.get(rotation).x,
+            y: this.cameraData.position.y + zoom / 2 * (this.canvas.height / this.canvas.width) + this.canvas.height / 2 - this.tileManager.data.posMap.get(rotation).y
         }
 
 

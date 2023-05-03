@@ -1,4 +1,4 @@
-import HexMapClass from "./gameObjects/hexMap/HexMap"
+import HexMapManagerClass from "./gameObjects/hexMap/HexMapManager";
 import UiControllerClass from "./UiController";
 
 export default class GameManagerClass {
@@ -10,7 +10,7 @@ export default class GameManagerClass {
 
         this.images = images;
 
-        this.hexMap = null
+        this.hexMapManager = null
 
         this.updateUi = updateUi
         this.uiController = new UiControllerClass(uiComponents, bgCanvas)
@@ -33,7 +33,7 @@ export default class GameManagerClass {
 
     createGame = (userConstants) => {
 
-        this.hexMap = new HexMapClass(
+        this.hexMapManager = new HexMapManagerClass(
             this.ctx,
             this.canvas,
             this.images,
@@ -42,16 +42,16 @@ export default class GameManagerClass {
             this.state,
         )
 
-        this.hexMap.build(userConstants.MAP_SIZE);
+        this.hexMapManager.build(userConstants.MAP_SIZE);
         console.log("DONE BUILDING")
-        this.hexMap.prerender();
+        this.hexMapManager.prerender();
         console.log("DONE PRERENDERING")
 
     }
 
     clear = () => {
-        if(this.hexMap) this.hexMap.clear()
-        this.hexMap = null
+        if(this.hexMapManager) this.hexMapManager.clear()
+        this.hexMapManager = null
         clearInterval(this.updateInterval);
     }
 
@@ -68,7 +68,7 @@ export default class GameManagerClass {
     update = () => {
         if (this.state.current != this.state.play) return
 
-        this.hexMap.update();
+        this.hexMapManager.update();
     }
 
     draw = () => {
@@ -84,7 +84,7 @@ export default class GameManagerClass {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         //draw game objects
-        if (this.hexMap.state != 'disabled') this.hexMap.draw();
+        if (this.hexMapManager.state != 'disabled') this.hexMapManager.draw();
 
         //draw fps
         this.ctx.font = '30px Arial'
@@ -94,13 +94,16 @@ export default class GameManagerClass {
     }
 
     setStatePause = () => {
+        console.log("pause")
         this.state.current = this.state.pause
         this.uiController.setPauseMenu(true)
     }
 
     setStatePlay = () => {
+        console.log("play")
         this.state.current = this.state.play
         this.uiController.setPauseMenu(false)
+        this.uiController.setEndGameMenu(false)
     }
 
 }

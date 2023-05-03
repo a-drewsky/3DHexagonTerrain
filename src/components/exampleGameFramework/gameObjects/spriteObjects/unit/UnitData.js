@@ -46,6 +46,7 @@ export default class UnitDataClass {
     unselectUnit = () => {
         this.selectedUnit.setIdle()
         this.selectedUnit = null
+        this.hexMapData.resetState()
     }
 
 }

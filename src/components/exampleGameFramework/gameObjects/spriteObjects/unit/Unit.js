@@ -68,7 +68,7 @@ export default class UnitClass {
             jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'moving' },
             mine: { name: 'mine', rate: 150, duration: 1800, type: 'action' },
             attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
-            hit: { name: 'hit', rate: 300, duration: 900, type: 'action' },
+            hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
             death: { name: 'death', rate: 150, duration: 600, type: 'action' }
         }
         this.state.current = this.state.idle
@@ -174,7 +174,6 @@ export default class UnitClass {
         this.destinationStartTime = null
 
         this.state.current = this.state.idle
-        this.hexMapData.resetState()
 
     }
 

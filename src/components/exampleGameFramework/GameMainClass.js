@@ -44,8 +44,6 @@ export default class GameMainClass {
       //Input controller
       this.inputController = new InputControllerClass(this.gameManager);
 
-      console.log(this.gameManager)
-
    }
 
    clear = () => {

@@ -5,10 +5,10 @@ import { INIT_CAMERA_POSITION } from './HexMapConstants'
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, camera, hexMapData, tileManager, spriteManager, userConstants, images, uiController) {
+   constructor(ctx, canvas, cameraData, hexMapData, tileManager, spriteManager, userConstants, images, uiController) {
       this.ctx = ctx;
       this.canvas = canvas;
-      this.camera = camera;
+      this.cameraData = cameraData;
       this.hexMapData = hexMapData;
       this.tileManager = tileManager
       this.spriteManager = spriteManager
@@ -18,7 +18,7 @@ export default class HexMapViewClass {
 
       this.uiController = uiController
 
-      this.tableView = new HexMapViewTableClass(hexMapData, tileManager, camera)
+      this.tableView = new HexMapViewTableClass(hexMapData, tileManager, cameraData)
 
       //Debug Settings
       this.DEBUG = userConstants.DEBUG;
@@ -42,7 +42,7 @@ export default class HexMapViewClass {
 
       if (this.DEBUG) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
-      this.ctx.drawImage(this.drawCanvas, this.camera.position.x, this.camera.position.y, this.canvas.width + this.camera.zoom * this.camera.zoomAmount, this.canvas.height + this.camera.zoom * this.camera.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(this.drawCanvas, this.cameraData.position.x, this.cameraData.position.y, this.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount, this.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
 
       if (this.DEBUG) {
          this.ctx.fillStyle = 'black'
@@ -84,11 +84,11 @@ export default class HexMapViewClass {
 
       let keys = this.tileManager.data.getKeys();
 
-      //set camera rotation
-      this.camera.rotation = this.camera.initCameraRotation;
+      //set cameraData rotation
+      this.cameraData.rotation = this.cameraData.initCameraRotation;
 
 
-      //set camera position (top, middle or bottom)
+      //set cameraData position (top, middle or bottom)
       let maxQ = Math.max(...keys.map(key => key.q))
       let minQ = Math.min(...keys.map(key => key.q))
       let medQ = (maxQ + minQ) / 2
@@ -117,20 +117,20 @@ export default class HexMapViewClass {
             break;
       }
 
-      let camPos = this.commonUtils.rotateTile(camQ, camR, this.camera.rotation)
+      let camPos = this.commonUtils.rotateTile(camQ, camR, this.cameraData.rotation)
 
-      let mappos = this.tileManager.data.posMap.get(this.camera.rotation)
+      let mappos = this.tileManager.data.posMap.get(this.cameraData.rotation)
 
-      //set the camera position
+      //set the cameraData position
       let vecQ, vecR
-      if (this.camera.rotation % 2 == 0) {
+      if (this.cameraData.rotation % 2 == 0) {
          vecQ = this.hexMapData.VecQ
          vecR = this.hexMapData.VecR
       } else {
          vecQ = this.hexMapData.flatTopVecQ
          vecR = this.hexMapData.flatTopVecR
       }
-      this.camera.setPosition(
+      this.cameraData.setPosition(
          mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width / 2,
          mappos.y + (camPos.q * vecQ.y * this.hexMapData.squish + camPos.r * vecR.y * this.hexMapData.squish) - this.canvas.height / 2
       )

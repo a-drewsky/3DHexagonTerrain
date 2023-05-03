@@ -3,12 +3,12 @@ import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 
 export default class ModifierRendererClass{
 
-    constructor(structureData, hexMapData, tileData, camera, images){
+    constructor(structureData, hexMapData, tileData, cameraData, images){
         this.structureData = structureData
         this.hexMapData = hexMapData
         this.tileData = tileData
-        this.camera = camera
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
+        this.cameraData = cameraData
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, cameraData, images)
 
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -60,7 +60,7 @@ export default class ModifierRendererClass{
             return
         }
 
-        let initCameraRotation = this.camera.rotation
+        let initCameraRotation = this.cameraData.rotation
 
         //set canvas size
         let canvasSize = {
@@ -94,7 +94,7 @@ export default class ModifierRendererClass{
 
         for (let rotation = 0; rotation < 12; rotation++) {
 
-            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+            if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
                 let filteredPositionsList = []
                 for (let j = 0; j < filteredPositions.length; j++) {
 
@@ -157,9 +157,9 @@ export default class ModifierRendererClass{
         for (let i = 0; i < modifier.images[0].length; i++) {
             if (modifier.images[0][i] == null) continue
 
-            this.camera.rotation = i;
-            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
+            this.cameraData.rotation = i;
+            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
 
 
             this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.offset, keyObj, rotatedMap, true)
@@ -169,12 +169,12 @@ export default class ModifierRendererClass{
             this.utils.darkenSprite(modifier.images[0][i].bottom, modifier)
         }
 
-        this.camera.rotation = initCameraRotation
+        this.cameraData.rotation = initCameraRotation
     }
 
     renderShadows = (modifier) => {
 
-        let initCameraRotation = this.camera.rotation
+        let initCameraRotation = this.cameraData.rotation
 
         let shadowCanvasSize = {
             width: this.hexMapData.size * 2 * modifier.imageObject.shadowSize.width,
@@ -186,7 +186,7 @@ export default class ModifierRendererClass{
 
         for (let rotation = 0; rotation < 12; rotation++) {
 
-            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+            if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
                 let filteredPositionsList = []
                 for (let j = 0; j < modifier.spritePositions.length; j++) {
 
@@ -233,22 +233,22 @@ export default class ModifierRendererClass{
         for (let i = 0; i < modifier.shadowImages[0].length; i++) {
             if (modifier.shadowImages[0][i] == null) continue
 
-            this.camera.rotation = i;
-            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
+            this.cameraData.rotation = i;
+            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
 
 
             let shadowImage = this.utils.cropStructureShadow(modifier.shadowImages[0][i], modifier.imageObject.shadowSize, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
             modifier.shadowImages[0][i] = shadowImage
         }
 
-        this.camera.rotation = initCameraRotation
+        this.cameraData.rotation = initCameraRotation
     }
 
     renderSingleImage = (modifier) => {
 
 
-        let initRotation = this.camera.rotation
+        let initRotation = this.cameraData.rotation
 
         //set canvas size
         let canvasSize = {
@@ -260,7 +260,7 @@ export default class ModifierRendererClass{
 
         for (let rotation = 0; rotation < 12; rotation++) {
 
-            if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+            if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
                 let tempCanvas = document.createElement('canvas')
                 tempCanvas.width = canvasSize.width
@@ -290,16 +290,16 @@ export default class ModifierRendererClass{
         for (let i = 0; i < modifier.images[0].length; i++) {
             if (modifier.images[0][i] == null) continue
 
-            this.camera.rotation = i;
-            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
+            this.cameraData.rotation = i;
+            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
 
 
             this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.singleImageOffset, keyObj, rotatedMap, true)
             this.utils.darkenSprite(modifier.images[0][i].top, modifier)
         }
 
-        this.camera.rotation = initRotation
+        this.cameraData.rotation = initRotation
     }
 
 }

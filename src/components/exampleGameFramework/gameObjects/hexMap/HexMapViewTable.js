@@ -10,11 +10,11 @@ const TABLE_COLORS = {
 
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, tileManager, camera) {
+   constructor(hexMapData, tileManager, cameraData) {
 
       this.hexMapData = hexMapData;
       this.tileManager = tileManager
-      this.camera = camera;
+      this.cameraData = cameraData;
       this.drawCanvas = null
 
       this.rotationAlpha = {
@@ -46,7 +46,7 @@ export default class HexMapViewTableClass {
       let tempctx = tempCanvas.getContext('2d')
 
       //get table position
-      let tablePosition = this.tileManager.data.getTablePosition(this.camera.rotation);
+      let tablePosition = this.tileManager.data.getTablePosition(this.cameraData.rotation);
 
       tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l}%)`
       tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l}%)`
@@ -64,13 +64,13 @@ export default class HexMapViewTableClass {
       let tempTablePosition = [...tablePosition].sort((a, b) => a.y - b.y)
 
 
-      let shadowRotation = this.hexMapData.shadowRotation + this.camera.rotation;
+      let shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation;
 
       if (shadowRotation > 11) shadowRotation -= 12;
 
 
 
-      if (this.camera.rotation % 3 == 0) {
+      if (this.cameraData.rotation % 3 == 0) {
 
          tempTablePosition.shift();
          tempTablePosition.shift();
@@ -96,7 +96,7 @@ export default class HexMapViewTableClass {
          tempTablePosition.sort((a, b) => a.x - b.x)
 
 
-         let shiftedShadowRotation = this.hexMapData.shadowRotation + Math.floor(this.camera.rotation / 3) * 3;
+         let shiftedShadowRotation = this.hexMapData.shadowRotation + Math.floor(this.cameraData.rotation / 3) * 3;
 
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 

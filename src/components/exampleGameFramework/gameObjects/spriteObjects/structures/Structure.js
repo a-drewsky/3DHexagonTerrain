@@ -17,6 +17,7 @@ export default class StructureClass {
         if (config.rotation) this.rotation = config.rotation
 
         this.imageObject = images[config.sprite]
+        this.hexMapData = hexMapData
         this.canvasSize = {
             width: hexMapData.size * 2 * this.imageObject.spriteSize.width,
             height: hexMapData.size * 2 * this.imageObject.spriteSize.height

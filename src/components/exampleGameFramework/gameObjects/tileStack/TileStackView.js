@@ -2,12 +2,12 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackViewClass {
 
-    constructor(hexMapData, tileData, tileRenderer, camera, canvas) {
+    constructor(hexMapData, tileData, tileRenderer, cameraData, canvas) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.tileRenderer = tileRenderer
-        this.cameraData = camera
+        this.cameraDataData = cameraData
 
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -17,7 +17,7 @@ export default class TileStackViewClass {
 
     draw = (drawctx) => {
 
-        let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+        let rotatedMap = this.tileData.rotatedMapList[this.cameraDataData.rotation]
 
         for (let [key, value] of rotatedMap) {
 
@@ -26,18 +26,20 @@ export default class TileStackViewClass {
 
             if (!tileObj.images || tileObj.images.length == 0) continue
 
-            let tilePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation)
+            let tilePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraDataData.rotation)
 
-            if (this.cameraData.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.cameraData.rotation].width, height: tileObj.images[this.cameraData.rotation].height }) == true) {
-                drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
+            if (this.cameraDataData.onScreenCheck({ x: tilePos.x - this.hexMapData.size, y: tilePos.y - this.hexMapData.size * this.hexMapData.squish }, { width: tileObj.images[this.cameraDataData.rotation].width, height: tileObj.images[this.cameraDataData.rotation].height }) == true) {
+                drawctx.drawImage(tileObj.images[this.cameraDataData.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.cameraDataData.rotation].width, tileObj.images[this.cameraDataData.rotation].height)
             }
 
-            let tileSelection = this.hexMapData.getSelection(value.q, value.r)
+            let tileSelections = this.hexMapData.getSelections(value.q, value.r)
 
-            if(this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.state.current]
+            for (let tileSelection of tileSelections) {
+                if (this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.curState()]
 
-            if (tileSelection !== null) {
-                this.drawHighlight(drawctx, value, tileSelection)
+                if (tileSelection !== null) {
+                    this.drawHighlight(drawctx, value, tileSelection)
+                }
             }
 
 
@@ -51,13 +53,13 @@ export default class TileStackViewClass {
 
         let tile = this.tileData.getEntry(position.q, position.r)
 
-        let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation), tile.height, this.cameraData.rotation)
+        let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraDataData.rotation), tile.height, this.cameraDataData.rotation)
 
-        if (!tile.selectionImages[selection] || !tile.selectionImages[selection][this.cameraData.rotation]) {
+        if (!tile.selectionImages[selection] || !tile.selectionImages[selection][this.cameraDataData.rotation]) {
             this.tileRenderer.renderSelectionImage(tile, selection)
         }
 
-        let sprite = tile.selectionImages[selection][this.cameraData.rotation]
+        let sprite = tile.selectionImages[selection][this.cameraDataData.rotation]
 
         drawctx.drawImage(sprite, tilePos.x - this.hexMapData.size, tilePos.y - (this.hexMapData.size * this.hexMapData.squish), this.hexMapData.size * 2, this.hexMapData.size * 2)
 

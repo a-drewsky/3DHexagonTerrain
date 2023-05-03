@@ -4,11 +4,11 @@ import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
 
 export default class CommonRendererUtilsClass {
 
-    constructor(hexMapData, tileData, camera, images) {
+    constructor(hexMapData, tileData, cameraData, images) {
 
         this.hexMapData = hexMapData
         this.tileData = tileData
-        this.camera = camera
+        this.cameraData = cameraData
 
         this.images = images
 
@@ -174,8 +174,8 @@ export default class CommonRendererUtilsClass {
         let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
         let tile = this.tileData.getEntry(tileRef.q, tileRef.r)
         let tileHeight = tile.height
-        let ogPos = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
-        let newPos = this.tileData.hexPositionToXYPosition(tileObj, tileHeight, this.camera.rotation)
+        let ogPos = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
+        let newPos = this.tileData.hexPositionToXYPosition(tileObj, tileHeight, this.cameraData.rotation)
 
         let diff = {
             x: newPos.x - ogPos.x,
@@ -204,7 +204,7 @@ export default class CommonRendererUtilsClass {
                     y: (this.hexMapData.size * this.hexMapData.squish) + this.hexMapData.size * 2 * imageOffset.y + diff.y
                 }
 
-                if (this.camera.rotation % 2 == 1) {
+                if (this.cameraData.rotation % 2 == 1) {
                     tilePos.x += this.hexMapData.flatTopVecQ.x * cropList[i].q + this.hexMapData.flatTopVecR.x * cropList[i].r
                     tilePos.y += this.hexMapData.flatTopVecQ.y * cropList[i].q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * cropList[i].r * this.hexMapData.squish
 
@@ -249,7 +249,7 @@ export default class CommonRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -296,7 +296,7 @@ export default class CommonRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -316,7 +316,7 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.camera.rotation % 2 == 1) {
+                if (this.cameraData.rotation % 2 == 1) {
                     clipXOffset = this.hexMapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
                     clipYOffset = this.hexMapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
                 } else {
@@ -329,8 +329,8 @@ export default class CommonRendererUtilsClass {
                 tempctx.beginPath();
 
                 clipFlatHexagonPathForImage(tempctx,
-                    zeroPoint.x + this.tileData.posMap.get(this.camera.rotation).x + clipXOffset,
-                    zeroPoint.y + this.tileData.posMap.get(this.camera.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
+                    zeroPoint.x + this.tileData.posMap.get(this.cameraData.rotation).x + clipXOffset,
+                    zeroPoint.y + this.tileData.posMap.get(this.cameraData.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
                     height
                 );
 
@@ -372,7 +372,7 @@ export default class CommonRendererUtilsClass {
 
         let zeroPoint
 
-        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -392,7 +392,7 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.camera.rotation % 2 == 1) {
+                if (this.cameraData.rotation % 2 == 1) {
                     clipXOffset = this.hexMapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
                     clipYOffset = this.hexMapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
                 } else {
@@ -405,8 +405,8 @@ export default class CommonRendererUtilsClass {
                 tempctx.beginPath();
 
                 clipFlatHexagonPathForImage(tempctx,
-                    zeroPoint.x + this.tileData.posMap.get(this.camera.rotation).x + clipXOffset,
-                    zeroPoint.y + this.tileData.posMap.get(this.camera.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
+                    zeroPoint.x + this.tileData.posMap.get(this.cameraData.rotation).x + clipXOffset,
+                    zeroPoint.y + this.tileData.posMap.get(this.cameraData.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
                     height
                 );
 
@@ -444,7 +444,7 @@ export default class CommonRendererUtilsClass {
         let tileHeight = height
         let zeroPoint
 
-        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
 
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
@@ -464,7 +464,7 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.camera.rotation % 2 == 1) {
+                if (this.cameraData.rotation % 2 == 1) {
                     clipXOffset = this.hexMapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.hexMapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
                     clipYOffset = this.hexMapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.hexMapData.squish;
                 } else {
@@ -477,8 +477,8 @@ export default class CommonRendererUtilsClass {
                 tempctx.beginPath();
 
                 clipFlatHexagonPathForImage(tempctx,
-                    zeroPoint.x + this.tileData.posMap.get(this.camera.rotation).x + clipXOffset,
-                    zeroPoint.y + this.tileData.posMap.get(this.camera.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
+                    zeroPoint.x + this.tileData.posMap.get(this.cameraData.rotation).x + clipXOffset,
+                    zeroPoint.y + this.tileData.posMap.get(this.cameraData.rotation).y + clipYOffset - cropListTile.height * this.hexMapData.tileHeight,
                     height
                 );
 

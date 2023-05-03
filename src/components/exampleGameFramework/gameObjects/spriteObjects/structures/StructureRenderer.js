@@ -3,12 +3,12 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class StructureRendererClass {
 
-    constructor(structureData, hexMapData, tileData, camera, images) {
+    constructor(structureData, hexMapData, tileData, cameraData, images) {
         this.structureData = structureData
         this.hexMapData = hexMapData
         this.tileData = tileData
-        this.camera = camera
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
+        this.cameraData = cameraData
+        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, cameraData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -19,7 +19,7 @@ export default class StructureRendererClass {
 
     renderSprite = (structure) => {
 
-        let initRotation = this.camera.rotation
+        let initRotation = this.cameraData.rotation
 
         let canvasSize = {
             width: this.hexMapData.size * 2 * structure.imageObject.spriteSize.width,
@@ -29,7 +29,7 @@ export default class StructureRendererClass {
         for (let i = 0; i < structure.imageObject[structure.state.current.name].images.length; i++) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
-                if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+                if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
                     let spriteRotation = structure.rotation + rotation
                     if (rotation % 2 == 1) spriteRotation--
@@ -69,31 +69,31 @@ export default class StructureRendererClass {
 
             if (structure.images[0][i] == null) continue
 
-            this.camera.rotation = i;
-            let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-            let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.camera.rotation)
+            this.cameraData.rotation = i;
+            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
 
             this.utils.cropOutTiles(structure.images[0][i], structure.imageObject.spriteOffset, keyObj, rotatedMap)
             this.utils.darkenSprite(structure.images[0][i], structure)
 
         }
 
-        this.camera.rotation = initRotation
+        this.cameraData.rotation = initRotation
     }
 
     renderShadow = (structure) => {
 
-        let initRotation = this.camera.rotation
+        let initRotation = this.cameraData.rotation
 
         //prerender shadow images
         if (structure.imageObject.shadowImages) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
-                if ((rotation - this.camera.initCameraRotation) % this.camera.rotationAmount == 0) {
+                if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
-                    this.camera.rotation = rotation;
-                    let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
-                    let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.camera.rotation)
+                    this.cameraData.rotation = rotation;
+                    let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+                    let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
 
 
                     let shadowImage = this.utils.cropStructureShadow(structure.imageObject.shadowImages[rotation], structure.imageObject.shadowSize, structure.imageObject.shadowOffset, keyObj, rotatedMap)
@@ -109,7 +109,7 @@ export default class StructureRendererClass {
 
         }
 
-        this.camera.rotation = initRotation
+        this.cameraData.rotation = initRotation
 
     }
 

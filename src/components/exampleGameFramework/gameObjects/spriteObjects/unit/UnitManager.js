@@ -23,6 +23,7 @@ export default class UnitManagerClass {
                 case 'mine':
                     unit.collectTargetResources()
                     unit.setIdle()
+                    this.hexMapData.resetState()
                     return
                 case 'attack':
                     unit.attackTarget()
@@ -30,6 +31,7 @@ export default class UnitManagerClass {
                     return
                 case 'hit':
                     unit.setIdle()
+                    if(unit.state.current.name != 'death') this.hexMapData.resetState()
                     return
                 case 'death':
                     this.data.deleteUnit(unit.position.q, unit.position.r)

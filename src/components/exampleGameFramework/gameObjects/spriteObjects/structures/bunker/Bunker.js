@@ -38,6 +38,7 @@ export default class BunkerClass extends StructureClass{
 
     recieveAttack = (damage) => {
         this.health -= damage
+        this.hexMapData.resetState()
     }
 
 }

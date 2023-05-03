@@ -22,7 +22,7 @@ export default class HexMapControllerMouseClass {
 
         let tileObj = this.tileManager.data.getEntry(hoverTile.q, hoverTile.r)
 
-        switch (this.hexMapData.state.current) {
+        switch (this.hexMapData.curState()) {
             case 'placeUnit':
             case 'selectTile':
             case 'chooseRotation':

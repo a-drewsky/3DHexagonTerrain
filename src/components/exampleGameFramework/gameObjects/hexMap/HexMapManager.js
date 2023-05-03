@@ -4,14 +4,15 @@ import HexMapViewClass from "./HexMapView"
 import TileStackDataClass from '../tileStack/TileStackData'
 import StructureDataClass from '../spriteObjects/structures/StructureData'
 import UnitDataClass from "../spriteObjects/unit/UnitData"
+import CameraDataClass from "../camera/CameraData"
 import HexMapprerendererClass from "./HexMapPrerenderer"
 import HexMapUiUpdaterClass from "./HexMapUiUpdater"
-import CameraClass from "../camera/Camera"
+import CameraManagerClass from "../camera/CameraManager"
 
 import TileStackManagerClass from "../tileStack/TileStackManager"
 import SpriteObjectManagerClass from "../spriteObjects/SpriteObjectManager"
 
-export default class HexMapClass {
+export default class HexMapManagerClass {
 
     constructor(ctx, canvas, images, userConstants, uiController, globalState) {
 
@@ -21,25 +22,26 @@ export default class HexMapClass {
         this.tileData = new TileStackDataClass(this.data, images)
         this.structureData = new StructureDataClass(this.data, images.structures)
         this.unitData = new UnitDataClass(this.data, this.tileData, images, uiController, globalState)
+        this.cameraData = new CameraDataClass(this.data, canvas)
 
-        this.camera = new CameraClass(this.data, canvas)
+        this.cameraManager = new CameraManagerClass(this.data, this.cameraData, canvas)
 
-        this.tileManager = new TileStackManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.camera.data, this.images, canvas)
-        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.camera.data, this.images, canvas)
+        this.tileManager = new TileStackManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.cameraData, this.images, canvas)
+        this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.cameraData, this.images, canvas)
 
         this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
 
-        this.view = new HexMapViewClass(ctx, canvas, this.camera.data, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
+        this.view = new HexMapViewClass(ctx, canvas, this.cameraData, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
 
-        this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.camera.controller, this.camera.data, canvas, images, uiController, globalState)
+        this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.cameraManager, canvas, images, uiController, globalState)
 
-        this.uiUpdater = new HexMapUiUpdaterClass(this.data, this.camera, canvas, uiController)
+        this.uiUpdater = new HexMapUiUpdaterClass(this.data, this.cameraData, canvas, uiController)
 
     }
 
     clear = () => {
         this.data = null
-        this.camera = null
+        this.cameraManager = null
         this.tileData.tileMap.clear()
         this.tileManager = null
         this.spriteManager.structures.data.structureMap.clear()
@@ -62,7 +64,7 @@ export default class HexMapClass {
         let drawCanvas = this.view.initializeCanvas()
         this.prerenderer.prerender(drawCanvas)
         this.uiUpdater.prerender(drawCanvas)
-        this.camera.prerender(drawCanvas)
+        this.cameraManager.prerender(drawCanvas)
         this.tileData.setMapPos(drawCanvas);
         this.view.initializeCamera()
 
@@ -70,7 +72,7 @@ export default class HexMapClass {
 
     update = () => {
         this.prerenderer.update();
-        this.camera.updater.update()
+        this.cameraManager.update()
         this.uiUpdater.update();
         this.spriteManager.update()
         this.spriteManager.render()
