@@ -21,7 +21,6 @@ export default class GameImagesClass {
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
-            console.log(totalLoaded)
             console.log("loaded")
             if(totalLoaded == 5) setImagesLoaded(true)
         }

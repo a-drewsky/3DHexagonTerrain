@@ -4,10 +4,10 @@ import SpriteObjectViewClass from "./SpriteObjectView"
 
 export default class SpriteObjectManagerClass{
 
-    constructor(hexMapData, tileData, structureData, unitData, camera, images, canvas, settings){
-        this.structures = new StructureManagerClass(hexMapData, tileData, structureData, camera, images, settings)
-        this.units = new UnitManagerClass(hexMapData, tileData, unitData, camera, images, settings)
-        this.view = new SpriteObjectViewClass(hexMapData, tileData, this.units.data, this.structures.data, camera, images, canvas, settings)
+    constructor(hexMapData, tileData, structureData, unitData, cameraData, images, canvas){
+        this.structures = new StructureManagerClass(hexMapData, tileData, structureData, cameraData, images)
+        this.units = new UnitManagerClass(hexMapData, tileData, unitData, cameraData, images)
+        this.view = new SpriteObjectViewClass(hexMapData, tileData, this.units.data, this.structures.data, cameraData, images, canvas)
     }
 
     update = () => {

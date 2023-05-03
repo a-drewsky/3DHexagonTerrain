@@ -48,7 +48,12 @@ export default class ModifierRendererClass{
         ]
     }
 
-    render = (modifier) => {
+    renderAll = (modifier) => {
+        this.renderSprite(modifier)
+        this.renderShadows(modifier)
+    }
+
+    renderSprite = (modifier) => {
 
         if(modifier.modifierType == 'singleImage'){
             this.renderSingleImage(modifier)
@@ -147,8 +152,6 @@ export default class ModifierRendererClass{
 
         modifier.images[0] = imageList
 
-        this.renderShadows(modifier)
-
 
         //crop and darken sprites
         for (let i = 0; i < modifier.images[0].length; i++) {
@@ -159,13 +162,11 @@ export default class ModifierRendererClass{
             let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
 
 
-            let croppedImageTop = this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.spriteSize, modifier.imageObject.offset, keyObj, rotatedMap, true)
-            let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, modifier)
-            modifier.images[0][i].top = darkenedImageTop
+            this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.offset, keyObj, rotatedMap, true)
+            this.utils.darkenSprite(modifier.images[0][i].top, modifier)
 
-            let croppedImageBottom = this.utils.cropOutTiles(modifier.images[0][i].bottom, modifier.imageObject.spriteSize, modifier.imageObject.offset, keyObj, rotatedMap, true)
-            let darkenedImageBottom = this.utils.darkenSprite(croppedImageBottom, modifier)
-            modifier.images[0][i].bottom = darkenedImageBottom
+            this.utils.cropOutTiles(modifier.images[0][i].bottom, modifier.imageObject.offset, keyObj, rotatedMap, true)
+            this.utils.darkenSprite(modifier.images[0][i].bottom, modifier)
         }
 
         this.camera.rotation = initCameraRotation
@@ -237,7 +238,7 @@ export default class ModifierRendererClass{
             let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
 
 
-            let shadowImage = this.utils.cropStructureShadow(modifier.shadowImages[0][i], modifier.imageObject.shadowSize, modifier.imageObject.shadowOffset, keyObj, rotatedMap, true)
+            let shadowImage = this.utils.cropStructureShadow(modifier.shadowImages[0][i], modifier.imageObject.shadowSize, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
             modifier.shadowImages[0][i] = shadowImage
         }
 
@@ -294,9 +295,8 @@ export default class ModifierRendererClass{
             let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.camera.rotation)
 
 
-            let croppedImageTop = this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.singleImageSize, modifier.imageObject.singleImageOffset, keyObj, rotatedMap, true)
-            let darkenedImageTop = this.utils.darkenSprite(croppedImageTop, modifier)
-            modifier.images[0][i].top = darkenedImageTop
+            this.utils.cropOutTiles(modifier.images[0][i].top, modifier.imageObject.singleImageOffset, keyObj, rotatedMap, true)
+            this.utils.darkenSprite(modifier.images[0][i].top, modifier)
         }
 
         this.camera.rotation = initRotation

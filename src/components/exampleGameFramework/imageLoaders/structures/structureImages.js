@@ -18,7 +18,6 @@ export default class StructureImagesClass{
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
-            console.log(totalLoaded)
             if(totalLoaded == 5) startGame()
         }
         this.modifier.loadImages(testLoaded)

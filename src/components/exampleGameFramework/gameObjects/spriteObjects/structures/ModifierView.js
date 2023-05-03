@@ -1,5 +1,4 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import CommonViewUtilsClass from "../../commonUtils/CommonViewUtils"
 
 export default class ModifierViewClass{
 
@@ -7,10 +6,9 @@ export default class ModifierViewClass{
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.structureData = structureData
-        this.camera = camera
+        this.cameraData = camera
         this.images = images
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
     }
 
@@ -27,7 +25,7 @@ export default class ModifierViewClass{
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.imageObject.singleImageSize.width,
@@ -38,9 +36,9 @@ export default class ModifierViewClass{
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.singleImageOffset.y * this.hexMapData.size * 2
 
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.camera.rotation].top,
+            spriteObject.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -67,7 +65,7 @@ export default class ModifierViewClass{
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.width,
@@ -78,9 +76,9 @@ export default class ModifierViewClass{
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.offset.y * this.hexMapData.size * 2
 
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.camera.rotation].top,
+            spriteObject.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -106,7 +104,7 @@ export default class ModifierViewClass{
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.width,
@@ -117,9 +115,9 @@ export default class ModifierViewClass{
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.offset.y * this.hexMapData.size * 2
 
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.camera.rotation].bottom,
+            spriteObject.images[0][this.cameraData.rotation].bottom,
             spritePos.x,
             spritePos.y,
             spriteSize.width,

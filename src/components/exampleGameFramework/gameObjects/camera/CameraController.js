@@ -88,7 +88,6 @@ export default class CameraControllerClass {
     }
 
     zoom = (deltaY) => {
-        console.log(deltaY)
         let zoomAmount = this.cameraData.zoomAmount
 
         let updatePosition = false

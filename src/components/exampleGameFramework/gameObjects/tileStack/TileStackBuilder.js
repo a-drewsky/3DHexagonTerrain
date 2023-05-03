@@ -75,8 +75,6 @@ export default class TileStackBuilderClass {
 
         for (let entry of this.tileData.getTileMap()) {
 
-            console.log(entry)
-
             let keyObj = this.commonUtils.split(entry.key);
 
             //elevation generation

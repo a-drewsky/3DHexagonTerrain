@@ -2,14 +2,16 @@ import UnitRendererClass from "./UnitRenderer"
 
 export default class UnitManagerClass {
 
-    constructor(hexMapData, tileData, unitData, camera, images, settings) {
+    constructor(hexMapData, tileData, unitData, cameraData, images) {
+        this.hexMapData = hexMapData
         this.data = unitData
-        this.renderer = new UnitRendererClass(this.data, hexMapData, tileData, camera, settings, images)
+        this.renderer = new UnitRendererClass(this.data, hexMapData, tileData, cameraData, images)
     }
     
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
+            if(unit.state.current.type == 'action' || unit.state.current.type == 'moving') unit.render = true
 
             if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
 
@@ -33,7 +35,6 @@ export default class UnitManagerClass {
                     this.data.deleteUnit(unit.position.q, unit.position.r)
                     this.hexMapData.resetState()
                     return
-
             }
         }
     }

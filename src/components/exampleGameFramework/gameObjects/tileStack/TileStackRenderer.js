@@ -300,14 +300,12 @@ export default class TileStackRendererClass {
 
         if (tileObj.selectionImages[selection] === undefined) tileObj.selectionImages[selection] = []
 
-        tileObj.selectionImages[selection][this.camera.rotation] = tempCanvas
-
         //crop image
         let rotatedMap = this.tileData.rotatedMapList[this.camera.rotation]
         let keyObj = this.commonUtils.rotateTile(tileObj.position.q, tileObj.position.r, this.camera.rotation)
 
-        let croppedImage = this.utils.cropOutTiles(tileObj.selectionImages[selection][this.camera.rotation], { width: 1, height: 1 }, { x: 0, y: 0 }, keyObj, rotatedMap)
-        tileObj.selectionImages[selection][this.camera.rotation] = croppedImage
+        this.utils.cropOutTiles(tempCanvas, { x: 0, y: 0 }, keyObj, rotatedMap)
+        tileObj.selectionImages[selection][this.camera.rotation] = tempCanvas
 
     }
 

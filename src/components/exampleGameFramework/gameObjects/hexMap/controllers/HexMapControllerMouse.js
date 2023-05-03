@@ -1,3 +1,5 @@
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+
 export default class HexMapControllerMouseClass {
 
     constructor(hexMapData, tileManager, spriteManager, utils, uiController, config) {
@@ -7,6 +9,8 @@ export default class HexMapControllerMouseClass {
         this.utils = utils
         this.uiController = uiController
         this.config = config
+
+        this.commonUtils = new CommonHexMapUtilsClass()
 
     }
 
@@ -48,11 +52,8 @@ export default class HexMapControllerMouseClass {
 
     addUnit = (tile) => {
 
-        if (tile != null) {
-            let newUnit = this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
-            this.spriteManager.units.renderer.render(newUnit)
-        }
-
+        if (tile != null) this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
+        
         this.hexMapData.setState('selectTile')
 
         this.hexMapData.resetSelected()
@@ -136,8 +137,9 @@ export default class HexMapControllerMouseClass {
 
         if (!tileClicked) return
 
+        if (unit.rotation == this.commonUtils.getDirection(unit.position, tileClicked)) return
+
         unit.setDirection(tileClicked)
-        this.spriteManager.units.renderer.render(unit)
 
     }
 

@@ -1,6 +1,18 @@
+
+const MAX_ZOOM = 100;
+
+const ZOOM_AMOUNT = 50;
+
+const ROTATION_AMOUNT = 2
+
+const INIT_CAMERA_ROTATION = 1 //0 is pointy
+
 export default class CameraDataClass {
 
-    constructor(settings) {
+    constructor(hexMapData, canvas) {
+
+        this.hexMapData = hexMapData
+        this.canvas = canvas
 
         this.position = {
             x: 0,
@@ -29,12 +41,26 @@ export default class CameraDataClass {
         this.clickPos = null
         this.clickMovePos = null
 
-        this.maxZoom = settings.MAX_ZOOM;
-        this.zoomAmount = settings.ZOOM_AMOUNT;
-        this.rotationAmount = settings.ROTATION_AMOUNT;
-        this.initCameraRotation = settings.INIT_CAMERA_ROTATION;
-        this.cameraSpeed = settings.CAMERA_SPEED;
+        this.maxZoom = MAX_ZOOM;
+        this.zoomAmount = ZOOM_AMOUNT;
+        this.rotationAmount = ROTATION_AMOUNT;
+        this.initCameraRotation = INIT_CAMERA_ROTATION;
 
+    }
+
+    onScreenCheck = (spritePos, spriteSize) => {
+
+        let zoom = this.zoomAmount * this.zoom
+
+        let position = this.position
+
+        //check if sprite is on screen
+        if (spritePos.x < position.x - spriteSize.width
+            || spritePos.y < position.y - spriteSize.height
+            || spritePos.x > position.x + this.canvas.width + zoom
+            || spritePos.y > position.y + this.canvas.height + zoom * (this.canvas.height / this.canvas.width)) return false;
+
+        return true
     }
 
     setCameraPos = (anchorX, anchorY) => {

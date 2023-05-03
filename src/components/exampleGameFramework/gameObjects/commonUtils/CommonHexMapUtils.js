@@ -84,4 +84,24 @@ export default class CommonHexMapUtilsClass {
         return posMap[index]
     }
 
+    getDirection = (pos1, pos2) => {
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+        let rotatePosMap = directionMap.map(pos => pos === null ? null : { q: pos1.q - pos.q, r: pos1.r - pos.r })
+
+        let closestPos
+        if (rotatePosMap.findIndex(pos => pos !== null && pos.q == pos2.q && pos.r == pos2.r) != -1) {
+            closestPos = pos2
+        } else {
+            closestPos = this.getClosestPos(pos2, rotatePosMap)
+        }
+
+        let direction = {
+            q: closestPos.q - pos1.q,
+            r: closestPos.r - pos1.r
+        }
+
+        return directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+    }
+
 }

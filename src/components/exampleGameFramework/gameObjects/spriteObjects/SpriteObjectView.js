@@ -1,27 +1,25 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
-import CommonViewUtilsClass from "../commonUtils/CommonViewUtils"
 import ModifierViewClass from "./structures/ModifierView"
 import StructureViewClass from "./structures/StructureView"
 import UnitViewClass from "./unit/UnitView"
 
 export default class SpriteObjectViewClass {
 
-   constructor(hexMapData, tileData, unitData, structureData, camera, images, canvas, settings) {
+   constructor(hexMapData, tileData, unitData, structureData, cameraData, images, canvas) {
 
       this.hexMapData = hexMapData
       this.tileData = tileData
       this.unitData = unitData
       this.structureData = structureData
-      this.camera = camera
+      this.cameraData = cameraData
       this.images = images
       this.commonUtils = new CommonHexMapUtilsClass()
-      this.viewUtils = new CommonViewUtilsClass(camera)
 
       this.canvas = canvas
 
-      this.modifiers = new ModifierViewClass(hexMapData, tileData, structureData, camera, images, canvas)
-      this.structures = new StructureViewClass(hexMapData, tileData, structureData, camera, images, canvas)
-      this.units = new UnitViewClass(hexMapData, tileData, unitData, camera, images, canvas, settings)
+      this.modifiers = new ModifierViewClass(hexMapData, tileData, structureData, cameraData, images, canvas)
+      this.structures = new StructureViewClass(hexMapData, tileData, structureData, cameraData, images, canvas)
+      this.units = new UnitViewClass(hexMapData, tileData, unitData, cameraData, images, canvas)
 
    }
 
@@ -31,7 +29,7 @@ export default class SpriteObjectViewClass {
 
       //terrain objects
       for (let [key, value] of this.structureData.getStructureMap()) {
-         let keyObj = this.commonUtils.rotateTile(value.position.q, value.position.r, this.camera.rotation)
+         let keyObj = this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation)
          let height = this.tileData.getEntry(value.position.q, value.position.r).height
 
          //modifier top or bottom
@@ -79,9 +77,9 @@ export default class SpriteObjectViewClass {
          let height
 
          if (unitObject.destination != null && (unitObject.destinationCurTime - unitObject.destinationStartTime) / unitObject.travelTime > 0.5) {
-            keyObj = this.commonUtils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.camera.rotation)
+            keyObj = this.commonUtils.rotateTile(unitObject.destination.q, unitObject.destination.r, this.cameraData.rotation)
          } else {
-            keyObj = this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.camera.rotation)
+            keyObj = this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation)
          }
 
          height = this.tileData.getEntry(unitObject.position.q, unitObject.position.r).height
@@ -147,7 +145,7 @@ export default class SpriteObjectViewClass {
 
          let shadowSize
 
-         let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, spriteList[i].height, this.camera.rotation)
+         let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, spriteList[i].height, this.cameraData.rotation)
 
          shadowSize = {
             width: this.hexMapData.size * 2 * sprite.shadowSize.width,
@@ -158,10 +156,10 @@ export default class SpriteObjectViewClass {
          shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
 
 
-         if (this.viewUtils.onScreenCheck(shadowPos, shadowSize, this.canvas) == false) continue
+         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) continue
 
          drawctx.drawImage(
-            spriteObject.shadowImages[0][this.camera.rotation],
+            spriteObject.shadowImages[0][this.cameraData.rotation],
             shadowPos.x,
             shadowPos.y,
             shadowSize.width,

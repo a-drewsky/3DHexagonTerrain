@@ -14,7 +14,7 @@ export default class UnitClass {
         //static data
         this.name = 'Villager'
         this.type = 'unit'
-        this.tileHeight = 3
+        this.height = 3
 
         //image data
         this.imageObject = unitImages.villager
@@ -82,23 +82,7 @@ export default class UnitClass {
     setDirection = (targetPos) => {
         this.render = true
 
-        //find closest neighbor to this.destination
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
-        let rotatePosMap = directionMap.map(pos => pos === null ? null : { q: this.position.q - pos.q, r: this.position.r - pos.r })
-
-        let closestPos
-        if (rotatePosMap.findIndex(pos => pos !== null && pos.q == targetPos.q && pos.r == targetPos.r) != -1) {
-            closestPos = targetPos
-        } else {
-            closestPos = this.commonUtils.getClosestPos(targetPos, rotatePosMap)
-        }
-
-        let direction = {
-            q: closestPos.q - this.position.q,
-            r: closestPos.r - this.position.r
-        }
-
-        this.rotation = directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+        this.rotation = this.commonUtils.getDirection(this.position, targetPos)
 
     }
 
@@ -175,7 +159,7 @@ export default class UnitClass {
         this.render = true
 
         if (this.health <= 0) {
-            this.state.current = this.state.death
+            this.setAnimation('death')
             return
         }
 

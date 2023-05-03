@@ -47,7 +47,6 @@ export default class StructureDataClass {
     }
 
     destroyStructure = (structure) => {
-        console.log(structure)
         this.setModifier(structure.position.q, structure.position.r, structure.destructionStructure)
     }
 

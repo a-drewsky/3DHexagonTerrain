@@ -49,8 +49,8 @@ export default class HexMapprerendererClass {
 
         if (this.spriteManager.structures.data.hasStructure(tileToRender.position.q, tileToRender.position.r)) {
             let structure = this.spriteManager.structures.data.getStructure(tileToRender.position.q, tileToRender.position.r)
-            if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.render(structure)
-            else this.spriteManager.structures.structureRenderer.render(structure)
+            if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.renderAll(structure)
+            else this.spriteManager.structures.structureRenderer.renderAll(structure)
             structure.render = false
             structure.prerender = false
         }

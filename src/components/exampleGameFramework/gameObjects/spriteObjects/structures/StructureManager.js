@@ -26,8 +26,8 @@ export default class StructureManagerClass {
     render = () => {
         for (let [key, value] of this.data.structureMap) {
             if (value.render && !value.prerender){
-                if(value.type != 'modifier') this.structureRenderer.render(value)
-                else this.modifierRenderer.render(value)
+                if(value.type != 'modifier') this.structureRenderer.renderSprite(value)
+                else this.modifierRenderer.renderSprite(value)
             } 
             value.render = false
             value.prerender = false

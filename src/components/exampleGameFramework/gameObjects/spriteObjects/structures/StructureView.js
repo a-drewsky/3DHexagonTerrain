@@ -1,16 +1,14 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import CommonViewUtilsClass from "../../commonUtils/CommonViewUtils"
 
 export default class StructureViewClass{
 
-    constructor(hexMapData, tileData, structureData, camera, images, canvas) {
+    constructor(hexMapData, tileData, structureData, cameraData, images, canvas) {
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.structureData = structureData
-        this.camera = camera
+        this.cameraData = cameraData
         this.images = images
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
     }
 
@@ -28,7 +26,7 @@ export default class StructureViewClass{
 
       let spriteSize
 
-      let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+      let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
 
       spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -38,9 +36,9 @@ export default class StructureViewClass{
       spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
       spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-      if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+      if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
       drawctx.drawImage(
-         spriteObject.images[0][this.camera.rotation],
+         spriteObject.images[0][this.cameraData.rotation],
          spritePos.x,
          spritePos.y,
          spriteSize.width,

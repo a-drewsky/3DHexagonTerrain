@@ -67,26 +67,20 @@ export default class CommonRendererUtilsClass {
 
     }
 
-    darkenImage = (image) => {
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = image.width
-        tempCanvas.height = image.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, image.width, image.height)
+    darkenImage = (canvas) => {
+        let tempctx = canvas.getContext('2d')
 
         tempctx.globalCompositeOperation = 'source-atop'
         tempctx.fillStyle = 'rgba(0,0,0,0.25)'
 
-        tempctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
+        tempctx.fillRect(0, 0, canvas.width, canvas.height)
         tempctx.globalCompositeOperation = 'source-over'
-
-        return tempCanvas
     }
 
-    darkenSprite = (croppedImage, structureData) => {
+    darkenSprite = (canvas, spriteObject) => {
 
-        let shadowHeight = structureData.height + 1
+
+        let shadowHeight = spriteObject.height + 1
 
         let distance = 0
         let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
@@ -99,18 +93,18 @@ export default class CommonRendererUtilsClass {
                 let startingPoint = shadowPosition.startingPoints[i]
 
                 if (this.hexMapData.shadowRotation % 2 == 0 && i == 0) {
-                    if (this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight + 1 / (SHADOW_SIZE / 2) * Math.sqrt(3)) {
+                    if (this.tileData.getEntry(spriteObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, spriteObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.tileData.getEntry(spriteObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, spriteObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height + shadowHeight + 1 / (SHADOW_SIZE / 2) * Math.sqrt(3)) {
 
-                        croppedImage = this.darkenImage(croppedImage)
+                        this.darkenImage(canvas)
                         cropped = true
                         break;
                     }
                 } else {
-                    if (this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance)
-                        && this.tileData.getEntry(structureData.position.q + startingPoint.q + shadowPosition.distance.q * distance, structureData.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(structureData.position.q, structureData.position.r).height + shadowHeight) {
+                    if (this.tileData.getEntry(spriteObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, spriteObject.position.r + startingPoint.r + shadowPosition.distance.r * distance)
+                        && this.tileData.getEntry(spriteObject.position.q + startingPoint.q + shadowPosition.distance.q * distance, spriteObject.position.r + startingPoint.r + shadowPosition.distance.r * distance).height > this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height + shadowHeight) {
 
-                        croppedImage = this.darkenImage(croppedImage)
+                        this.darkenImage(canvas)
                         cropped = true
                         break;
                     }
@@ -128,12 +122,10 @@ export default class CommonRendererUtilsClass {
             }
 
         }
-
-        return croppedImage;
     }
 
-    darkenSpriteJump = (croppedImage, structureData, closestTile, height) => {
-        let shadowHeight = structureData.height + 1
+    darkenSpriteJump = (canvas, unit, closestTile, height) => {
+        let shadowHeight = unit.height + 1
 
         let distance = 0
         let shadowPosition = this.shadowPositions[this.hexMapData.shadowRotation]
@@ -149,7 +141,7 @@ export default class CommonRendererUtilsClass {
                     if (this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance)
                         && this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight + 1 / (SHADOW_SIZE / 2) * Math.sqrt(3)) {
 
-                        croppedImage = this.darkenImage(croppedImage)
+                        this.darkenImage(canvas)
                         cropped = true
                         break;
                     }
@@ -157,7 +149,7 @@ export default class CommonRendererUtilsClass {
                     if (this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance)
                         && this.tileData.getEntry(closestTile.q + startingPoint.q + shadowPosition.distance.q * distance, closestTile.r + startingPoint.r + shadowPosition.distance.r * distance).height > height + shadowHeight) {
 
-                        croppedImage = this.darkenImage(croppedImage)
+                        this.darkenImage(canvas)
                         cropped = true
                         break;
                     }
@@ -175,11 +167,9 @@ export default class CommonRendererUtilsClass {
             }
 
         }
-
-        return croppedImage;
     }
 
-    cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap, test) => {
+    cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
         let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
         let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
         let tile = this.tileData.getEntry(tileRef.q, tileRef.r)
@@ -243,7 +233,7 @@ export default class CommonRendererUtilsClass {
 
         tempctx.restore();
 
-        tempCanvas = this.cropOutShadowTiles(tempCanvas, imageSize, imageOffset, keyObj, rotatedMap)
+        this.cropOutShadowTiles(tempCanvas, imageOffset, keyObj, rotatedMap)
 
         return tempCanvas
     }
@@ -281,7 +271,7 @@ export default class CommonRendererUtilsClass {
     }
 
     //create common function
-    cropOutTiles = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+    cropOutTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -311,12 +301,7 @@ export default class CommonRendererUtilsClass {
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
 
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
-        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+        let tempctx = canvas.getContext('2d')
 
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
@@ -355,16 +340,14 @@ export default class CommonRendererUtilsClass {
                 tempctx.save();
                 tempctx.clip();
 
-                tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.clearRect(0, 0, canvas.width, canvas.height)
 
                 tempctx.restore();
             }
         }
-
-        return tempCanvas
     }
 
-    cropOutShadowTiles = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+    cropOutShadowTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -394,15 +377,7 @@ export default class CommonRendererUtilsClass {
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
 
-
-
-
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
-        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+        let tempctx = canvas.getContext('2d')
 
         let cropList = [{ q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 }, { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }]
 
@@ -441,16 +416,14 @@ export default class CommonRendererUtilsClass {
                 tempctx.save();
                 tempctx.clip();
 
-                tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.clearRect(0, 0, canvas.width, canvas.height)
 
                 tempctx.restore();
             }
         }
-
-        return tempCanvas
     }
-    
-    cropOutTilesJump = (image, imageSize, imageOffset, keyObj, rotatedMap, height) => {
+
+    cropOutTilesJump = (canvas, imageOffset, keyObj, rotatedMap, height) => {
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -476,12 +449,7 @@ export default class CommonRendererUtilsClass {
         zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
 
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
-        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+        let tempctx = canvas.getContext('2d')
 
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
@@ -519,25 +487,18 @@ export default class CommonRendererUtilsClass {
                 tempctx.save();
                 tempctx.clip();
 
-                tempctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.clearRect(0, 0, canvas.width, canvas.height)
 
                 tempctx.restore();
             }
         }
-
-        return tempCanvas
     }
 
-    addHealthBar = (image, imageSize, object) => {
+    addHealthBar = (canvas, object) => {
 
-        if (object.health == 100) return image
+        if (object.health == 100) return
 
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
-        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+        let tempctx = canvas.getContext('2d')
 
         let healthBarIndex = 10 - Math.floor(object.health / 10)
 
@@ -549,26 +510,19 @@ export default class CommonRendererUtilsClass {
         }
 
         let healthbarPos = {
-            x: tempCanvas.width / 2 - healthbarSpriteSize.width / 2,
+            x: canvas.width / 2 - healthbarSpriteSize.width / 2,
             y: 0
         }
 
         tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
 
-        return tempCanvas
-
     }
 
-    addResourceBar = (image, imageSize, object) => {
+    addResourceBar = (canvas, object) => {
 
-        if (object.resources == 100) return image
+        if (object.resources == 100) return canvas
 
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.hexMapData.size * 2 * imageSize.width
-        tempCanvas.height = this.hexMapData.size * 2 * imageSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
+        let tempctx = canvas.getContext('2d')
 
         let resourceBarIndex = 10 - Math.floor(object.resources / 10)
 
@@ -580,13 +534,11 @@ export default class CommonRendererUtilsClass {
         }
 
         let resourcebarPos = {
-            x: tempCanvas.width / 2 - resourcebarSpriteSize.width / 2,
+            x: canvas.width / 2 - resourcebarSpriteSize.width / 2,
             y: 0
         }
 
         tempctx.drawImage(resourceBarSprite.images[resourceBarIndex], resourcebarPos.x, resourcebarPos.y, resourcebarSpriteSize.width, resourcebarSpriteSize.height)
-
-        return tempCanvas
 
     }
 

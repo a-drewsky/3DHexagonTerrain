@@ -1,18 +1,16 @@
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import CommonViewUtilsClass from "../../commonUtils/CommonViewUtils"
 
 export default class UnitViewClass{
 
-    constructor(hexMapData, tileData, unitData, camera, images, canvas, settings) {
+    constructor(hexMapData, tileData, unitData, camera, images, canvas) {
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.unitData = unitData
-        this.camera = camera
+        this.cameraData = camera
         this.images = images
         this.rendererUtils = new CommonRendererUtilsClass(hexMapData, tileData, camera, images)
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.viewUtils = new CommonViewUtilsClass(camera)
         this.canvas = canvas
     }
 
@@ -20,17 +18,17 @@ export default class UnitViewClass{
 
         let spriteObject = this.unitData.unitList[spriteReference.id]
 
-        if (spriteObject.state.current.type == 'moving') {
-            this.drawMovingUnit(drawctx, spriteReference, spriteObject)
-            return
+        switch(spriteObject.state.current.type) {
+            case 'static':
+                this.drawStaticUnit(drawctx, spriteReference)
+                return
+            case 'action':
+                this.drawActionUnit(drawctx, spriteReference, spriteObject)
+                return
+            case 'moving':
+                this.drawMovingUnit(drawctx, spriteReference, spriteObject)
+                return
         }
-
-        if (spriteObject.state.current.type == 'action') {
-            this.drawActionUnit(drawctx, spriteReference, spriteObject)
-            return
-        }
-
-        this.drawStaticUnit(drawctx, spriteReference)
 
     }
 
@@ -50,7 +48,7 @@ export default class UnitViewClass{
 
         let shadowSize
 
-        let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.camera.rotation)
+        let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
 
 
         shadowSize = {
@@ -62,9 +60,9 @@ export default class UnitViewClass{
         shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
 
 
-        if (this.viewUtils.onScreenCheck(shadowPos, shadowSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
         drawctx.drawImage(
-            spriteObject.shadowImages[this.camera.rotation],
+            spriteObject.shadowImages[this.cameraData.rotation],
             shadowPos.x,
             shadowPos.y,
             shadowSize.width,
@@ -103,7 +101,7 @@ export default class UnitViewClass{
                 q: point1.q + (point2.q - point1.q) * percent,
                 r: point1.r + (point2.r - point1.r) * percent
             }
-            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.camera.rotation)
+            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
             if (percent > 0.5) {
                 closestTile = {
                     q: spriteObject.destination.q,
@@ -115,7 +113,7 @@ export default class UnitViewClass{
         let shadowSize
         let tileHeight = this.tileData.getEntry(closestTile.q, closestTile.r).height
 
-        let shadowPos = this.tileData.hexPositionToXYPosition(pos, tileHeight, this.camera.rotation)
+        let shadowPos = this.tileData.hexPositionToXYPosition(pos, tileHeight, this.cameraData.rotation)
 
         shadowSize = {
             width: this.hexMapData.size * 2 * sprite.shadowSize.width,
@@ -125,11 +123,11 @@ export default class UnitViewClass{
         shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
         shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
 
-        if (this.viewUtils.onScreenCheck(shadowPos, shadowSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
-        let shadowImage = sprite.shadowImages[this.camera.rotation]
+        let shadowImage = sprite.shadowImages[this.cameraData.rotation]
 
-        shadowImage = this.rendererUtils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.tileData.rotatedMapList[this.camera.rotation])
+        shadowImage = this.rendererUtils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
 
         drawctx.drawImage(
             shadowImage,
@@ -142,6 +140,7 @@ export default class UnitViewClass{
     }
 
     drawStaticUnit = (drawctx, spriteReference) => {
+
         let spriteObject = this.unitData.unitList[spriteReference.id]
 
         let keyObj = {
@@ -153,7 +152,7 @@ export default class UnitViewClass{
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -163,9 +162,9 @@ export default class UnitViewClass{
         spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[spriteObject.frame][this.camera.rotation],
+            spriteObject.images[spriteObject.frame][this.cameraData.rotation],
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -185,7 +184,7 @@ export default class UnitViewClass{
 
         let sprite = spriteObject.imageObject
 
-        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         let spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -195,20 +194,10 @@ export default class UnitViewClass{
         spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
 
-        let spriteRotation = spriteObject.rotation + this.camera.rotation
+        let spriteImage = spriteObject.images
 
-        if (this.camera.rotation % 2 == 1) spriteRotation--
-
-        if (spriteRotation > 11) spriteRotation -= 12
-
-        let spriteImage = sprite[spriteObject.state.current.name].images[spriteObject.frame][spriteRotation]
-
-        //SHOULD BE HANDLED BY RENDERER
-        spriteImage = this.rendererUtils.addHealthBar(spriteImage, sprite.spriteSize, spriteObject)
-        spriteImage = this.rendererUtils.cropOutTiles(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.tileData.rotatedMapList[this.camera.rotation])
-        spriteImage = this.rendererUtils.darkenSpriteJump(spriteImage, spriteObject, pos, height)
         drawctx.drawImage(
             spriteImage,
             spritePos.x,
@@ -242,7 +231,7 @@ export default class UnitViewClass{
                 q: point1.q + (point2.q - point1.q) * percent,
                 r: point1.r + (point2.r - point1.r) * percent
             }
-            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.camera.rotation)
+            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
             if (percent > 0.5) {
                 closestTile = {
                     q: spriteObject.destination.q,
@@ -265,7 +254,7 @@ export default class UnitViewClass{
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.camera.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -275,18 +264,9 @@ export default class UnitViewClass{
         spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
         spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
 
-        if (this.viewUtils.onScreenCheck(spritePos, spriteSize, this.canvas) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
 
-        let spriteRotation = spriteObject.rotation + this.camera.rotation
-
-        if (this.camera.rotation % 2 == 1) spriteRotation--
-
-        if (spriteRotation > 11) spriteRotation -= 12
-
-        let spriteImage = sprite[spriteObject.state.current.name].images[spriteObject.frame][spriteRotation]
-
-        spriteImage = this.rendererUtils.cropOutTilesJump(spriteImage, sprite.spriteSize, sprite.spriteOffset, pos, this.tileData.rotatedMapList[this.camera.rotation], height)
-        spriteImage = this.rendererUtils.darkenSpriteJump(spriteImage, spriteObject, closestTile, height)
+        let spriteImage = spriteObject.images
 
         drawctx.drawImage(
             spriteImage,

@@ -148,7 +148,7 @@ export default class TileStackDataClass {
     }
 
     setMaxHeight = () => {
-        this.maxHeight = Math.max(this.getTileMap().map(entry => entry.value.height))
+        this.maxHeight = Math.max(...this.getTileMap().map(entry => entry.value.height))
     }
 
     getEntry = (q, r) => {
