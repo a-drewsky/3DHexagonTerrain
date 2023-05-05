@@ -128,7 +128,6 @@ export default class HexMapControllerMouseClass {
 
     setUnitMouseDirection = (x, y) => {
 
-
         let unit = this.spriteManager.units.data.selectedUnit
 
         if (unit == null) return

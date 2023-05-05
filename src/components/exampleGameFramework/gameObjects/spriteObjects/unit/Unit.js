@@ -64,8 +64,8 @@ export default class UnitClass {
 
         this.state = {
             idle: { name: 'idle', rate: 'static', duration: 'continuous', type: 'static' },
-            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'moving' },
-            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'moving' },
+            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
+            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
             mine: { name: 'mine', rate: 150, duration: 1800, type: 'action' },
             attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
             hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },

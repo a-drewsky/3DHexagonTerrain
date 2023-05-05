@@ -11,7 +11,7 @@ export default class UnitManagerClass {
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
-            if(unit.state.current.type == 'action' || unit.state.current.type == 'moving') unit.render = true
+            if(unit.state.current.type == 'action') unit.render = true
 
             if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
 

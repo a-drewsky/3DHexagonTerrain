@@ -12,21 +12,16 @@ export default class StructureViewClass{
         this.canvas = canvas
     }
 
-   draw = (drawctx, spriteReference) => {
-      let spriteObject = this.structureData.getStructure(spriteReference.id.q, spriteReference.id.r)
-
+   draw = (drawctx, spriteObject) => {
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-      let keyObj = {
-         q: spriteReference.q,
-         r: spriteReference.r
-      }
-
+      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
       let sprite = spriteObject.imageObject
+      let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
       let spriteSize
 
-      let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraData.rotation)
+      let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
       spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
@@ -43,6 +38,37 @@ export default class StructureViewClass{
          spritePos.y,
          spriteSize.width,
          spriteSize.height
+      )
+   }
+
+   drawShadow = (drawctx, spriteObject) => {
+      if (this.commonUtils.checkShadowImages(spriteObject) == false) return
+
+      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+      let sprite = spriteObject.imageObject
+      let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+
+      let shadowSize
+
+      let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
+
+      shadowSize = {
+         width: this.hexMapData.size * 2 * sprite.shadowSize.width,
+         height: this.hexMapData.size * 2 * sprite.shadowSize.height
+      }
+
+      shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
+      shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
+
+
+      if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+
+      drawctx.drawImage(
+         spriteObject.shadowImages[0][this.cameraData.rotation],
+         shadowPos.x,
+         shadowPos.y,
+         shadowSize.width,
+         shadowSize.height
       )
    }
 

@@ -34,6 +34,11 @@ export default class CommonHexMapUtilsClass {
         return true
     }
 
+    checkShadowImages = (spriteObject) => {
+        if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) return false
+        return true
+    }
+
     split = (key) => {
         let nums = key.split(',').map(Number);
         return {

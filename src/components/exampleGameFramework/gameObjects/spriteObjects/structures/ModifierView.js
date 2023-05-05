@@ -6,39 +6,36 @@ export default class ModifierViewClass{
         this.hexMapData = hexMapData
         this.tileData = tileData
         this.structureData = structureData
-        this.cameraDataData = cameraData
+        this.cameraData = cameraData
         this.images = images
         this.commonUtils = new CommonHexMapUtilsClass()
         this.canvas = canvas
     }
 
-    drawSingleImage = (drawctx, spriteReference) => {
-
-        let spriteObject = this.structureData.getStructure(spriteReference.id.q, spriteReference.id.r)
+    drawSingleImage = (drawctx, spriteObject) => {
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-        let keyObj = {
-            q: spriteReference.q,
-            r: spriteReference.r
-        }
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let sprite = spriteObject.imageObject
+        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraDataData.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * spriteObject.imageObject.singleImageSize.width,
-            height: this.hexMapData.size * 2 * spriteObject.imageObject.singleImageSize.height
+            width: this.hexMapData.size * 2 * sprite.singleImageSize.width,
+            height: this.hexMapData.size * 2 * sprite.singleImageSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + spriteObject.imageObject.singleImageOffset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.singleImageOffset.y * this.hexMapData.size * 2
+        spritePos.x -= this.hexMapData.size + sprite.singleImageOffset.x * this.hexMapData.size * 2
+        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.singleImageOffset.y * this.hexMapData.size * 2
 
 
-        if (this.cameraDataData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraDataData.rotation].top,
+            spriteObject.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -47,38 +44,35 @@ export default class ModifierViewClass{
 
     }
 
-    drawTop = (drawctx, spriteReference) => {
-
-        let spriteObject = this.structureData.getStructure(spriteReference.id.q, spriteReference.id.r)
-
-        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+    drawTop = (drawctx, spriteObject) => {
 
         if (spriteObject.modifierType == 'singleImage') {
-            this.drawSingleImage(drawctx, spriteReference)
+            this.drawSingleImage(drawctx, spriteObject)
             return
         }
 
-        let keyObj = {
-            q: spriteReference.q,
-            r: spriteReference.r
-        }
+        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let sprite = spriteObject.imageObject
+        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraDataData.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.width,
-            height: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.height
+            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + spriteObject.imageObject.offset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.offset.y * this.hexMapData.size * 2
+        spritePos.x -= this.hexMapData.size + sprite.offset.x * this.hexMapData.size * 2
+        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.offset.y * this.hexMapData.size * 2
 
 
-        if (this.cameraDataData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraDataData.rotation].top,
+            spriteObject.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -87,37 +81,34 @@ export default class ModifierViewClass{
 
     }
 
-    drawBottom = (drawctx, spriteReference) => {
-
-        let spriteObject = this.structureData.getStructure(spriteReference.id.q, spriteReference.id.r)
-
-        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+    drawBottom = (drawctx, spriteObject) => {
 
         if (spriteObject.modifierType == 'singleImage') {
             return
         }
 
-        let keyObj = {
-            q: spriteReference.q,
-            r: spriteReference.r
-        }
+        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let sprite = spriteObject.imageObject
+        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
         let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, spriteReference.height, this.cameraDataData.rotation)
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.width,
-            height: this.hexMapData.size * 2 * spriteObject.imageObject.spriteSize.height
+            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + spriteObject.imageObject.offset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + spriteObject.imageObject.offset.y * this.hexMapData.size * 2
+        spritePos.x -= this.hexMapData.size + sprite.offset.x * this.hexMapData.size * 2
+        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.offset.y * this.hexMapData.size * 2
 
 
-        if (this.cameraDataData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraDataData.rotation].bottom,
+            spriteObject.images[0][this.cameraData.rotation].bottom,
             spritePos.x,
             spritePos.y,
             spriteSize.width,

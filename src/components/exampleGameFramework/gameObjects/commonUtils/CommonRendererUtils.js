@@ -170,6 +170,9 @@ export default class CommonRendererUtilsClass {
     }
 
     cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
+
+        if(!this.needsShadowCropIn(keyObj, rotatedMap) && !this.needsShadowCropOut(keyObj, rotatedMap)) return image
+
         let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
         let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
         let tile = this.tileData.getEntry(tileRef.q, tileRef.r)
@@ -238,7 +241,7 @@ export default class CommonRendererUtilsClass {
         return tempCanvas
     }
 
-    needsCropping = (imageOffset, keyObj, rotatedMap) => {
+    needsCropping = (keyObj, rotatedMap) => {
 
         let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
 
@@ -247,31 +250,77 @@ export default class CommonRendererUtilsClass {
 
         let tileHeight = tile.height
 
-        let zeroPoint
-
-        zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tileHeight, this.cameraData.rotation)
-
-        zeroPoint.x = (zeroPoint.x - this.hexMapData.size - imageOffset.x * this.hexMapData.size * 2) * -1
-        zeroPoint.y = (zeroPoint.y - (this.hexMapData.size * this.hexMapData.squish) - imageOffset.y * this.hexMapData.size * 2) * -1
-
         let cropList = [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
         for (let i = 0; i < cropList.length; i++) {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
             if (!cropListTileRef) continue
             let cropListTile = this.tileData.getEntry(cropListTileRef.q, cropListTileRef.r)
-            if (!cropListTile) continue
 
-            if (cropListTile.height > tileHeight) {
+            let distance = this.commonUtils.getDistance(tileRef, cropListTileRef)
+            if (cropListTile.height - (distance - 1)*2 > tileHeight) {
                 return true
             }
         }
 
         return false
     }
+    
+    needsShadowCropIn = (keyObj, rotatedMap) => {
+
+        let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
+
+        let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
+        let tile = this.tileData.getEntry(tileRef.q, tileRef.r)
+
+        let tileHeight = tile.height
+
+        let cropList = [{ q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
+
+        for (let i = 0; i < cropList.length; i++) {
+            let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
+            if (!cropListTileRef) return true
+            let cropListTile = this.tileData.getEntry(cropListTileRef.q, cropListTileRef.r)
+            
+            if (cropListTile.height != tileHeight) {
+                return true
+            }
+        }
+
+        return false
+
+    }
+
+    needsShadowCropOut = (keyObj, rotatedMap) => {
+
+        let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
+
+        let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
+        let tile = this.tileData.getEntry(tileRef.q, tileRef.r)
+
+        let tileHeight = tile.height
+
+        let cropList = [{ q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 }, { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }]
+
+        for (let i = 0; i < cropList.length; i++) {
+            let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
+            if (!cropListTileRef) continue
+            let cropListTile = this.tileData.getEntry(cropListTileRef.q, cropListTileRef.r)
+
+            let distance = this.commonUtils.getDistance(tileRef, cropListTileRef)
+            if (cropListTile.height - (distance - 1)*2 > tileHeight) {
+                return true
+            }
+        }
+
+        return false
+
+    }
 
     //create common function
     cropOutTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
+
+        if(!this.needsCropping(keyObj, rotatedMap)) return
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
@@ -348,6 +397,8 @@ export default class CommonRendererUtilsClass {
     }
 
     cropOutShadowTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
+
+        if(!this.needsShadowCropOut(keyObj, rotatedMap)) return
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * this.hexMapData.size, y + Math.cos(this.hexMapData.sideLength * 5 - this.hexMapData.sideLength / 2) * (this.hexMapData.size * this.hexMapData.squish));
