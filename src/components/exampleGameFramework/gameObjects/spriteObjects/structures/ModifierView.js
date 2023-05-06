@@ -16,7 +16,7 @@ export default class ModifierViewClass{
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
@@ -53,7 +53,7 @@ export default class ModifierViewClass{
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
@@ -89,7 +89,7 @@ export default class ModifierViewClass{
 
         if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 

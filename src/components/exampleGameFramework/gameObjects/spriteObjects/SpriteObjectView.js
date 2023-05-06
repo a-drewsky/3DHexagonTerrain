@@ -34,11 +34,13 @@ export default class SpriteObjectViewClass {
 
             spriteList.push({
                spriteObject: value,
+               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
                layer: 1
             })
 
             spriteList.push({
                spriteObject: value,
+               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
                layer: -1
             })
 
@@ -46,6 +48,7 @@ export default class SpriteObjectViewClass {
 
             spriteList.push({
                spriteObject: value,
+               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
                layer: 0
             })
 
@@ -59,12 +62,15 @@ export default class SpriteObjectViewClass {
 
          spriteList.push({
             spriteObject: unitObject,
+            rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
             layer: 0
          })
       }
 
+      
+
       //sort terrain object list
-      spriteList.sort((a, b) => { return a.spriteObject.position.r - b.spriteObject.position.r || a.spriteObject.position.q - b.spriteObject.position.q || a.layer - b.layer })
+      spriteList.sort((a, b) => { return a.rotatedTile.r - b.rotatedTile.r || a.rotatedTile.q - b.rotatedTile.q || a.layer - b.layer })
 
       return spriteList
    }

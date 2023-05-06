@@ -12,7 +12,7 @@ export default class ModifierClass extends StructureClass{
         }
         this.state.current = this.state.default
 
-        this.spritePositions = null
+        this.spritePositions = this.createSpritePosition()
     }
 
     setState = (stateName) => {
@@ -21,6 +21,30 @@ export default class ModifierClass extends StructureClass{
 
     update = () => {
 
+    }
+
+    createSpritePosition = () => {
+        let positions = [0, 1, 2, 3, 4, 5]
+
+        //create pos list
+        let filteredPositions = []
+
+        let currentIndex = Math.floor(Math.random() * positions.length)
+        filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * this.imageObject.modifierImages.length) })
+        positions.splice(currentIndex, 1)
+
+        let chance = this.secondSpriteChance
+        let roll = Math.random()
+        while (roll > chance && positions.length > 0) {
+            currentIndex = Math.floor(Math.random() * positions.length)
+            filteredPositions.push({ position: positions[currentIndex], imageNum: Math.floor(Math.random() * this.imageObject.modifierImages.length) })
+            positions.splice(currentIndex, 1)
+
+            chance += this.spriteIncrementChance
+            roll = Math.random()
+        }
+
+        return filteredPositions
     }
 
 }

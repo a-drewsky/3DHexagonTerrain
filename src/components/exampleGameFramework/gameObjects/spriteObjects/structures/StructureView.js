@@ -15,15 +15,13 @@ export default class StructureViewClass{
    draw = (drawctx, spriteObject) => {
       if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
 
-      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
       let sprite = spriteObject.imageObject
       let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
-      let spriteSize
-
       let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
-      spriteSize = {
+      let spriteSize = {
          width: this.hexMapData.size * 2 * sprite.spriteSize.width,
          height: this.hexMapData.size * 2 * sprite.spriteSize.height
       }
@@ -44,7 +42,7 @@ export default class StructureViewClass{
    drawShadow = (drawctx, spriteObject) => {
       if (this.commonUtils.checkShadowImages(spriteObject) == false) return
 
-      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
       let sprite = spriteObject.imageObject
       let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 

@@ -41,7 +41,7 @@ export default class UnitViewClass {
 
     drawStaticUnit = (drawctx, spriteObject) => {
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
@@ -71,7 +71,7 @@ export default class UnitViewClass {
     drawStaticShadow = (drawctx, spriteObject) => {
         if (this.commonUtils.checkShadowImages(spriteObject) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
@@ -101,7 +101,7 @@ export default class UnitViewClass {
 
     drawActionUnit = (drawctx, spriteObject) => {
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
         let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
 
@@ -157,7 +157,7 @@ export default class UnitViewClass {
     drawActionShadow = (drawctx, spriteObject) => {
         if (this.commonUtils.checkShadowImages(spriteObject) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotaiton)
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
         let sprite = spriteObject.imageObject
 
         let pos = {

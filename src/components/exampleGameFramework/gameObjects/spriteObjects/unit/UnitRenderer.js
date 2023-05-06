@@ -62,7 +62,6 @@ export default class UnitRendererClass {
                 this.utils.darkenSprite(imageList[rotation], unit)
                 this.utils.cropOutTiles(imageList[rotation], unit.imageObject.spriteOffset, keyObj, rotatedMap)
 
-
             }
 
             unit.images[i] = imageList
@@ -75,7 +74,6 @@ export default class UnitRendererClass {
 
         let initRotation = this.cameraData.rotation
 
-        //prerender shadow images
         if (unit.imageObject.shadowImages) {
             let imageList = []
             for (let rotation = 0; rotation < 12; rotation++) {
@@ -148,12 +146,8 @@ export default class UnitRendererClass {
 
 
         let sprite = unit.imageObject
-
-        let spriteSize
-
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
-
-        spriteSize = {
+        let spriteSize = {
             width: this.hexMapData.size * 2 * sprite.spriteSize.width,
             height: this.hexMapData.size * 2 * sprite.spriteSize.height
         }
@@ -164,9 +158,7 @@ export default class UnitRendererClass {
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
 
         let spriteRotation = unit.rotation + this.cameraData.rotation
-
         if (this.cameraData.rotation % 2 == 1) spriteRotation--
-
         if (spriteRotation > 11) spriteRotation -= 12
 
         let spriteImage = sprite[unit.state.current.name].images[unit.frame][spriteRotation]
@@ -188,10 +180,7 @@ export default class UnitRendererClass {
 
         if (!unit.imageObject.shadowImages) return
 
-        let pos = {
-            q: unit.position.q,
-            r: unit.position.r
-        }
+        let pos = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
 
         let closestTile = {
             q: unit.position.q,
@@ -215,24 +204,22 @@ export default class UnitRendererClass {
             }
         }
 
-        let shadowSize
-        let tileHeight = this.tileData.getEntry(closestTile.q, closestTile.r).height
-
-        let shadowPos = this.tileData.hexPositionToXYPosition(pos, tileHeight, this.cameraData.rotation)
-
-        shadowSize = {
-            width: this.hexMapData.size * 2 * unit.imageObject.shadowSize.width,
-            height: this.hexMapData.size * 2 * unit.imageObject.shadowSize.height
+        let height = this.tileData.getEntry(closestTile.q, closestTile.r).height
+        let sprite = unit.imageObject
+        let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
+        let shadowSize = {
+            width: this.hexMapData.size * 2 * sprite.shadowSize.width,
+            height: this.hexMapData.size * 2 * sprite.shadowSize.height
         }
 
-        shadowPos.x -= this.hexMapData.size + unit.imageObject.shadowOffset.x * this.hexMapData.size * 2
-        shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + unit.imageObject.shadowOffset.y * this.hexMapData.size * 2
+        shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
+        shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
-        let shadowImage = unit.imageObject.shadowImages[this.cameraData.rotation]
+        let shadowImage = sprite.shadowImages[this.cameraData.rotation]
 
-        shadowImage = this.utils.cropStructureShadow(shadowImage, unit.imageObject.shadowSize, unit.imageObject.shadowOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
+        shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
 
         unit.shadowImages = shadowImage
 
