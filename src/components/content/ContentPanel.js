@@ -201,8 +201,7 @@ const ContentPanel = () => {
                            <option value={'small'}>Small</option>
                            <option value={'medium'}>Medium</option>
                            <option value={'large'}>Large</option>
-                           <option value={'extralarge'}>Extra Large</option>
-                           <option value={'massive'}>Massive</option>
+                           <option value={'square'}>Square</option>
                         </Form.Control>
                      </div>
                   </Form.Group>

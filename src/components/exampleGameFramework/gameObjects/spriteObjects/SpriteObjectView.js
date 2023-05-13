@@ -65,14 +65,38 @@ export default class SpriteObjectViewClass {
             rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
             layer: 0
          })
-      }
 
-      
+         if (unitObject.destination != null) this.setUnitLayer(spriteList[spriteList.length - 1])
+      }
 
       //sort terrain object list
       spriteList.sort((a, b) => { return a.rotatedTile.r - b.rotatedTile.r || a.rotatedTile.q - b.rotatedTile.q || a.layer - b.layer })
 
       return spriteList
+   }
+
+   setUnitLayer = (spriteListEntry) => {
+
+      let unit = spriteListEntry.spriteObject
+      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
+      let rotationMap = {
+         1: 'up',
+         3: 'down',
+         5: 'down',
+         7: 'down',
+         9: 'up',
+         11: 'up',
+      }
+
+      let spriteRotation = unit.rotation + this.cameraData.rotation
+      if (this.cameraData.rotation % 2 == 1) spriteRotation--
+      if (spriteRotation > 11) spriteRotation -= 12
+      let direction = rotationMap[spriteRotation]
+
+      if((percent > 0.3 && percent < 0.5 && direction == 'up') || (percent < 0.7 && percent > 0.5 && direction == 'down')) spriteListEntry.layer = -2
+      if((percent > 0.3 && percent < 0.5 && direction == 'down') || (percent < 0.7 && percent > 0.5 && direction == 'up')) spriteListEntry.layer = 2
+      console.log(percent, spriteListEntry.layer)
+
    }
 
    draw = (drawctx) => {
@@ -120,8 +144,8 @@ export default class SpriteObjectViewClass {
                this.structures.draw(drawctx, spriteObject)
                continue
             case 'modifier':
-               if (spriteList[i].layer == 1) this.modifiers.drawTop(drawctx, spriteObject)
-               if (spriteList[i].layer == -1) this.modifiers.drawBottom(drawctx, spriteObject)
+               if (spriteList[i].layer == -1) this.modifiers.drawTop(drawctx, spriteObject)
+               if (spriteList[i].layer == 1) this.modifiers.drawBottom(drawctx, spriteObject)
                continue
             case 'unit':
                this.units.draw(drawctx, spriteObject)

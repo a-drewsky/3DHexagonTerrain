@@ -18,21 +18,23 @@ export default class StructureBuilderClass {
 
    }
 
-   generateStructures = (mapSizeConstant) => {
-      let noiseFluctuation = MAP_SIZES[mapSizeConstant.size].noiseFluctuation
+   generateStructures = (mapSize) => {
+      let noiseFluctuation = MAP_SIZES[mapSize].noiseFluctuation
       this.generateModifiers(noiseFluctuation)
       this.generateProps()
-      this.generateMainBases(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
-      this.generateMines(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
-      this.generateBases(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
+      this.generateMainBases(mapSize)
+      this.generateMines(mapSize)
+      this.generateBases(mapSize)
    }
 
-   generateBases = (q, r, mapSize) => {
+   generateBases = (mapSize) => {
 
-      let bufferSize = MAP_SIZES[mapSize].bufferSize
+      let mapConfig = MAP_SIZES[mapSize]
 
-      for (let rGen = 0; rGen < r; rGen++) {
-         for (let qGen = 0; qGen < q; qGen++) {
+      let bufferSize = mapConfig.bufferSize
+
+      for (let rGen = 0; rGen < mapConfig.r; rGen++) {
+         for (let qGen = 0; qGen < mapConfig.q; qGen++) {
             let cellTiles = []
 
             for (let rPos = bufferSize + CELL_SIZE.r * rGen; rPos < bufferSize + CELL_SIZE.r * (rGen + 1); rPos++) {
@@ -74,32 +76,41 @@ export default class StructureBuilderClass {
 
    }
 
-   generateMainBases = (q, r, mapSize) => {
-      let bufferSize = MAP_SIZES[mapSize].bufferSize
+   generateMainBases = (mapSize) => {
+      let mapConfig = MAP_SIZES[mapSize]
 
-      //base 1
-      let rPos = Math.floor(bufferSize + CELL_SIZE.r * 0.25)
-      let qPos = Math.floor(CELL_SIZE.q * 0.75 - Math.floor(0.25 / 2))
+      let bufferSize = mapConfig.bufferSize
 
-      this.structureBuilderUtils.setMainBase(qPos, rPos)
 
-      //base 2
-      rPos = Math.floor(bufferSize + CELL_SIZE.r * r - CELL_SIZE.r * 0.25)
-      qPos = Math.floor(CELL_SIZE.q * 1 - Math.floor(rPos / 2))
+      for (let i=0; i<mapConfig.bases; i++){
 
-      this.structureBuilderUtils.setMainBase(qPos, rPos)
+         //base 1
+         let rPos = Math.floor(bufferSize + CELL_SIZE.r * 0.25)
+         let qPos = Math.floor((CELL_SIZE.q * mapConfig.q)/(mapConfig.bases+1)*(i+1) - Math.floor(rPos / 2))
+   
+         this.structureBuilderUtils.setMainBase(qPos, rPos)
+   
+         //base 2
+         rPos = Math.floor(bufferSize + CELL_SIZE.r * mapConfig.r - CELL_SIZE.r * 0.25)
+         qPos = Math.floor((CELL_SIZE.q * mapConfig.q)/(mapConfig.bases+1)*(i+1) - Math.floor(rPos / 2))
+   
+         this.structureBuilderUtils.setMainBase(qPos, rPos)
+
+      }
+
    }
 
-   generateMines = (q, r, mapSize) => {
+   generateMines = (mapSize) => {
+      let mapConfig = MAP_SIZES[mapSize]
 
-      let bufferSize = MAP_SIZES[mapSize].bufferSize
+      let bufferSize = mapConfig.bufferSize
 
       let closeSpriteList = ['goldmine', 'coppermine']
 
       let farSpriteList = ['goldmine', 'ironmine', 'rubymine', 'amethystmine']
 
-      for (let rGen = 0; rGen < r; rGen++) {
-         for (let qGen = 0; qGen < q; qGen++) {
+      for (let rGen = 0; rGen < mapConfig.r; rGen++) {
+         for (let qGen = 0; qGen < mapConfig.q; qGen++) {
             let cellTiles = []
 
             for (let rPos = bufferSize + CELL_SIZE.r * rGen; rPos < bufferSize + CELL_SIZE.r * (rGen + 1); rPos++) {
@@ -142,7 +153,7 @@ export default class StructureBuilderClass {
 
                let closeSection = false
 
-               if (rGen == 0 || rGen == r - 1) closeSection = true
+               if (rGen == 0 || rGen == mapSize.r - 1) closeSection = true
 
 
                let mineType
@@ -243,4 +254,5 @@ export default class StructureBuilderClass {
       }
 
    }
+   
 }

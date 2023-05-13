@@ -63,7 +63,7 @@ export default class UnitClass {
         this.render = true
 
         this.state = {
-            idle: { name: 'idle', rate: 'static', duration: 'continuous', type: 'static' },
+            idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
             walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
             jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
             mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
@@ -83,6 +83,7 @@ export default class UnitClass {
         this.render = true
 
         this.rotation = this.commonUtils.getDirection(this.position, targetPos)
+        console.log(this.rotation)
 
     }
 
@@ -165,8 +166,8 @@ export default class UnitClass {
 
         this.target = null
         this.frame = 0
-        this.frameStartTime = null
-        this.frameCurTime = null
+        this.frameStartTime = Date.now()
+        this.frameCurTime = Date.now()
         this.animationCurTime = null
         this.animationStartTime = null
         this.destination = null

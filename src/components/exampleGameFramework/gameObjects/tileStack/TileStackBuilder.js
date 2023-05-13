@@ -18,16 +18,17 @@ export default class TileStackBuilderClass {
 
     }
 
-    buildMap = (mapSizeConstant) => {
-        this.generateMap(mapSizeConstant.q, mapSizeConstant.r, mapSizeConstant.size)
-        this.generateBiomes(mapSizeConstant.size)
+    buildMap = (mapSize) => {
+        this.generateMap(mapSize)
+        this.generateBiomes(mapSize)
         this.smoothBiomes()
     }
 
-    generateMap = (q, r, mapSize) => {
+    generateMap = (mapSize) => {
 
-        let Qgen = q * CELL_SIZE.q
-        let Rgen = r * CELL_SIZE.r + MAP_SIZES[mapSize].bufferSize * 2
+        let mapConfig = MAP_SIZES[mapSize]
+        let Qgen = mapConfig.q * CELL_SIZE.q
+        let Rgen = mapConfig.r * CELL_SIZE.r + mapConfig.bufferSize * 2
 
         let groundShadowDistance = 3 //make setting
 

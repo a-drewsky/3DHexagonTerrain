@@ -6,6 +6,7 @@ import attack_sheet from '../../images/units/villagerUnit/villager_unit_attack_s
 import death_sheet from '../../images/units/villagerUnit/villager_unit_death_sheet.png'
 import mine_sheet from '../../images/units/villagerUnit/villager_unit_mine_sheet.png'
 import walk_sheet from '../../images/units/villagerUnit/villager_unit_walk_sheet.png'
+import idle_sheet from '../../images/units/villagerUnit/villager_unit_idle_sheet.png'
 
 export default class UnitImagesVillagerClass extends ImageLoaderClass {
 
@@ -81,18 +82,25 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
             walk: {
                 image: walk_sheet,
                 sprites: {
+                    0: 'walk_1',
+                    1: 'walk_2',
+                    2: 'jump_1',
+                    3: 'jump_2'
+                }
+            },
+            idle: {
+                image: idle_sheet,
+                sprites: {
                     0: 'idle_1',
-                    1: 'walk_1',
-                    2: 'walk_2',
-                    3: 'jump_1',
-                    4: 'jump_2'
+                    1: 'idle_2',
                 }
             }
         }
 
         this.animation_data = {
             idle: [
-                'idle_1'
+                'idle_1',
+                'idle_2'
             ],
             walk: [
                 'walk_1',

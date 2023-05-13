@@ -12,24 +12,36 @@ export const CELL_SIZE = {
 
 export const MAP_SIZES = {
     small: {
+        q: 2,
+        r: 3,
+        type: 'long',
         noiseFluctuation: 5,
-        bufferSize: 3
+        bufferSize: 3,
+        bases: 1
     },
     medium: {
+        q: 3,
+        r: 3,
+        type: 'long',
         noiseFluctuation: 6,
-        bufferSize: 4
+        bufferSize: 4,
+        bases: 2
     },
     large: {
+        q: 4,
+        r: 3,
+        type: 'long',
         noiseFluctuation: 7,
-        bufferSize: 5
+        bufferSize: 5,
+        bases: 3
     },
-    extralarge: {
+    square: {
+        q: 3,
+        r: 3,
+        type: 'square',
         noiseFluctuation: 8,
-        bufferSize: 7
-    },
-    massive: {
-        noiseFluctuation: 9,
-        bufferSize: 10
+        bufferSize: 7,
+        bases: 2
     },
 }
 
