@@ -1,12 +1,21 @@
 import StructureClass from "../Structure"
+
 import ModifierConfig from "./ModifierConfig"
 
 export default class ModifierClass extends StructureClass{
 
-    constructor(pos, structureName, hexMapData, images){
-        super(pos, ModifierConfig[structureName], hexMapData, images.modifier)
+    constructor(pos, structureId, hexMapData, images){
+        super(pos, ModifierConfig[structureId], hexMapData, images.modifier)
         this.type = 'modifier'
-        this.modifierType = ModifierConfig[structureName].modifierType
+        this.modifierType = ModifierConfig[structureId].modifierType
+
+        if(this.modifierType == 'components'){
+            this.secondSpriteChance = ModifierConfig[structureId].secondSpriteChance
+            this.spriteIncrementChance = ModifierConfig[structureId].spriteIncrementChance
+        }
+
+        if(ModifierConfig[structureId].cost) this.cost = ModifierConfig[structureId].cost
+
         this.state = {
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
         }

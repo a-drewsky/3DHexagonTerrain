@@ -49,7 +49,7 @@ export default class HexMapPathFinderClass {
     getTileCost = (tile) => {
         if(this.tileManager.data.getEntry(tile.q, tile.r).biome == 'water') return 2
         let terrain = this.spriteManager.structures.data.getStructure(tile.q, tile.r)
-        if(terrain != null && terrain.name == 'Forest') return 1
+        if(terrain && terrain.cost) return terrain.cost
         return 0
     }
 

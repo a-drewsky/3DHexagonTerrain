@@ -16,32 +16,32 @@ export default class StructureDataClass {
         this.structureMap = new Map()
     }
 
-    setBunker = (q, r, structureName) => {
-        let newBunker = new BunkerClass({q: q, r: r}, structureName, this.hexMapData, this.images)
+    setBunker = (q, r, structureId) => {
+        let newBunker = new BunkerClass({q: q, r: r}, structureId, this.hexMapData, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newBunker)
         return newBunker
     }
 
-    setFlag = (q, r, structureName) => {
-        let newFlag = new FlagClass({q: q, r: r}, structureName, this.hexMapData, this.images)
+    setFlag = (q, r, structureId) => {
+        let newFlag = new FlagClass({q: q, r: r}, structureId, this.hexMapData, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newFlag)
         return newFlag
     }
 
-    setModifier = (q, r, structureName) => {
-        let newModifier = new ModifierClass({q: q, r: r}, structureName, this.hexMapData, this.images)
+    setModifier = (q, r, structureId) => {
+        let newModifier = new ModifierClass({q: q, r: r}, structureId, this.hexMapData, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newModifier)
         return newModifier
     }
 
-    setProp = (q, r, structureName) => {
-        let newProp = new PropClass({q: q, r: r}, structureName, this.hexMapData, this.images)
+    setProp = (q, r, structureId) => {
+        let newProp = new PropClass({q: q, r: r}, structureId, this.hexMapData, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newProp)
         return newProp
     }
 
-    setResource = (q, r, structureName) => {
-        let newResource = new ResourceClass({q: q, r: r}, structureName, this.hexMapData, this.images)
+    setResource = (q, r, structureId) => {
+        let newResource = new ResourceClass({q: q, r: r}, structureId, this.hexMapData, this.images)
         this.structureMap.set(this.commonUtils.join(q, r), newResource)
         return newResource
     }
@@ -61,6 +61,10 @@ export default class StructureDataClass {
 
     getStructureMap = () => {
         return this.structureMap
+    }
+
+    getBunkersArray = () => {
+        return Array.from(this.structureMap.values()).filter(structure => structure.type == 'bunker')
     }
 
     deleteStructure = (q, r) => {

@@ -18,6 +18,11 @@ export default class HexMapControllerMouseClass {
 
         let hoverTile = this.utils.getSelectedTile(x, y)
 
+        if(this.spriteManager.units.data.placementUnit != null){
+            this.spriteManager.units.data.placementUnit.setPosition(hoverTile)
+            if(!hoverTile) this.spriteManager.units.data.placementUnit.setPosition({q: null, r: null})
+        }
+
         if (!hoverTile) return
 
         let tileObj = this.tileManager.data.getEntry(hoverTile.q, hoverTile.r)
@@ -52,10 +57,10 @@ export default class HexMapControllerMouseClass {
 
     addUnit = (tile) => {
 
-        if (tile != null) this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
+        if (tile != null && this.utils.checkUnitPlacementTile(tile)) this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
         
+        this.spriteManager.units.data.eraseUnit()
         this.hexMapData.setState('selectTile')
-
         this.hexMapData.resetSelected()
 
     }

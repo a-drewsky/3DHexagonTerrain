@@ -35,13 +35,15 @@ export default class SpriteObjectViewClass {
             spriteList.push({
                spriteObject: value,
                rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
-               layer: 1
+               layer: 1,
+               silhouette: false
             })
 
             spriteList.push({
                spriteObject: value,
                rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
-               layer: -1
+               layer: -1,
+               silhouette: false
             })
 
          } else {
@@ -49,7 +51,8 @@ export default class SpriteObjectViewClass {
             spriteList.push({
                spriteObject: value,
                rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
-               layer: 0
+               layer: 0,
+               silhouette: false
             })
 
          }
@@ -63,10 +66,20 @@ export default class SpriteObjectViewClass {
          spriteList.push({
             spriteObject: unitObject,
             rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
-            layer: 0
+            layer: 0,
+            silhouette: false
          })
 
          if (unitObject.destination != null) this.setUnitLayer(spriteList[spriteList.length - 1])
+      }
+      if(this.unitData.placementUnit){
+         let unitObject = this.unitData.placementUnit
+         spriteList.push({
+            spriteObject: unitObject,
+            rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
+            layer: 0,
+            silhouette: true
+         })
       }
 
       //sort terrain object list
@@ -111,6 +124,7 @@ export default class SpriteObjectViewClass {
    drawShadows = (drawctx, spriteList) => {
       for (let i = 0; i < spriteList.length; i++) {
          if (spriteList[i].layer == -1) continue
+         if (spriteList[i].silhouette) continue
 
          let spriteObject = spriteList[i].spriteObject
 
@@ -148,7 +162,8 @@ export default class SpriteObjectViewClass {
                if (spriteList[i].layer == 1) this.modifiers.drawBottom(drawctx, spriteObject)
                continue
             case 'unit':
-               this.units.draw(drawctx, spriteObject)
+               if(spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
+               else this.units.draw(drawctx, spriteObject)
                continue
          }
 

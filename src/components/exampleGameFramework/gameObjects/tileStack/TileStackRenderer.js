@@ -250,7 +250,7 @@ export default class TileStackRendererClass {
             if (!this.tileData.hasEntry(mapTileKey.q, mapTileKey.r)) continue
 
 
-            let mapTileValue = this.tileData.getEntry(mapTileKey.q, mapTileKey.r)
+            let mapTileValue = this.tileData.getAnyEntry(mapTileKey.q, mapTileKey.r)
 
             tileKey = this.commonUtils.rotateTile(tileKey.q, tileKey.r, this.cameraData.rotation)
 

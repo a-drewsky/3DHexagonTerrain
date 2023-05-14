@@ -1,7 +1,7 @@
 export default class FlagConfig {
 
     static defaultFlag = {
-        name: 'Flag',
+        id: 'default_flag',
         sprite: 'default',
         height: 5,
         stats: {}

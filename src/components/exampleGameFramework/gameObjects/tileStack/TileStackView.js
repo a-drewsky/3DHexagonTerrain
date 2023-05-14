@@ -22,7 +22,7 @@ export default class TileStackViewClass {
         for (let [key, value] of rotatedMap) {
 
             let keyObj = this.commonUtils.split(key)
-            let tileObj = this.tileData.getEntry(value.q, value.r)
+            let tileObj = this.tileData.getAnyEntry(value.q, value.r)
 
             if (!tileObj.images || tileObj.images.length == 0) continue
 
@@ -38,6 +38,7 @@ export default class TileStackViewClass {
                 if (this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.curState()]
 
                 if (tileSelection !== null) {
+                    // tileSelection = this.hexMapData.selections.modifySelection(tileSelection, value)
                     this.drawHighlight(drawctx, value, tileSelection)
                 }
             }
@@ -51,7 +52,7 @@ export default class TileStackViewClass {
 
     drawHighlight = (drawctx, position, selection) => {
 
-        let tile = this.tileData.getEntry(position.q, position.r)
+        let tile = this.tileData.getAnyEntry(position.q, position.r)
 
         let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation), tile.height, this.cameraData.rotation)
 

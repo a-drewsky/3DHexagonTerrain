@@ -11,6 +11,7 @@ export default class HexMapSelectionsClass {
             action: [],
             attack: []
         }
+        this.placement = []
 
         this.stateSelections = {
             hover: {

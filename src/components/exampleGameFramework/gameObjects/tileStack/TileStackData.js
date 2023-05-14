@@ -152,7 +152,13 @@ export default class TileStackDataClass {
     }
 
     getEntry = (q, r) => {
-        return this.tileMap.get(q + "," + r);
+        let entry = this.tileMap.get(q + "," + r)
+        if(entry && entry.groundShadowTile == false) return entry 
+        return null
+    }
+
+    getAnyEntry = (q, r) => {
+        return this.tileMap.get(q + "," + r)
     }
 
     getEntryRotated = (q, r, rotation) => {

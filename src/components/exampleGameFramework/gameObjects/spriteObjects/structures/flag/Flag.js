@@ -3,8 +3,8 @@ import FlagConfig from "./FlagConfig";
 
 export default class FlagClass extends StructureClass{
 
-    constructor(pos, structureName, hexMapData, images){
-        super(pos, FlagConfig[structureName], hexMapData, images.flag)
+    constructor(pos, structureId, hexMapData, images){
+        super(pos, FlagConfig[structureId], hexMapData, images.flag)
         this.type = 'flag'
         this.state = {
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }

@@ -11,6 +11,7 @@ export default class UnitDataClass {
 
         this.unitList = [];
         this.selectedUnit = null
+        this.placementUnit = null
     }
 
     //return terrain at tile (q, r) or null if the tile has no terrain
@@ -33,10 +34,21 @@ export default class UnitDataClass {
         this.unitList.splice(index, 1)
     }
 
+    createUnit = () => {
+        let newUnit = new UnitClass({q: null, r: null}, this.hexMapData, this.tileData, this.images.unit, this.uiController, this.globalState)
+        this.placementUnit = newUnit
+    }
+
+    eraseUnit = () => {
+        this.placementUnit = null
+    }
+
     addUnit = (q, r) => {
-        let newUnit = new UnitClass({ q: q, r: r }, this.hexMapData, this.tileData, this.images.unit, this.uiController, this.globalState)
+        let newUnit = this.placementUnit
+        this.placementUnit = null
+        newUnit.position = {q: q, r: r}
         this.unitList.push(newUnit)
-        return this.getUnit(q, r)
+        return newUnit
     }
 
     selectUnit = (q, r) => {

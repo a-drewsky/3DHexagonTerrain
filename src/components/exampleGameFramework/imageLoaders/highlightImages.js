@@ -7,6 +7,7 @@ import path from '../images/highlights/highlight_path.png'
 import unit from '../images/highlights/highlight_unit.png'
 import hover_place from '../images/highlights/highlight_hover_place.png'
 import rotate from '../images/highlights/highlight_rotate.png'
+import placement from '../images/highlights/highlight_placement.png'
 
 export default class HighlighImagesClass {
 
@@ -23,7 +24,8 @@ export default class HighlighImagesClass {
             target: new Image(),
             rotate: new Image(),
             hover_select: new Image(),
-            hover_place: new Image()
+            hover_place: new Image(),
+            placement: new Image(),
 
         }
 
@@ -55,6 +57,7 @@ export default class HighlighImagesClass {
         this.rotate.src = rotate
         this.hover_select.src = hover_select
         this.hover_place.src = hover_place
+        this.placement.src = placement
 
 
     }

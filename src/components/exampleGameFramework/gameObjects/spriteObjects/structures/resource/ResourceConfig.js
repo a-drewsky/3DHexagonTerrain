@@ -1,7 +1,7 @@
 export default class ResourceConfig {
 
     static goldmine = {
-        name: 'Gold Mine',
+        id: 'gold_mine',
         sprite: 'gold_mine',
         height: 2,
         stats: {}
@@ -9,7 +9,7 @@ export default class ResourceConfig {
 
 
     static coppermine = {
-        name: 'Copper Mine',
+        id: 'copper_mine',
         sprite: 'copper_mine',
         height: 2,
         stats: {}
@@ -17,7 +17,7 @@ export default class ResourceConfig {
 
 
     static ironmine = {
-        name: 'Iron Mine',
+        id: 'iron_mine',
         sprite: 'iron_mine',
         height: 2,
         stats: {}
@@ -25,7 +25,7 @@ export default class ResourceConfig {
 
 
     static rubymine = {
-        name: 'Ruby Mine',
+        id: 'ruby_mine',
         sprite: 'ruby_mine',
         height: 2,
         stats: {}
@@ -33,7 +33,7 @@ export default class ResourceConfig {
 
 
     static amethystmine = {
-        name: 'Amethyst Mine',
+        id: 'amethyst_mine',
         sprite: 'amethyst_mine',
         height: 2,
         stats: {}

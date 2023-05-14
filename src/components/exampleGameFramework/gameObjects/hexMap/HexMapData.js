@@ -66,6 +66,7 @@ export default class HexMapDataClass {
         if(this.selections.pathing.movement.some(val => val.q == q && val.r == r)) selections.push('movement')
         if(this.selections.pathing.action.some(val => val.q == q && val.r == r)) selections.push('action')
         if(this.selections.pathing.attack.some(val => val.q == q && val.r == r)) selections.push('attack')
+        if(this.selections.placement.some(val => val.q == q && val.r == r)) selections.push('placement')
         return selections
     }
 
@@ -73,21 +74,16 @@ export default class HexMapDataClass {
         this.selections[selection] = { q: q, r: r }
     }
 
-    setPathingSelections = (pathing) => {
-        this.selections.pathing = pathing
+    setPathingSelections = (pathingObj) => {
+        this.selections.pathing = pathingObj
+    }
+
+    setPlacementSelection = (placementArr) => {
+        this.selections.placement = placementArr
     }
 
     resetSelected = () => {
-        this.selections.hover = null
-        this.selections.tile = null
-        this.selections.unit = null
-        this.selections.target = null
-        this.selections.path = []
-        this.selections.pathing = {
-            movement: [],
-            action: [],
-            attack: []
-        }
+        this.selections = new HexMapSelectionsClass()
     }
 
     resetHover = () => {

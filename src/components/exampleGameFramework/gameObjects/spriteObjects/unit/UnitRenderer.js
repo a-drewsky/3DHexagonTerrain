@@ -30,6 +30,8 @@ export default class UnitRendererClass {
 
     renderStaticSprites = (unit) => {
 
+        if(unit.position.q == null || unit.position.r == null) return
+
         let initRotation = this.cameraData.rotation
 
         for (let i = 0; i < unit.imageObject.idle.images.length; i++) {
@@ -71,6 +73,8 @@ export default class UnitRendererClass {
     }
 
     renderStaticShadows = (unit) => {
+
+        if(unit.position.q == null || unit.position.r == null) return
 
         let initRotation = this.cameraData.rotation
 

@@ -59,7 +59,6 @@ export default class HexMapControllerUtilsClass {
         return false
     }
 
-
     findMoveSet = () => {
 
         let unit = this.spriteManager.units.data.selectedUnit
@@ -99,6 +98,33 @@ export default class HexMapControllerUtilsClass {
             }
         }
         this.hexMapData.setPathingSelections(pathing)
+    }
+
+    checkUnitPlacementTile = (tile) => {
+
+        let placementSet = [...this.hexMapData.selections.placement]
+
+        if(placementSet.findIndex(placementTile => placementTile.q == tile.position.q && placementTile.r == tile.position.r) != -1) return true
+        return false
+    }
+
+    findPlacementSet = () => {
+
+        let placementSet = new Set()
+
+        let bunkers = this.spriteManager.structures.data.getBunkersArray()
+        for(let bunker of bunkers){
+            let neighborKeys = this.tileManager.data.getNeighborKeys(bunker.position.q, bunker.position.r)
+            for(let neighborKey of neighborKeys){
+                if(this.pathFinder.isValid(neighborKey.q, neighborKey.r)){
+                    placementSet.add(this.commonUtils.join(neighborKey.q, neighborKey.r))
+                }
+            }
+
+        }
+
+        this.hexMapData.setPlacementSelection(Array.from(placementSet).map(keyStr => this.commonUtils.split(keyStr)))
+
     }
 
     getSelectedTile = (x, y) => {
@@ -222,7 +248,7 @@ export default class HexMapControllerUtilsClass {
 
         let tileClickedObj = this.tileManager.data.getEntry(rotatedTile.q, rotatedTile.r)
 
-        if (!tileClickedObj.images || tileClickedObj.images.length == 0) return null
+        if (!tileClickedObj || !tileClickedObj.images || tileClickedObj.images.length == 0) return null
 
         return rotatedTile
 

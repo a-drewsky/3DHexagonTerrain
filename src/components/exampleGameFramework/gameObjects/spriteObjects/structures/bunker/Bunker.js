@@ -3,8 +3,8 @@ import BunkerConfig from "./BunkerConfig";
 
 export default class BunkerClass extends StructureClass{
 
-    constructor(pos, structureName, hexMapData, images){
-        super(pos, BunkerConfig[structureName], hexMapData, images.bunker)
+    constructor(pos, structureId, hexMapData, images){
+        super(pos, BunkerConfig[structureId], hexMapData, images.bunker)
         this.type = 'bunker'
         this.destructionStructure = 'rubblepile'
         this.health = 100

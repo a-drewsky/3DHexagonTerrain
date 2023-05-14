@@ -1,7 +1,7 @@
 export default class PropConfig{
 
     static savannaTree = {
-            name: 'Savanna Tree',
+            id: 'savanna_tree',
             sprite: 'savanna_tree',
             height: 3,
             stats: {}
@@ -9,7 +9,7 @@ export default class PropConfig{
     
 
     static largeRock = {
-            name: 'Large Rock',
+            id: 'large_rock',
             sprite: 'large_rock',
             height: 2,
             stats: {}

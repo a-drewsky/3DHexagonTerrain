@@ -39,11 +39,44 @@ export default class UnitViewClass {
 
     }
 
+    drawSilhouette = (drawctx, spriteObject) => {
+        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
+        let tileObj = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r)
+        if(!tileObj) return
+        let sprite = spriteObject.imageObject
+        let height = tileObj.height
+
+        let spriteSize
+
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
+
+        spriteSize = {
+            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
+            height: this.hexMapData.size * 2 * sprite.spriteSize.height
+        }
+
+        spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
+        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
+
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        drawctx.globalAlpha = 0.4
+        drawctx.drawImage(
+            spriteObject.images[spriteObject.frame][this.cameraData.rotation],
+            spritePos.x,
+            spritePos.y,
+            spriteSize.width,
+            spriteSize.height
+        )
+        drawctx.globalAlpha = 1
+    }
+
     drawStaticUnit = (drawctx, spriteObject) => {
 
         let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
+        let tileObj = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r)
+        if(!tileObj) return
         let sprite = spriteObject.imageObject
-        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+        let height = tileObj.height
 
         let spriteSize
 

@@ -120,6 +120,8 @@ export default class HexMapControllerClass {
 
         this.hexMapData.resetSelected()
         this.hexMapData.resetHover()
+        this.utils.findPlacementSet()
+        this.spriteManager.units.data.createUnit()
         this.hexMapData.setState('placeUnit')
     }
 

@@ -29,10 +29,10 @@ export default class HexMapprerendererClass {
 
         let tileToRender = this.renderStack.pop()
         if (tileToRender.groundShadowTile == false) {
-            let tileObj = this.tileManager.data.getEntry(tileToRender.position.q, tileToRender.position.r)
+            let tileObj = this.tileManager.data.getAnyEntry(tileToRender.position.q, tileToRender.position.r)
             this.tileManager.renderer.renderTileStack(tileObj)
         } else {
-            let tileObj = this.tileManager.data.getEntry(tileToRender.position.q, tileToRender.position.r)
+            let tileObj = this.tileManager.data.getAnyEntry(tileToRender.position.q, tileToRender.position.r)
             this.tileManager.renderer.renderGroundShadowTile(tileObj)
         }
         tileToRender.rendered = true
@@ -40,7 +40,7 @@ export default class HexMapprerendererClass {
         //check for structures
         let neighborKeys = this.tileManager.data.getNeighborKeys(tileToRender.position.q, tileToRender.position.r)
         for(let neighborKey of neighborKeys){
-            if(!this.tileManager.data.getEntry(neighborKey.q, neighborKey.r).rendered) continue
+            if(!this.tileManager.data.getAnyEntry(neighborKey.q, neighborKey.r).rendered) continue
             if(!this.spriteManager.structures.data.hasStructure(neighborKey.q, neighborKey.r)) continue
             let structure = this.spriteManager.structures.data.getStructure(neighborKey.q, neighborKey.r)
             if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.renderShadows(structure)

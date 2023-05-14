@@ -1,7 +1,7 @@
 export default class ModifierConfig {
 
     static emptymine = {
-        name: 'Empty Mine',
+        id: 'empty_mine',
         modifierType: 'singleImage',
         sprite: 'empty_mine',
         height: 1,
@@ -9,7 +9,7 @@ export default class ModifierConfig {
     }
 
     static rubblepile = {
-        name: 'Rubble Pile',
+        id: 'rubble_pile',
         modifierType: 'singleImage',
         sprite: 'rubble_pile',
         height: 1,
@@ -18,7 +18,7 @@ export default class ModifierConfig {
     }
 
     static smallRocks = {
-        name: 'Rocks',
+        id: 'small_rocks',
         modifierType: 'components',
         sprite: 'small_rocks',
         height: 1,
@@ -28,27 +28,29 @@ export default class ModifierConfig {
     }
 
     static oakTrees = {
-        name: 'Forest',
+        id: 'oak_forest',
         modifierType: 'components',
         sprite: 'woodland_trees',
         height: 2,
         stats: {},
         secondSpriteChance: 0.4,
-        spriteIncrementChance: 0.2
+        spriteIncrementChance: 0.2,
+        cost: 1
     }
 
     static spruceTrees = {
-        name: 'Forest',
+        id: 'spruce_forest',
         modifierType: 'components',
         sprite: 'tundra_trees',
         height: 2,
         stats: {},
         secondSpriteChance: 0.6,
-        spriteIncrementChance: 0.2
+        spriteIncrementChance: 0.2,
+        cost: 1
     }
 
     static cacti = {
-        name: 'Cacti',
+        id: 'cacti',
         modifierType: 'components',
         sprite: 'desert_trees',
         height: 2,

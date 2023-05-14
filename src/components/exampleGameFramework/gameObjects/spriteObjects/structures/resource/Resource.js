@@ -3,8 +3,8 @@ import ResourceConfig from "./ResourceConfig";
 
 export default class ResourceClass extends StructureClass {
 
-    constructor(pos, structureName, hexMapData, images) {
-        super(pos, ResourceConfig[structureName], hexMapData, images.resource)
+    constructor(pos, structureId, hexMapData, images) {
+        super(pos, ResourceConfig[structureId], hexMapData, images.resource)
         this.type = 'resource'
         this.destructionStructure = 'emptymine'
         this.resources = 100

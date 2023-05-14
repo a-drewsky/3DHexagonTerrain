@@ -12,7 +12,7 @@ export default class UnitClass {
         }
 
         //static data
-        this.name = 'Villager'
+        this.id = 'villager_unit'
         this.type = 'unit'
         this.height = 3
 
@@ -84,6 +84,13 @@ export default class UnitClass {
 
         this.rotation = this.commonUtils.getDirection(this.position, targetPos)
         console.log(this.rotation)
+
+    }
+
+    setPosition = (position) => {
+        this.render = true
+
+        this.position = position
 
     }
 
