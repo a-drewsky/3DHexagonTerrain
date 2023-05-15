@@ -10,7 +10,7 @@ export default class StructureClass {
         this.images = []
         this.shadowImages = []
 
-        this.name = config.name
+        this.id = config.id
         this.sprite = config.sprite
         this.height = config.height
         if (config.stats) this.stats = config.stats

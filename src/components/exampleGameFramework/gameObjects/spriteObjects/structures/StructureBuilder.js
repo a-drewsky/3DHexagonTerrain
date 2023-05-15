@@ -191,7 +191,7 @@ export default class StructureBuilderClass {
 
          //generate large rocks
          let terrain = this.structureData.getStructure(keyObj.q, keyObj.r)
-         if (terrain != null && terrain.name == 'Rocks' && spawnChance.largeRock > thresholds.largeRock) {
+         if (terrain != null && terrain.id == 'small_rocks' && spawnChance.largeRock > thresholds.largeRock) {
             this.structureData.setProp(keyObj.q, keyObj.r, 'largeRock')
          }
 

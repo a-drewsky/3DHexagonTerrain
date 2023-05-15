@@ -5,11 +5,13 @@ import ControlButtons from '../uiComponents/ControlButtons'
 import PauseMenu from '../uiComponents/PauseMenu';
 import EndGameMenu from '../uiComponents/EndGameMenu';
 
+import { Container } from 'react-bootstrap';
+
 const UiOverlay = (props) => {
 
     return (
-        <>
-            <ResourceBar resourceNum={props.uiComponents.resourceBar.resourceNum}></ResourceBar>
+        <Container className='p-0'>
+            <ResourceBar resources={props.uiComponents.resources}></ResourceBar>
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
             {
                 (props.uiComponents.contextMenu.show == true) &&
@@ -23,7 +25,7 @@ const UiOverlay = (props) => {
                 (props.uiComponents.endGameMenu.show == true) &&
                 <EndGameMenu gameClass={props.gameClass} endGame={props.endGame} restartGame={props.restartGame}></EndGameMenu>
             }
-        </>
+        </Container>
     )
 
 }

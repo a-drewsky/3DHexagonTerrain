@@ -38,8 +38,12 @@ const ContentPanel = () => {
          y: 0,
          buttonList: []
       },
-      resourceBar: {
-         resourceNum: 0
+      resources: {
+         gold: 0,
+         copper: 0,
+         iron: 0,
+         ruby: 0,
+         amethyst: 0
       }
    })
 
@@ -52,12 +56,12 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resourceBar }) => ({ 
+      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources }) => ({ 
          pauseMenu: newUi.pauseMenu, 
          endGameMenu: newUi.endGameMenu,
          bgCanvas: newUi.bgCanvas,
          contextMenu: newUi.contextMenu, 
-         resourceBar: newUi.resourceBar 
+         resources: newUi.resources 
       }));
    }
 

@@ -7,6 +7,7 @@ export default class ResourceClass extends StructureClass {
         super(pos, ResourceConfig[structureId], hexMapData, images.resource)
         this.type = 'resource'
         this.destructionStructure = 'emptymine'
+        this.resource = ResourceConfig[structureId].resource
         this.resources = 100
         this.state = {
             resources_lte_100: { name: 'resources_lte_100', rate: 'static', duration: 'continuous', type: 'static' },

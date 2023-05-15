@@ -51,8 +51,8 @@ export default class UiControllerClass {
         this.uiComponents.contextMenu.buttonList = buttonList
     }
 
-    setResourceBar = (resourceNum) => {
-        this.uiComponents.resourceBar.resourceNum = resourceNum
+    setResourceBar = (resources) => {
+        this.uiComponents.resources = resources
     }
 
 }

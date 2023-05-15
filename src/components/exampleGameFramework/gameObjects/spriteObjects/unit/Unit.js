@@ -253,7 +253,7 @@ export default class UnitClass {
     //END STATE
     collectTargetResources = () => {
         this.target.resources -= 25
-        this.hexMapData.resources++
+        this.hexMapData.resources[this.target.resource]++
     }
 
     attackTarget = () => {
