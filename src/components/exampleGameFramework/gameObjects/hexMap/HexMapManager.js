@@ -57,6 +57,15 @@ export default class HexMapManagerClass {
         this.tileManager.builder.buildMap(mapSizeConstant)
         this.spriteManager.structures.builder.generateStructures(mapSizeConstant)
         this.tileManager.builder.reduceTileHeights()
+
+        //TEMP
+        this.data.addCard()
+        this.data.flipCard()
+        this.data.addCard()
+        this.data.flipCard()
+        this.data.addCard()
+        this.data.flipCard()
+        this.data.addCard()
     }
 
     prerender = () => {

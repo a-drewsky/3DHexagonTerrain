@@ -44,7 +44,9 @@ const ContentPanel = () => {
          iron: 0,
          ruby: 0,
          amethyst: 0
-      }
+      },
+      cards: [],
+      selectedCard: null
    })
 
    const [initialUi, setInitialUi] = useState({...uiComponents})
@@ -56,12 +58,14 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources }) => ({ 
+      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources, cards, selectedCard }) => ({ 
          pauseMenu: newUi.pauseMenu, 
          endGameMenu: newUi.endGameMenu,
          bgCanvas: newUi.bgCanvas,
          contextMenu: newUi.contextMenu, 
-         resources: newUi.resources 
+         resources: newUi.resources,
+         cards: newUi.cards,
+         selectedCard: newUi.selectedCard
       }));
    }
 
@@ -163,7 +167,7 @@ const ContentPanel = () => {
                      width={0}
                      height={0}
                      style={
-                        { imageRendering: 'crisp-edges', touchAction: 'none', width: uiComponents.bgCanvas.width, height: uiComponents.bgCanvas.height, left: uiComponents.bgCanvas.x, top: uiComponents.bgCanvas.y, position: 'absolute' }
+                        { imageRendering: 'pixelated', touchAction: 'none', width: uiComponents.bgCanvas.width, height: uiComponents.bgCanvas.height, left: uiComponents.bgCanvas.x, top: uiComponents.bgCanvas.y, position: 'absolute' }
                      }
                   />
                   <canvas
@@ -177,7 +181,7 @@ const ContentPanel = () => {
 
                      onWheel={mouseWheel}
                      style={
-                        { imageRendering: 'crisp-edges', touchAction: 'none', width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'absolute' }
+                        { imageRendering: 'pixelated', touchAction: 'none', width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'absolute' }
                      }
                   />
 

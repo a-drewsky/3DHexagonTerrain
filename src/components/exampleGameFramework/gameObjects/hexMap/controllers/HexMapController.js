@@ -125,6 +125,33 @@ export default class HexMapControllerClass {
         this.hexMapData.setState('placeUnit')
     }
 
+    selectCard_new = (cardNum) => {
+        if(this.hexMapData.selectedCard == cardNum){
+            this.hexMapData.selectedCard = null
+            return
+        }
+        this.hexMapData.selectedCard = null
+        if(this.hexMapData.cards[cardNum].flipped){
+            this.hexMapData.flipCard()
+            this.hexMapData.addCard()
+        } else {
+            this.hexMapData.selectedCard = cardNum
+        }
+    }
+
+    useCard = () => {
+        this.selectCard()
+        this.hexMapData.removeCard()
+        this.hexMapData.addCard()
+        this.hexMapData.selectedCard = null
+    }
+
+    scrapCard = () => {
+        this.hexMapData.removeCard()
+        this.hexMapData.addCard()
+        this.hexMapData.selectedCard = null
+    }
+
     rotateRight = () => {
 
         let zoomAmount = this.cameraManager.data.zoomAmount

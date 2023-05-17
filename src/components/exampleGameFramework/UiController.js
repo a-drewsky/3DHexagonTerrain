@@ -55,4 +55,12 @@ export default class UiControllerClass {
         this.uiComponents.resources = resources
     }
 
+    setCards = (cards) => {
+        this.uiComponents.cards = cards
+    }
+
+    selectCard = (selection) => {
+        this.uiComponents.selectedCard = selection
+    }
+
 }

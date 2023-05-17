@@ -70,6 +70,7 @@ export default class HexMapViewClass {
       this.drawCanvas = document.createElement('canvas')
       this.drawCanvas.width = mapHyp / this.hexMapData.squish;
       this.drawCanvas.height = mapHyp;
+      this.drawCanvas.style.imageRendering = 'pixelated'
       this.drawctx = this.drawCanvas.getContext("2d");
 
       this.uiController.setBgCanvasSize(this.drawCanvas.width, this.drawCanvas.height)

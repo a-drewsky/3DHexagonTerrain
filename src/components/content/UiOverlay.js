@@ -4,6 +4,7 @@ import ContextMenu from '../uiComponents/ContextMenu';
 import ControlButtons from '../uiComponents/ControlButtons'
 import PauseMenu from '../uiComponents/PauseMenu';
 import EndGameMenu from '../uiComponents/EndGameMenu';
+import CardDeck from '../uiComponents/CardDeck';
 
 import { Container } from 'react-bootstrap';
 
@@ -13,6 +14,7 @@ const UiOverlay = (props) => {
         <Container className='p-0'>
             <ResourceBar resources={props.uiComponents.resources}></ResourceBar>
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
+            <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard}></CardDeck>
             {
                 (props.uiComponents.contextMenu.show == true) &&
                 <ContextMenu x={props.uiComponents.contextMenu.x} y={props.uiComponents.contextMenu.y} buttonList={props.uiComponents.contextMenu.buttonList} gameClass={props.gameClass}></ContextMenu>

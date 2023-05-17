@@ -83,7 +83,6 @@ export default class UnitClass {
         this.render = true
 
         this.rotation = this.commonUtils.getDirection(this.position, targetPos)
-        console.log(this.rotation)
 
     }
 

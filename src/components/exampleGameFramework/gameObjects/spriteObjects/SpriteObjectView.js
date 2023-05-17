@@ -108,7 +108,6 @@ export default class SpriteObjectViewClass {
 
       if((percent > 0.3 && percent < 0.5 && direction == 'up') || (percent < 0.7 && percent > 0.5 && direction == 'down')) spriteListEntry.layer = -2
       if((percent > 0.3 && percent < 0.5 && direction == 'down') || (percent < 0.7 && percent > 0.5 && direction == 'up')) spriteListEntry.layer = 2
-      console.log(percent, spriteListEntry.layer)
 
    }
 

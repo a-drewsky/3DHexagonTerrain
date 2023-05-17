@@ -39,6 +39,8 @@ export default class HexMapDataClass {
             ruby: 0,
             amethyst: 0
         }
+        this.cards = []
+        this.selectedCard = null
     }
 
     curState = () => {
@@ -57,6 +59,29 @@ export default class HexMapDataClass {
         console.log(this.curState())
     }
 
+    //CARDS
+    addCard = () => {
+        if(this.cards.length==5) return
+        if(this.cards.length>0 && this.cards[this.cards.length-1].flipped == true) return
+
+        this.cards.push({
+            Name: 'Villager',
+            image: null,
+            cost: null,
+            flipped: true
+        })
+    }
+
+    flipCard = () => {
+        this.cards[this.cards.length-1].flipped = false
+    }
+
+    removeCard = () => {
+        this.cards.splice(this.selectedCard, 1)
+    }
+
+
+    //SELECTIONS
 
     getSelectionPosition = (selection) => {
         return this.selections[selection]

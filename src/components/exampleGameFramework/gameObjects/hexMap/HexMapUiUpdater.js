@@ -21,6 +21,8 @@ export default class HexMapUiUpdaterClass {
 
     update = () => {
         this.uiController.setResourceBar(this.hexMapData.resources)
+        this.uiController.setCards(this.hexMapData.cards)
+        this.uiController.selectCard(this.hexMapData.selectedCard)
 
         let zoom = this.cameraData.zoom * this.cameraData.zoomAmount
 
