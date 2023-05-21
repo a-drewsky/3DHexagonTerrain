@@ -11,7 +11,7 @@ import { Container } from 'react-bootstrap';
 const UiOverlay = (props) => {
 
     return (
-        <Container className='p-0'>
+        <Container className='p-0 w-100 h-100 user-select-none pe-none'>
             <ResourceBar resources={props.uiComponents.resources}></ResourceBar>
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
             <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard}></CardDeck>

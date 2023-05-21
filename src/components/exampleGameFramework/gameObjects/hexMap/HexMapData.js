@@ -16,8 +16,6 @@ export default class HexMapDataClass {
         }
         this.state.current = this.state.selectTile
 
-        this.renderBackground = true
-
         this.size = canvas.width / TILE_SIZE;
         this.squish = HEXMAP_SQUISH;
         this.tileHeight = TILE_HEIGHT;
@@ -30,6 +28,9 @@ export default class HexMapDataClass {
         this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
         this.sideLength = Math.PI / 3;
         this.selections = new HexMapSelectionsClass()
+
+        //ui commands
+        this.renderBackground = true
 
         //will be player data
         this.resources = {
@@ -82,7 +83,6 @@ export default class HexMapDataClass {
 
 
     //SELECTIONS
-
     getSelectionPosition = (selection) => {
         return this.selections[selection]
     }

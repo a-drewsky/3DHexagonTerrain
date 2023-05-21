@@ -104,6 +104,7 @@ const ContentPanel = () => {
    //INPUTS
    const mouseDown = ({ nativeEvent }) => {
       nativeEvent.preventDefault();
+      nativeEvent.stopPropagation();
       const { offsetX, offsetY } = nativeEvent;
 
       if (gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);

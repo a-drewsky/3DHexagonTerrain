@@ -7,7 +7,7 @@ const EndGameMenu = (props) => {
         <>
             <div className='position-absolute w-100 h-100 bg-info opacity-25'>
             </div>
-            <div className='position-absolute w-100 h-100'>
+            <div className='pe-auto position-absolute w-100 h-100'>
                 <Row className='h-100 d-flex align-items-center'>
                     <Col xs={3} className='mx-auto'>
                         <div style={{ border: '2px', borderStyle: 'solid', background: 'lightsteelblue' }} className='py-3'>

@@ -38,7 +38,6 @@ export default class TileStackViewClass {
                 if (this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.curState()]
 
                 if (tileSelection !== null) {
-                    // tileSelection = this.hexMapData.selections.modifySelection(tileSelection, value)
                     this.drawHighlight(drawctx, value, tileSelection)
                 }
             }
@@ -47,8 +46,6 @@ export default class TileStackViewClass {
         }
 
     }
-
-
 
     drawHighlight = (drawctx, position, selection) => {
 
@@ -63,8 +60,6 @@ export default class TileStackViewClass {
         let sprite = tile.selectionImages[selection][this.cameraData.rotation]
 
         drawctx.drawImage(sprite, tilePos.x - this.hexMapData.size, tilePos.y - (this.hexMapData.size * this.hexMapData.squish), this.hexMapData.size * 2, this.hexMapData.size * 2)
-
-
 
     }
 
