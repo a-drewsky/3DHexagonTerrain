@@ -3,11 +3,15 @@ import BunkerConfig from "./BunkerConfig";
 
 export default class BunkerClass extends StructureClass{
 
-    constructor(pos, structureId, hexMapData, images){
-        super(pos, BunkerConfig[structureId], hexMapData, images.bunker)
+    constructor(pos, bunkerId, hexMapData, images){
+        if(!BunkerConfig[bunkerId]) throw Error(`Invalid Bunker ID: (${bunkerId}). Bunker config properties are: [${Object.getOwnPropertyNames(BunkerConfig).splice(3)}]`)
+        super(pos, BunkerConfig[bunkerId], hexMapData, images.bunker)
         this.type = 'bunker'
         this.destructionStructure = 'rubblepile'
-        this.health = 100
+
+        this.stats = {
+            health: BunkerConfig[bunkerId].stats.health
+        }
         this.state = {
             health_lte_100: { name: 'health_lte_100', rate: 'static', duration: 'continuous', type: 'static' },
             health_lte_75: { name: 'health_lte_75', rate: 'static', duration: 'continuous', type: 'static' },
@@ -29,7 +33,7 @@ export default class BunkerClass extends StructureClass{
 
     update = () => {
 
-        let newStateName = this.health > 75 ? 'health_lte_100' : this.health > 50 ? 'health_lte_75' : this.health > 25 ? 'health_lte_50' : this.health > 0 ? 'health_lte_25' : 'destroyed'
+        let newStateName = this.stats.health > 75 ? 'health_lte_100' : this.stats.health > 50 ? 'health_lte_75' : this.stats.health > 25 ? 'health_lte_50' : this.stats.health > 0 ? 'health_lte_25' : 'destroyed'
 
         if (newStateName == this.curState().name) return
         
@@ -37,7 +41,7 @@ export default class BunkerClass extends StructureClass{
     }
 
     recieveAttack = (damage) => {
-        this.health -= damage
+        this.stats.health -= damage
         this.hexMapData.resetState()
     }
 

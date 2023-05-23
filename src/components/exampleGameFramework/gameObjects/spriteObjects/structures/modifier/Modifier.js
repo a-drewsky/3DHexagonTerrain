@@ -4,17 +4,18 @@ import ModifierConfig from "./ModifierConfig"
 
 export default class ModifierClass extends StructureClass{
 
-    constructor(pos, structureId, hexMapData, images){
-        super(pos, ModifierConfig[structureId], hexMapData, images.modifier)
+    constructor(pos, modifierId, hexMapData, images){
+        if(!ModifierConfig[modifierId]) throw Error(`Invalid Modifier ID: (${modifierId}). Modifier config properties are: [${Object.getOwnPropertyNames(ModifierConfig).splice(3)}]`)
+        super(pos, ModifierConfig[modifierId], hexMapData, images.modifier)
         this.type = 'modifier'
-        this.modifierType = ModifierConfig[structureId].modifierType
+        this.modifierType = ModifierConfig[modifierId].modifierType
 
         if(this.modifierType == 'components'){
-            this.secondSpriteChance = ModifierConfig[structureId].secondSpriteChance
-            this.spriteIncrementChance = ModifierConfig[structureId].spriteIncrementChance
+            this.secondSpriteChance = ModifierConfig[modifierId].secondSpriteChance
+            this.spriteIncrementChance = ModifierConfig[modifierId].spriteIncrementChance
         }
 
-        if(ModifierConfig[structureId].cost) this.cost = ModifierConfig[structureId].cost
+        if(ModifierConfig[modifierId].cost) this.cost = ModifierConfig[modifierId].cost
 
         this.state = {
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }

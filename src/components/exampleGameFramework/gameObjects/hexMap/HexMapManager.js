@@ -25,16 +25,12 @@ export default class HexMapManagerClass {
         this.cameraData = new CameraDataClass(this.data, canvas)
 
         this.cameraManager = new CameraManagerClass(this.data, this.cameraData, canvas)
-
         this.tileManager = new TileStackManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.cameraData, this.images, canvas)
         this.spriteManager = new SpriteObjectManagerClass(this.data, this.tileData, this.structureData, this.unitData, this.cameraData, this.images, canvas)
 
         this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
-
         this.view = new HexMapViewClass(ctx, canvas, this.cameraData, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
-
         this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.cameraManager, canvas, images, uiController, globalState)
-
         this.uiUpdater = new HexMapUiUpdaterClass(this.data, this.cameraData, canvas, uiController)
 
     }

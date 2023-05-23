@@ -3,8 +3,9 @@ import PropConfig from "./PropConfig";
 
 export default class PropClass extends StructureClass{
 
-    constructor(pos, structureId, hexMapData, images){
-        super(pos, PropConfig[structureId], hexMapData, images.prop)
+    constructor(pos, propId, hexMapData, images){
+        if(!PropConfig[propId]) throw Error(`Invalid Prop ID: (${propId}). Prop config properties are: [${Object.getOwnPropertyNames(PropConfig).splice(3)}]`)
+        super(pos, PropConfig[propId], hexMapData, images.prop)
         this.type = 'prop'
         this.state = {
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }

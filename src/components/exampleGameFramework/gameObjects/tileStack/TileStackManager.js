@@ -8,7 +8,6 @@ export default class TileStackManagerClass {
     constructor(hexMapData, tileData, structureData, unitData, cameraData, images, canvas) {
         this.data = tileData
         this.renderer = new TileStackRendererClass(tileData, hexMapData, structureData, unitData, cameraData, images)
-        this.selectionModifier = new TileStackSelectionModifierClass(hexMapData, tileData, structureData, unitData)
         this.view = new TileStackViewClass(hexMapData, tileData, this.renderer, cameraData, canvas)
         this.builder = new TileStackBuilderClass(hexMapData, tileData)
     }

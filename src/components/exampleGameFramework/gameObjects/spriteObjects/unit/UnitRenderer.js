@@ -56,10 +56,9 @@ export default class UnitRendererClass {
                 if (this.cameraData.rotation % 2 == 1) spriteRotation--
 
                 if (spriteRotation > 11) spriteRotation -= 12
-
                 tempctx.drawImage(unit.imageObject.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
-
+                
                 this.utils.addHealthBar(imageList[rotation], unit)
                 this.utils.darkenSprite(imageList[rotation], unit)
                 this.utils.cropOutTiles(imageList[rotation], unit.imageObject.spriteOffset, keyObj, rotatedMap)

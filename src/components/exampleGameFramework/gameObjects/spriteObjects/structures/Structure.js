@@ -13,7 +13,6 @@ export default class StructureClass {
         this.id = config.id
         this.sprite = config.sprite
         this.height = config.height
-        if (config.stats) this.stats = config.stats
         if (config.rotation) this.rotation = config.rotation
 
         this.imageObject = images[config.sprite]

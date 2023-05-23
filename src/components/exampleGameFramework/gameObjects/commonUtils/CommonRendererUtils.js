@@ -546,12 +546,11 @@ export default class CommonRendererUtilsClass {
     }
 
     addHealthBar = (canvas, object) => {
-
-        if (object.health == 100) return
+        if (object.stats.health == 100) return
 
         let tempctx = canvas.getContext('2d')
 
-        let healthBarIndex = 10 - Math.floor(object.health / 10)
+        let healthBarIndex = 10 - Math.floor(object.stats.health / 10)
 
         let healthBarSprite = this.images.ui.healthbar
 
@@ -564,18 +563,18 @@ export default class CommonRendererUtilsClass {
             x: canvas.width / 2 - healthbarSpriteSize.width / 2,
             y: 0
         }
-
+        console.log(healthBarIndex)
         tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
 
     }
 
     addResourceBar = (canvas, object) => {
 
-        if (object.resources == 100) return canvas
+        if (object.stats.resources == 100) return canvas
 
         let tempctx = canvas.getContext('2d')
 
-        let resourceBarIndex = 10 - Math.floor(object.resources / 10)
+        let resourceBarIndex = 10 - Math.floor(object.stats.resources / 10)
 
         let resourceBarSprite = this.images.ui.resourcebar
 

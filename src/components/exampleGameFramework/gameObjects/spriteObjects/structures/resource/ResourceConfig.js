@@ -5,7 +5,9 @@ export default class ResourceConfig {
         sprite: 'gold_mine',
         resource: 'gold',
         height: 2,
-        stats: {}
+        stats: {
+            resources: 100
+        }
     }
 
 
@@ -14,7 +16,9 @@ export default class ResourceConfig {
         sprite: 'copper_mine',
         resource: 'copper',
         height: 2,
-        stats: {}
+        stats: {
+            resources: 100
+        }
     }
 
 
@@ -23,7 +27,9 @@ export default class ResourceConfig {
         sprite: 'iron_mine',
         resource: 'iron',
         height: 2,
-        stats: {}
+        stats: {
+            resources: 100
+        }
     }
 
 
@@ -32,7 +38,9 @@ export default class ResourceConfig {
         sprite: 'ruby_mine',
         resource: 'ruby',
         height: 2,
-        stats: {}
+        stats: {
+            resources: 100
+        }
     }
 
 
@@ -41,7 +49,9 @@ export default class ResourceConfig {
         sprite: 'amethyst_mine',
         resource: 'amethyst',
         height: 2,
-        stats: {}
+        stats: {
+            resources: 100
+        }
     }
 
 

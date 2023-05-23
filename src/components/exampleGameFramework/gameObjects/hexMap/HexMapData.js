@@ -1,4 +1,5 @@
 import HexMapSelectionsClass from "./HexMapDataSelections";
+import CardBuilderClass from "../cards/CardBuilder";
 
 import { TILE_SIZE, HEXMAP_SQUISH, TILE_HEIGHT, SHADOW_ROTATION, HEXMAP_ELEVATION_RANGES } from './HexMapConstants'
 
@@ -28,6 +29,7 @@ export default class HexMapDataClass {
         this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
         this.sideLength = Math.PI / 3;
         this.selections = new HexMapSelectionsClass()
+        this.cardBuilder = new CardBuilderClass()
 
         //ui commands
         this.renderBackground = true
@@ -65,12 +67,7 @@ export default class HexMapDataClass {
         if(this.cards.length==5) return
         if(this.cards.length>0 && this.cards[this.cards.length-1].flipped == true) return
 
-        this.cards.push({
-            Name: 'Villager',
-            image: null,
-            cost: null,
-            flipped: true
-        })
+        this.cards.push(this.cardBuilder.buildCard('villager_unit'))
     }
 
     flipCard = () => {

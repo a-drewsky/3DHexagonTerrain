@@ -1,10 +1,12 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import UnitConfig from "./UnitConfig"
 
 import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, hexMapData, tileData, unitImages, uiController, globalState) {
+    constructor(pos, unitId, hexMapData, tileData, unitImages, uiController, globalState) {
+        if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = {
             q: pos.q,
@@ -12,12 +14,12 @@ export default class UnitClass {
         }
 
         //static data
-        this.id = 'villager_unit'
+        this.id = UnitConfig[unitId].id
         this.type = 'unit'
-        this.height = 3
+        this.height = UnitConfig[unitId].height
 
         //image data
-        this.imageObject = unitImages.villager
+        this.imageObject = unitImages[UnitConfig[unitId].sprite]
         this.canvasSize = {
             width: hexMapData.size * 2 * this.imageObject.spriteSize.width,
             height: hexMapData.size * 2 * this.imageObject.spriteSize.height
@@ -25,13 +27,6 @@ export default class UnitClass {
         this.images = []
         this.shadowImages = []
 
-
-        //stats
-        this.stats = {
-            movement: 5,
-            baseHealth: 100
-        }
-        this.health = this.stats.baseHealth
 
         //animation data
         this.rotation = 5
@@ -61,6 +56,22 @@ export default class UnitClass {
 
         //unit data
         this.render = true
+        
+        this.stats = {
+            health: UnitConfig[unitId].stats.health,
+            movement: UnitConfig[unitId].stats.movement,
+            mining: UnitConfig[unitId].stats.mining,
+            physical_attack: UnitConfig[unitId].stats.physical_attack,
+            physical_attack_modifications: UnitConfig[unitId].stats.physical_attack_modifications,
+            elemental_attack: UnitConfig[unitId].stats.elemental_attack,
+            elemental_attack_modifications: UnitConfig[unitId].stats.elemental_attack_modifications,
+            physical_resistance: UnitConfig[unitId].stats.physical_resistance,
+            physical_resistance_modifications: UnitConfig[unitId].stats.physical_resistance_modifications,
+            elemental_resistance: UnitConfig[unitId].stats.elemental_resistance,
+            elemental_resistance_modifications: UnitConfig[unitId].stats.elemental_resistance_modifications,
+        }
+
+        this.abilities = [...UnitConfig[unitId].abilities]
 
         this.state = {
             idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
@@ -165,7 +176,7 @@ export default class UnitClass {
     setIdle = () => {
         this.render = true
 
-        if (this.health <= 0) {
+        if (this.stats.health <= 0) {
             this.setAnimation('death')
             return
         }
@@ -251,7 +262,7 @@ export default class UnitClass {
 
     //END STATE
     collectTargetResources = () => {
-        this.target.resources -= 25
+        this.target.stats.resources -= 25
         this.hexMapData.resources[this.target.resource]++
     }
 
@@ -270,7 +281,7 @@ export default class UnitClass {
 
     //RECIEVING
     recieveAttack = (damage) => {
-        this.health -= damage
+        this.stats.health -= damage
         this.setAnimation('hit')
     }
 

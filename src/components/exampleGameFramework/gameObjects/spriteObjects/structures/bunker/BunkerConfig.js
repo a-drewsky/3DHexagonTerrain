@@ -4,7 +4,9 @@ export default class BunkerConfig {
         id: 'bunker',
         sprite: 'bunker',
         height: 2,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_1 = {
@@ -12,7 +14,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 1,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_3 = {
@@ -20,7 +24,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 3,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_5 = {
@@ -28,7 +34,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 5,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_7 = {
@@ -36,7 +44,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 7,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_9 = {
@@ -44,7 +54,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 9,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
     static main_bunker_11 = {
@@ -52,7 +64,9 @@ export default class BunkerConfig {
         sprite: `main_bunker`,
         height: 3,
         rotation: 11,
-        stats: {}
+        stats: {
+            health: 100
+        }
     }
 
 }
