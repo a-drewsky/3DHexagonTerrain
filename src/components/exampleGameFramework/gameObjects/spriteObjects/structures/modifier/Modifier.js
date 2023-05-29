@@ -25,14 +25,6 @@ export default class ModifierClass extends StructureClass{
         this.spritePositions = this.createSpritePosition()
     }
 
-    setState = (stateName) => {
-        this.state.current = this.state[stateName]
-    }
-
-    update = () => {
-
-    }
-
     createSpritePosition = () => {
         let positions = [0, 1, 2, 3, 4, 5]
 

@@ -23,11 +23,12 @@ export default class UnitManagerClass {
                 case 'mine':
                     unit.collectTargetResources()
                     unit.setIdle()
-                    this.hexMapData.resetState()
+                    this.data.unselectUnit()
                     return
                 case 'attack':
                     unit.attackTarget()
                     unit.setIdle()
+                    this.data.unselectUnit()
                     return
                 case 'hit':
                     unit.setIdle()

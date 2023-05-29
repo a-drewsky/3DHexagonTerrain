@@ -570,11 +570,11 @@ export default class CommonRendererUtilsClass {
 
     addResourceBar = (canvas, object) => {
 
-        if (object.stats.resources == 100) return canvas
+        if (object.stats.resources == object.stats.maxResources) return canvas
 
         let tempctx = canvas.getContext('2d')
 
-        let resourceBarIndex = 10 - Math.floor(object.stats.resources / 10)
+        let resourceBarIndex = 10 - Math.floor(object.stats.resources / object.stats.maxResources * 10)
 
         let resourceBarSprite = this.images.ui.resourcebar
 

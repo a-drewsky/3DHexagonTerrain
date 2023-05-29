@@ -44,19 +44,19 @@ export default class InputControllerClass {
             this.gameManager.setStatePlay()
             return
          case 'card_0':
-            this.gameManager.hexMapManager.controller.selectCard_new(0)
+            this.gameManager.hexMapManager.controller.selectCard(0)
             return
          case 'card_1':
-            this.gameManager.hexMapManager.controller.selectCard_new(1)
+            this.gameManager.hexMapManager.controller.selectCard(1)
             return
          case 'card_2':
-            this.gameManager.hexMapManager.controller.selectCard_new(2)
+            this.gameManager.hexMapManager.controller.selectCard(2)
             return
          case 'card_3':
-            this.gameManager.hexMapManager.controller.selectCard_new(3)
+            this.gameManager.hexMapManager.controller.selectCard(3)
             return
          case 'card_4':
-            this.gameManager.hexMapManager.controller.selectCard_new(4)
+            this.gameManager.hexMapManager.controller.selectCard(4)
             return
          case 'use_card':
             this.gameManager.hexMapManager.controller.useCard()

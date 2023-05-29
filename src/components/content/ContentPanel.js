@@ -46,7 +46,8 @@ const ContentPanel = () => {
          amethyst: 0
       },
       cards: [],
-      selectedCard: null
+      selectedCard: null,
+      selectedSprite: null
    })
 
    const [initialUi, setInitialUi] = useState({...uiComponents})
@@ -58,14 +59,15 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources, cards, selectedCard }) => ({ 
+      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources, cards, selectedCard, selectedSprite }) => ({ 
          pauseMenu: newUi.pauseMenu, 
          endGameMenu: newUi.endGameMenu,
          bgCanvas: newUi.bgCanvas,
          contextMenu: newUi.contextMenu, 
          resources: newUi.resources,
          cards: newUi.cards,
-         selectedCard: newUi.selectedCard
+         selectedCard: newUi.selectedCard,
+         selectedSprite: newUi.selectedSprite
       }));
    }
 

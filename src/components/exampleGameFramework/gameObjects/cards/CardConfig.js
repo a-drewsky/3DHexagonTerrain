@@ -7,7 +7,7 @@ export default class CardConfig {
         type: 'unit',
         unitId: 'villager_unit',
         image: villager_icon,
-        cost: null,
+        cost: [{resource: 'gold', amount: 2}, {resource: 'copper', amount: 4}, {resource: 'iron', amount: 6}],
         description: 'An average villager meant for testing purposes. Has no unique abilities.'
     }
 

@@ -7,6 +7,7 @@ export default class CardBuilderClass {
         if(!UnitConfig[cardId]) throw Error(`Invalid Card ID: (${cardId}). Card config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
         let card = {
             name: CardConfig[cardId].name,
+            unitId: CardConfig[cardId].unitId,
             cost: CardConfig[cardId].cost,
             image: CardConfig[cardId].image,
             description: CardConfig[cardId].description,

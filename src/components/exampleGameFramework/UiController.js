@@ -63,4 +63,8 @@ export default class UiControllerClass {
         this.uiComponents.selectedCard = selection
     }
 
+    selectSprite = (unit) => {
+        this.uiComponents.selectedSprite = unit
+    }
+
 }

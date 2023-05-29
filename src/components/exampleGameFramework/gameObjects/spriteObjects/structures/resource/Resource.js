@@ -11,7 +11,8 @@ export default class ResourceClass extends StructureClass {
         this.resource = ResourceConfig[resourceId].resource
 
         this.stats = {
-            resources: ResourceConfig[resourceId].stats.resources
+            resources: ResourceConfig[resourceId].stats.resources,
+            maxResources: ResourceConfig[resourceId].stats.resources
         }
         this.state = {
             resources_lte_100: { name: 'resources_lte_100', rate: 'static', duration: 'continuous', type: 'static' },
@@ -29,12 +30,19 @@ export default class ResourceClass extends StructureClass {
 
     setState = (stateName) => {
         this.state.current = this.state[stateName]
-        this.render = true
     }
 
-    update = () => {
+    removeResources = (resources) => {
 
-        let newStateName = this.stats.resources > 75 ? 'resources_lte_100' : this.stats.resources > 50 ? 'resources_lte_75' : this.stats.resources > 25 ? 'resources_lte_50' : this.stats.resources > 0 ? 'resources_lte_25' : 'destroyed'
+        let minResources = Math.min(this.stats.resources, resources)
+
+        this.stats.resources -= minResources
+        this.hexMapData.resources[this.resource] += minResources
+        this.render = true
+        
+        let resourcePercent = this.stats.resources / this.stats.maxResources * 100
+
+        let newStateName = resourcePercent > 75 ? 'resources_lte_100' : resourcePercent > 50 ? 'resources_lte_75' : resourcePercent > 25 ? 'resources_lte_50' : resourcePercent > 0 ? 'resources_lte_25' : 'destroyed'
 
         if (newStateName == this.curState().name) return
 

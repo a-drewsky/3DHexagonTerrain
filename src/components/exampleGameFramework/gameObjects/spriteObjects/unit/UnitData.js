@@ -34,8 +34,8 @@ export default class UnitDataClass {
         this.unitList.splice(index, 1)
     }
 
-    createUnit = () => {
-        let newUnit = new UnitClass({q: null, r: null}, 'villager_unit', this.hexMapData, this.tileData, this.images.unit, this.uiController, this.globalState)
+    createUnit = (unitId) => {
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.hexMapData, this.tileData, this.images.unit, this.uiController, this.globalState)
         this.placementUnit = newUnit
     }
 

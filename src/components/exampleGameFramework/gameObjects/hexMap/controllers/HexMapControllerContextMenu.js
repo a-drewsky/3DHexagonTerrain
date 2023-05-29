@@ -31,7 +31,7 @@ export default class HexMapControllerContextMenuClass {
 
     move = () => {
         if (this.spriteManager.units.data.selectedUnit != null) this.spriteManager.units.data.selectedUnit.setMove()
-        this.hexMapData.resetSelected()
+        this.hexMapData.selectionData.resetSelected()
         this.uiController.clearContextMenu()
     }
 
@@ -39,7 +39,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.getSelectionPosition('target')
+        let selectionTarget = this.hexMapData.selectionData.getSelectionPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -48,14 +48,14 @@ export default class HexMapControllerContextMenuClass {
 
         this.spriteManager.units.data.selectedUnit.target = targetStructure
 
-        if (this.hexMapData.selections.path.length == 0) {
+        if (this.hexMapData.selectionData.selections.path.length == 0) {
             this.spriteManager.units.data.selectedUnit.setMine()
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
             this.spriteManager.units.data.selectedUnit.futureState = 'mine'
             this.spriteManager.units.data.selectedUnit.setMove()
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
@@ -64,7 +64,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.getSelectionPosition('target')
+        let selectionTarget = this.hexMapData.selectionData.getSelectionPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -80,14 +80,14 @@ export default class HexMapControllerContextMenuClass {
 
         this.spriteManager.units.data.selectedUnit.target = targetObject
 
-        if (this.hexMapData.selections.path.length == 0) {
+        if (this.hexMapData.selectionData.selections.path.length == 0) {
             this.spriteManager.units.data.selectedUnit.setAttack()
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
             this.spriteManager.units.data.selectedUnit.futureState = 'attack'
             this.spriteManager.units.data.selectedUnit.setMove()
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
@@ -96,7 +96,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.hexMapData.getSelectionPosition('target')
+        let selectionTarget = this.hexMapData.selectionData.getSelectionPosition('target')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -109,20 +109,21 @@ export default class HexMapControllerContextMenuClass {
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.spriteManager.units.data.selectedUnit.captureFlag(targetTile)
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         } else {
             this.spriteManager.units.data.selectedUnit.futureState = 'capture'
             this.spriteManager.units.data.selectedUnit.setMove()
-            this.hexMapData.resetSelected()
+            this.hexMapData.selectionData.resetSelected()
             this.uiController.clearContextMenu()
         }
     }
 
     cancel = () => {
-        this.hexMapData.resetSelected()
+        this.hexMapData.selectionData.resetSelected()
 
-        this.hexMapData.setState('selectTile')
+        this.hexMapData.resetState()
+        this.spriteManager.units.data.unselectUnit()
 
         this.uiController.clearContextMenu()
     }

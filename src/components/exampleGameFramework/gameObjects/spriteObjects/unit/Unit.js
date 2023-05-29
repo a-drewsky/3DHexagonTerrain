@@ -16,6 +16,8 @@ export default class UnitClass {
         //static data
         this.id = UnitConfig[unitId].id
         this.type = 'unit'
+        this.name = UnitConfig[unitId].name
+        this.description = UnitConfig[unitId].description
         this.height = UnitConfig[unitId].height
 
         //image data
@@ -222,7 +224,7 @@ export default class UnitClass {
         }
 
         this.futureState = null
-        this.hexMapData.resetSelected()
+        this.hexMapData.selectionData.resetSelected()
 
     }
 
@@ -240,7 +242,7 @@ export default class UnitClass {
 
         let startTile = this.tileData.getEntry(this.position.q, this.position.r)
 
-        this.path = this.hexMapData.selections.path
+        this.path = this.hexMapData.selectionData.selections.path
 
         let nextPosition = this.tileData.getEntry(this.path[0].q, this.path[0].r)
 
@@ -262,8 +264,7 @@ export default class UnitClass {
 
     //END STATE
     collectTargetResources = () => {
-        this.target.stats.resources -= 25
-        this.hexMapData.resources[this.target.resource]++
+        this.target.removeResources(this.stats.mining)
     }
 
     attackTarget = () => {

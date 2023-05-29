@@ -31,7 +31,7 @@ export default class HexMapManagerClass {
         this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
         this.view = new HexMapViewClass(ctx, canvas, this.cameraData, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
         this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.cameraManager, canvas, images, uiController, globalState)
-        this.uiUpdater = new HexMapUiUpdaterClass(this.data, this.cameraData, canvas, uiController)
+        this.uiUpdater = new HexMapUiUpdaterClass(this.data, this.unitData, this.cameraData, canvas, uiController)
 
     }
 
@@ -55,13 +55,13 @@ export default class HexMapManagerClass {
         this.tileManager.builder.reduceTileHeights()
 
         //TEMP
-        this.data.addCard()
-        this.data.flipCard()
-        this.data.addCard()
-        this.data.flipCard()
-        this.data.addCard()
-        this.data.flipCard()
-        this.data.addCard()
+        this.data.cardData.addCard()
+        this.data.cardData.flipCard()
+        this.data.cardData.addCard()
+        this.data.cardData.flipCard()
+        this.data.cardData.addCard()
+        this.data.cardData.flipCard()
+        this.data.cardData.addCard()
     }
 
     prerender = () => {

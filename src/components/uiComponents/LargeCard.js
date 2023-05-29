@@ -86,12 +86,23 @@ const LargeCardObject = (props) => {
                     <Card.Text className='small text-justify p-1 m-0 overflow-auto' style={{ height: '4.4rem', lineHeight: '0.9rem' }}>
                         {props.card.description}
                     </Card.Text>
-                    <Card.Title className={`text-end d-block small p-1 m-0`} style={{ height: '1.4rem' }}> 2 <img src={goldImage} className='h-100 mb-1' /> </Card.Title>
+                    <Card.Title className={`text-end d-block m-0 font-bold ${props.card.flipped && 'opacity-0'} `} style={{ height: '1.4rem', fontSize: '1rem' }}>
+                        {props.card.cost && props.card.cost.map((cost, index) =>
+                            <span
+                                className={`mx-1`}
+                                key={index}>
+                                {cost.amount}<img src={props.resourceIcons[cost.resource]} className='mb-1' style={{ height: '0.8rem' }} />
+                            </span>
+                        )}
+                    </Card.Title>
                 </Card.Body>
             </Card>
-            <ButtonGroup className={`pe-auto w-100 my-1`} style={{ maxWidth: '12rem', border: 'solid 2px white', opacity: '0.95' }}>
-                <Button variant='success' onClick={() => { props.gameClass.uiInput(`use_card`) }} >Use</Button> <Button variant='warning' onClick={() => { props.gameClass.uiInput(`scrap_card`) }}>Scrap</Button>
-            </ButtonGroup>
+            {
+                props.buttons &&
+                <ButtonGroup className={`pe-auto w-100 my-1`} style={{ maxWidth: '12rem', border: 'solid 2px white', opacity: '0.95' }}>
+                    <Button variant='success' onClick={() => { props.gameClass.uiInput(`use_card`) }} >Use</Button> <Button variant='warning' onClick={() => { props.gameClass.uiInput(`scrap_card`) }}>Scrap</Button>
+                </ButtonGroup>
+            }
         </Col>
     )
 }

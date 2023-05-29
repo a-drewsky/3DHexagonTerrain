@@ -14,7 +14,7 @@ const UiOverlay = (props) => {
         <Container className='p-0 w-100 h-100 user-select-none pe-none'>
             <ResourceBar resources={props.uiComponents.resources}></ResourceBar>
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
-            <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard}></CardDeck>
+            <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard} selectedSprite={props.uiComponents.selectedSprite}></CardDeck>
             {
                 (props.uiComponents.contextMenu.show == true) &&
                 <ContextMenu x={props.uiComponents.contextMenu.x} y={props.uiComponents.contextMenu.y} buttonList={props.uiComponents.contextMenu.buttonList} gameClass={props.gameClass}></ContextMenu>

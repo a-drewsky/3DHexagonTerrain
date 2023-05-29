@@ -28,21 +28,18 @@ export default class BunkerClass extends StructureClass{
 
     setState = (stateName) => {
         this.state.current = this.state[stateName]
-        this.render = true
     }
 
-    update = () => {
+    recieveAttack = (damage) => {
+        this.render = true
+        
+        this.stats.health -= damage
 
         let newStateName = this.stats.health > 75 ? 'health_lte_100' : this.stats.health > 50 ? 'health_lte_75' : this.stats.health > 25 ? 'health_lte_50' : this.stats.health > 0 ? 'health_lte_25' : 'destroyed'
 
         if (newStateName == this.curState().name) return
         
         this.setState(newStateName)
-    }
-
-    recieveAttack = (damage) => {
-        this.stats.health -= damage
-        this.hexMapData.resetState()
     }
 
 }

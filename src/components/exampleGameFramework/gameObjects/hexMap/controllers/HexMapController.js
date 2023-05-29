@@ -58,7 +58,7 @@ export default class HexMapControllerClass {
 
     zoom = (deltaY) => {
         this.cameraManager.controller.zoom(deltaY)
-        this.hexMapData.resetHover()
+        this.hexMapData.selectionData.resetHover()
     }
 
     selectTile = (tileSelected, clickPos) => {
@@ -90,7 +90,7 @@ export default class HexMapControllerClass {
 
         this.cameraManager.controller.mouseMove(x, y)
 
-        this.hexMapData.resetHover()
+        this.hexMapData.selectionData.resetHover()
 
         switch (this.hexMapData.curState()) {
             case 'selectTile':
@@ -115,41 +115,41 @@ export default class HexMapControllerClass {
         this.contextMenuController.select(input)
     }
 
-    selectCard = () => {
-        if (this.hexMapData.curState() != 'selectTile') return
+    selectCard = (cardNum) => {
+        if(this.hexMapData.curState() != 'selectTile') return
 
-        this.hexMapData.resetSelected()
-        this.hexMapData.resetHover()
-        this.utils.findPlacementSet()
-        this.spriteManager.units.data.createUnit()
-        this.hexMapData.setState('placeUnit')
-    }
-
-    selectCard_new = (cardNum) => {
-        if(this.hexMapData.selectedCard == cardNum){
-            this.hexMapData.selectedCard = null
+        if(this.hexMapData.cardData.selectedCard == cardNum){
+            this.hexMapData.cardData.selectedCard = null
             return
         }
-        this.hexMapData.selectedCard = null
-        if(this.hexMapData.cards[cardNum].flipped){
-            this.hexMapData.flipCard()
-            this.hexMapData.addCard()
+        this.hexMapData.cardData.selectedCard = null
+        if(this.hexMapData.cardData.cards[cardNum].flipped){
+            this.hexMapData.cardData.flipCard()
+            this.hexMapData.cardData.addCard()
         } else {
-            this.hexMapData.selectedCard = cardNum
+            this.hexMapData.cardData.selectedCard = cardNum
         }
     }
 
     useCard = () => {
-        this.selectCard()
-        this.hexMapData.removeCard()
-        this.hexMapData.addCard()
-        this.hexMapData.selectedCard = null
+        if (this.hexMapData.curState() != 'selectTile') return
+        if(!this.hexMapData.cardData.canUseCard(this.hexMapData.resources)) return
+
+        this.hexMapData.selectionData.resetSelected()
+        this.hexMapData.selectionData.resetHover()
+        this.utils.findPlacementSet()
+        this.spriteManager.units.data.createUnit(this.hexMapData.cardData.cards[this.hexMapData.cardData.selectedCard].unitId)
+        this.hexMapData.setState('placeUnit')
+
+        this.hexMapData.cardData.useCard(this.hexMapData.resources)
+        this.hexMapData.cardData.addCard()
+        this.hexMapData.cardData.selectedCard = null
     }
 
     scrapCard = () => {
-        this.hexMapData.removeCard()
-        this.hexMapData.addCard()
-        this.hexMapData.selectedCard = null
+        this.hexMapData.cardData.scrapCard(this.hexMapData.resources)
+        this.hexMapData.cardData.addCard()
+        this.hexMapData.cardData.selectedCard = null
     }
 
     rotateRight = () => {
@@ -200,7 +200,7 @@ export default class HexMapControllerClass {
         }
 
         this.cameraManager.controller.rotateRight()
-        this.hexMapData.resetHover()
+        this.hexMapData.selectionData.resetHover()
         this.hexMapData.renderBackground = true
     }
 
@@ -253,7 +253,7 @@ export default class HexMapControllerClass {
         }
 
         this.cameraManager.controller.rotateLeft()
-        this.hexMapData.resetHover()
+        this.hexMapData.selectionData.resetHover()
         this.hexMapData.renderBackground = true
     }
 

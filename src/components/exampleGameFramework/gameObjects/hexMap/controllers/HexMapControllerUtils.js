@@ -53,7 +53,7 @@ export default class HexMapControllerUtilsClass {
 
     checkValidPath = () => {
         let unit = this.spriteManager.units.data.selectedUnit
-        let path = [unit.position, ...this.hexMapData.selections.path]
+        let path = [unit.position, ...this.hexMapData.selectionData.selections.path]
         let pathCost = this.pathFinder.pathCost(path)
         if (pathCost <= unit.stats.movement) return true
         return false
@@ -97,12 +97,12 @@ export default class HexMapControllerUtilsClass {
                 continue
             }
         }
-        this.hexMapData.setPathingSelections(pathing)
+        this.hexMapData.selectionData.setPathingSelections(pathing)
     }
 
     checkUnitPlacementTile = (tile) => {
 
-        let placementSet = [...this.hexMapData.selections.placement]
+        let placementSet = [...this.hexMapData.selectionData.selections.placement]
 
         if(placementSet.findIndex(placementTile => placementTile.q == tile.position.q && placementTile.r == tile.position.r) != -1) return true
         return false
@@ -123,7 +123,7 @@ export default class HexMapControllerUtilsClass {
 
         }
 
-        this.hexMapData.setPlacementSelection(Array.from(placementSet).map(keyStr => this.commonUtils.split(keyStr)))
+        this.hexMapData.selectionData.setPlacementSelection(Array.from(placementSet).map(keyStr => this.commonUtils.split(keyStr)))
 
     }
 

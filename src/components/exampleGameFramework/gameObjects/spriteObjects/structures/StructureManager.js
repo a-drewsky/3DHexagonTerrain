@@ -15,7 +15,6 @@ export default class StructureManagerClass {
 
     update = () => {
         for (let [key, value] of this.data.structureMap) {
-            value.update()
             if (value.state.current.name == 'destroyed') {
                 this.data.destroyStructure(value)
                 return

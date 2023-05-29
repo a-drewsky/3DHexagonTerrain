@@ -27,7 +27,7 @@ export default class TileStackDataClass {
     }
     
     setSelection = (q, r, selection) => {
-        if(this.hasTileEntry(q, r)) this.hexMapData.setSelection(q, r, selection)
+        if(this.hasTileEntry(q, r)) this.hexMapData.selectionData.setSelection(q, r, selection)
     }
 
     //delete an entry in the tileMap (void)

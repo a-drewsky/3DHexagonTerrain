@@ -6,7 +6,7 @@ export default class ResourceConfig {
         resource: 'gold',
         height: 2,
         stats: {
-            resources: 100
+            resources: 20
         }
     }
 
@@ -17,7 +17,7 @@ export default class ResourceConfig {
         resource: 'copper',
         height: 2,
         stats: {
-            resources: 100
+            resources: 20
         }
     }
 
@@ -28,7 +28,7 @@ export default class ResourceConfig {
         resource: 'iron',
         height: 2,
         stats: {
-            resources: 100
+            resources: 20
         }
     }
 
@@ -39,7 +39,7 @@ export default class ResourceConfig {
         resource: 'ruby',
         height: 2,
         stats: {
-            resources: 100
+            resources: 20
         }
     }
 
@@ -50,7 +50,7 @@ export default class ResourceConfig {
         resource: 'amethyst',
         height: 2,
         stats: {
-            resources: 100
+            resources: 20
         }
     }
 

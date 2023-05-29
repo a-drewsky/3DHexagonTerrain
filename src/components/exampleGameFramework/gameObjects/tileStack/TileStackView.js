@@ -32,10 +32,10 @@ export default class TileStackViewClass {
                 drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.hexMapData.size, tilePos.y - this.hexMapData.size * this.hexMapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
             }
 
-            let tileSelections = this.hexMapData.getSelections(value.q, value.r)
+            let tileSelections = this.hexMapData.selectionData.getSelections(value.q, value.r)
 
             for (let tileSelection of tileSelections) {
-                if (this.hexMapData.selections.stateSelections[tileSelection]) tileSelection = this.hexMapData.selections.stateSelections[tileSelection][this.hexMapData.curState()]
+                if (this.hexMapData.selectionData.stateSelections[tileSelection]) tileSelection = this.hexMapData.selectionData.stateSelections[tileSelection][this.hexMapData.curState()]
 
                 if (tileSelection !== null) {
                     this.drawHighlight(drawctx, value, tileSelection)

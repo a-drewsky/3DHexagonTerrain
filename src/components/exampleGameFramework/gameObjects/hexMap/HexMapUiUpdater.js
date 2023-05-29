@@ -2,9 +2,10 @@ import CollisionClass from "../../utilities/collision"
 
 export default class HexMapUiUpdaterClass {
 
-    constructor(hexMapData, cameraData, canvas, uiController) {
+    constructor(hexMapData, unitData, cameraData, canvas, uiController) {
 
         this.hexMapData = hexMapData
+        this.unitData = unitData
         this.cameraData = cameraData
         this.canvas = canvas
         this.drawCanvas = null
@@ -21,8 +22,9 @@ export default class HexMapUiUpdaterClass {
 
     update = () => {
         this.uiController.setResourceBar(this.hexMapData.resources)
-        this.uiController.setCards(this.hexMapData.cards)
-        this.uiController.selectCard(this.hexMapData.selectedCard)
+        this.uiController.setCards(this.hexMapData.cardData.cards)
+        this.uiController.selectCard(this.hexMapData.cardData.selectedCard)
+        this.uiController.selectSprite(this.unitData.placementUnit || this.unitData.selectedUnit)
 
         let zoom = this.cameraData.zoom * this.cameraData.zoomAmount
 
