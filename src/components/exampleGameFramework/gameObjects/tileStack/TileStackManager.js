@@ -5,11 +5,11 @@ import TileStackSelectionModifierClass from './TileStackSelectionModifier'
 
 export default class TileStackManagerClass {
 
-    constructor(hexMapData, tileData, structureData, unitData, cameraData, images, canvas) {
-        this.data = tileData
-        this.renderer = new TileStackRendererClass(tileData, hexMapData, structureData, unitData, cameraData, images)
-        this.view = new TileStackViewClass(hexMapData, tileData, this.renderer, cameraData, canvas)
-        this.builder = new TileStackBuilderClass(hexMapData, tileData)
+    constructor(hexMapData, images, canvas) {
+        this.data = hexMapData.tileData
+        this.renderer = new TileStackRendererClass(hexMapData, images)
+        this.view = new TileStackViewClass(hexMapData, this.renderer, canvas)
+        this.builder = new TileStackBuilderClass(hexMapData)
     }
 
 

@@ -2,14 +2,14 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class StructureViewClass{
 
-    constructor(hexMapData, tileData, structureData, cameraData, images, canvas) {
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.structureData = structureData
-        this.cameraData = cameraData
+    constructor(hexMapData, images, canvas) {
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.structureData = hexMapData.structureData
+        this.cameraData = hexMapData.cameraData
         this.images = images
-        this.commonUtils = new CommonHexMapUtilsClass()
         this.canvas = canvas
+        this.commonUtils = new CommonHexMapUtilsClass()
     }
 
    draw = (drawctx, spriteObject) => {
@@ -22,12 +22,12 @@ export default class StructureViewClass{
       let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
       let spriteSize = {
-         width: this.hexMapData.size * 2 * sprite.spriteSize.width,
-         height: this.hexMapData.size * 2 * sprite.spriteSize.height
+         width: this.mapData.size * 2 * sprite.spriteSize.width,
+         height: this.mapData.size * 2 * sprite.spriteSize.height
       }
 
-      spritePos.x -= this.hexMapData.size + sprite.spriteOffset.x * this.hexMapData.size * 2
-      spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.spriteOffset.y * this.hexMapData.size * 2
+      spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
+      spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
 
       if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
       drawctx.drawImage(
@@ -51,12 +51,12 @@ export default class StructureViewClass{
       let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
       shadowSize = {
-         width: this.hexMapData.size * 2 * sprite.shadowSize.width,
-         height: this.hexMapData.size * 2 * sprite.shadowSize.height
+         width: this.mapData.size * 2 * sprite.shadowSize.width,
+         height: this.mapData.size * 2 * sprite.shadowSize.height
       }
 
-      shadowPos.x -= this.hexMapData.size + sprite.shadowOffset.x * this.hexMapData.size * 2
-      shadowPos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.shadowOffset.y * this.hexMapData.size * 2
+      shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
+      shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
 
 
       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return

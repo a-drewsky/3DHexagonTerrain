@@ -3,12 +3,12 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class StructureRendererClass {
 
-    constructor(structureData, hexMapData, tileData, cameraData, images) {
-        this.structureData = structureData
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.cameraData = cameraData
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, cameraData, images)
+    constructor(hexMapData, images) {
+        this.structureData = hexMapData.structureData
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.cameraData = hexMapData.cameraData
+        this.utils = new CommonRendererUtilsClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -22,8 +22,8 @@ export default class StructureRendererClass {
         let initRotation = this.cameraData.rotation
 
         let canvasSize = {
-            width: this.hexMapData.size * 2 * structure.imageObject.spriteSize.width,
-            height: this.hexMapData.size * 2 * structure.imageObject.spriteSize.height
+            width: this.mapData.size * 2 * structure.imageObject.spriteSize.width,
+            height: this.mapData.size * 2 * structure.imageObject.spriteSize.height
         }
 
         for (let i = 0; i < structure.imageObject[structure.state.current.name].images.length; i++) {

@@ -8,12 +8,12 @@ import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../../co
 
 export default class StructureBuilderClass {
 
-   constructor(hexMapData, tileData, structureData) {
-      this.hexMapData = hexMapData;
-      this.tileData = tileData
-      this.structureData = structureData
+   constructor(hexMapData) {
+      this.mapData = hexMapData.mapData
+      this.tileData = hexMapData.tileData
+      this.structureData = hexMapData.structureData
 
-      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData, tileData, structureData)
+      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData)
       this.commonUtils = new CommonHexMapUtilsClass()
 
    }

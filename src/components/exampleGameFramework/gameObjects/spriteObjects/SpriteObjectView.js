@@ -5,21 +5,19 @@ import UnitViewClass from "./unit/UnitView"
 
 export default class SpriteObjectViewClass {
 
-   constructor(hexMapData, tileData, unitData, structureData, cameraData, images, canvas) {
+   constructor(hexMapData, images, canvas) {
 
-      this.hexMapData = hexMapData
-      this.tileData = tileData
-      this.unitData = unitData
-      this.structureData = structureData
-      this.cameraData = cameraData
-      this.images = images
+      this.unitData = hexMapData.unitData
+      this.structureData = hexMapData.structureData
+      this.cameraData = hexMapData.cameraData
+      
       this.commonUtils = new CommonHexMapUtilsClass()
 
       this.canvas = canvas
 
-      this.modifiers = new ModifierViewClass(hexMapData, tileData, structureData, cameraData, images, canvas)
-      this.structures = new StructureViewClass(hexMapData, tileData, structureData, cameraData, images, canvas)
-      this.units = new UnitViewClass(hexMapData, tileData, unitData, cameraData, images, canvas)
+      this.modifiers = new ModifierViewClass(hexMapData, images, canvas)
+      this.structures = new StructureViewClass(hexMapData, images, canvas)
+      this.units = new UnitViewClass(hexMapData, images, canvas)
 
    }
 

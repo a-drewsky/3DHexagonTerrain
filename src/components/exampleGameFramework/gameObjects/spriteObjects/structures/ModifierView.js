@@ -2,14 +2,14 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ModifierViewClass{
 
-    constructor(hexMapData, tileData, structureData, cameraData, images, canvas) {
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.structureData = structureData
-        this.cameraData = cameraData
+    constructor(hexMapData, images, canvas) {
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.structureData = hexMapData.structureData
+        this.cameraData = hexMapData.cameraData
         this.images = images
-        this.commonUtils = new CommonHexMapUtilsClass()
         this.canvas = canvas
+        this.commonUtils = new CommonHexMapUtilsClass()
     }
 
     drawSingleImage = (drawctx, spriteObject) => {
@@ -25,12 +25,12 @@ export default class ModifierViewClass{
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * sprite.singleImageSize.width,
-            height: this.hexMapData.size * 2 * sprite.singleImageSize.height
+            width: this.mapData.size * 2 * sprite.singleImageSize.width,
+            height: this.mapData.size * 2 * sprite.singleImageSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + sprite.singleImageOffset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.singleImageOffset.y * this.hexMapData.size * 2
+        spritePos.x -= this.mapData.size + sprite.singleImageOffset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.singleImageOffset.y * this.mapData.size * 2
 
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
@@ -62,12 +62,12 @@ export default class ModifierViewClass{
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
-            height: this.hexMapData.size * 2 * sprite.spriteSize.height
+            width: this.mapData.size * 2 * sprite.spriteSize.width,
+            height: this.mapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + sprite.offset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.offset.y * this.hexMapData.size * 2
+        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
 
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
@@ -98,12 +98,12 @@ export default class ModifierViewClass{
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.hexMapData.size * 2 * sprite.spriteSize.width,
-            height: this.hexMapData.size * 2 * sprite.spriteSize.height
+            width: this.mapData.size * 2 * sprite.spriteSize.width,
+            height: this.mapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.hexMapData.size + sprite.offset.x * this.hexMapData.size * 2
-        spritePos.y -= (this.hexMapData.size * this.hexMapData.squish) + sprite.offset.y * this.hexMapData.size * 2
+        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
 
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return

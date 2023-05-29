@@ -10,11 +10,12 @@ const TABLE_COLORS = {
 
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, tileManager, cameraData) {
+   constructor(hexMapData, tileManager) {
 
-      this.hexMapData = hexMapData;
+      this.mapData = hexMapData.mapData;
+      this.cameraData = hexMapData.cameraData;
+      
       this.tileManager = tileManager
-      this.cameraData = cameraData;
       this.drawCanvas = null
 
       this.rotationAlpha = {
@@ -64,7 +65,7 @@ export default class HexMapViewTableClass {
       let tempTablePosition = [...tablePosition].sort((a, b) => a.y - b.y)
 
 
-      let shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation;
+      let shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
 
       if (shadowRotation > 11) shadowRotation -= 12;
 
@@ -96,7 +97,7 @@ export default class HexMapViewTableClass {
          tempTablePosition.sort((a, b) => a.x - b.x)
 
 
-         let shiftedShadowRotation = this.hexMapData.shadowRotation + Math.floor(this.cameraData.rotation / 3) * 3;
+         let shiftedShadowRotation = this.mapData.shadowRotation + Math.floor(this.cameraData.rotation / 3) * 3;
 
          if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
 

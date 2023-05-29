@@ -8,12 +8,12 @@ import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../commo
 
 export default class TileStackBuilderClass {
 
-    constructor(hexMapData, tileData) {
+    constructor(hexMapData) {
 
-        this.hexMapData = hexMapData;
-        this.tileData = tileData
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
 
-        this.utils = new CommonBuilderUtilsClass(hexMapData, tileData)
+        this.utils = new CommonBuilderUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
     }
@@ -131,14 +131,14 @@ export default class TileStackBuilderClass {
             }
         }
         tileLowBiome = biome
-        if (tileHeight >= this.hexMapData.elevationRanges['low']) tileVerylowBiome = biome
+        if (tileHeight >= this.mapData.elevationRanges['low']) tileVerylowBiome = biome
 
         biome = 'snowhill'
         if (tileTemp > TEMP_RANGES['tundra']) biome = 'grasshill'
         if (tileTemp > TEMP_RANGES['woodlands']) biome = 'savannahill'
         if (tileTemp > TEMP_RANGES['savanna']) {
             biome = 'sandhill'
-            if (tileHeight >= this.hexMapData.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.hexMapData.elevationRanges['mid']) / SAND_HILL_ELVATION_DIVISOR) //set sand hill elevation
+            if (tileHeight >= this.mapData.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.mapData.elevationRanges['mid']) / SAND_HILL_ELVATION_DIVISOR) //set sand hill elevation
         }
         tileMidBiome = biome
 
@@ -152,11 +152,11 @@ export default class TileStackBuilderClass {
         tileVeryhighBiome = biome
 
 
-        if (tileHeight >= this.hexMapData.elevationRanges['verylow']) tileBiome = tileVerylowBiome
-        if (tileHeight >= this.hexMapData.elevationRanges['low']) tileBiome = tileLowBiome
-        if (tileHeight >= this.hexMapData.elevationRanges['mid']) tileBiome = tileMidBiome
-        if (tileHeight >= this.hexMapData.elevationRanges['high']) tileBiome = tileHighBiome
-        if (tileHeight >= this.hexMapData.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
+        if (tileHeight >= this.mapData.elevationRanges['verylow']) tileBiome = tileVerylowBiome
+        if (tileHeight >= this.mapData.elevationRanges['low']) tileBiome = tileLowBiome
+        if (tileHeight >= this.mapData.elevationRanges['mid']) tileBiome = tileMidBiome
+        if (tileHeight >= this.mapData.elevationRanges['high']) tileBiome = tileHighBiome
+        if (tileHeight >= this.mapData.elevationRanges['veryhigh']) tileBiome = tileVeryhighBiome
 
 
         tileObj.height = tileHeight

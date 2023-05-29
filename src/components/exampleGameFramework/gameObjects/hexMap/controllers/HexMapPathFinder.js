@@ -4,7 +4,7 @@ export default class HexMapPathFinderClass {
 
     constructor(hexMapData, tileManager, spriteManager) {
 
-        this.hexMapData = hexMapData
+        this.mapData = hexMapData.mapData
         this.tileManager = tileManager
         this.spriteManager = spriteManager
 

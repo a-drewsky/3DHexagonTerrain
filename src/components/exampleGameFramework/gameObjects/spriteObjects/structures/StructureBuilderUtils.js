@@ -3,11 +3,11 @@ import { BIOME_CONSTANTS } from '../../commonConstants/CommonConstants'
 
 export default class StructureBuilderUtilsClass {
 
-    constructor(hexMapData, tileData, structureData) {
+    constructor(hexMapData) {
 
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.structureData = structureData
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.structureData = hexMapData.structureData
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {
@@ -22,11 +22,11 @@ export default class StructureBuilderUtilsClass {
 
             let tileBiome
 
-            if (terrainHeight >= this.hexMapData.elevationRanges['verylow']) tileBiome = tileToSet.verylowBiome
-            if (terrainHeight >= this.hexMapData.elevationRanges['low']) tileBiome = tileToSet.lowBiome
-            if (terrainHeight >= this.hexMapData.elevationRanges['mid']) tileBiome = tileToSet.midBiome
-            if (terrainHeight >= this.hexMapData.elevationRanges['high']) tileBiome = tileToSet.highBiome
-            if (terrainHeight >= this.hexMapData.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
+            if (terrainHeight >= this.mapData.elevationRanges['verylow']) tileBiome = tileToSet.verylowBiome
+            if (terrainHeight >= this.mapData.elevationRanges['low']) tileBiome = tileToSet.lowBiome
+            if (terrainHeight >= this.mapData.elevationRanges['mid']) tileBiome = tileToSet.midBiome
+            if (terrainHeight >= this.mapData.elevationRanges['high']) tileBiome = tileToSet.highBiome
+            if (terrainHeight >= this.mapData.elevationRanges['veryhigh']) tileBiome = tileToSet.veryhighBiome
 
             tileToSet.height = terrainHeight
             tileToSet.biome = tileBiome

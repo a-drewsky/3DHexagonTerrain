@@ -2,10 +2,10 @@ import UnitRendererClass from "./UnitRenderer"
 
 export default class UnitManagerClass {
 
-    constructor(hexMapData, tileData, unitData, cameraData, images) {
-        this.hexMapData = hexMapData
-        this.data = unitData
-        this.renderer = new UnitRendererClass(this.data, hexMapData, tileData, cameraData, images)
+    constructor(hexMapData, images) {
+        this.mapData = hexMapData.mapData
+        this.data = hexMapData.unitData
+        this.renderer = new UnitRendererClass(hexMapData, images)
     }
     
     update = () => {
@@ -32,11 +32,11 @@ export default class UnitManagerClass {
                     return
                 case 'hit':
                     unit.setIdle()
-                    if(unit.state.current.name != 'death') this.hexMapData.resetState()
+                    if(unit.state.current.name != 'death') this.mapData.resetState()
                     return
                 case 'death':
                     this.data.deleteUnit(unit.position.q, unit.position.r)
-                    this.hexMapData.resetState()
+                    this.mapData.resetState()
                     return
             }
         }

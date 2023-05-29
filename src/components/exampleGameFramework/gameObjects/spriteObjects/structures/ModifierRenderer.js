@@ -3,12 +3,12 @@ import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 
 export default class ModifierRendererClass {
 
-    constructor(structureData, hexMapData, tileData, cameraData, images) {
-        this.structureData = structureData
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.cameraData = cameraData
-        this.utils = new CommonRendererUtilsClass(hexMapData, tileData, cameraData, images)
+    constructor(hexMapData, images) {
+        this.structureData = hexMapData.structureData
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.cameraData = hexMapData.cameraData
+        this.utils = new CommonRendererUtilsClass(hexMapData, images)
 
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -17,33 +17,33 @@ export default class ModifierRendererClass {
         this.positionsList = [
             {
                 listPos: 5,
-                x: Math.sin(this.hexMapData.sideLength * 0) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 0) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 0) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 0) * (this.mapData.size * this.mapData.squish) / 2
             },
             {
                 listPos: 3,
-                x: Math.sin(this.hexMapData.sideLength * 1) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 1) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 1) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 1) * (this.mapData.size * this.mapData.squish) / 2
             },
             {
                 listPos: 1,
-                x: Math.sin(this.hexMapData.sideLength * 2) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 2) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 2) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 2) * (this.mapData.size * this.mapData.squish) / 2
             },
             {
                 listPos: 0,
-                x: Math.sin(this.hexMapData.sideLength * 3) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 3) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 3) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 3) * (this.mapData.size * this.mapData.squish) / 2
             },
             {
                 listPos: 2,
-                x: Math.sin(this.hexMapData.sideLength * 4) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 4) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 4) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 4) * (this.mapData.size * this.mapData.squish) / 2
             },
             {
                 listPos: 4,
-                x: Math.sin(this.hexMapData.sideLength * 5) * this.hexMapData.size / 2,
-                y: Math.cos(this.hexMapData.sideLength * 5) * (this.hexMapData.size * this.hexMapData.squish) / 2
+                x: Math.sin(this.mapData.sideLength * 5) * this.mapData.size / 2,
+                y: Math.cos(this.mapData.sideLength * 5) * (this.mapData.size * this.mapData.squish) / 2
             },
         ]
     }
@@ -64,8 +64,8 @@ export default class ModifierRendererClass {
 
         //set canvas size
         let canvasSize = {
-            width: this.hexMapData.size * 2 * modifier.imageObject.spriteSize.width,
-            height: this.hexMapData.size * 2 * modifier.imageObject.spriteSize.height
+            width: this.mapData.size * 2 * modifier.imageObject.spriteSize.width,
+            height: this.mapData.size * 2 * modifier.imageObject.spriteSize.height
         }
 
         let imageList = []
@@ -105,18 +105,18 @@ export default class ModifierRendererClass {
                     if (filteredPositionsList[i].y > 0) {
                         tempctxBottom.drawImage(
                             modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum],
-                            canvasSize.width / 2 - this.hexMapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
-                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * modifier.imageObject.modifierSize.width,
-                            this.hexMapData.size * 2 * modifier.imageObject.modifierSize.height
+                            canvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
+                            canvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
+                            this.mapData.size * 2 * modifier.imageObject.modifierSize.width,
+                            this.mapData.size * 2 * modifier.imageObject.modifierSize.height
                         )
                     } else {
                         tempctxTop.drawImage(
                             modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum],
-                            canvasSize.width / 2 - this.hexMapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
-                            canvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * modifier.imageObject.modifierSize.width,
-                            this.hexMapData.size * 2 * modifier.imageObject.modifierSize.height
+                            canvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
+                            canvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
+                            this.mapData.size * 2 * modifier.imageObject.modifierSize.width,
+                            this.mapData.size * 2 * modifier.imageObject.modifierSize.height
                         )
                     }
                 }
@@ -148,8 +148,8 @@ export default class ModifierRendererClass {
         let initCameraRotation = this.cameraData.rotation
 
         let shadowCanvasSize = {
-            width: this.hexMapData.size * 2 * modifier.imageObject.shadowSize.width,
-            height: this.hexMapData.size * 2 * modifier.imageObject.shadowSize.height
+            width: this.mapData.size * 2 * modifier.imageObject.shadowSize.width,
+            height: this.mapData.size * 2 * modifier.imageObject.shadowSize.height
         }
 
         //construct shadow images
@@ -184,10 +184,10 @@ export default class ModifierRendererClass {
                     if (modifier.imageObject.shadowImages[filteredPositionsList[i].imageNum][rotation] != null) {
                         tempctx.drawImage(
                             modifier.imageObject.shadowImages[filteredPositionsList[i].imageNum][rotation],
-                            shadowCanvasSize.width / 2 - this.hexMapData.size * 2 * modifier.imageObject.shadowSpriteSize.width / 2 + filteredPositionsList[i].x,
-                            shadowCanvasSize.height / 2 - this.hexMapData.size * 2 * this.hexMapData.squish * modifier.imageObject.shadowSpriteSize.height / 2 + filteredPositionsList[i].y,
-                            this.hexMapData.size * 2 * modifier.imageObject.shadowSpriteSize.width,
-                            this.hexMapData.size * 2 * modifier.imageObject.shadowSpriteSize.height
+                            shadowCanvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.width / 2 + filteredPositionsList[i].x,
+                            shadowCanvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.shadowSpriteSize.height / 2 + filteredPositionsList[i].y,
+                            this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.width,
+                            this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.height
                         )
                     }
                 }
@@ -215,8 +215,8 @@ export default class ModifierRendererClass {
 
         //set canvas size
         let canvasSize = {
-            width: this.hexMapData.size * 2 * modifier.imageObject.singleImageSize.width,
-            height: this.hexMapData.size * 2 * modifier.imageObject.singleImageSize.height
+            width: this.mapData.size * 2 * modifier.imageObject.singleImageSize.width,
+            height: this.mapData.size * 2 * modifier.imageObject.singleImageSize.height
         }
 
         let imageList = []

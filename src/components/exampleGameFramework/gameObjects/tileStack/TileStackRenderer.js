@@ -7,15 +7,15 @@ const HEXMAP_LINE_WIDTH = 3
 
 export default class TileStackRendererClass {
 
-    constructor(tileData, hexMapData, structureData, unitData, cameraData, images) {
+    constructor(hexMapData, images) {
 
-        this.hexMapData = hexMapData
-        this.tileData = tileData
-        this.structureData = structureData
-        this.unitData = unitData
-        this.cameraData = cameraData
+        this.mapData = hexMapData.mapData
+        this.tileData = hexMapData.tileData
+        this.structureData = hexMapData.structureData
+        this.unitData = hexMapData.unitData
+        this.cameraData = hexMapData.cameraData
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, this.tileData, cameraData, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
 
 
@@ -46,16 +46,16 @@ export default class TileStackRendererClass {
             if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
                 let stackCanvas = document.createElement('canvas')
-                stackCanvas.width = this.hexMapData.size * 2
-                stackCanvas.height = this.hexMapData.size * 2
+                stackCanvas.width = this.mapData.size * 2
+                stackCanvas.height = this.mapData.size * 2
                 let stackctx = stackCanvas.getContext('2d')
 
                 let shadowRotation;
 
                 if (this.cameraData.rotation % 2 == 0) {
-                    shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation;
+                    shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
                 } else {
-                    shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation - 1;
+                    shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation - 1;
                 }
 
                 if (shadowRotation > 11) shadowRotation -= 12;
@@ -64,7 +64,7 @@ export default class TileStackRendererClass {
 
                 stackctx.beginPath()
 
-                this.utils.clipFlatHexagonPath(stackctx, this.hexMapData.size, this.hexMapData.size * this.hexMapData.squish)
+                this.utils.clipFlatHexagonPath(stackctx, this.mapData.size, this.mapData.size * this.mapData.squish)
 
                 stackctx.save()
                 stackctx.clip()
@@ -72,8 +72,8 @@ export default class TileStackRendererClass {
                 let rotTile = this.commonUtils.rotateTile(tile.position.q, tile.position.r, rotation)
 
                 let tilePos = this.tileData.hexPositionToXYPosition(rotTile, tile.height, this.cameraData.rotation)
-                tilePos.x -= this.hexMapData.size
-                tilePos.y -= this.hexMapData.size * this.hexMapData.squish
+                tilePos.x -= this.mapData.size
+                tilePos.y -= this.mapData.size * this.mapData.squish
 
                 this.drawShadows(stackctx, tile)
 
@@ -99,40 +99,40 @@ export default class TileStackRendererClass {
             if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
                 let stackCanvas = document.createElement('canvas')
-                stackCanvas.width = this.hexMapData.size * 2
-                stackCanvas.height = this.hexMapData.size * 2 + tile.height * this.hexMapData.tileHeight
+                stackCanvas.width = this.mapData.size * 2
+                stackCanvas.height = this.mapData.size * 2 + tile.height * this.mapData.tileHeight
                 let stackctx = stackCanvas.getContext('2d')
 
                 for (let i = 1; i <= tile.height; i++) {
                     let tileBiome = tile.verylowBiome;
 
-                    if (i >= this.hexMapData.elevationRanges['low']) {
+                    if (i >= this.mapData.elevationRanges['low']) {
                         tileBiome = tile.lowBiome
                     }
-                    if (i >= this.hexMapData.elevationRanges['mid']) {
+                    if (i >= this.mapData.elevationRanges['mid']) {
                         tileBiome = tile.midBiome
                     }
-                    if (i >= this.hexMapData.elevationRanges['high']) {
+                    if (i >= this.mapData.elevationRanges['high']) {
                         tileBiome = tile.highBiome
                     }
-                    if (i >= this.hexMapData.elevationRanges['veryhigh']) {
+                    if (i >= this.mapData.elevationRanges['veryhigh']) {
                         tileBiome = tile.veryhighBiome
                     }
 
                     stackctx.drawImage(
                         tile.imageObject[tileBiome][this.cameraData.rotation],
                         0,
-                        tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
-                        this.hexMapData.size * 2,
-                        this.hexMapData.size * 2
+                        tile.height * this.mapData.tileHeight - (i) * this.mapData.tileHeight,
+                        this.mapData.size * 2,
+                        this.mapData.size * 2
                     )
 
                     let shadowRotation;
 
                     if (this.cameraData.rotation % 2 == 0) {
-                        shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation;
+                        shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
                     } else {
-                        shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation - 1;
+                        shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation - 1;
                     }
 
                     if (shadowRotation > 11) shadowRotation -= 12;
@@ -140,8 +140,8 @@ export default class TileStackRendererClass {
                     //wall shadow
                     this.utils.drawFlatHexagonWall(
                         stackctx,
-                        this.hexMapData.size,
-                        this.hexMapData.size * this.hexMapData.squish + tile.height * this.hexMapData.tileHeight - (i) * this.hexMapData.tileHeight,
+                        this.mapData.size,
+                        this.mapData.size * this.mapData.squish + tile.height * this.mapData.tileHeight - (i) * this.mapData.tileHeight,
                         `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                         `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].left)})`,
                         `hsla(220, 20%, 20%, ${HEXMAP_SIDE_COLOR_MULTIPLIER * (1 - this.shadowRotationDims[shadowRotation].right)})`,
@@ -155,7 +155,7 @@ export default class TileStackRendererClass {
                 //top shadows
                 stackctx.beginPath()
 
-                this.utils.clipFlatHexagonPath(stackctx, this.hexMapData.size, this.hexMapData.size * this.hexMapData.squish)
+                this.utils.clipFlatHexagonPath(stackctx, this.mapData.size, this.mapData.size * this.mapData.squish)
 
                 stackctx.save()
                 stackctx.clip()
@@ -163,8 +163,8 @@ export default class TileStackRendererClass {
                 let rotTile = this.commonUtils.rotateTile(tile.position.q, tile.position.r, rotation)
 
                 let tilePos = this.tileData.hexPositionToXYPosition(rotTile, tile.height, this.cameraData.rotation)
-                tilePos.x -= this.hexMapData.size
-                tilePos.y -= this.hexMapData.size * this.hexMapData.squish
+                tilePos.x -= this.mapData.size
+                tilePos.y -= this.mapData.size * this.mapData.squish
 
                 this.drawShadows(stackctx, tile)
 
@@ -189,13 +189,13 @@ export default class TileStackRendererClass {
         stackctx.beginPath();
         this.utils.clipFlatHexagonPath(
             stackctx,
-            this.hexMapData.size,
-            this.hexMapData.size * this.hexMapData.squish
+            this.mapData.size,
+            this.mapData.size * this.mapData.squish
         );
         stackctx.save();
         stackctx.clip();
 
-        stackctx.drawImage(tileShadows, 0, 0, this.hexMapData.size * 2, this.hexMapData.size * 2)
+        stackctx.drawImage(tileShadows, 0, 0, this.mapData.size * 2, this.mapData.size * 2)
 
         stackctx.restore();
 
@@ -206,37 +206,37 @@ export default class TileStackRendererClass {
         let tileList = [{ q: -1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -2, r: 1 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -3, r: 2 }, { q: -2, r: 3 }, { q: -3, r: 3 }, { q: -4, r: 3 }, { q: -3, r: 4 }, { q: -4, r: 4 }, { q: -5, r: 4 }, { q: -4, r: 5 }, { q: -5, r: 5 }]
 
         let shadowCanvas = document.createElement('canvas')
-        shadowCanvas.width = this.hexMapData.size * 2
-        shadowCanvas.height = this.hexMapData.size * 2
+        shadowCanvas.width = this.mapData.size * 2
+        shadowCanvas.height = this.mapData.size * 2
         let shadowctx = shadowCanvas.getContext('2d')
         shadowctx.lineJoin = 'round';
         shadowctx.lineCap = 'round';
         shadowctx.textAlign = 'center';
         shadowctx.textBaseline = 'middle'
-        shadowctx.lineWidth = HEXMAP_LINE_WIDTH * (1 - this.cameraData.zoom / this.hexMapData.tileHeight);
+        shadowctx.lineWidth = HEXMAP_LINE_WIDTH * (1 - this.cameraData.zoom / this.mapData.tileHeight);
 
         let shadowDims;
 
         let shadowRotation;
 
         if (this.cameraData.rotation % 2 == 0) {
-            shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation;
+            shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
         } else {
-            shadowRotation = this.hexMapData.shadowRotation + this.cameraData.rotation - 1;
+            shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation - 1;
         }
 
         if (shadowRotation > 11) shadowRotation -= 12;
 
         if (this.cameraData.rotation % 2 == 1) {
             shadowDims = {
-                x: (this.hexMapData.flatTopVecQ.x * this.shadowRotationDims[shadowRotation].q + this.hexMapData.flatTopVecR.x * this.shadowRotationDims[shadowRotation].r),
-                y: (this.hexMapData.flatTopVecQ.y * this.shadowRotationDims[shadowRotation].q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * this.shadowRotationDims[shadowRotation].r * this.hexMapData.squish)
+                x: (this.mapData.flatTopVecQ.x * this.shadowRotationDims[shadowRotation].q + this.mapData.flatTopVecR.x * this.shadowRotationDims[shadowRotation].r),
+                y: (this.mapData.flatTopVecQ.y * this.shadowRotationDims[shadowRotation].q * this.mapData.squish + this.mapData.flatTopVecR.y * this.shadowRotationDims[shadowRotation].r * this.mapData.squish)
 
             }
         } else {
             shadowDims = {
-                x: (this.hexMapData.VecQ.x * this.shadowRotationDims[shadowRotation].q + this.hexMapData.VecR.x * this.shadowRotationDims[shadowRotation].r),
-                y: (this.hexMapData.VecQ.y * this.shadowRotationDims[shadowRotation].q * this.hexMapData.squish + this.hexMapData.VecR.y * this.shadowRotationDims[shadowRotation].r * this.hexMapData.squish)
+                x: (this.mapData.VecQ.x * this.shadowRotationDims[shadowRotation].q + this.mapData.VecR.x * this.shadowRotationDims[shadowRotation].r),
+                y: (this.mapData.VecQ.y * this.shadowRotationDims[shadowRotation].q * this.mapData.squish + this.mapData.VecR.y * this.shadowRotationDims[shadowRotation].r * this.mapData.squish)
 
             }
         }
@@ -260,19 +260,19 @@ export default class TileStackRendererClass {
             let yOffset;
 
             if (this.cameraData.rotation % 2 == 1) {
-                xOffset = (this.hexMapData.flatTopVecQ.x * tileKey.q + this.hexMapData.flatTopVecR.x * tileKey.r)
-                yOffset = (this.hexMapData.flatTopVecQ.y * tileKey.q * this.hexMapData.squish + this.hexMapData.flatTopVecR.y * tileKey.r * this.hexMapData.squish)
+                xOffset = (this.mapData.flatTopVecQ.x * tileKey.q + this.mapData.flatTopVecR.x * tileKey.r)
+                yOffset = (this.mapData.flatTopVecQ.y * tileKey.q * this.mapData.squish + this.mapData.flatTopVecR.y * tileKey.r * this.mapData.squish)
             } else {
-                xOffset = this.hexMapData.VecQ.x * tileKey.q + this.hexMapData.VecR.x * tileKey.r;
-                yOffset = this.hexMapData.VecQ.y * tileKey.q * this.hexMapData.squish + this.hexMapData.VecR.y * tileKey.r * this.hexMapData.squish;
+                xOffset = this.mapData.VecQ.x * tileKey.q + this.mapData.VecR.x * tileKey.r;
+                yOffset = this.mapData.VecQ.y * tileKey.q * this.mapData.squish + this.mapData.VecR.y * tileKey.r * this.mapData.squish;
             }
 
             this.utils.clipHexagonShadowPath(
                 shadowctx,
-                this.hexMapData.size + xOffset,
-                (this.hexMapData.size * this.hexMapData.squish) + yOffset,
-                this.hexMapData.size + xOffset + shadowDims.x * (mapTileValue.height - tile.height),
-                (this.hexMapData.size * this.hexMapData.squish) + yOffset + shadowDims.y * (mapTileValue.height - tile.height),
+                this.mapData.size + xOffset,
+                (this.mapData.size * this.mapData.squish) + yOffset,
+                this.mapData.size + xOffset + shadowDims.x * (mapTileValue.height - tile.height),
+                (this.mapData.size * this.mapData.squish) + yOffset + shadowDims.y * (mapTileValue.height - tile.height),
                 shadowRotation,
                 this.cameraData.rotation % 2 == 1 ? 'flat' : 'pointy'
             );
