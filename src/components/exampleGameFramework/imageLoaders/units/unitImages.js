@@ -1,11 +1,13 @@
 import UnitImagesVillagerClass from "./unitImagesVillager";
+import UnitImagesMountainRangerClass from "./unitImagesMountainRanger";
 
 export default class UnitImagesClass {
 
     constructor() {
-
-        this.villager = new UnitImagesVillagerClass()
-
+        this.loaders = [
+        this.villager = new UnitImagesVillagerClass(),
+        this.mountainRanger = new UnitImagesMountainRangerClass()
+        ]
     }
 
     loadImages = (startGame) => {
@@ -13,10 +15,12 @@ export default class UnitImagesClass {
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
-            if(totalLoaded == 1) startGame()
+            if(totalLoaded == this.loaders.length) startGame()
         }
 
-        this.villager.loadImages(testLoaded)
+        for (let loader of this.loaders){
+            loader.loadImages(testLoaded)
+        }
         
     }
 

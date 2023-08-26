@@ -17,7 +17,12 @@ export default class CardDataClass {
         if(this.cards.length==5) return
         if(this.cards.length>0 && this.cards[this.cards.length-1].flipped == true) return
 
-        this.cards.push(this.cardBuilder.buildCard('villager_unit'))
+        let card_options = [
+            'villager_unit',
+            'mountain_ranger'
+        ]
+
+        this.cards.push(this.cardBuilder.buildCard(card_options[Math.floor(Math.random() * card_options.length)]))
     }
 
     flipCard = () => {

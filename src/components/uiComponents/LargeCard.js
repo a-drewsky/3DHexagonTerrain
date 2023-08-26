@@ -1,7 +1,6 @@
 import { Card, Col, Row, Button, ButtonGroup } from 'react-bootstrap'
 
 import unitImage from '../exampleGameFramework/images/units/villagerUnit/villager_unit_icon.png'
-import goldImage from '../exampleGameFramework/images/ui/gold_icon.png'
 
 const LargeCardObject = (props) => {
 
