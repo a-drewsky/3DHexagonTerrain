@@ -206,6 +206,7 @@ export default class HexMapControllerMouseClass {
         let newUnit = this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r)
         if (newUnit == null) {
             this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'tile')
+            this.spriteManager.units.data.selectedUnit = null
             this.mapData.setState('selectTile')
         }
         else {

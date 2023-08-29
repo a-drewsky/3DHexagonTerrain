@@ -21,14 +21,14 @@ export default class UnitManagerClass {
                     unit.updatePath()
                     return
                 case 'mine':
+                    this.data.unselectUnit()
                     unit.collectTargetResources()
                     unit.setIdle()
-                    this.data.unselectUnit()
                     return
                 case 'attack':
+                    this.data.unselectUnit()
                     unit.attackTarget()
                     unit.setIdle()
-                    this.data.unselectUnit()
                     return
                 case 'hit':
                     unit.setIdle()

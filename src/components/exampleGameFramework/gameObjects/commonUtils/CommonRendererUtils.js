@@ -563,7 +563,7 @@ export default class CommonRendererUtilsClass {
             x: canvas.width / 2 - healthbarSpriteSize.width / 2,
             y: 0
         }
-        console.log(healthBarIndex)
+        
         tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
 
     }

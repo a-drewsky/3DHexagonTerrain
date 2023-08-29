@@ -8,6 +8,8 @@ import mine_sheet from '../../images/units/mountainRanger/mountain_ranger_mine_s
 import walk_sheet from '../../images/units/mountainRanger/mountain_ranger_walk_sheet.png'
 import idle_sheet from '../../images/units/mountainRanger/mountain_ranger_idle_sheet.png'
 
+import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.png'
+
 export default class UnitImagesMountainRangerClass extends ImageLoaderClass {
 
     constructor() {
@@ -37,6 +39,8 @@ export default class UnitImagesMountainRangerClass extends ImageLoaderClass {
         this.padding = [
             [null, { x: 10, y: 9 }, null, { x: 10, y: 9 }, null, { x: 10, y: 9 }, null, { x: 10, y: 9 }, null, { x: 10, y: 9 }, null, { x: 10, y: 9 }]
         ]
+
+        this.icon = icon_image
 
         this.rows = {
             0: 'frontRight',

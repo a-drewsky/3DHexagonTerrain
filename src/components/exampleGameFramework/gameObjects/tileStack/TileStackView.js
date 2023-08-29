@@ -52,6 +52,8 @@ export default class TileStackViewClass {
 
         let tile = this.tileData.getAnyEntry(position.q, position.r)
 
+        if(!tile.selectionImageObject[selection]) throw Error(`Invalid Tile Selection: (${selection}). Tile selection properties are: [${Object.getOwnPropertyNames(tile.selectionImageObject).splice(3)}]`)
+
         let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation), tile.height, this.cameraData.rotation)
 
         //MOVE TO RENDERER

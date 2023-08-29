@@ -10,7 +10,7 @@ export default class SpriteObjectViewClass {
       this.unitData = hexMapData.unitData
       this.structureData = hexMapData.structureData
       this.cameraData = hexMapData.cameraData
-      
+
       this.commonUtils = new CommonHexMapUtilsClass()
 
       this.canvas = canvas
@@ -68,9 +68,12 @@ export default class SpriteObjectViewClass {
             silhouette: false
          })
 
-         if (unitObject.destination != null) this.setUnitLayer(spriteList[spriteList.length - 1])
+         if (unitObject.destination != null) {
+            this.setUnitPosition(spriteList[spriteList.length - 1])
+            this.setUnitLayer(spriteList[spriteList.length - 1])
+         }
       }
-      if(this.unitData.placementUnit){
+      if (this.unitData.placementUnit) {
          let unitObject = this.unitData.placementUnit
          spriteList.push({
             spriteObject: unitObject,
@@ -84,6 +87,42 @@ export default class SpriteObjectViewClass {
       spriteList.sort((a, b) => { return a.rotatedTile.r - b.rotatedTile.r || a.rotatedTile.q - b.rotatedTile.q || a.layer - b.layer })
 
       return spriteList
+   }
+
+   setUnitPosition = (spriteListEntry) => {
+
+      let unit = spriteListEntry.spriteObject
+      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
+
+      let spriteRotation = unit.rotation + this.cameraData.rotation
+      if (this.cameraData.rotation % 2 == 1) spriteRotation--
+      if (spriteRotation > 11) spriteRotation -= 12
+
+      if (percent >= 0.5) {
+         switch (spriteRotation) {
+            case 1:
+               spriteListEntry.rotatedTile.r -= 1
+               spriteListEntry.rotatedTile.q += 1
+               return
+            case 3:
+               spriteListEntry.rotatedTile.q += 1
+               return
+            case 5:
+               spriteListEntry.rotatedTile.r += 1
+               return
+            case 7:
+               spriteListEntry.rotatedTile.q -= 1
+               spriteListEntry.rotatedTile.r += 1
+               return
+            case 9:
+               spriteListEntry.rotatedTile.q -= 1
+               return
+            case 11:
+               spriteListEntry.rotatedTile.r -= 1
+               return
+         }
+      }
+
    }
 
    setUnitLayer = (spriteListEntry) => {
@@ -104,8 +143,8 @@ export default class SpriteObjectViewClass {
       if (spriteRotation > 11) spriteRotation -= 12
       let direction = rotationMap[spriteRotation]
 
-      if((percent > 0.3 && percent < 0.5 && direction == 'up') || (percent < 0.7 && percent > 0.5 && direction == 'down')) spriteListEntry.layer = -2
-      if((percent > 0.3 && percent < 0.5 && direction == 'down') || (percent < 0.7 && percent > 0.5 && direction == 'up')) spriteListEntry.layer = 2
+      if (percent > 0.3 && percent < 0.5 && direction == 'up' || percent < 0.7 && percent >= 0.5 && direction == 'down') spriteListEntry.layer = -2
+      if (percent > 0.3 && percent < 0.5 && direction == 'down' || percent < 0.7 && percent >= 0.5 && direction == 'up') spriteListEntry.layer = 2
 
    }
 
@@ -159,7 +198,7 @@ export default class SpriteObjectViewClass {
                if (spriteList[i].layer == 1) this.modifiers.drawBottom(drawctx, spriteObject)
                continue
             case 'unit':
-               if(spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
+               if (spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
                else this.units.draw(drawctx, spriteObject)
                continue
          }

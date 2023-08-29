@@ -1,9 +1,6 @@
 import { Card, Col, Row, Button, ButtonGroup } from 'react-bootstrap'
 
-import unitImage from '../exampleGameFramework/images/units/villagerUnit/villager_unit_icon.png'
-
 const LargeCardObject = (props) => {
-
 
     return (
         <Col className='ms-2 p-0'>
@@ -12,7 +9,7 @@ const LargeCardObject = (props) => {
                     <Card.Title className={`d-block m-0 p-1 text-center`} style={{ height: '2rem' }}>{props.card.name}</Card.Title>
                     <Row style={{ height: '5rem' }} className='m-0 p-0'>
                         <Col className='col-6 px-0'>
-                            <Card.Img src={unitImage} className={`d-block m-0 mx-auto p-1`} style={{ height: '5rem', width: 'auto' }} />
+                            <Card.Img src={props.card.image || props.card.imageObject.icon} className={`d-block m-0 mx-auto p-1`} style={{ height: '5rem', width: 'auto' }} />
                         </Col>
                         <Col className='col-6 px-0 text-center my-auto'>
                             <Card.Text className='w-100 m-0 p-0 font-monospace small'>HP {props.card.stats.health}</Card.Text>

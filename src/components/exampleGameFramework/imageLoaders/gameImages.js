@@ -8,26 +8,27 @@ import StructureImagesClass from './structures/structureImages'
 export default class GameImagesClass {
 
     constructor() {
-
-        this.tile = new TileImagesClass()
-        this.unit = new UnitImagesClass()
-        this.highlight = new HighlighImagesClass()
-        this.ui = new UiImagesClass()
-        this.structures = new StructureImagesClass()
-
+        this.loaders = [
+            this.tile = new TileImagesClass(),
+            this.unit = new UnitImagesClass(),
+            this.highlight = new HighlighImagesClass(),
+            this.ui = new UiImagesClass(),
+            this.structures = new StructureImagesClass()
+        ]
     }
 
-    loadImages = (setImagesLoaded) => {
+    loadImages = (startGame) => {
+
         let totalLoaded = 0;
         let testLoaded = () => {
             totalLoaded++
-            if(totalLoaded == 5) setImagesLoaded(true)
+            if (totalLoaded == this.loaders.length) startGame()
         }
-        this.tile.loadImages(testLoaded)
-        this.unit.loadImages(testLoaded)
-        this.highlight.loadImages(testLoaded)
-        this.ui.loadImages(testLoaded)
-        this.structures.loadImages(testLoaded)
+
+        for (let loader of this.loaders) {
+            loader.loadImages(testLoaded)
+        }
+
     }
 
 }
