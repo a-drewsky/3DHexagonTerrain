@@ -94,9 +94,7 @@ export default class SpriteObjectViewClass {
       let unit = spriteListEntry.spriteObject
       let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
 
-      let spriteRotation = unit.rotation + this.cameraData.rotation
-      if (this.cameraData.rotation % 2 == 1) spriteRotation--
-      if (spriteRotation > 11) spriteRotation -= 12
+      let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
 
       if (percent >= 0.5) {
          switch (spriteRotation) {
@@ -138,9 +136,7 @@ export default class SpriteObjectViewClass {
          11: 'up',
       }
 
-      let spriteRotation = unit.rotation + this.cameraData.rotation
-      if (this.cameraData.rotation % 2 == 1) spriteRotation--
-      if (spriteRotation > 11) spriteRotation -= 12
+      let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
       let direction = rotationMap[spriteRotation]
 
       if (percent > 0.3 && percent < 0.5 && direction == 'up' || percent < 0.7 && percent >= 0.5 && direction == 'down') spriteListEntry.layer = -2

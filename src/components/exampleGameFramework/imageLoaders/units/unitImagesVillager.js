@@ -1,5 +1,3 @@
-import ImageLoaderClass from '../ImageLoader'
-
 import shadow_sheet from '../../images/shadows/unit_shadow_sheet.png'
 
 import attack_sheet from '../../images/units/villagerUnit/villager_unit_attack_sheet.png'
@@ -10,21 +8,13 @@ import idle_sheet from '../../images/units/villagerUnit/villager_unit_idle_sheet
 
 import icon_image from '../../images/units/villagerUnit/villager_unit_icon.png'
 
-export default class UnitImagesVillagerClass extends ImageLoaderClass {
+import UnitImageLoaderClass from './unitImageLoader'
+
+export default class UnitImagesVillagerClass extends UnitImageLoaderClass {
 
     constructor() {
 
         super(shadow_sheet)
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.shadowSize = {
             width: 1,
@@ -54,6 +44,8 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
         this.sheet_data = {
             attack: {
                 image: attack_sheet,
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'attack_1',
                     1: 'attack_2',
@@ -64,6 +56,8 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
             },
             death: {
                 image: death_sheet,
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'hit_1',
                     1: 'hit_2',
@@ -74,6 +68,8 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
             },
             mine: {
                 image: mine_sheet,
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'mine_1',
                     1: 'mine_2',
@@ -85,6 +81,8 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
             },
             walk: {
                 image: walk_sheet,
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'walk_1',
                     1: 'walk_2',
@@ -94,6 +92,8 @@ export default class UnitImagesVillagerClass extends ImageLoaderClass {
             },
             idle: {
                 image: idle_sheet,
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'idle_1',
                     1: 'idle_2',

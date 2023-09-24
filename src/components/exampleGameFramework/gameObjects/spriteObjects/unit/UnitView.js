@@ -51,12 +51,12 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.mapData.size * 2 * sprite.spriteSize.width,
-            height: this.mapData.size * 2 * sprite.spriteSize.height
+            width: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.w, 
+            height: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.h
         }
 
-        spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.globalAlpha = 0.4
@@ -83,12 +83,12 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.mapData.size * 2 * sprite.spriteSize.width,
-            height: this.mapData.size * 2 * sprite.spriteSize.height
+            width: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.w,
+            height: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.h
         }
 
-        spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -170,12 +170,12 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.mapData.size * 2 * sprite.spriteSize.width,
-            height: this.mapData.size * 2 * sprite.spriteSize.height
+            width: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.w,
+            height: this.mapData.size * 2 * sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].size.h
         }
 
-        spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[spriteObject.state.current.name].images[spriteObject.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(

@@ -26,4 +26,11 @@ export default class StructureClass {
         this.prerender = false
     }
 
+    spriteRotation = (cameraRotation) => {
+        let spriteRotation = this.rotation + cameraRotation
+        if (cameraRotation % 2 == 1) spriteRotation--
+        if (spriteRotation > 11) spriteRotation -= 12
+        return spriteRotation
+    }
+
 }

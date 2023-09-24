@@ -19,7 +19,8 @@ export default class CardDataClass {
 
         let card_options = [
             'villager_unit',
-            'mountain_ranger'
+            'mountain_ranger',
+            'imperial_soldier'
         ]
 
         this.cards.push(this.cardBuilder.buildCard(card_options[Math.floor(Math.random() * card_options.length)]))

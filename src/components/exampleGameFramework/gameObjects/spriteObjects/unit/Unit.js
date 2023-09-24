@@ -22,10 +22,6 @@ export default class UnitClass {
 
         //image data
         this.imageObject = unitImages[UnitConfig[unitId].sprite]
-        this.canvasSize = {
-            width: hexMapData.size * 2 * this.imageObject.spriteSize.width,
-            height: hexMapData.size * 2 * this.imageObject.spriteSize.height
-        }
         this.images = []
         this.shadowImages = []
 
@@ -88,10 +84,24 @@ export default class UnitClass {
 
     }
 
+    //HELPER FUNCTIONS
     curState = () => {
         return this.state.current
     }
 
+    sprite = (cameraRotation) => {
+        return this.imageObject[this.state.current.name].images[this.frame][this.spriteRotation(cameraRotation)]
+    }
+
+    spriteRotation = (cameraRotation) => {
+        let spriteRotation = this.rotation + cameraRotation
+        if (cameraRotation % 2 == 1) spriteRotation--
+        if (spriteRotation > 11) spriteRotation -= 12
+        return spriteRotation
+    }
+
+
+    //SET FUNCTIONS
     setDirection = (targetPos) => {
         this.render = true
 

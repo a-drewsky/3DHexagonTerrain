@@ -1,4 +1,4 @@
-import noise from "../../utilities/perlin";
+import NoiseClass from "../../utilities/perlin";
 import CommonBuilderUtilsClass from "../commonUtils/CommonBuilderUtils";
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
 
@@ -15,6 +15,7 @@ export default class TileStackBuilderClass {
 
         this.utils = new CommonBuilderUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
+        this.noise = new NoiseClass()
 
     }
 
@@ -79,7 +80,7 @@ export default class TileStackBuilderClass {
             let keyObj = this.commonUtils.split(entry.key);
 
             //elevation generation
-            let tileHeightNoise = noise(elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation) * noise(elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation)
+            let tileHeightNoise = this.noise.noise([elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation]) * this.noise.noise([elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation])
 
             let tileHeight = Math.ceil(tileHeightNoise * ELEVATION_MULTIPLIER)
 
@@ -97,7 +98,7 @@ export default class TileStackBuilderClass {
 
 
             //temp generation
-            let tileTemp = noise(tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation) * noise(tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation)
+            let tileTemp = this.noise.noise([tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation]) * this.noise.noise([tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation])
 
             this.generteTileBiomes(this.tileData.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
 
@@ -117,7 +118,6 @@ export default class TileStackBuilderClass {
         let tileVeryhighBiome = null
 
         let biome = null
-
 
         biome = 'water'
         if (tileTemp < WATER_TEMP_RANGES['frozenwater']) biome = 'frozenwater'
@@ -204,7 +204,6 @@ export default class TileStackBuilderClass {
 
             //check if tile has non-similar biome neighbors
             let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r)
-            let tempMap = neighborKeys.map(key => this.tileData.getEntry(key.q, key.r).biome)
             neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
             if (neighborKeys.length == 0) return false
 
@@ -260,6 +259,7 @@ export default class TileStackBuilderClass {
             }
 
             //Check size of biome set and fix tiles if neccessary
+            console.log(biome)
             if (keyStrArr.length < BIOME_CONSTANTS[biome].minBiomeSmoothing) {
                 while (keyStrArr.length > 0) {
                     let keyStrArrObj = this.commonUtils.split(keyStrArr[0])

@@ -42,26 +42,27 @@ export default class UnitRendererClass {
                     continue
                 }
 
+
                 this.cameraData.rotation = rotation;
+
+                let sprite = unit.sprite(this.cameraData.rotation)
+                let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
+
                 let rotatedMap = this.tileData.rotatedMapList[rotation]
                 let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
 
                 let tempCanvas = document.createElement('canvas')
-                tempCanvas.width = unit.canvasSize.width
-                tempCanvas.height = unit.canvasSize.height
+                tempCanvas.width = this.mapData.size * 2 * sprite.size.w
+                tempCanvas.height = this.mapData.size * 2 * sprite.size.h
                 let tempctx = tempCanvas.getContext('2d')
 
-                let spriteRotation = unit.rotation + this.cameraData.rotation
 
-                if (this.cameraData.rotation % 2 == 1) spriteRotation--
-
-                if (spriteRotation > 11) spriteRotation -= 12
-                tempctx.drawImage(unit.imageObject.idle.images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
                 
                 this.utils.addHealthBar(imageList[rotation], unit)
                 this.utils.darkenSprite(imageList[rotation], unit)
-                this.utils.cropOutTiles(imageList[rotation], unit.imageObject.spriteOffset, keyObj, rotatedMap)
+                this.utils.cropOutTiles(imageList[rotation], sprite.offset, keyObj, rotatedMap)
 
             }
 
@@ -94,7 +95,7 @@ export default class UnitRendererClass {
                 tempCanvas.height = this.mapData.size * 2 * unit.imageObject.shadowSize.height
                 let tempctx = tempCanvas.getContext('2d')
 
-                tempctx.drawImage(unit.imageObject.shadowImages[rotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.drawImage(unit.imageObject.shadowImages[rotation].image, 0, 0, tempCanvas.width, tempCanvas.height)
 
                 tempCanvas = this.utils.cropStructureShadow(tempCanvas, unit.imageObject.shadowSize, unit.imageObject.shadowOffset, keyObj, rotatedMap)
 
@@ -147,34 +148,30 @@ export default class UnitRendererClass {
             }
         }
 
+        let sprite = unit.sprite(this.cameraData.rotation)
 
-        let sprite = unit.imageObject
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
-        let spriteSize = {
-            width: this.mapData.size * 2 * sprite.spriteSize.width,
-            height: this.mapData.size * 2 * sprite.spriteSize.height
-        }
+        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
 
-        spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
+        let spriteSize = {
+            width: this.mapData.size * 2 * sprite.size.w,
+            height: this.mapData.size * 2 * sprite.size.h
+        }
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
 
-        let spriteRotation = unit.rotation + this.cameraData.rotation
-        if (this.cameraData.rotation % 2 == 1) spriteRotation--
-        if (spriteRotation > 11) spriteRotation -= 12
-
-        let spriteImage = sprite[unit.state.current.name].images[unit.frame][spriteRotation]
+        let spriteImage = sprite.image
 
         let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.mapData.size * 2 * sprite.spriteSize.width
-        tempCanvas.height = this.mapData.size * 2 * sprite.spriteSize.height
+        tempCanvas.width = this.mapData.size * 2 * sprite.size.w
+        tempCanvas.height = this.mapData.size * 2 * sprite.size.h
         let tempctx = tempCanvas.getContext('2d')
 
         tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
 
         this.utils.addHealthBar(tempCanvas, unit)
-        this.utils.cropOutTilesJump(tempCanvas, sprite.spriteOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
+        this.utils.cropOutTilesJump(tempCanvas, sprite.offset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
         this.utils.darkenSpriteJump(tempCanvas, unit, closestTile, height)
         unit.images = tempCanvas
     }
@@ -220,7 +217,7 @@ export default class UnitRendererClass {
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
-        let shadowImage = sprite.shadowImages[this.cameraData.rotation]
+        let shadowImage = sprite.shadowImages[this.cameraData.rotation].image
 
         shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
 

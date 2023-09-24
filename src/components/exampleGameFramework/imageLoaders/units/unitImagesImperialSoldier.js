@@ -1,16 +1,16 @@
 import shadow_sheet from '../../images/shadows/unit_shadow_sheet.png'
 
-import attack_sheet from '../../images/units/mountainRanger/mountain_ranger_attack_sheet.png'
-import death_sheet from '../../images/units/mountainRanger/mountain_ranger_death_sheet.png'
-import mine_sheet from '../../images/units/mountainRanger/mountain_ranger_mine_sheet.png'
-import walk_sheet from '../../images/units/mountainRanger/mountain_ranger_walk_sheet.png'
-import idle_sheet from '../../images/units/mountainRanger/mountain_ranger_idle_sheet.png'
+import attack_sheet from '../../images/units/imperialSoldier/imperial_swordsman_attack_sheet.png'
+import death_sheet from '../../images/units/imperialSoldier/imperial_swordsman_death_sheet.png'
+import mine_sheet from '../../images/units/imperialSoldier/imperial_swordsman_mine_sheet.png'
+import walk_sheet from '../../images/units/imperialSoldier/imperial_swordsman_walk_sheet.png'
+import idle_sheet from '../../images/units/imperialSoldier/imperial_swordsman_idle_sheet.png'
 
-import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.png'
+import icon_image from '../../images/units/imperialSoldier/imperial_swordsman_icon.png'
 
 import UnitImageLoaderClass from './unitImageLoader'
 
-export default class UnitImagesMountainRangerClass extends UnitImageLoaderClass {
+export default class UnitImagesImperialSoldierClass extends UnitImageLoaderClass {
 
     constructor() {
 
@@ -44,8 +44,8 @@ export default class UnitImagesMountainRangerClass extends UnitImageLoaderClass 
         this.sheet_data = {
             attack: {
                 image: attack_sheet,
-                size: { w: 1.5, h: 1.5 },
-                offset: { x: 0.25, y: 0.5 },
+                size: { w: 1, h: 1.5 },
+                offset: { x: 0, y: 0.5 },
                 sprites: {
                     0: 'attack_1',
                     1: 'attack_2',
@@ -76,7 +76,8 @@ export default class UnitImagesMountainRangerClass extends UnitImageLoaderClass 
                     2: 'mine_3',
                     3: 'mine_4',
                     4: 'mine_5',
-                    5: 'mine_6'
+                    5: 'mine_6',
+                    6: 'mine_7'
                 }
             },
             walk: {
@@ -105,7 +106,7 @@ export default class UnitImagesMountainRangerClass extends UnitImageLoaderClass 
             idle: ['idle_1', 'idle_2'],
             walk: ['walk_1', 'idle_1', 'walk_2', 'idle_1'],
             jump: ['jump_1', 'jump_2'],
-            mine: ['mine_1', 'mine_2', 'mine_3', 'mine_4', 'mine_5', 'mine_6'],
+            mine: ['mine_1', 'mine_2', 'mine_3', 'mine_4', 'mine_5', 'mine_6', 'mine_7'],
             attack: ['attack_1','attack_2','attack_3','attack_4','attack_5'],
             hit: ['hit_1','hit_2','hit_3'],
             death: ['death_1','death_2','death_2','death_2']

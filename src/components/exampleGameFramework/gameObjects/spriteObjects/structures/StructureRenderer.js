@@ -36,9 +36,7 @@ export default class StructureRendererClass {
 
                 if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
-                    let spriteRotation = structure.rotation + rotation
-                    if (rotation % 2 == 1) spriteRotation--
-                    if (spriteRotation > 11) spriteRotation -= 12
+                    let spriteRotation = structure.spriteRotation(rotation)
 
                     //create canvas
                     let tempCanvas = document.createElement('canvas')
