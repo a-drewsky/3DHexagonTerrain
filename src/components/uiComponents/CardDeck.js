@@ -3,11 +3,11 @@ import LargeCardObject from "./LargeCard";
 
 import { Row } from 'react-bootstrap';
 
-import goldIcon from '../exampleGameFramework/images/ui/gold_icon.png'
-import copperIcon from '../exampleGameFramework/images/ui/copper_icon.png'
-import ironIcon from '../exampleGameFramework/images/ui/iron_icon.png'
-import rubyIcon from '../exampleGameFramework/images/ui/ruby_icon.png'
-import amethystIcon from '../exampleGameFramework/images/ui/amethyst_icon.png'
+import goldIcon from '../HexGame/images/ui/gold_icon.png'
+import copperIcon from '../HexGame/images/ui/copper_icon.png'
+import ironIcon from '../HexGame/images/ui/iron_icon.png'
+import rubyIcon from '../HexGame/images/ui/ruby_icon.png'
+import amethystIcon from '../HexGame/images/ui/amethyst_icon.png'
 
 const resourceIcons = {
     gold: goldIcon,

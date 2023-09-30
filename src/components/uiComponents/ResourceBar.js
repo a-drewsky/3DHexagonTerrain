@@ -1,8 +1,8 @@
-import amethyst_icon from '../exampleGameFramework/images/ui/amethyst_icon.png';
-import copper_icon from '../exampleGameFramework/images/ui/copper_icon.png';
-import gold_icon from '../exampleGameFramework/images/ui/gold_icon.png';
-import iron_icon from '../exampleGameFramework/images/ui/iron_icon.png';
-import ruby_icon from '../exampleGameFramework/images/ui/ruby_icon.png';
+import amethyst_icon from '../HexGame/images/ui/amethyst_icon.png';
+import copper_icon from '../HexGame/images/ui/copper_icon.png';
+import gold_icon from '../HexGame/images/ui/gold_icon.png';
+import iron_icon from '../HexGame/images/ui/iron_icon.png';
+import ruby_icon from '../HexGame/images/ui/ruby_icon.png';
 
 import { Row, Col } from 'react-bootstrap'
 
