@@ -31,14 +31,15 @@ export default class UnitClass {
         this.frame = 0
         this.frameStartTime = Date.now()
         this.frameCurTime = Date.now()
+        this.animationStartTime = null
+        this.animationCurTime = null
 
+        //pathing data
         this.path = []
         this.destination = null
         this.destinationStartTime = null
         this.destinationCurTime = null
         this.target = null
-        this.animationStartTime = null
-        this.animationCurTime = null
         this.futureState = null
 
         //settings
@@ -69,16 +70,16 @@ export default class UnitClass {
             elemental_resistance_modifications: UnitConfig[unitId].stats.elemental_resistance_modifications,
         }
 
-        this.abilities = [...UnitConfig[unitId].abilities]
+        this.abilities = UnitConfig[unitId].abilities
 
         this.state = {
-            idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
-            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
-            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
-            mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
-            attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
-            hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
-            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+            idle: UnitConfig[unitId].animations.idle,
+            walk: UnitConfig[unitId].animations.walk,
+            jump: UnitConfig[unitId].animations.jump,
+            mine: UnitConfig[unitId].animations.mine,
+            attack: UnitConfig[unitId].animations.attack,
+            hit: UnitConfig[unitId].animations.hit,
+            death: UnitConfig[unitId].animations.death
         }
         this.state.current = this.state.idle
 
@@ -100,6 +101,10 @@ export default class UnitClass {
         return spriteRotation
     }
 
+    projectilePosition = () => {
+        return this.commonUtils.getAdjacentPos(this.position, this.rotation)
+    }
+
 
     //SET FUNCTIONS
     setDirection = (targetPos) => {
@@ -118,7 +123,7 @@ export default class UnitClass {
 
     setFrame = () => {
         this.frameCurTime = Date.now()
-        if (this.state.current.rate == 'static') return
+        if (this.state.current.rate == 0) return
         if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
             this.render = true
             this.frameStartTime = Date.now()

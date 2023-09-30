@@ -4,14 +4,15 @@ export default class UnitManagerClass {
 
     constructor(hexMapData, images) {
         this.mapData = hexMapData.mapData
+        this.projectileData = hexMapData.projectileData
         this.data = hexMapData.unitData
         this.renderer = new UnitRendererClass(hexMapData, images)
     }
-    
+
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
-            if(unit.state.current.type == 'action') unit.render = true
+            if (unit.state.current.type == 'action') unit.render = true
 
             if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
 
@@ -27,12 +28,19 @@ export default class UnitManagerClass {
                     return
                 case 'attack':
                     this.data.unselectUnit()
-                    unit.attackTarget()
+                    switch (unit.id) {
+                        case 'mountain_ranger':
+                            let projectilePosition = unit.projectilePosition()
+                            this.projectileData.newProjectile('arrow_projectile', projectilePosition.q, projectilePosition.r, unit.target.position.q, unit.target.position.r)
+                            break
+                        default:
+                            unit.attackTarget()
+                    }
                     unit.setIdle()
                     return
                 case 'hit':
                     unit.setIdle()
-                    if(unit.state.current.name != 'death') this.mapData.resetState()
+                    if (unit.state.current.name != 'death') this.mapData.resetState()
                     return
                 case 'death':
                     this.data.deleteUnit(unit.position.q, unit.position.r)
@@ -47,7 +55,7 @@ export default class UnitManagerClass {
             if (unit.render) this.renderer.render(unit)
             unit.render = false
         }
-        if(this.data.placementUnit){
+        if (this.data.placementUnit) {
             if (this.data.placementUnit.render) this.renderer.render(this.data.placementUnit)
             this.data.placementUnit.render = false
         }

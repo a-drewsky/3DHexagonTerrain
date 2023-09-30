@@ -82,7 +82,7 @@ export default class HexMapControllerContextMenuClass {
 
         this.spriteManager.units.data.selectedUnit.target = targetObject
 
-        if (this.selectionData.selections.path.length == 0) {
+        if (this.selectionData.selections.path.length == 0 || this.spriteManager.units.data.selectedUnit.id == 'mountain_ranger') {
             this.spriteManager.units.data.selectedUnit.setAttack()
             this.selectionData.resetSelected()
             this.uiController.clearContextMenu()

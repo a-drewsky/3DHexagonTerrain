@@ -2,6 +2,7 @@ import HexMapDataMapClass from "./HexMapDataMap"
 import TileStackDataClass from "../tileStack/TileStackData"
 import StructureDataClass from "../spriteObjects/structures/StructureData"
 import UnitDataClass from "../spriteObjects/unit/UnitData"
+import ProjectileDataClass from "../spriteObjects/projectile/ProjectileData"
 import CameraDataClass from "../camera/CameraData"
 
 import HexMapSelectionsClass from "./HexMapDataSelections";
@@ -17,6 +18,7 @@ export default class HexMapDataClass {
         this.tileData = new TileStackDataClass(this.mapData, this.selectionData, images)
         this.structureData = new StructureDataClass(this.mapData, images.structures)
         this.unitData = new UnitDataClass(this.mapData, this.tileData, images, uiController, globalState)
+        this.projectileData = new ProjectileDataClass(this.mapData, this.unitData, this.tileData, images)
         this.cameraData = new CameraDataClass(this.mapData, canvas)
 
     }

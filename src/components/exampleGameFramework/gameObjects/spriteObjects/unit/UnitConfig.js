@@ -19,7 +19,16 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        abilities: []
+        animations: {
+            idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
+            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
+            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
+            mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
+            attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
+            hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+        },
+        abilities: {}
     }
 
     static mountain_ranger = {
@@ -41,7 +50,16 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        abilities: []
+        animations: {
+            idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
+            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
+            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
+            mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
+            attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
+            hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+        },
+        abilities: {}
     }
 
     static imperial_soldier = {
@@ -63,7 +81,16 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        abilities: []
+        animations: {
+            idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
+            walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
+            jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
+            mine: { name: 'mine', rate: 150, duration: 1050, type: 'action' },
+            attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
+            hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+        },
+        abilities: {}
     }
 
 }

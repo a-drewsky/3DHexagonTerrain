@@ -38,7 +38,7 @@ export default class TileStackViewClass {
             for (let tileSelection of tileSelections) {
                 if (this.selectionData.stateSelections[tileSelection]) tileSelection = this.selectionData.stateSelections[tileSelection][this.mapData.curState()]
 
-                if (tileSelection !== null) {
+                if (tileSelection) {
                     this.drawHighlight(drawctx, value, tileSelection)
                 }
             }

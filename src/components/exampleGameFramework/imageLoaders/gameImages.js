@@ -4,6 +4,7 @@ import UnitImagesClass from './units/unitImages'
 import HighlighImagesClass from './highlightImages'
 import UiImagesClass from './ui/uiImages'
 import StructureImagesClass from './structures/structureImages'
+import ProjectileImagesClass from './projectiles/projectileImages'
 
 export default class GameImagesClass {
 
@@ -13,7 +14,8 @@ export default class GameImagesClass {
             this.unit = new UnitImagesClass(),
             this.highlight = new HighlighImagesClass(),
             this.ui = new UiImagesClass(),
-            this.structures = new StructureImagesClass()
+            this.structures = new StructureImagesClass(),
+            this.projectiles = new ProjectileImagesClass()
         ]
     }
 

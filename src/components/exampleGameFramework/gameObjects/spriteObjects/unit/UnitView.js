@@ -132,6 +132,7 @@ export default class UnitViewClass {
         )
     }
 
+    //rename to drawActionSprite
     drawActionUnit = (drawctx, spriteObject) => {
 
         let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)

@@ -2,6 +2,7 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 import ModifierViewClass from "./structures/ModifierView"
 import StructureViewClass from "./structures/StructureView"
 import UnitViewClass from "./unit/UnitView"
+import ProjectileViewClass from "./projectile/ProjectileView"
 
 export default class SpriteObjectViewClass {
 
@@ -9,6 +10,7 @@ export default class SpriteObjectViewClass {
 
       this.unitData = hexMapData.unitData
       this.structureData = hexMapData.structureData
+      this.projectileData = hexMapData.projectileData
       this.cameraData = hexMapData.cameraData
 
       this.commonUtils = new CommonHexMapUtilsClass()
@@ -18,7 +20,7 @@ export default class SpriteObjectViewClass {
       this.modifiers = new ModifierViewClass(hexMapData, images, canvas)
       this.structures = new StructureViewClass(hexMapData, images, canvas)
       this.units = new UnitViewClass(hexMapData, images, canvas)
-
+      this.projectiles = new ProjectileViewClass(hexMapData, images, canvas)
    }
 
    buildSpriteList = () => {
@@ -80,6 +82,18 @@ export default class SpriteObjectViewClass {
             rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
             layer: 0,
             silhouette: true
+         })
+      }
+
+      //projectiles
+      for (let i = 0; i < this.projectileData.projectileList.length; i++) {
+         let projectileObject = this.projectileData.projectileList[i]
+
+         spriteList.push({
+            spriteObject: projectileObject,
+            rotatedTile: this.commonUtils.rotateTile(projectileObject.position.q, projectileObject.position.r, this.cameraData.rotation),
+            layer: 0,
+            silhouette: false
          })
       }
 
@@ -164,12 +178,14 @@ export default class SpriteObjectViewClass {
             case 'unit':
                this.units.drawShadow(drawctx, spriteObject)
                continue
+            case 'projectile':
+               this.projectiles.drawShadow(drawctx, spriteObject)
+               continue
             case 'bunker':
             case 'prop':
             case 'resource':
             case 'flag':
             case 'modifier':
-            case 'unit':
                this.structures.drawShadow(drawctx, spriteObject)
                continue
          }
@@ -196,6 +212,9 @@ export default class SpriteObjectViewClass {
             case 'unit':
                if (spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
                else this.units.draw(drawctx, spriteObject)
+               continue
+            case 'projectile':
+               this.projectiles.drawSprite(drawctx, spriteObject)
                continue
          }
 

@@ -46,7 +46,6 @@ export default class UnitRendererClass {
                 this.cameraData.rotation = rotation;
 
                 let sprite = unit.sprite(this.cameraData.rotation)
-                let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
 
                 let rotatedMap = this.tileData.rotatedMapList[rotation]
                 let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)

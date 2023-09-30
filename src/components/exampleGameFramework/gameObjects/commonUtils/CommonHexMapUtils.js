@@ -35,7 +35,8 @@ export default class CommonHexMapUtilsClass {
     }
 
     checkShadowImages = (spriteObject) => {
-        if (!spriteObject.shadowImages || spriteObject.shadowImages.length == 0) return false
+        if (!spriteObject.shadowImages && !spriteObject.shadowImage) return false
+        if (spriteObject.shadowImages && spriteObject.shadowImages.length == 0) return false
         return true
     }
 
@@ -106,6 +107,17 @@ export default class CommonHexMapUtilsClass {
         }
 
         return directionMap.findIndex(pos => pos != null && pos.q == direction.q && pos.r == direction.r)
+
+    }
+
+    getAdjacentPos = (pos, rotation) => {
+        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+        
+        let direction = directionMap[rotation]
+
+        if(direction == null) return null
+
+        return { q: pos.q + direction.q, r: pos.r + direction.r}
 
     }
 
