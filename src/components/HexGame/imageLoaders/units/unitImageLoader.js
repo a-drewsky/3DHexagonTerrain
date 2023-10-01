@@ -52,6 +52,8 @@ export default class UnitImageLoaderClass {
         if (this.shadow_sheet !== undefined) {
             this.sheet_data.shadow = {
                 image: this.shadow_sheet,
+                size: this.shadowSize,
+                offset: this.shadowOffset,
                 sprites: {
                     0: 'shadow'
                 }

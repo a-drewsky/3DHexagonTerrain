@@ -1,4 +1,4 @@
-import shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
+import shadow_sheet from '../../images/shadows/arrow_shadow_sheet.png'
 
 import projectile_sheet from '../../images/projectiles/arrow_projectile_sheet.png'
 

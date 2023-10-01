@@ -25,7 +25,6 @@ export default class ProjectileRendererClass {
         let pos = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
 
 
-
         //set pos
         let point1 = projectile.position
         let point2 = projectile.target

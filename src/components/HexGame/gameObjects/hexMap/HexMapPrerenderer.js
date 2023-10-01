@@ -1,3 +1,6 @@
+
+import { PRERENDER_STACKS_PER_FRAME } from "./HexMapConstants"
+
 export default class HexMapprerendererClass {
 
     constructor(hexMapData, tileManager, spriteManager) {
@@ -23,10 +26,7 @@ export default class HexMapprerendererClass {
 
     }
 
-    update = () => {
-        //check render stack
-        if (this.renderStack.length == 0) return
-
+    renderTileStack = () => {
         let tileToRender = this.renderStack.pop()
         if (tileToRender.groundShadowTile == false) {
             let tileObj = this.tileManager.data.getAnyEntry(tileToRender.position.q, tileToRender.position.r)
@@ -53,6 +53,15 @@ export default class HexMapprerendererClass {
             else this.spriteManager.structures.structureRenderer.renderAll(structure)
             structure.render = false
             structure.prerender = false
+        }
+    }
+
+    update = () => {
+        //check render stack
+        if (this.renderStack.length == 0) return
+
+        for(let i=0; i<PRERENDER_STACKS_PER_FRAME; i++){
+            this.renderTileStack()
         }
 
         if (this.renderStack.length == 0) console.log("done rendering")
