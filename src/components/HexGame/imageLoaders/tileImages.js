@@ -64,19 +64,19 @@ export default class TileImagesClass {
         this.flat_playa_hex.src = flat_playa_hex;
 
 
-        this.snowmountain = [null, this.flat_snowmountain_hex, null, this.flat_snowmountain_hex, null, this.flat_snowmountain_hex, null, this.flat_snowmountain_hex, null, this.flat_snowmountain_hex, null, this.flat_snowmountain_hex]
-        this.rockmountain = [null, this.flat_rockmountain_hex, null, this.flat_rockmountain_hex, null, this.flat_rockmountain_hex, null, this.flat_rockmountain_hex, null, this.flat_rockmountain_hex, null, this.flat_rockmountain_hex]
-        this.snowhill =     [null, this.flat_snowhill_hex,     null, this.flat_snowhill_hex,     null, this.flat_snowhill_hex,     null, this.flat_snowhill_hex,     null, this.flat_snowhill_hex,     null, this.flat_snowhill_hex    ]
-        this.grasshill =    [null, this.flat_grasshill_hex,    null, this.flat_grasshill_hex,    null, this.flat_grasshill_hex,    null, this.flat_grasshill_hex,    null, this.flat_grasshill_hex,    null, this.flat_grasshill_hex   ]
-        this.savannahill =  [null, this.flat_savannahill_hex,  null, this.flat_savannahill_hex,  null, this.flat_savannahill_hex,  null, this.flat_savannahill_hex,  null, this.flat_savannahill_hex,  null, this.flat_savannahill_hex ]
-        this.sandhill =     [null, this.flat_sandhill_hex,     null, this.flat_sandhill_hex,     null, this.flat_sandhill_hex,     null, this.flat_sandhill_hex,     null, this.flat_sandhill_hex,     null, this.flat_sandhill_hex    ]
-        this.woodlands =    [null, this.flat_woodlands_hex,    null, this.flat_woodlands_hex,    null, this.flat_woodlands_hex,    null, this.flat_woodlands_hex,    null, this.flat_woodlands_hex,    null, this.flat_woodlands_hex   ]
-        this.savanna =      [null, this.flat_savanna_hex,      null, this.flat_savanna_hex,      null, this.flat_savanna_hex,      null, this.flat_savanna_hex,      null, this.flat_savanna_hex,      null, this.flat_savanna_hex     ]
-        this.tundra =       [null, this.flat_tundra_hex,       null, this.flat_tundra_hex,       null, this.flat_tundra_hex,       null, this.flat_tundra_hex,       null, this.flat_tundra_hex,       null, this.flat_tundra_hex      ]
-        this.desert =       [null, this.flat_desert_hex,       null, this.flat_desert_hex,       null, this.flat_desert_hex,       null, this.flat_desert_hex,       null, this.flat_desert_hex,       null, this.flat_desert_hex      ]
-        this.water =        [null, this.flat_water_hex,        null, this.flat_water_hex,        null, this.flat_water_hex,        null, this.flat_water_hex,        null, this.flat_water_hex,        null, this.flat_water_hex       ]
-        this.frozenwater =  [null, this.flat_frozenwater_hex,  null, this.flat_frozenwater_hex,  null, this.flat_frozenwater_hex,  null, this.flat_frozenwater_hex,  null, this.flat_frozenwater_hex,  null, this.flat_frozenwater_hex ]
-        this.playa =        [null, this.flat_playa_hex,        null, this.flat_playa_hex,        null, this.flat_playa_hex,        null, this.flat_playa_hex,        null, this.flat_playa_hex,        null, this.flat_playa_hex       ]
+        this.snowmountain = [this.flat_snowmountain_hex, this.flat_snowmountain_hex, this.flat_snowmountain_hex, this.flat_snowmountain_hex, this.flat_snowmountain_hex, this.flat_snowmountain_hex]
+        this.rockmountain = [this.flat_rockmountain_hex, this.flat_rockmountain_hex, this.flat_rockmountain_hex, this.flat_rockmountain_hex, this.flat_rockmountain_hex, this.flat_rockmountain_hex]
+        this.snowhill =     [this.flat_snowhill_hex,     this.flat_snowhill_hex,     this.flat_snowhill_hex,     this.flat_snowhill_hex,     this.flat_snowhill_hex,     this.flat_snowhill_hex    ]
+        this.grasshill =    [this.flat_grasshill_hex,    this.flat_grasshill_hex,    this.flat_grasshill_hex,    this.flat_grasshill_hex,    this.flat_grasshill_hex,    this.flat_grasshill_hex   ]
+        this.savannahill =  [this.flat_savannahill_hex,  this.flat_savannahill_hex,  this.flat_savannahill_hex,  this.flat_savannahill_hex,  this.flat_savannahill_hex,  this.flat_savannahill_hex ]
+        this.sandhill =     [this.flat_sandhill_hex,     this.flat_sandhill_hex,     this.flat_sandhill_hex,     this.flat_sandhill_hex,     this.flat_sandhill_hex,     this.flat_sandhill_hex    ]
+        this.woodlands =    [this.flat_woodlands_hex,    this.flat_woodlands_hex,    this.flat_woodlands_hex,    this.flat_woodlands_hex,    this.flat_woodlands_hex,    this.flat_woodlands_hex   ]
+        this.savanna =      [this.flat_savanna_hex,      this.flat_savanna_hex,      this.flat_savanna_hex,      this.flat_savanna_hex,      this.flat_savanna_hex,      this.flat_savanna_hex     ]
+        this.tundra =       [this.flat_tundra_hex,       this.flat_tundra_hex,       this.flat_tundra_hex,       this.flat_tundra_hex,       this.flat_tundra_hex,       this.flat_tundra_hex      ]
+        this.desert =       [this.flat_desert_hex,       this.flat_desert_hex,       this.flat_desert_hex,       this.flat_desert_hex,       this.flat_desert_hex,       this.flat_desert_hex      ]
+        this.water =        [this.flat_water_hex,        this.flat_water_hex,        this.flat_water_hex,        this.flat_water_hex,        this.flat_water_hex,        this.flat_water_hex       ]
+        this.frozenwater =  [this.flat_frozenwater_hex,  this.flat_frozenwater_hex,  this.flat_frozenwater_hex,  this.flat_frozenwater_hex,  this.flat_frozenwater_hex,  this.flat_frozenwater_hex ]
+        this.playa =        [this.flat_playa_hex,        this.flat_playa_hex,        this.flat_playa_hex,        this.flat_playa_hex,        this.flat_playa_hex,        this.flat_playa_hex       ]
 
     }
 

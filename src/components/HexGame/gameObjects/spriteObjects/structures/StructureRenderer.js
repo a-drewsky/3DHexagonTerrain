@@ -28,40 +28,37 @@ export default class StructureRendererClass {
 
         for (let i = 0; i < structure.imageObject[structure.state.current.name].images.length; i++) {
             let imageList = []
-            for (let rotation = 0; rotation < 12; rotation++) {
+            for (let rotation = 0; rotation < 6; rotation++) {
 
                 this.cameraData.rotation = rotation;
                 let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
                 let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
 
-                if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
 
-                    let spriteRotation = structure.spriteRotation(rotation)
+                let spriteRotation = structure.spriteRotation(rotation)
 
-                    //create canvas
-                    let tempCanvas = document.createElement('canvas')
-                    tempCanvas.width = canvasSize.width
-                    tempCanvas.height = canvasSize.height
-                    let tempctx = tempCanvas.getContext('2d')
-
-                    tempctx.drawImage(structure.imageObject[structure.state.current.name].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
-                    imageList[rotation] = tempCanvas
-
-                    if (structure.type == 'resource') {
-                        this.utils.addResourceBar(imageList[rotation], structure)
-                    }
-
-                    if (structure.type == 'bunker') {
-                        this.utils.addHealthBar(imageList[rotation], structure)
-                    }
+                //create canvas
+                let tempCanvas = document.createElement('canvas')
+                tempCanvas.width = canvasSize.width
+                tempCanvas.height = canvasSize.height
+                let tempctx = tempCanvas.getContext('2d')
 
 
-                    this.utils.cropOutTiles(imageList[rotation], structure.imageObject.spriteOffset, keyObj, rotatedMap)
-                    this.utils.darkenSprite(imageList[rotation], structure)
+                tempctx.drawImage(structure.imageObject[structure.state.current.name].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                imageList[rotation] = tempCanvas
 
-                } else {
-                    imageList[rotation] = null
+                if (structure.type == 'resource') {
+                    this.utils.addResourceBar(imageList[rotation], structure)
                 }
+
+                if (structure.type == 'bunker') {
+                    this.utils.addHealthBar(imageList[rotation], structure)
+                }
+
+
+                this.utils.cropOutTiles(imageList[rotation], structure.imageObject.spriteOffset, keyObj, rotatedMap)
+                this.utils.darkenSprite(imageList[rotation], structure)
+
             }
 
             structure.images[i] = imageList
@@ -77,21 +74,17 @@ export default class StructureRendererClass {
         //prerender shadow images
         if (structure.imageObject.shadowImages) {
             let imageList = []
-            for (let rotation = 0; rotation < 12; rotation++) {
-                if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount == 0) {
+            for (let rotation = 0; rotation < 6; rotation++) {
 
-                    this.cameraData.rotation = rotation;
-                    let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-                    let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
+                this.cameraData.rotation = rotation;
+                let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+                let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
 
 
-                    let shadowImage = this.utils.cropStructureShadow(structure.imageObject.shadowImages[rotation], structure.imageObject.shadowSize, structure.imageObject.shadowOffset, keyObj, rotatedMap)
+                let shadowImage = this.utils.cropStructureShadow(structure.imageObject.shadowImages[rotation], structure.imageObject.shadowSize, structure.imageObject.shadowOffset, keyObj, rotatedMap)
 
-                    imageList[rotation] = shadowImage
+                imageList[rotation] = shadowImage
 
-                } else {
-                    imageList[rotation] = null
-                }
             }
 
             structure.shadowImages[0] = imageList

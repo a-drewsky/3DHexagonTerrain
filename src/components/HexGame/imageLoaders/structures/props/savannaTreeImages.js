@@ -32,7 +32,7 @@ export default class SavannaTreeImagesClass extends ImageLoaderClass {
         }
 
         this.padding = {
-            'default': [null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}, null, {x:10,y:6}]
+            'default': [{x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}]
         }
 
         this.rows = {

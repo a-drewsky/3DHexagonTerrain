@@ -60,8 +60,8 @@ export default class CameraControllerClass {
                 break;
         }
 
-        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
-        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
+        if (this.cameraData.rotation >= 6) this.cameraData.rotation = this.cameraData.rotation - 6;
+        if (this.cameraData.rotation < 0) this.cameraData.rotation = 6 + this.cameraData.rotation;
 
         this.cameraData.setVelocity();
     }
@@ -108,17 +108,17 @@ export default class CameraControllerClass {
     }
 
     rotateRight = () => {
-        this.cameraData.clearAnchorPoint();
-        this.cameraData.rotation += this.cameraData.rotationAmount
-        if (this.cameraData.rotation >= 12) this.cameraData.rotation = 0 + (this.cameraData.rotation - 12);
-        this.cameraData.setVelocity();
+        this.cameraData.clearAnchorPoint()
+        this.cameraData.rotation++
+        if (this.cameraData.rotation >= 6) this.cameraData.rotation = this.cameraData.rotation - 6
+        this.cameraData.setVelocity()
     }
 
     rotateLeft = () => {
-        this.cameraData.clearAnchorPoint();
-        this.cameraData.rotation -= this.cameraData.rotationAmount
-        if (this.cameraData.rotation <= -1) this.cameraData.rotation = 11 + (this.cameraData.rotation + 1);
-        this.cameraData.setVelocity();
+        this.cameraData.clearAnchorPoint()
+        this.cameraData.rotation--
+        if (this.cameraData.rotation < 0) this.cameraData.rotation = 6 + this.cameraData.rotation
+        this.cameraData.setVelocity()
     }
 
 }

@@ -96,8 +96,7 @@ export default class UnitClass {
 
     spriteRotation = (cameraRotation) => {
         let spriteRotation = this.rotation + cameraRotation
-        if (cameraRotation % 2 == 1) spriteRotation--
-        if (spriteRotation > 11) spriteRotation -= 12
+        if (spriteRotation >= 6) spriteRotation -= 6
         return spriteRotation
     }
 

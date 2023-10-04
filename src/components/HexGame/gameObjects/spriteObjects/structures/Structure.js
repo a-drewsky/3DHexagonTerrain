@@ -5,7 +5,7 @@ export default class StructureClass {
             q: pos.q,
             r: pos.r
         }
-        this.rotation = 1
+        this.rotation = null
 
         this.images = []
         this.shadowImages = []
@@ -13,7 +13,7 @@ export default class StructureClass {
         this.id = config.id
         this.sprite = config.sprite
         this.height = config.height
-        if (config.rotation) this.rotation = config.rotation
+        if (config.rotation !== undefined) this.rotation = config.rotation
 
         this.imageObject = images[config.sprite]
         this.hexMapData = hexMapData
@@ -28,8 +28,7 @@ export default class StructureClass {
 
     spriteRotation = (cameraRotation) => {
         let spriteRotation = this.rotation + cameraRotation
-        if (cameraRotation % 2 == 1) spriteRotation--
-        if (spriteRotation > 11) spriteRotation -= 12
+        if (spriteRotation >= 6) spriteRotation -= 6
         return spriteRotation
     }
 

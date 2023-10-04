@@ -31,7 +31,7 @@ export default class DefaultFlagImagesClass extends ImageLoaderClass {
         }
 
         this.padding = {
-            'default': [null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}, null, {x: 0, y: 3}]
+            'default': [{x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}]
         }
 
         this.rows = {

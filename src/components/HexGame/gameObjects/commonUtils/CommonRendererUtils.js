@@ -16,50 +16,26 @@ export default class CommonRendererUtilsClass {
 
         this.shadowPositions = {
             0: {
-                distance: { q: -1, r: 2 },
-                startingPoints: [{ q: -1, r: 2 }, { q: -1, r: 1 }, { q: 0, r: 1 }]
-            },
-            1: {
                 distance: { q: -1, r: 1 },
                 startingPoints: [{ q: -1, r: 1 }]
             },
-            2: {
-                distance: { q: -2, r: 1 },
-                startingPoints: [{ q: -2, r: 1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
-            },
-            3: {
+            1: {
                 distance: { q: -1, r: 0 },
                 startingPoints: [{ q: -1, r: 0 }]
             },
-            4: {
-                distance: { q: -1, r: -1 },
-                startingPoints: [{ q: -1, r: -1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
-            },
-            5: {
+            2: {
                 distance: { q: 0, r: -1 },
                 startingPoints: [{ q: 0, r: -1 }]
             },
-            6: {
-                distance: { q: 1, r: -2 },
-                startingPoints: [{ q: 1, r: -2 }, { q: 0, r: -1 }, { q: 1, r: -1 }]
-            },
-            7: {
+            3: {
                 distance: { q: 1, r: -1 },
                 startingPoints: [{ q: 1, r: -1 }]
             },
-            8: {
-                distance: { q: 2, r: -1 },
-                startingPoints: [{ q: 2, r: -1 }, { q: 1, r: -1 }, { q: 1, r: 0 }]
-            },
-            9: {
+            4: {
                 distance: { q: 1, r: 0 },
                 startingPoints: [{ q: 1, r: 0 }]
             },
-            10: {
-                distance: { q: 1, r: 1 },
-                startingPoints: [{ q: 1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }]
-            },
-            11: {
+            5: {
                 distance: { q: 0, r: 1 },
                 startingPoints: [{ q: 0, r: 1 }]
             }
@@ -171,7 +147,7 @@ export default class CommonRendererUtilsClass {
 
     cropStructureShadow = (image, imageSize, imageOffset, keyObj, rotatedMap) => {
 
-        if(!this.needsShadowCropIn(keyObj, rotatedMap) && !this.needsShadowCropOut(keyObj, rotatedMap)) return image
+        if (!this.needsShadowCropIn(keyObj, rotatedMap) && !this.needsShadowCropOut(keyObj, rotatedMap)) return image
 
         let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
         let tileRef = rotatedMap.get(tileObj.q + ',' + tileObj.r)
@@ -207,25 +183,14 @@ export default class CommonRendererUtilsClass {
                     y: (this.mapData.size * this.mapData.squish) + this.mapData.size * 2 * imageOffset.y + diff.y
                 }
 
-                if (this.cameraData.rotation % 2 == 1) {
-                    tilePos.x += this.mapData.flatTopVecQ.x * cropList[i].q + this.mapData.flatTopVecR.x * cropList[i].r
-                    tilePos.y += this.mapData.flatTopVecQ.y * cropList[i].q * this.mapData.squish + this.mapData.flatTopVecR.y * cropList[i].r * this.mapData.squish
+                tilePos.x += this.mapData.flatTopVecQ.x * cropList[i].q + this.mapData.flatTopVecR.x * cropList[i].r
+                tilePos.y += this.mapData.flatTopVecQ.y * cropList[i].q * this.mapData.squish + this.mapData.flatTopVecR.y * cropList[i].r * this.mapData.squish
 
-                    this.clipFlatHexagonPath(
-                        tempctx,
-                        tilePos.x,
-                        tilePos.y
-                    );
-                } else {
-                    tilePos.x += this.mapData.VecQ.x * cropList[i].q + this.mapData.VecR.x * cropList[i].r
-                    tilePos.y += this.mapData.VecQ.y * cropList[i].q * this.mapData.squish + this.mapData.VecR.y * cropList[i].r * this.mapData.squish
-
-                    this.clipPointyHexagonPath(
-                        tempctx,
-                        tilePos.x,
-                        tilePos.y
-                    );
-                }
+                this.clipFlatHexagonPath(
+                    tempctx,
+                    tilePos.x,
+                    tilePos.y
+                );
             }
         }
 
@@ -258,14 +223,14 @@ export default class CommonRendererUtilsClass {
             let cropListTile = this.tileData.getAnyEntry(cropListTileRef.q, cropListTileRef.r)
 
             let distance = this.commonUtils.getDistance(tileRef, cropListTileRef)
-            if (cropListTile.height - (distance - 1)*2 > tileHeight) {
+            if (cropListTile.height - (distance - 1) * 2 > tileHeight) {
                 return true
             }
         }
 
         return false
     }
-    
+
     needsShadowCropIn = (keyObj, rotatedMap) => {
 
         let tileObj = this.commonUtils.roundToNearestHex(keyObj.q, keyObj.r)
@@ -281,7 +246,7 @@ export default class CommonRendererUtilsClass {
             let cropListTileRef = rotatedMap.get((tileObj.q + cropList[i].q) + ',' + (tileObj.r + cropList[i].r))
             if (!cropListTileRef) return true
             let cropListTile = this.tileData.getAnyEntry(cropListTileRef.q, cropListTileRef.r)
-            
+
             if (cropListTile.height != tileHeight) {
                 return true
             }
@@ -308,7 +273,7 @@ export default class CommonRendererUtilsClass {
             let cropListTile = this.tileData.getAnyEntry(cropListTileRef.q, cropListTileRef.r)
 
             let distance = this.commonUtils.getDistance(tileRef, cropListTileRef)
-            if (cropListTile.height - (distance - 1)*2 > tileHeight) {
+            if (cropListTile.height - (distance - 1) * 2 > tileHeight) {
                 return true
             }
         }
@@ -320,7 +285,7 @@ export default class CommonRendererUtilsClass {
     //create common function
     cropOutTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
 
-        if(!this.needsCropping(keyObj, rotatedMap)) return
+        if (!this.needsCropping(keyObj, rotatedMap)) return
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
@@ -365,13 +330,9 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.cameraData.rotation % 2 == 1) {
-                    clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                } else {
-                    clipXOffset = this.mapData.VecQ.x * (tileObj.q + cropList[i].q) + this.mapData.VecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.VecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.VecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                }
+                clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
+                clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
+
 
                 let height = cropListTile.height - tileHeight
 
@@ -398,7 +359,7 @@ export default class CommonRendererUtilsClass {
 
     cropOutShadowTiles = (canvas, imageOffset, keyObj, rotatedMap) => {
 
-        if(!this.needsShadowCropOut(keyObj, rotatedMap)) return
+        if (!this.needsShadowCropOut(keyObj, rotatedMap)) return
 
         let clipFlatHexagonPathForImage = (ctx, x, y, height) => {
             ctx.moveTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
@@ -443,13 +404,9 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.cameraData.rotation % 2 == 1) {
-                    clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                } else {
-                    clipXOffset = this.mapData.VecQ.x * (tileObj.q + cropList[i].q) + this.mapData.VecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.VecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.VecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                }
+                clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
+                clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
+
 
                 let height = cropListTile.height - tileHeight
 
@@ -515,13 +472,9 @@ export default class CommonRendererUtilsClass {
                 let clipXOffset;
                 let clipYOffset;
 
-                if (this.cameraData.rotation % 2 == 1) {
-                    clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                } else {
-                    clipXOffset = this.mapData.VecQ.x * (tileObj.q + cropList[i].q) + this.mapData.VecR.x * (tileObj.r + cropList[i].r);
-                    clipYOffset = this.mapData.VecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.VecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
-                }
+                clipXOffset = this.mapData.flatTopVecQ.x * (tileObj.q + cropList[i].q) + this.mapData.flatTopVecR.x * (tileObj.r + cropList[i].r);
+                clipYOffset = this.mapData.flatTopVecQ.y * (tileObj.q + cropList[i].q) * this.mapData.squish + this.mapData.flatTopVecR.y * (tileObj.r + cropList[i].r) * this.mapData.squish;
+
 
                 let height = cropListTile.height - tileHeight
 
@@ -563,7 +516,7 @@ export default class CommonRendererUtilsClass {
             x: canvas.width / 2 - healthbarSpriteSize.width / 2,
             y: 0
         }
-        
+
         tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
 
     }
@@ -614,47 +567,17 @@ export default class CommonRendererUtilsClass {
 
     clipHexagonShadowPath = (ctx, x, y, shadowX, shadowY, rotation, orientation) => {
 
-        if (orientation == 'pointy') {
-            if (rotation % 2 == 0) {
-                ctx.moveTo(x + Math.sin(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * rotation) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * rotation) * (this.mapData.size * this.mapData.squish));
-            } else {
-                ctx.moveTo(x + Math.sin(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * (rotation - 1)) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * (rotation - 1)) * (this.mapData.size * this.mapData.squish));
-            }
-        } else {
-            if (rotation % 2 == 0) {
-                ctx.moveTo(x + Math.sin(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * rotation - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-            } else {
-                ctx.moveTo(x + Math.sin(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 0 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 2 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 3 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-                ctx.lineTo(x + Math.sin(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 6 - this.mapData.sideLength / 2 * (rotation - 1) - this.mapData.sideLength / 2) * (this.mapData.size * this.mapData.squish));
-            }
-        }
+        ctx.moveTo(x + Math.sin(this.mapData.sideLength * 0 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 0 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(x + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 1 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 1 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 2 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 2 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 3 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 3 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(shadowX + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, shadowY + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(x + Math.sin(this.mapData.sideLength * 4 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 4 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(x + Math.sin(this.mapData.sideLength * 5 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 5 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+        ctx.lineTo(x + Math.sin(this.mapData.sideLength * 6 - this.mapData.sideLength * rotation - Math.PI/6) * this.mapData.size, y + Math.cos(this.mapData.sideLength * 6 - this.mapData.sideLength * rotation - Math.PI/6) * (this.mapData.size * this.mapData.squish));
+
+
 
     }
 

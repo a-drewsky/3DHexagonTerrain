@@ -106,7 +106,7 @@ export default class HexMapControllerUtilsClass {
 
         let placementSet = [...this.selectionData.selections.placement]
 
-        if(placementSet.findIndex(placementTile => placementTile.q == tile.position.q && placementTile.r == tile.position.r) != -1) return true
+        if (placementSet.findIndex(placementTile => placementTile.q == tile.position.q && placementTile.r == tile.position.r) != -1) return true
         return false
     }
 
@@ -115,10 +115,10 @@ export default class HexMapControllerUtilsClass {
         let placementSet = new Set()
 
         let bunkers = this.spriteManager.structures.data.getBunkersArray()
-        for(let bunker of bunkers){
+        for (let bunker of bunkers) {
             let neighborKeys = this.tileManager.data.getNeighborKeys(bunker.position.q, bunker.position.r)
-            for(let neighborKey of neighborKeys){
-                if(this.pathFinder.isValid(neighborKey.q, neighborKey.r)){
+            for (let neighborKey of neighborKeys) {
+                if (this.pathFinder.isValid(neighborKey.q, neighborKey.r)) {
                     placementSet.add(this.commonUtils.join(neighborKey.q, neighborKey.r))
                 }
             }
@@ -188,11 +188,11 @@ export default class HexMapControllerUtilsClass {
             }
 
             let structureData = null
-            if(this.spriteManager.structures.data.hasStructure(rotatedTile.position.q, rotatedTile.position.r)){
+            if (this.spriteManager.structures.data.hasStructure(rotatedTile.position.q, rotatedTile.position.r)) {
                 structureData = this.spriteManager.structures.data.getStructure(rotatedTile.position.q, rotatedTile.position.r).data
             }
             let unitData = null
-            if(this.spriteManager.units.data.hasUnit(rotatedTile.position.q, rotatedTile.position.r)){
+            if (this.spriteManager.units.data.hasUnit(rotatedTile.position.q, rotatedTile.position.r)) {
                 unitData = this.spriteManager.units.data.getUnit(rotatedTile.position.q, rotatedTile.position.r)
             }
 
@@ -278,17 +278,11 @@ export default class HexMapControllerUtilsClass {
         let centerHexPos;
 
 
-        if (rotation % 2 == 0) {
-            centerHexPos = {
-                q: (Math.sqrt(3) / 3 * centerPos.x - 1 / 3 * (centerPos.y * (1 / squish))) / size,
-                r: ((centerPos.y * (1 / squish)) * (2 / 3)) / size
-            }
-        } else {
-            centerHexPos = {
-                q: ((2 / 3) * centerPos.x) / size,
-                r: ((-1 / 3) * centerPos.x + Math.sqrt(3) / 3 * (centerPos.y * (1 / squish))) / size
-            }
+        centerHexPos = {
+            q: ((2 / 3) * centerPos.x) / size,
+            r: ((-1 / 3) * centerPos.x + Math.sqrt(3) / 3 * (centerPos.y * (1 / squish))) / size
         }
+
 
         return centerHexPos;
     }

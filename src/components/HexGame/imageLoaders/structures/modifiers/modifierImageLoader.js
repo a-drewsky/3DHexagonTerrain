@@ -89,8 +89,8 @@ export default class ModifierImageLoaderClass {
 
             this.modifierImages.push(this[image])
 
-            if(data.shadow !== null) this.shadowImages.push([null, this['backRight_' + data.shadow], null, this['frontRight_' + data.shadow], null, this['front_' + data.shadow], null, this['frontLeft_' + data.shadow], null, this['backLeft_' + data.shadow], null, this['back_' + data.shadow]])
-            else this.shadowImages.push([null, null, null, null, null, null, null, null, null, null, null, null])
+            if(data.shadow !== null) this.shadowImages.push([this['backRight_' + data.shadow], this['frontRight_' + data.shadow], this['front_' + data.shadow], this['frontLeft_' + data.shadow], this['backLeft_' + data.shadow], this['back_' + data.shadow]])
+            else this.shadowImages.push([null, null, null, null, null, null])
         }
 
         startGame();

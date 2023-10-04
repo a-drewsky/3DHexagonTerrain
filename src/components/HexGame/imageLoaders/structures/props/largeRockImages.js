@@ -32,7 +32,7 @@ export default class LargeRockImagesClass extends ImageLoaderClass {
         }
 
         this.padding = {
-            'default': [null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}]
+            'default': [{x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}]
         }
 
         this.rows = {

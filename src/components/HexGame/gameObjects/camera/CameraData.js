@@ -3,9 +3,7 @@ const MAX_ZOOM = 100;
 
 const ZOOM_AMOUNT = 50;
 
-const ROTATION_AMOUNT = 2
-
-const INIT_CAMERA_ROTATION = 1 //0 is pointy
+const INIT_CAMERA_ROTATION = 0
 
 export default class CameraDataClass {
 
@@ -44,7 +42,6 @@ export default class CameraDataClass {
 
         this.maxZoom = MAX_ZOOM;
         this.zoomAmount = ZOOM_AMOUNT;
-        this.rotationAmount = ROTATION_AMOUNT;
         this.initCameraRotation = INIT_CAMERA_ROTATION;
 
     }

@@ -118,14 +118,14 @@ export default class HexMapControllerClass {
     }
 
     selectCard = (cardNum) => {
-        if(this.mapData.curState() != 'selectTile') return
+        if (this.mapData.curState() != 'selectTile') return
 
-        if(this.cardData.selectedCard == cardNum){
+        if (this.cardData.selectedCard == cardNum) {
             this.cardData.selectedCard = null
             return
         }
         this.cardData.selectedCard = null
-        if(this.cardData.cards[cardNum].flipped){
+        if (this.cardData.cards[cardNum].flipped) {
             this.cardData.flipCard()
             this.cardData.addCard()
         } else {
@@ -135,7 +135,7 @@ export default class HexMapControllerClass {
 
     useCard = () => {
         if (this.mapData.curState() != 'selectTile') return
-        if(!this.cardData.canUseCard(this.mapData.resources)) return
+        if (!this.cardData.canUseCard(this.mapData.resources)) return
 
         this.selectionData.resetSelected()
         this.selectionData.resetHover()
@@ -162,44 +162,32 @@ export default class HexMapControllerClass {
         let zoom = zoomLevel * zoomAmount
         let newRotation = this.cameraManager.data.rotation
 
-        for (let i = 0; i < this.cameraManager.data.rotationAmount; i++) {
-            let centerHexPos = this.utils.getCenterHexPos(newRotation);
+        let centerHexPos = this.utils.getCenterHexPos(newRotation);
 
-            newRotation++
-            if (newRotation >= 12) newRotation = 0 + (newRotation - 12);
+        newRotation++
+        if (newRotation >= 6) newRotation = newRotation - 6
 
-            //Set camera position
-            let squish = this.mapData.squish;
+        //Set camera position
+        let squish = this.mapData.squish;
 
-            if (newRotation % 2 == 1) {
 
-                let vecQ = this.mapData.flatTopVecQ;
-                let vecR = this.mapData.flatTopVecR;
+        let vecQ = this.mapData.flatTopVecQ;
+        let vecR = this.mapData.flatTopVecR;
 
-                this.cameraManager.data.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
-                );
+        centerHexPos.s = -centerHexPos.q - centerHexPos.r
+        let newR = centerHexPos.r;
+        let newS = centerHexPos.s;
 
-            } else {
+        centerHexPos.q = -newR;
+        centerHexPos.r = -newS;
 
-                centerHexPos.s = -centerHexPos.q - centerHexPos.r
-                let newR = centerHexPos.r;
-                let newS = centerHexPos.s;
+        this.cameraManager.data.setCameraPos(
+            vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+            vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+        )
 
-                centerHexPos.q = -newR;
-                centerHexPos.r = -newS;
 
-                let vecQ = this.mapData.VecQ;
-                let vecR = this.mapData.VecR;
 
-                this.cameraManager.data.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
-                );
-
-            }
-        }
 
         this.cameraManager.controller.rotateRight()
         this.selectionData.resetHover()
@@ -215,44 +203,28 @@ export default class HexMapControllerClass {
 
         let newRotation = this.cameraManager.data.rotation
 
-        for (let i = 0; i < this.cameraManager.data.rotationAmount; i++) {
-            let centerHexPos = this.utils.getCenterHexPos(newRotation);
+        let centerHexPos = this.utils.getCenterHexPos(newRotation);
 
-            newRotation--
-            if (newRotation <= -1) newRotation = 11 + (newRotation + 1);
+        newRotation--
+        if (newRotation < 0) newRotation = 6 + newRotation;
 
-            //Set camera position
-            let squish = this.mapData.squish;
+        //Set camera position
+        let squish = this.mapData.squish;
 
-            if (newRotation % 2 == 0) {
+        centerHexPos.s = -centerHexPos.r - centerHexPos.q
+        let newQ = centerHexPos.q;
+        let newS = centerHexPos.s;
 
-                let vecQ = this.mapData.VecQ;
-                let vecR = this.mapData.VecR;
+        centerHexPos.r = -newQ;
+        centerHexPos.q = -newS;
 
-                this.cameraManager.data.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
-                );
+        let vecQ = this.mapData.flatTopVecQ;
+        let vecR = this.mapData.flatTopVecR;
 
-            } else {
-
-                centerHexPos.s = -centerHexPos.r - centerHexPos.q
-                let newQ = centerHexPos.q;
-                let newS = centerHexPos.s;
-
-                centerHexPos.r = -newQ;
-                centerHexPos.q = -newS;
-
-                let vecQ = this.mapData.flatTopVecQ;
-                let vecR = this.mapData.flatTopVecR;
-
-                this.cameraManager.data.setCameraPos(
-                    vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-                    vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
-                );
-
-            }
-        }
+        this.cameraManager.data.setCameraPos(
+            vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
+            vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+        );
 
         this.cameraManager.controller.rotateLeft()
         this.selectionData.resetHover()

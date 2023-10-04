@@ -19,18 +19,12 @@ export default class HexMapViewTableClass {
       this.drawCanvas = null
 
       this.rotationAlpha = {
-         0: 1,
-         1: 0.9,
-         2: 0.8,
-         3: 0.7,
-         4: 0.6,
-         5: 0.5,
-         6: 0.4,
-         7: 0.5,
-         8: 0.6,
-         9: 0.7,
-         10: 0.8,
-         11: 0.9,
+         0: 0.9,
+         1: 0.7,
+         2: 0.5,
+         3: 0.5,
+         4: 0.7,
+         5: 0.9,
       }
 
    }
@@ -67,11 +61,11 @@ export default class HexMapViewTableClass {
 
       let shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
 
-      if (shadowRotation > 11) shadowRotation -= 12;
+      if (shadowRotation >= 6) shadowRotation -= 6;
 
 
 
-      if (this.cameraData.rotation % 3 == 0) {
+      if (this.cameraData.rotation == 1 || this.cameraData.rotation == 4) {
 
          tempTablePosition.shift();
          tempTablePosition.shift();
@@ -99,7 +93,7 @@ export default class HexMapViewTableClass {
 
          let shiftedShadowRotation = this.mapData.shadowRotation + Math.floor(this.cameraData.rotation / 3) * 3;
 
-         if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
+         if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6;
 
 
          tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
@@ -115,7 +109,7 @@ export default class HexMapViewTableClass {
          tempctx.stroke();
 
          shiftedShadowRotation += 3;
-         if (shiftedShadowRotation > 11) shiftedShadowRotation -= 12;
+         if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6
 
          tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
          tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`

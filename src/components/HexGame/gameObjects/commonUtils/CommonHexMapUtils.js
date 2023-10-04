@@ -54,8 +54,7 @@ export default class CommonHexMapUtilsClass {
 
     rotateTile = (q, r, rotation) => {
         let s = -q - r;
-        let angle = rotation * 15;
-        if (rotation % 2 == 1) angle -= 15;
+        let angle = rotation * 30;
 
         let newQ = q;
         let newR = r;
@@ -91,7 +90,7 @@ export default class CommonHexMapUtilsClass {
     }
 
     getDirection = (pos1, pos2) => {
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+        let directionMap = [{ q: 1, r: -1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
         let rotatePosMap = directionMap.map(pos => pos === null ? null : { q: pos1.q - pos.q, r: pos1.r - pos.r })
 
         let closestPos
@@ -111,7 +110,7 @@ export default class CommonHexMapUtilsClass {
     }
 
     getAdjacentPos = (pos, rotation) => {
-        let directionMap = [null, { q: 1, r: -1 }, null, { q: 1, r: 0 }, null, { q: 0, r: 1 }, null, { q: -1, r: 1 }, null, { q: -1, r: 0 }, null, { q: 0, r: -1 }]
+        let directionMap = [{ q: 1, r: -1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
         
         let direction = directionMap[rotation]
 

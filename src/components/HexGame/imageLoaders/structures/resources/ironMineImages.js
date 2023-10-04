@@ -31,10 +31,10 @@ export default class IronMineImagesClass extends ImageLoaderClass {
         }
 
         this.padding = {
-            'resources_lte_100': [null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}, null, {x:0,y:11}],
-            'resources_lte_75': [null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}, null, {x:0,y:13}],
-            'resources_lte_50': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}],
-            'resources_lte_25': [null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}, null, {x:0,y:18}]  
+            'resources_lte_100': [{x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}],
+            'resources_lte_75': [{x:0,y:13}, {x:0,y:13}, {x:0,y:13}, {x:0,y:13}, {x:0,y:13}, {x:0,y:13}],
+            'resources_lte_50': [{x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}],
+            'resources_lte_25': [{x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}]  
         }
 
         this.rows = {

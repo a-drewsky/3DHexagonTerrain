@@ -30,17 +30,13 @@ export default class UnitRendererClass {
 
     renderStaticSprites = (unit) => {
 
-        if(unit.position.q == null || unit.position.r == null) return
+        if (unit.position.q == null || unit.position.r == null) return
 
         let initRotation = this.cameraData.rotation
 
         for (let i = 0; i < unit.imageObject.idle.images.length; i++) {
             let imageList = []
-            for (let rotation = 0; rotation < 12; rotation++) {
-                if ((rotation - initRotation) % this.cameraData.rotationAmount != 0) {
-                    imageList[rotation] = null
-                    continue
-                }
+            for (let rotation = 0; rotation < 6; rotation++) {
 
 
                 this.cameraData.rotation = rotation;
@@ -58,7 +54,7 @@ export default class UnitRendererClass {
 
                 tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
-                
+
                 this.utils.addHealthBar(imageList[rotation], unit)
                 this.utils.darkenSprite(imageList[rotation], unit)
                 this.utils.cropOutTiles(imageList[rotation], sprite.offset, keyObj, rotatedMap)
@@ -73,17 +69,13 @@ export default class UnitRendererClass {
 
     renderStaticShadows = (unit) => {
 
-        if(unit.position.q == null || unit.position.r == null) return
+        if (unit.position.q == null || unit.position.r == null) return
 
         let initRotation = this.cameraData.rotation
 
         if (unit.imageObject.shadowImages) {
             let imageList = []
-            for (let rotation = 0; rotation < 12; rotation++) {
-                if ((rotation - this.cameraData.initCameraRotation) % this.cameraData.rotationAmount != 0) {
-                    imageList[rotation] = null
-                    continue
-                }
+            for (let rotation = 0; rotation < 6; rotation++) {
 
                 this.cameraData.rotation = rotation;
                 let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]

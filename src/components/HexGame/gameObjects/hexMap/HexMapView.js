@@ -63,8 +63,8 @@ export default class HexMapViewClass {
       //Set render canvas size
       let keys = this.tileManager.data.getKeys();
 
-      let mapWidth = Math.max(...keys.map(key => this.mapData.VecQ.x * key.q + this.mapData.VecR.x * key.r)) - Math.min(...keys.map(key => this.mapData.VecQ.x * key.q + this.mapData.VecR.x * key.r));
-      let mapHeight = Math.max(...keys.map(key => this.mapData.VecQ.y * key.q * this.mapData.squish + this.mapData.VecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.VecQ.y * key.q * this.mapData.squish + this.mapData.VecR.y * key.r * this.mapData.squish));
+      let mapWidth = Math.max(...keys.map(key => this.mapData.flatTopVecQ.x * key.q + this.mapData.flatTopVecR.x * key.r)) - Math.min(...keys.map(key => this.mapData.flatTopVecQ.x * key.q + this.mapData.flatTopVecR.x * key.r));
+      let mapHeight = Math.max(...keys.map(key => this.mapData.flatTopVecQ.y * key.q * this.mapData.squish + this.mapData.flatTopVecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.flatTopVecQ.y * key.q * this.mapData.squish + this.mapData.flatTopVecR.y * key.r * this.mapData.squish));
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
       this.drawCanvas = document.createElement('canvas')
@@ -124,13 +124,9 @@ export default class HexMapViewClass {
 
       //set the cameraData position
       let vecQ, vecR
-      if (this.cameraData.rotation % 2 == 0) {
-         vecQ = this.mapData.VecQ
-         vecR = this.mapData.VecR
-      } else {
-         vecQ = this.mapData.flatTopVecQ
-         vecR = this.mapData.flatTopVecR
-      }
+      vecQ = this.mapData.flatTopVecQ
+      vecR = this.mapData.flatTopVecR
+      
       this.cameraData.setPosition(
          mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width / 2,
          mappos.y + (camPos.q * vecQ.y * this.mapData.squish + camPos.r * vecR.y * this.mapData.squish) - this.canvas.height / 2

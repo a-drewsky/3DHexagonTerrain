@@ -20,8 +20,8 @@ export default class HexMapDataMapClass {
         this.shadowRotation = SHADOW_ROTATION;
         this.elevationRanges = HEXMAP_ELEVATION_RANGES
 
-        this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
-        this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
+        // this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
+        // this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
         this.flatTopVecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
         this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
         this.sideLength = Math.PI / 3;

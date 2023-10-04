@@ -23,7 +23,7 @@ export default class ProjectileImagesArrowClass extends ImageLoaderClass {
         }
 
         this.padding = [
-            [null, {x: 10, y: 9}, null, {x: 10, y: 9}, null, {x: 10, y: 9}, null, {x: 10, y: 9}, null, {x: 10, y: 9}, null, {x: 10, y: 9}]
+            [{x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}]
         ]
 
         // this.icon = icon_image

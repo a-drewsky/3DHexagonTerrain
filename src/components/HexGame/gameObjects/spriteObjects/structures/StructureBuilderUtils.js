@@ -94,12 +94,12 @@ export default class StructureBuilderUtilsClass {
             if (posName.r == -1) posName.r = 'm1'
             
             //set main base rotation
-            if(posName.q == 1 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_1')
-            else if(posName.q == 1 && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_3')
-            else if(posName.q == 0 && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_5')
-            else if(posName.q == 'm1' && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_7')
-            else if(posName.q == 'm1' && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_9')
-            else if(posName.q == 0 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_11')
+            if(posName.q == 1 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_0')
+            else if(posName.q == 1 && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_1')
+            else if(posName.q == 0 && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_2')
+            else if(posName.q == 'm1' && posName.r == 1) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_3')
+            else if(posName.q == 'm1' && posName.r == 0) this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_4')
+            else if(posName.q == 0 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey.q, tileToSetKey.r, 'main_bunker_5')
 
             
 

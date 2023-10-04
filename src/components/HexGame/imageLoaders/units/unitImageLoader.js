@@ -36,11 +36,11 @@ export default class UnitImageLoaderClass {
             }
 
             for (let frame of data) {
-                this[animation].images.push([null, this['backRight_' + frame], null, this['frontRight_' + frame], null, this['front_' + frame], null, this['frontLeft_' + frame], null, this['backLeft_' + frame], null, this['back_' + frame]])
+                this[animation].images.push([this['backRight_' + frame], this['frontRight_' + frame], this['front_' + frame], this['frontLeft_' + frame], this['backLeft_' + frame], this['back_' + frame]])
             }
         }
 
-        this.shadowImages = [null, this.backRight_shadow, null, this.frontRight_shadow, null, this.front_shadow, null, this.frontLeft_shadow, null, this.backLeft_shadow, null, this.back_shadow]
+        this.shadowImages = [this.backRight_shadow, this.frontRight_shadow, this.front_shadow, this.frontLeft_shadow, this.backLeft_shadow, this.back_shadow]
 
         startGame();
     }
