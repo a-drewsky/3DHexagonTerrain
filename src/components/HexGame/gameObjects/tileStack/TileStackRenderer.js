@@ -198,8 +198,6 @@ export default class TileStackRendererClass {
 
         shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
 
-        console.log(shadowRotation)
-
         if (shadowRotation >= 6) shadowRotation -= 6;
 
         shadowDims = {

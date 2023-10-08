@@ -101,30 +101,26 @@ export default class UnitViewClass {
 
     }
 
-    drawStaticShadow = (drawctx, spriteObject) => {
-        if (this.commonUtils.checkShadowImages(spriteObject) == false) return
+    drawStaticShadow = (drawctx, unit) => {
+        if (this.commonUtils.checkShadowImages(unit) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-        let sprite = spriteObject.imageObject
-        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+        let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
 
-        let shadowSize
-
-        let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
-
-
-        shadowSize = {
-            width: this.mapData.size * 2 * sprite.shadowSize.width,
-            height: this.mapData.size * 2 * sprite.shadowSize.height
+        let shadowImage = this.images.shadows[unit.imageObject.shadow][this.cameraData.rotation]
+        
+        let shadowSize = {
+            width: this.mapData.size * 2 * shadowImage.size.w,
+            height: this.mapData.size * 2 * shadowImage.size.h
         }
 
-        shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
-        shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
-
+        let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
+        shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
+        shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
         drawctx.drawImage(
-            spriteObject.shadowImages[this.cameraData.rotation],
+            unit.shadowImages[this.cameraData.rotation],
             shadowPos.x,
             shadowPos.y,
             shadowSize.width,
@@ -188,11 +184,12 @@ export default class UnitViewClass {
         )
     }
 
-    drawActionShadow = (drawctx, spriteObject) => {
-        if (this.commonUtils.checkShadowImages(spriteObject) == false) return
+    drawActionShadow = (drawctx, unit) => {
+        if (this.commonUtils.checkShadowImages(unit) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-        let sprite = spriteObject.imageObject
+        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+
+        let shadowImage = this.images.shadows[unit.imageObject.shadow][this.cameraData.rotation]
 
         let pos = {
             q: keyObj.q,
@@ -200,14 +197,14 @@ export default class UnitViewClass {
         }
 
         let closestTile = {
-            q: spriteObject.position.q,
-            r: spriteObject.position.r
+            q: unit.position.q,
+            r: unit.position.r
         }
 
-        if (spriteObject.destination != null) {
-            let point1 = spriteObject.position
-            let point2 = spriteObject.destination
-            let percent = (spriteObject.destinationCurTime - spriteObject.destinationStartTime) / spriteObject.travelTime
+        if (unit.destination != null) {
+            let point1 = unit.position
+            let point2 = unit.destination
+            let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
             let lerpPos = {
                 q: point1.q + (point2.q - point1.q) * percent,
                 r: point1.r + (point2.r - point1.r) * percent
@@ -215,8 +212,8 @@ export default class UnitViewClass {
             pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
             if (percent > 0.5) {
                 closestTile = {
-                    q: spriteObject.destination.q,
-                    r: spriteObject.destination.r
+                    q: unit.destination.q,
+                    r: unit.destination.r
                 }
             }
         }
@@ -227,16 +224,16 @@ export default class UnitViewClass {
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         shadowSize = {
-            width: this.mapData.size * 2 * sprite.shadowSize.width,
-            height: this.mapData.size * 2 * sprite.shadowSize.height
+            width: this.mapData.size * 2 * shadowImage.size.w,
+            height: this.mapData.size * 2 * shadowImage.size.h
         }
 
-        shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
-        shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
+        shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
+        shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
         drawctx.drawImage(
-            spriteObject.shadowImages,
+            unit.shadowImages,
             shadowPos.x,
             shadowPos.y,
             shadowSize.width,

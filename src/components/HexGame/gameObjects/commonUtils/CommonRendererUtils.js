@@ -162,8 +162,8 @@ export default class CommonRendererUtilsClass {
         }
 
         let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = this.mapData.size * 2 * imageSize.width
-        tempCanvas.height = this.mapData.size * 2 * imageSize.height
+        tempCanvas.width = this.mapData.size * 2 * imageSize.w
+        tempCanvas.height = this.mapData.size * 2 * imageSize.h
         let tempctx = tempCanvas.getContext('2d')
 
         let cropList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]

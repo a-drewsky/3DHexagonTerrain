@@ -39,30 +39,30 @@ export default class StructureViewClass{
       )
    }
 
-   drawShadow = (drawctx, spriteObject) => {
-      if (this.commonUtils.checkShadowImages(spriteObject) == false) return
+   drawShadow = (drawctx, structure) => {
+      if (this.commonUtils.checkShadowImages(structure) == false) return
 
-      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-      let sprite = spriteObject.imageObject
-      let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+      let shadowImage = this.images.shadows[structure.imageObject.shadow][this.cameraData.rotation]
+      let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
+      let height = this.tileData.getEntry(structure.position.q, structure.position.r).height
 
       let shadowSize
 
       let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
       shadowSize = {
-         width: this.mapData.size * 2 * sprite.shadowSize.width,
-         height: this.mapData.size * 2 * sprite.shadowSize.height
+         width: this.mapData.size * 2 * shadowImage.size.w,
+         height: this.mapData.size * 2 * shadowImage.size.h
       }
 
-      shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
-      shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
+      shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
+      shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
 
 
       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
       drawctx.drawImage(
-         spriteObject.shadowImages[0][this.cameraData.rotation],
+         structure.shadowImages[0][this.cameraData.rotation],
          shadowPos.x,
          shadowPos.y,
          shadowSize.width,

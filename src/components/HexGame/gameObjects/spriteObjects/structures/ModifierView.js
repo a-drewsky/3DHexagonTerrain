@@ -117,4 +117,34 @@ export default class ModifierViewClass{
 
     }
 
+    drawShadow = (drawctx, modifier) => {
+       if (this.commonUtils.checkShadowImages(modifier) == false) return
+
+       let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
+       let height = this.tileData.getEntry(modifier.position.q, modifier.position.r).height
+ 
+       let shadowSize
+ 
+       let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
+ 
+       shadowSize = {
+          width: this.mapData.size * 2 * modifier.imageObject.shadowSize.width,
+          height: this.mapData.size * 2 * modifier.imageObject.shadowSize.height
+       }
+ 
+       shadowPos.x -= this.mapData.size + modifier.imageObject.shadowOffset.x * this.mapData.size * 2
+       shadowPos.y -= (this.mapData.size * this.mapData.squish) + modifier.imageObject.shadowOffset.y * this.mapData.size * 2
+ 
+ 
+       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+ 
+       drawctx.drawImage(
+          modifier.shadowImages[0][this.cameraData.rotation],
+          shadowPos.x,
+          shadowPos.y,
+          shadowSize.width,
+          shadowSize.height
+       )
+    }
+
 }

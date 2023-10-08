@@ -5,6 +5,7 @@ import HighlighImagesClass from './highlightImages'
 import UiImagesClass from './ui/uiImages'
 import StructureImagesClass from './structures/structureImages'
 import ProjectileImagesClass from './projectiles/projectileImages'
+import ShadowImagesClass from './shadowImages'
 
 export default class GameImagesClass {
 
@@ -15,7 +16,8 @@ export default class GameImagesClass {
             this.highlight = new HighlighImagesClass(),
             this.ui = new UiImagesClass(),
             this.structures = new StructureImagesClass(),
-            this.projectiles = new ProjectileImagesClass()
+            this.projectiles = new ProjectileImagesClass(),
+            this.shadows = new ShadowImagesClass()
         ]
     }
 

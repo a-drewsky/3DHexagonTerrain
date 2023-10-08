@@ -6,17 +6,7 @@ export default class EmptyMineImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 
-        super({})
-
-        this.shadowSize = {
-            width: 0,
-            height: 0
-        }
-
-        this.shadowOffset = {
-            x: 0,
-            y: 0
-        }
+        super()
 
         this.image_data = {
             empty_mine:{

@@ -6,7 +6,7 @@ export default class ProjectileManagerClass {
     constructor(hexMapData, images) {
         this.mapData = hexMapData.mapData
         this.data = hexMapData.projectileData
-        this.renderer = new ProjectileRendererClass(hexMapData, images.projectiles)
+        this.renderer = new ProjectileRendererClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 

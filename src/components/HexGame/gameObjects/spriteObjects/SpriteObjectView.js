@@ -185,8 +185,10 @@ export default class SpriteObjectViewClass {
             case 'prop':
             case 'resource':
             case 'flag':
-            case 'modifier':
                this.structures.drawShadow(drawctx, spriteObject)
+               continue
+            case 'modifier':
+               this.modifiers.drawShadow(drawctx, spriteObject)
                continue
          }
 

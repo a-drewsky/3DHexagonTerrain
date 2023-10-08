@@ -4,27 +4,15 @@ import projectile_sheet from '../../images/projectiles/arrow_projectile_sheet.pn
 
 // import icon_image from '???'
 
-import ImageLoaderClass from '../units/unitImageLoader'
+import ImageLoaderClass from '../newImageLoader'
 
 export default class ProjectileImagesArrowClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super()
 
-        this.shadowSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0,
-            y: 0.5
-        }
-
-        this.padding = [
-            [{x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}]
-        ]
+        this.shadow = 'projectile_shadow'
 
         // this.icon = icon_image
 

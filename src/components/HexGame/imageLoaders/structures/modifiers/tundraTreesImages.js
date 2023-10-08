@@ -3,13 +3,11 @@ import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 import tundra_tree_1 from '../../../images/modifiers/tundra_tree_01.png'
 import tundra_tree_2 from '../../../images/modifiers/tundra_tree_02.png'
 
-import medium_round_shadow_sheet from '../../../images/shadows/medium_round_shadow_sheet.png'
-
 export default class TundraTreesImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 
-        super({medium_round_shadow: medium_round_shadow_sheet})
+        super()
 
         this.rows = {
             0: 'backRight',

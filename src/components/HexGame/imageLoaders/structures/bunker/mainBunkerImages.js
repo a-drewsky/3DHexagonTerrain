@@ -1,14 +1,14 @@
 import ImageLoaderClass from '../../ImageLoader'
 
-import shadow_sheet from '../../../images/shadows/base_shadow_sheet.png'
-
 import base_sheet from '../../../images/bases/mainBase/main_base_sheet.png'
 
 export default class MainBunkerImagesClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super(false)
+
+        this.shadow = 'base_shadow'
 
         this.spriteSize = {
             width: 1,
@@ -17,16 +17,6 @@ export default class MainBunkerImagesClass extends ImageLoaderClass {
 
         this.spriteOffset = {
             x: 0,
-            y: 0.5
-        }
-
-        this.shadowSize = {
-            width: 2,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0.5,
             y: 0.5
         }
 
@@ -49,7 +39,6 @@ export default class MainBunkerImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: base_sheet,
-                spriteCount: 5,
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

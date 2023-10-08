@@ -8,6 +8,7 @@ export default class StructureRendererClass {
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
+        this.images = images
         this.utils = new CommonRendererUtilsClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
@@ -43,7 +44,6 @@ export default class StructureRendererClass {
                 tempCanvas.height = canvasSize.height
                 let tempctx = tempCanvas.getContext('2d')
 
-
                 tempctx.drawImage(structure.imageObject[structure.state.current.name].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
 
@@ -71,25 +71,26 @@ export default class StructureRendererClass {
 
         let initRotation = this.cameraData.rotation
 
+        if (!structure.imageObject.shadow) return
+
         //prerender shadow images
-        if (structure.imageObject.shadowImages) {
-            let imageList = []
-            for (let rotation = 0; rotation < 6; rotation++) {
+        let imageList = []
+        for (let rotation = 0; rotation < 6; rotation++) {
 
-                this.cameraData.rotation = rotation;
-                let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-                let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
+            let shadowImage = this.images.shadows[structure.imageObject.shadow][rotation]
+
+            this.cameraData.rotation = rotation;
+            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
 
 
-                let shadowImage = this.utils.cropStructureShadow(structure.imageObject.shadowImages[rotation], structure.imageObject.shadowSize, structure.imageObject.shadowOffset, keyObj, rotatedMap)
+            let croppedImage = this.utils.cropStructureShadow(shadowImage.image, shadowImage.size, shadowImage.offset, keyObj, rotatedMap)
 
-                imageList[rotation] = shadowImage
-
-            }
-
-            structure.shadowImages[0] = imageList
+            imageList[rotation] = croppedImage
 
         }
+
+        structure.shadowImages[0] = imageList
 
         this.cameraData.rotation = initRotation
 

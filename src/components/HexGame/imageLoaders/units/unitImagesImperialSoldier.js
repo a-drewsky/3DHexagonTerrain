@@ -1,5 +1,3 @@
-import shadow_sheet from '../../images/shadows/unit_shadow_sheet.png'
-
 import attack_sheet from '../../images/units/imperialSoldier/imperial_swordsman_attack_sheet.png'
 import death_sheet from '../../images/units/imperialSoldier/imperial_swordsman_death_sheet.png'
 import mine_sheet from '../../images/units/imperialSoldier/imperial_swordsman_mine_sheet.png'
@@ -8,23 +6,15 @@ import idle_sheet from '../../images/units/imperialSoldier/imperial_swordsman_id
 
 import icon_image from '../../images/units/imperialSoldier/imperial_swordsman_icon.png'
 
-import UnitImageLoaderClass from './unitImageLoader'
+import ImageLoaderClass from '../newImageLoader'
 
-export default class UnitImagesImperialSoldierClass extends UnitImageLoaderClass {
+export default class UnitImagesImperialSoldierClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super()
 
-        this.shadowSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0,
-            y: 0.5
-        }
+        this.shadow = 'medium_round_shadow'
 
         this.padding = [
             [{ x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }]

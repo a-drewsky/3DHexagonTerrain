@@ -26,10 +26,6 @@ export default class ModifierImagesBaseDataClass extends ModifierImageLoaderClas
             width: 1,
             height: 1.5
         }
-        this.shadowSpriteSize = {
-            width: 1,
-            height: 1.5
-        }
         this.shadowSize = {
             width: 2,
             height: 2

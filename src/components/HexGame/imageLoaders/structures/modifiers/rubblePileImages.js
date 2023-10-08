@@ -6,7 +6,7 @@ export default class RubblePileImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 
-        super({})
+        super()
 
         this.image_data = {
             rubble_pile:{

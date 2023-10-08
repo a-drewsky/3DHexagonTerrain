@@ -8,6 +8,7 @@ export default class ModifierRendererClass {
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
+        this.images = images
         this.utils = new CommonRendererUtilsClass(hexMapData, images)
 
         this.commonUtils = new CommonHexMapUtilsClass()
@@ -103,7 +104,7 @@ export default class ModifierRendererClass {
             for (let i = 0; i < filteredPositionsList.length; i++) {
                 if (filteredPositionsList[i].y > 0) {
                     tempctxBottom.drawImage(
-                        modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum],
+                        modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum].image,
                         canvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
                         canvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
                         this.mapData.size * 2 * modifier.imageObject.modifierSize.width,
@@ -111,7 +112,7 @@ export default class ModifierRendererClass {
                     )
                 } else {
                     tempctxTop.drawImage(
-                        modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum],
+                        modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum].image,
                         canvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.modifierSize.width / 2 + filteredPositionsList[i].x,
                         canvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.modifierSize.height / 2 + filteredPositionsList[i].y,
                         this.mapData.size * 2 * modifier.imageObject.modifierSize.width,
@@ -176,21 +177,25 @@ export default class ModifierRendererClass {
             let tempctx = tempCanvas.getContext('2d')
 
             for (let i = 0; i < filteredPositionsList.length; i++) {
-                if (modifier.imageObject.shadowImages[filteredPositionsList[i].imageNum][rotation] != null) {
-                    tempctx.drawImage(
-                        modifier.imageObject.shadowImages[filteredPositionsList[i].imageNum][rotation],
-                        shadowCanvasSize.width / 2 - this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.width / 2 + filteredPositionsList[i].x,
-                        shadowCanvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * modifier.imageObject.shadowSpriteSize.height / 2 + filteredPositionsList[i].y,
-                        this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.width,
-                        this.mapData.size * 2 * modifier.imageObject.shadowSpriteSize.height
-                    )
-                }
+
+                if (modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum].shadow === null) continue
+
+                let shadowImage = this.images.shadows[modifier.imageObject.modifierImages[filteredPositionsList[i].imageNum].shadow][rotation]
+
+                tempctx.drawImage(
+                    shadowImage.image,
+                    shadowCanvasSize.width / 2 - this.mapData.size * 2 * shadowImage.size.w / 2 + filteredPositionsList[i].x,
+                    shadowCanvasSize.height / 2 - this.mapData.size * 2 * this.mapData.squish * shadowImage.size.h / 2 + filteredPositionsList[i].y,
+                    this.mapData.size * 2 * shadowImage.size.w,
+                    this.mapData.size * 2 * shadowImage.size.h
+                )
+
             }
 
             shadowImageList[rotation] = tempCanvas
 
-            let shadowImage = this.utils.cropStructureShadow(shadowImageList[rotation], modifier.imageObject.shadowSize, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
-            shadowImageList[rotation] = shadowImage
+            let croppedImage = this.utils.cropStructureShadow(shadowImageList[rotation], {w: modifier.imageObject.shadowSize.width, h: modifier.imageObject.shadowSize.height}, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
+            shadowImageList[rotation] = croppedImage
 
 
         }
@@ -225,7 +230,7 @@ export default class ModifierRendererClass {
             tempCanvas.height = canvasSize.height
             let tempctx = tempCanvas.getContext('2d')
 
-            tempctx.drawImage(modifier.imageObject.modifierImages[0], 0, 0, tempCanvas.width, tempCanvas.height)
+            tempctx.drawImage(modifier.imageObject.modifierImages[0].image, 0, 0, tempCanvas.width, tempCanvas.height)
 
             imageList[rotation] = {
                 top: tempCanvas,

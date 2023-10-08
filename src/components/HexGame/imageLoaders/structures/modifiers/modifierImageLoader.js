@@ -1,9 +1,5 @@
 export default class ModifierImageLoaderClass {
 
-    constructor(shadow_sheet_list) {
-        this.shadow_sheet_list = shadow_sheet_list
-    }
-
     loadImages = (startGame) => {
 
         this.createSheetImages()
@@ -26,14 +22,7 @@ export default class ModifierImageLoaderClass {
 
     createSheetImages = () => {
 
-        if (this.images === undefined) this.images = {}
-
-        for (let sheet in this.shadow_sheet_list) {
-            for (let row in this.rows) {
-                this.images[this.rows[row] + '_' + sheet] = new Image()
-            }
-
-        }
+        this.images = {}
 
         for (let imageName in this.image_data) {
             this.images[imageName] = new Image()
@@ -43,54 +32,21 @@ export default class ModifierImageLoaderClass {
 
     loadSheetImages = () => {
 
-        for (let sheetName in this.shadow_sheet_list) {
-
-            let sheet = new Image()
-
-            sheet.onload = () => {
-                let imageDims = {
-                    width: sheet.width,
-                    height: sheet.height / 6
-                }
-
-                for (let row in this.rows) {
-
-                    let tempCanvas = document.createElement('canvas')
-                    tempCanvas.width = imageDims.width
-                    tempCanvas.height = imageDims.height
-                    let tempctx = tempCanvas.getContext('2d')
-
-                    tempctx.drawImage(sheet, 0, imageDims.height * row, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
-
-                    let image = tempCanvas.toDataURL('image/png');
-
-                    this[this.rows[row] + '_' + sheetName].src = image
-
-                }
-            }
-            sheet.src = this.shadow_sheet_list[sheetName]
-        }
-
         for (let imageName in this.image_data) {
             this[imageName].src = this.image_data[imageName].sprite
-
         }
+        
     }
 
     assignImages = (startGame) => {
 
-        if (this.modifierImages === undefined) this.modifierImages = []
-
-        if (this.shadowImages === undefined) this.shadowImages = []
+        this.modifierImages = []
 
         for (let image in this.image_data) {
-
-            let data = this.image_data[image]
-
-            this.modifierImages.push(this[image])
-
-            if(data.shadow !== null) this.shadowImages.push([this['backRight_' + data.shadow], this['frontRight_' + data.shadow], this['front_' + data.shadow], this['frontLeft_' + data.shadow], this['backLeft_' + data.shadow], this['back_' + data.shadow]])
-            else this.shadowImages.push([null, null, null, null, null, null])
+            this.modifierImages.push({
+                image: this[image],
+                shadow: this.image_data[image].shadow
+            })
         }
 
         startGame();

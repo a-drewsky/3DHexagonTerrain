@@ -1,4 +1,3 @@
-import shadow_sheet from '../../images/shadows/unit_shadow_sheet.png'
 
 import attack_sheet from '../../images/units/villagerUnit/villager_unit_attack_sheet.png'
 import death_sheet from '../../images/units/villagerUnit/villager_unit_death_sheet.png'
@@ -8,23 +7,15 @@ import idle_sheet from '../../images/units/villagerUnit/villager_unit_idle_sheet
 
 import icon_image from '../../images/units/villagerUnit/villager_unit_icon.png'
 
-import UnitImageLoaderClass from './unitImageLoader'
+import ImageLoaderClass from '../newImageLoader'
 
-export default class UnitImagesVillagerClass extends UnitImageLoaderClass {
+export default class UnitImagesVillagerClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet)
+        super()
 
-        this.shadowSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0,
-            y: 0.5
-        }
+        this.shadow = 'medium_round_shadow'
 
         this.padding = [
             [{x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}, {x: 10, y: 9}]

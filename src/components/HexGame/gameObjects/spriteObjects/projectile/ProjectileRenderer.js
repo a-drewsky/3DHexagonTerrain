@@ -9,6 +9,8 @@ export default class ProjectileRendererClass {
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
 
+        this.images = images
+
         this.utils = new CommonRendererUtilsClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
@@ -67,7 +69,7 @@ export default class ProjectileRendererClass {
 
     renderShadow = (projectile) => {
 
-        if (!projectile.imageObject.shadowImages) return
+        let shadowImage = this.images.shadows[projectile.imageObject.shadow][this.cameraData.rotation]
 
         let pos = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
 
@@ -82,23 +84,20 @@ export default class ProjectileRendererClass {
         pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
 
         let height = projectile.tileHeight()
-        let sprite = projectile.imageObject
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
         let shadowSize = {
-            width: this.mapData.size * 2 * sprite.shadowSize.width,
-            height: this.mapData.size * 2 * sprite.shadowSize.height
+            width: this.mapData.size * 2 * shadowImage.size.w,
+            height: this.mapData.size * 2 * shadowImage.size.h
         }
 
-        shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
-        shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
+        shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
+        shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
-        let shadowImage = sprite.shadowImages[this.cameraData.rotation].image
+        let croppedImage = this.utils.cropStructureShadow(shadowImage.image, shadowImage.size, shadowImage.offset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
 
-        shadowImage = this.utils.cropStructureShadow(shadowImage, sprite.shadowSize, sprite.shadowOffset, pos, this.tileData.rotatedMapList[this.cameraData.rotation])
-
-        projectile.shadowImage = shadowImage
+        projectile.shadowImage = croppedImage
 
     }
 

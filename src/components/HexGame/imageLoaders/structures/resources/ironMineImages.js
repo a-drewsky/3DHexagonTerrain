@@ -2,13 +2,13 @@ import ImageLoaderClass from '../../ImageLoader'
 
 import iron_mine_sheet from '../../../images/resources/iron_mine_sheet.png'
 
-import shadow_sheet from '../../../images/shadows/large_round_shadow_sheet.png'
-
 export default class IronMineImagesClass extends ImageLoaderClass {
 
     constructor() {
 
-        super(shadow_sheet, true)
+        super(true)
+
+        this.shadow = 'large_round_shadow'
 
         this.spriteSize = {
             width: 1,
@@ -17,16 +17,6 @@ export default class IronMineImagesClass extends ImageLoaderClass {
 
         this.spriteOffset = {
             x: 0,
-            y: 0.5
-        }
-
-        this.shadowSize = {
-            width: 2,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0.5,
             y: 0.5
         }
 

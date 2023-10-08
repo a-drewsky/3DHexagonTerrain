@@ -60,7 +60,8 @@ export default class ProjectileViewClass {
         if (this.commonUtils.checkShadowImages(projectile) == false) return
 
         let keyObj = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
-        let sprite = projectile.imageObject
+        
+        let shadowImage = this.images.shadows[projectile.imageObject.shadow][this.cameraData.rotation]
 
         let pos = {
             q: keyObj.q,
@@ -76,18 +77,16 @@ export default class ProjectileViewClass {
         }
         pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
 
-        let shadowSize
         let height = projectile.tileHeight()
 
-        let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
-
-        shadowSize = {
-            width: this.mapData.size * 2 * sprite.shadowSize.width,
-            height: this.mapData.size * 2 * sprite.shadowSize.height
+        let shadowSize = {
+            width: this.mapData.size * 2 * shadowImage.size.w,
+            height: this.mapData.size * 2 * shadowImage.size.h
         }
 
-        shadowPos.x -= this.mapData.size + sprite.shadowOffset.x * this.mapData.size * 2
-        shadowPos.y -= (this.mapData.size * this.mapData.squish) + sprite.shadowOffset.y * this.mapData.size * 2
+        let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
+        shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
+        shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
         drawctx.drawImage(
