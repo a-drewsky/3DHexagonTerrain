@@ -1,4 +1,4 @@
-import ImageLoaderClass from '../../ImageLoader'
+import ImageLoaderClass from '../../imageLoader'
 
 import amethyst_mine_sheet from '../../../images/resources/amethyst_mine_sheet.png'
 
@@ -9,16 +9,6 @@ export default class AmethystMineImagesClass extends ImageLoaderClass {
         super(true)
 
         this.shadow = 'large_round_shadow'
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.padding = {
             'resources_lte_100': [{x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}],
@@ -39,6 +29,8 @@ export default class AmethystMineImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: amethyst_mine_sheet,
+                size: {w: 1, h: 1.5},
+                offset: {x: 0, y: 0.5},
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

@@ -12,26 +12,26 @@ export default class StructureViewClass{
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-   draw = (drawctx, spriteObject) => {
-      if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+   draw = (drawctx, structure) => {
+      if (this.commonUtils.checkImagesLoaded(structure) == false) return
 
-      let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-      let sprite = spriteObject.imageObject
-      let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+      let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
+      let sprite = structure.imageObject[structure.state.current.name].images[structure.frame][this.cameraData.rotation]
+      let height = this.tileData.getEntry(structure.position.q, structure.position.r).height
 
       let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
       let spriteSize = {
-         width: this.mapData.size * 2 * sprite.spriteSize.width,
-         height: this.mapData.size * 2 * sprite.spriteSize.height
+         width: this.mapData.size * 2 * sprite.size.w,
+         height: this.mapData.size * 2 * sprite.size.h
       }
 
-      spritePos.x -= this.mapData.size + sprite.spriteOffset.x * this.mapData.size * 2
-      spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.spriteOffset.y * this.mapData.size * 2
+      spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
+      spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
 
       if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
       drawctx.drawImage(
-         spriteObject.images[0][this.cameraData.rotation],
+         structure.images[0][this.cameraData.rotation],
          spritePos.x,
          spritePos.y,
          spriteSize.width,

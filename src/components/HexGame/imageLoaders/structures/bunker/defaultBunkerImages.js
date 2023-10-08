@@ -1,4 +1,4 @@
-import ImageLoaderClass from '../../ImageLoader'
+import ImageLoaderClass from '../../imageLoader'
 
 import bunker_sheet from '../../../images/bases/base/base_sheet.png'
 
@@ -9,16 +9,6 @@ export default class DefaultBunkerImagesClass extends ImageLoaderClass {
         super(false)
 
         this.shadow = 'base_shadow'
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.padding = {
             'health_lte_100': [{x: 0, y: 16}, {x: 0, y: 13}, {x: 0, y: 16}, {x: 0, y: 16}, {x: 0, y: 13}, {x: 0, y: 16}],
@@ -39,6 +29,8 @@ export default class DefaultBunkerImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: bunker_sheet,
+                size: {w: 1, h: 1.5},
+                offset: {x: 0, y: 0.5},
                 sprites: {
                     0: 'default_1',
                     1: 'default_2',

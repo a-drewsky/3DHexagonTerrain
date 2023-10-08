@@ -1,4 +1,4 @@
-import ImageLoaderClass from '../../ImageLoader'
+import ImageLoaderClass from '../../imageLoader'
 
 import flag from '../../../images/bases/mainBase/main_base_q0r0.png'
 
@@ -9,16 +9,6 @@ export default class DefaultFlagImagesClass extends ImageLoaderClass {
         super(true)
 
         this.shadow = 'small_round_shadow'
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.padding = {
             'default': [{x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}, {x: 0, y: 3}]
@@ -36,6 +26,8 @@ export default class DefaultFlagImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: flag,
+                size: {w: 1, h: 1.5},
+                offset: {x: 0, y: 0.5},
                 sprites: {
                     0: 'default'
                 }

@@ -7,7 +7,7 @@ import idle_sheet from '../../images/units/mountainRanger/mountain_ranger_idle_s
 
 import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.png'
 
-import ImageLoaderClass from '../newImageLoader'
+import ImageLoaderClass from '../imageLoader'
 
 export default class UnitImagesMountainRangerClass extends ImageLoaderClass {
 

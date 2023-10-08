@@ -6,21 +6,17 @@ export default class StructureClass {
             r: pos.r
         }
         this.rotation = null
+        this.frame = 0
 
         this.images = []
         this.shadowImages = []
 
         this.id = config.id
-        this.sprite = config.sprite
         this.height = config.height
         if (config.rotation !== undefined) this.rotation = config.rotation
 
         this.imageObject = images[config.sprite]
         this.hexMapData = hexMapData
-        this.canvasSize = {
-            width: hexMapData.size * 2 * this.imageObject.spriteSize.width,
-            height: hexMapData.size * 2 * this.imageObject.spriteSize.height
-        }
 
         this.render = true
         this.prerender = false
@@ -30,6 +26,10 @@ export default class StructureClass {
         let spriteRotation = this.rotation + cameraRotation
         if (spriteRotation >= 6) spriteRotation -= 6
         return spriteRotation
+    }
+
+    sprite = (cameraRotation) => {
+        return this.imageObject[this.state.current.name].images[this.frame][this.spriteRotation(cameraRotation)]
     }
 
 }

@@ -6,7 +6,7 @@ import idle_sheet from '../../images/units/imperialSoldier/imperial_swordsman_id
 
 import icon_image from '../../images/units/imperialSoldier/imperial_swordsman_icon.png'
 
-import ImageLoaderClass from '../newImageLoader'
+import ImageLoaderClass from '../imageLoader'
 
 export default class UnitImagesImperialSoldierClass extends ImageLoaderClass {
 

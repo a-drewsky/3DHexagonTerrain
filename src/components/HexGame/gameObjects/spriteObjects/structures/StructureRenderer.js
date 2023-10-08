@@ -22,21 +22,20 @@ export default class StructureRendererClass {
 
         let initRotation = this.cameraData.rotation
 
-        let canvasSize = {
-            width: this.mapData.size * 2 * structure.imageObject.spriteSize.width,
-            height: this.mapData.size * 2 * structure.imageObject.spriteSize.height
-        }
-
         for (let i = 0; i < structure.imageObject[structure.state.current.name].images.length; i++) {
             let imageList = []
             for (let rotation = 0; rotation < 6; rotation++) {
+                
+                let sprite = structure.sprite(rotation)
+
+                let canvasSize = {
+                    width: this.mapData.size * 2 * sprite.size.w,
+                    height: this.mapData.size * 2 * sprite.size.h
+                }
 
                 this.cameraData.rotation = rotation;
-                let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+                let rotatedMap = this.tileData.rotatedMapList[rotation]
                 let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
-
-
-                let spriteRotation = structure.spriteRotation(rotation)
 
                 //create canvas
                 let tempCanvas = document.createElement('canvas')
@@ -44,7 +43,7 @@ export default class StructureRendererClass {
                 tempCanvas.height = canvasSize.height
                 let tempctx = tempCanvas.getContext('2d')
 
-                tempctx.drawImage(structure.imageObject[structure.state.current.name].images[i][spriteRotation], 0, 0, tempCanvas.width, tempCanvas.height)
+                tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
 
                 if (structure.type == 'resource') {
@@ -56,7 +55,7 @@ export default class StructureRendererClass {
                 }
 
 
-                this.utils.cropOutTiles(imageList[rotation], structure.imageObject.spriteOffset, keyObj, rotatedMap)
+                this.utils.cropOutTiles(imageList[rotation], sprite.offset, keyObj, rotatedMap)
                 this.utils.darkenSprite(imageList[rotation], structure)
 
             }

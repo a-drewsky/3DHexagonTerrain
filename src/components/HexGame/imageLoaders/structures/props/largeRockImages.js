@@ -1,5 +1,5 @@
 
-import ImageLoaderClass from '../../ImageLoader'
+import ImageLoaderClass from '../../imageLoader'
 
 import large_rock from '../../../images/props/large_rock.png'
 
@@ -10,16 +10,6 @@ export default class LargeRockImagesClass extends ImageLoaderClass {
         super(true)
 
         this.shadow = 'large_round_shadow'
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.padding = {
             'default': [{x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}, {x:0,y:11}]
@@ -37,6 +27,8 @@ export default class LargeRockImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: large_rock,
+                size: {w: 1, h: 1.5},
+                offset: {x: 0, y: 0.5},
                 sprites: {
                     0: 'default'
                 }

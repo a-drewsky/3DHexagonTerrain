@@ -1,4 +1,4 @@
-import ImageLoaderClass from '../../ImageLoader'
+import ImageLoaderClass from '../../imageLoader'
 
 import savanna_tree from '../../../images/props/savanna_tree.png'
 
@@ -10,17 +10,7 @@ export default class SavannaTreeImagesClass extends ImageLoaderClass {
         super(true)
 
         this.shadow = 'savanna_tree_shadow'
-
-        this.spriteSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.spriteOffset = {
-            x: 0,
-            y: 0.5
-        }
-
+        
         this.padding = {
             'default': [{x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}, {x:10,y:6}]
         }
@@ -37,6 +27,8 @@ export default class SavannaTreeImagesClass extends ImageLoaderClass {
         this.sheet_data = {
             default: {
                 image: savanna_tree,
+                size: {w: 1, h: 1.5},
+                offset: {x: 0, y: 0.5},
                 sprites: {
                     0: 'default'
                 }
