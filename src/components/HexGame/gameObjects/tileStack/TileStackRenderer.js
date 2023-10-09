@@ -15,7 +15,7 @@ export default class TileStackRendererClass {
         this.unitData = hexMapData.unitData
         this.cameraData = hexMapData.cameraData
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
 

@@ -4,13 +4,11 @@ import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
 
 export default class CommonRendererUtilsClass {
 
-    constructor(hexMapData, images) {
+    constructor(hexMapData) {
 
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
-
-        this.images = images
 
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -496,53 +494,6 @@ export default class CommonRendererUtilsClass {
                 tempctx.restore();
             }
         }
-    }
-
-    addHealthBar = (canvas, object) => {
-        if (object.stats.health == 100) return
-
-        let tempctx = canvas.getContext('2d')
-
-        let healthBarIndex = 10 - Math.floor(object.stats.health / 10)
-
-        let healthBarSprite = this.images.ui.healthbar
-
-        let healthbarSpriteSize = {
-            width: this.mapData.size * 2 * healthBarSprite.spriteSize.width,
-            height: this.mapData.size * 2 * healthBarSprite.spriteSize.height
-        }
-
-        let healthbarPos = {
-            x: canvas.width / 2 - healthbarSpriteSize.width / 2,
-            y: 0
-        }
-
-        tempctx.drawImage(healthBarSprite.images[healthBarIndex], healthbarPos.x, healthbarPos.y, healthbarSpriteSize.width, healthbarSpriteSize.height)
-
-    }
-
-    addResourceBar = (canvas, object) => {
-
-        if (object.stats.resources == object.stats.maxResources) return canvas
-
-        let tempctx = canvas.getContext('2d')
-
-        let resourceBarIndex = 10 - Math.floor(object.stats.resources / object.stats.maxResources * 10)
-
-        let resourceBarSprite = this.images.ui.resourcebar
-
-        let resourcebarSpriteSize = {
-            width: this.mapData.size * 2 * resourceBarSprite.spriteSize.width,
-            height: this.mapData.size * 2 * resourceBarSprite.spriteSize.height
-        }
-
-        let resourcebarPos = {
-            x: canvas.width / 2 - resourcebarSpriteSize.width / 2,
-            y: 0
-        }
-
-        tempctx.drawImage(resourceBarSprite.images[resourceBarIndex], resourcebarPos.x, resourcebarPos.y, resourcebarSpriteSize.width, resourcebarSpriteSize.height)
-
     }
 
     clipPointyHexagonPath = (ctx, x, y) => {

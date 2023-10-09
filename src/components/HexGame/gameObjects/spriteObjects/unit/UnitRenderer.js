@@ -1,5 +1,6 @@
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import StatusBarRendererClass from "../../commonUtils/StatusBarRenderer"
 
 export default class UnitRendererClass {
 
@@ -11,7 +12,8 @@ export default class UnitRendererClass {
 
         this.images = images
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, images)
+        this.StatusBarRenderer = new StatusBarRendererClass(this.mapData, this.images)
+        this.utils = new CommonRendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -57,7 +59,7 @@ export default class UnitRendererClass {
                 tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
 
-                this.utils.addHealthBar(imageList[rotation], unit)
+                this.StatusBarRenderer.addHealthBar(imageList[rotation], unit)
                 this.utils.darkenSprite(imageList[rotation], unit)
                 this.utils.cropOutTiles(imageList[rotation], sprite.offset, keyObj, rotatedMap)
 
@@ -160,7 +162,7 @@ export default class UnitRendererClass {
 
         tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
 
-        this.utils.addHealthBar(tempCanvas, unit)
+        this.StatusBarRenderer.addHealthBar(tempCanvas, unit)
         this.utils.cropOutTilesJump(tempCanvas, sprite.offset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
         this.utils.darkenSpriteJump(tempCanvas, unit, closestTile, height)
         unit.images = tempCanvas

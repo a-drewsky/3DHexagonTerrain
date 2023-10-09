@@ -1,5 +1,6 @@
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import StatusBarRendererClass from "../../commonUtils/StatusBarRenderer"
 
 export default class StructureRendererClass {
 
@@ -9,7 +10,9 @@ export default class StructureRendererClass {
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
         this.images = images
-        this.utils = new CommonRendererUtilsClass(hexMapData, images)
+
+        this.StatusBarRenderer = new StatusBarRendererClass(this.mapData, this.images)
+        this.utils = new CommonRendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -47,11 +50,11 @@ export default class StructureRendererClass {
                 imageList[rotation] = tempCanvas
 
                 if (structure.type == 'resource') {
-                    this.utils.addResourceBar(imageList[rotation], structure)
+                    this.StatusBarRenderer.addResourceBar(imageList[rotation], structure)
                 }
 
                 if (structure.type == 'bunker') {
-                    this.utils.addHealthBar(imageList[rotation], structure)
+                    this.StatusBarRenderer.addHealthBar(imageList[rotation], structure)
                 }
 
 

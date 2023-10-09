@@ -11,7 +11,7 @@ export default class ProjectileRendererClass {
 
         this.images = images
 
-        this.utils = new CommonRendererUtilsClass(hexMapData, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
