@@ -1,10 +1,10 @@
 
-import projectile_shadow_sheet from '../images/shadows/arrow_shadow_sheet.png'
-import base_shadow_sheet from '../images/shadows/base_shadow_sheet.png'
-import savanna_tree_shadow_sheet from '../images/shadows/savanna_tree_shadow_sheet.png'
-import large_round_shadow_sheet from '../images/shadows/large_round_shadow_sheet.png'
-import medium_round_shadow_sheet from '../images/shadows/medium_round_shadow_sheet.png'
-import small_round_shadow_sheet from '../images/shadows/small_round_shadow_sheet.png'
+import projectile_shadow_sheet from '../../images/shadows/arrow_shadow_sheet.png'
+import base_shadow_sheet from '../../images/shadows/base_shadow_sheet.png'
+import savanna_tree_shadow_sheet from '../../images/shadows/savanna_tree_shadow_sheet.png'
+import large_round_shadow_sheet from '../../images/shadows/large_round_shadow_sheet.png'
+import medium_round_shadow_sheet from '../../images/shadows/medium_round_shadow_sheet.png'
+import small_round_shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
 
 import ShadowImageLoaderClass from './shadowImageLoader'
 
@@ -13,16 +13,6 @@ export default class ShadowImagesClass extends ShadowImageLoaderClass {
     constructor(){
 
         super()
-
-        this.shadowSize = {
-            width: 1,
-            height: 1.5
-        }
-
-        this.shadowOffset = {
-            x: 0,
-            y: 0.5
-        }
 
         this.rows = {
             0: 'backRight',

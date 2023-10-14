@@ -9,7 +9,7 @@ export default class ModifierRendererClass {
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
         this.images = images
-        this.utils = new CommonRendererUtilsClass(hexMapData, images)
+        this.utils = new CommonRendererUtilsClass(hexMapData)
 
         this.commonUtils = new CommonHexMapUtilsClass()
 

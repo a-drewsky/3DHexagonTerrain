@@ -1,5 +1,5 @@
 
-export const SHADOW_SIZE = 0.8
+export const SHADOW_SIZE = 1
 
 export const HEXMAP_SIDE_COLOR_MULTIPLIER = 1.1
 
