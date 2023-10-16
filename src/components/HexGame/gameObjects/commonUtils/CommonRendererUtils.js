@@ -57,25 +57,23 @@ export default class CommonRendererUtilsClass {
 
     }
 
-    getShadowRowHeights = (numRows, tile) => {
+    getShadowRowHeightsDifference = (numRows, position, height) => {
 
-        let rows = this.getShadowRows(numRows, tile.position)
-
-        // return rows.map(row => { return { l: this.tileData.getEntry(row.l.q, row.l.r).height, c: this.tileData.getEntry(row.c.q, row.c.r).height, r: this.tileData.getEntry(row.r.q, row.r.r).height } })
+        let rows = this.getShadowRows(numRows, position)
 
         let heightRows = {}
 
         for(let rowNum in rows){
             let row = rows[rowNum]
 
-            let l = 0
-            if(this.tileData.hasTileEntry(row.l.q, row.l.r)) l = this.tileData.getEntry(row.l.q, row.l.r).height - tile.height
+            let l = -1
+            if(this.tileData.hasTileEntry(row.l.q, row.l.r)) l = this.tileData.getEntry(row.l.q, row.l.r).height - height
 
-            let c = 0
-            if(this.tileData.hasTileEntry(row.c.q, row.c.r)) c = this.tileData.getEntry(row.c.q, row.c.r).height - tile.height
+            let c = -1
+            if(this.tileData.hasTileEntry(row.c.q, row.c.r)) c = this.tileData.getEntry(row.c.q, row.c.r).height - height
 
-            let r = 0
-            if(this.tileData.hasTileEntry(row.r.q, row.r.r)) r = this.tileData.getEntry(row.r.q, row.r.r).height - tile.height
+            let r = -1
+            if(this.tileData.hasTileEntry(row.r.q, row.r.r)) r = this.tileData.getEntry(row.r.q, row.r.r).height - height
 
             heightRows[rowNum] = { l: l, c: c, r: r }
         }
@@ -86,6 +84,10 @@ export default class CommonRendererUtilsClass {
 
     getShadowDistance = (rowNum, tileHeight) => {
         return (tileHeight + 2) - 2 * rowNum
+    }
+
+    getSideShadowDistance = (rowNum, tileHeight) => {
+        return (tileHeight + 3) - 2 * rowNum
     }
 
     darkenImage = (canvas) => {
