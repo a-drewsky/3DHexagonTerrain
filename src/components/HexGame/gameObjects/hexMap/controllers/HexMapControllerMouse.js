@@ -6,6 +6,7 @@ export default class HexMapControllerMouseClass {
         this.mapData = hexMapData.mapData
         this.selectionData = hexMapData.selectionData
         this.cardData = hexMapData.cardData
+        this.unitData = hexMapData.unitData
 
         this.tileManager = tileManager
         this.spriteManager = spriteManager
@@ -21,9 +22,9 @@ export default class HexMapControllerMouseClass {
 
         let hoverTile = this.utils.getSelectedTile(x, y)
 
-        if(this.spriteManager.units.data.placementUnit != null){
+        if (this.spriteManager.units.data.placementUnit != null) {
             this.spriteManager.units.data.placementUnit.setPosition(hoverTile)
-            if(!hoverTile) this.spriteManager.units.data.placementUnit.setPosition({q: null, r: null})
+            if (!hoverTile) this.spriteManager.units.data.placementUnit.setPosition({ q: null, r: null })
         }
 
         if (!hoverTile) return
@@ -62,9 +63,9 @@ export default class HexMapControllerMouseClass {
     addUnit = (tile) => {
 
         if (tile === null || this.utils.checkUnitPlacementTile(tile) == false) return
-        
+
         this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
-        
+
         this.spriteManager.units.data.eraseUnit()
         this.mapData.setState('selectTile')
         this.selectionData.resetSelected()
@@ -73,11 +74,18 @@ export default class HexMapControllerMouseClass {
 
     updatePathSelection = (x, y) => {
 
+        this.selectionData.resetTarget()
+
         let hoverTile = this.utils.getSelectedTile(x, y)
 
         if (!hoverTile) return
 
         let path = this.selectionData.selections.path
+
+        if(path.length > 0){
+            let prevTile = path[path.length-1]
+            if(hoverTile.q == prevTile.q && hoverTile.r == prevTile.r) return
+        }
 
         let unit = this.spriteManager.units.data.selectedUnit
 
@@ -90,21 +98,36 @@ export default class HexMapControllerMouseClass {
 
         if (this.selectionData.selections.pathing.movement.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
 
-            let actionSelections = [...this.selectionData.selections.pathing.action, ...this.selectionData.selections.pathing.attack]
+            let actionSelections = [...this.selectionData.selections.pathing.action]
+            let attackSelections = [...this.selectionData.selections.pathing.attack]
 
-            if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
+            if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1 && attackSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
                 this.selectionData.selections.path = []
                 return
-            } else {
-                let neighbors
-                if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
-                else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r)
-
-                if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                    this.selectionData.selections.path = this.utils.findClosestAdjacentPath(unit.position, hoverTile)
-                    return
-                }
             }
+
+            if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
+                this.selectionData.setTargetSelection(hoverTile.q, hoverTile.r, 'action')
+            }
+            else if (attackSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
+                this.selectionData.setTargetSelection(hoverTile.q, hoverTile.r, 'attack')
+            }
+            else this.selectionData.setTargetSelection(hoverTile.q, hoverTile.r, 'move')
+
+            if (this.unitData.selectedUnit.id == 'mountain_ranger') {
+                this.selectionData.selections.path = []
+                return
+            }
+
+            let neighbors
+            if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r)
+            else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r)
+
+            if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
+                this.selectionData.selections.path = this.utils.findClosestAdjacentPath(unit.position, hoverTile)
+                return
+            }
+
         } else if (path.length == 0) {
             let neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r)
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
@@ -167,7 +190,7 @@ export default class HexMapControllerMouseClass {
             || (this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'bunker'))
 
         if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'action')
             this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
 
@@ -176,7 +199,7 @@ export default class HexMapControllerMouseClass {
         }
 
         if (flagMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'action')
             this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
 
@@ -185,7 +208,7 @@ export default class HexMapControllerMouseClass {
         }
 
         if (attackMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'attack')
             this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
 
@@ -194,7 +217,7 @@ export default class HexMapControllerMouseClass {
         }
 
         if (moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)) {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'target')
+            this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'move')
             this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
 
@@ -216,7 +239,7 @@ export default class HexMapControllerMouseClass {
         }
 
     }
-    
+
     endUnitTurn = () => {
         this.spriteManager.units.data.unselectUnit()
     }

@@ -6,7 +6,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileClass {
 
-    constructor(loc, pos, target, projectileId, mapData, unitData, tileData, projectileImages) {
+    constructor(loc, pos, target, projectileId, mapData, unitData, structureData, tileData, projectileImages) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
         this.loc = loc
@@ -59,6 +59,7 @@ export default class ProjectileClass {
         //access data
         this.mapData = mapData
         this.unitData = unitData
+        this.structureData = structureData
         this.tileData = tileData
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -126,11 +127,17 @@ export default class ProjectileClass {
     //END STATE
     attackTarget = () => {
 
+        //unit
         let attckedUnit = this.unitData.getUnit(this.target.q, this.target.r)
 
-        if(!attckedUnit) return
+        if(attckedUnit) attckedUnit.recieveAttack(25)
 
-        attckedUnit.recieveAttack(25)
+        //structure
+        let attckedStructure = this.structureData.getStructure(this.target.q, this.target.r)
+
+        if(attckedStructure && attckedStructure.type == 'bunker') attckedStructure.recieveAttack(25)
+
+        
     }
 
 }

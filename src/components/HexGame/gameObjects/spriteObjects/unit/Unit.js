@@ -59,6 +59,7 @@ export default class UnitClass {
         this.stats = {
             health: UnitConfig[unitId].stats.health,
             movement: UnitConfig[unitId].stats.movement,
+            range: UnitConfig[unitId].stats.range,
             mining: UnitConfig[unitId].stats.mining,
             physical_attack: UnitConfig[unitId].stats.physical_attack,
             physical_attack_modifications: UnitConfig[unitId].stats.physical_attack_modifications,

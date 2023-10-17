@@ -63,7 +63,7 @@ export default class ProjectileRendererClass {
         tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
 
         this.utils.cropOutTilesJump(tempCanvas, sprite.offset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
-        this.utils.darkenSpriteJump(tempCanvas, projectile, closestTile, height)
+        this.utils.darkenSprite(tempCanvas, projectile, closestTile, 1)
         projectile.image = tempCanvas
     }
 

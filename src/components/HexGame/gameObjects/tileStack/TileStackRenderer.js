@@ -170,8 +170,6 @@ export default class TileStackRendererClass {
             tileShadows.r = 0
         }
 
-        console.log(tileShadows)
-
         let shadowImage = this.images.tile_shadows.adv_side_shadows[`l${tileShadows.l}_c${tileShadows.c}_r${tileShadows.r}`][this.cameraData.rotation]
 
         stackctx.drawImage(shadowImage, 0, stack.height * this.mapData.tileHeight - (tileHeight) * this.mapData.tileHeight, this.mapData.size * 2, this.mapData.size * 2)

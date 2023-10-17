@@ -41,7 +41,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.selectionData.getSelectionPosition('target')
+        let selectionTarget = this.selectionData.getTargetSelectionPosition('action')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -66,7 +66,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.selectionData.getSelectionPosition('target')
+        let selectionTarget = this.selectionData.getTargetSelectionPosition('attack')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 
@@ -98,7 +98,7 @@ export default class HexMapControllerContextMenuClass {
 
         if (this.spriteManager.units.data.selectedUnit == null) return
 
-        let selectionTarget = this.selectionData.getSelectionPosition('target')
+        let selectionTarget = this.selectionData.getTargetSelectionPosition('action')
         if (selectionTarget == null) return
         let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
 

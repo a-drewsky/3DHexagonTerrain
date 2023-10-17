@@ -2,9 +2,10 @@ import ProjectileClass from "./Projectile";
 
 export default class ProjectileDataClass {
 
-    constructor(mapData, unitData, tileData, images){
+    constructor(mapData, unitData, structureData, tileData, images){
         this.mapData = mapData
         this.unitData = unitData
+        this.structureData = structureData
         this.tileData = tileData
         this.images = images
 
@@ -14,7 +15,7 @@ export default class ProjectileDataClass {
 
     newProjectile = (projectileId, pq, pr, tq, tr) => {
 
-        let newProjectile = new ProjectileClass(this.projectileList.length, {q: pq, r: pr}, {q: tq, r: tr}, projectileId, this.mapData, this.unitData, this.tileData, this.images.projectiles)
+        let newProjectile = new ProjectileClass(this.projectileList.length, {q: pq, r: pr}, {q: tq, r: tr}, projectileId, this.mapData, this.unitData, this.structureData, this.tileData, this.images.projectiles)
 
         this.projectileList.push(newProjectile)
         return newProjectile

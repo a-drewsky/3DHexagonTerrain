@@ -5,10 +5,11 @@ export default class UnitConfig {
         sprite: 'villager',
         name: 'Billager',
         description: 'An average villager. Has no unique abilities.',
-        height: 3,
+        height: 2,
         stats: {
             health: 100,
             movement: 4,
+            range: 5,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],
@@ -40,6 +41,7 @@ export default class UnitConfig {
         stats: {
             health: 100,
             movement: 4,
+            range: 7,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],
@@ -71,6 +73,7 @@ export default class UnitConfig {
         stats: {
             health: 100,
             movement: 4,
+            range: 5,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],

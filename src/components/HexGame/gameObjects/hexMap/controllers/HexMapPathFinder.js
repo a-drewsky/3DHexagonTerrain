@@ -130,6 +130,127 @@ export default class HexMapPathFinderClass {
         return processed
     }
 
+    findAttackMoveSet = (start, moveAmount) => {
+
+        let isTarget = (q, r) => {
+            if(q == start.q && r == start.r) return false
+            if (this.spriteManager.units.data.getUnit(q, r) != null) return true
+            if (this.spriteManager.structures.data.hasStructure(q, r) && this.spriteManager.structures.data.getStructure(q, r).type == 'bunker') return true
+            return false
+        }
+
+        let startNode = this.createNode(start.q, start.r)
+
+        let toSearch = [startNode]
+        let processed = []
+
+        while (toSearch.length > 0) {
+            let current = toSearch[0]
+
+            for (let t of toSearch) {
+                if (t.moveCost < current.moveCost){
+                    current = t
+                } 
+            }
+
+            processed.push(current)
+            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
+            toSearch.splice(currentToSearchIndex, 1)
+            
+            if(isTarget(current.tile.q, current.tile.r) == true) continue
+
+            //Get Neighbors
+            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
+            neighbors = neighbors.filter(neighbor => isTarget(neighbor.tile.q, neighbor.tile.r) == true || this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
+            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
+
+
+            //assign cost to neighbors and add to search list
+            for (let neighbor of neighbors) {
+
+                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
+
+                let tileCost = this.getTileCost(neighbor.tile)
+
+                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
+
+                if (!inSearch || costToNeighbor < neighbor.g) {
+                    neighbor.moveCost = costToNeighbor
+                    neighbor.connection = current
+
+                    if (!inSearch && neighbor.moveCost <= moveAmount) {
+                        toSearch.push(neighbor)
+                    }
+                }
+
+            }
+
+        }
+        let startIndex = processed.findIndex(node => node.tile.q == start.q && node.tile.r == start.r)
+        processed.splice(startIndex, 1)
+        return processed
+    }
+
+    findActionMoveSet = (start, moveAmount) => {
+
+        let isTarget = (q, r) => {
+            if (this.spriteManager.structures.data.hasStructure(q, r) && this.spriteManager.structures.data.getStructure(q, r).type == 'resource') return true
+            if (this.spriteManager.structures.data.hasStructure(q, r) && this.spriteManager.structures.data.getStructure(q, r).type == 'flag') return true
+            return false
+        }
+
+        let startNode = this.createNode(start.q, start.r)
+
+        let toSearch = [startNode]
+        let processed = []
+
+        while (toSearch.length > 0) {
+            let current = toSearch[0]
+
+            for (let t of toSearch) {
+                if (t.moveCost < current.moveCost){
+                    current = t
+                } 
+            }
+
+            processed.push(current)
+            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
+            toSearch.splice(currentToSearchIndex, 1)
+            
+            if(isTarget(current.tile.q, current.tile.r) == true) continue
+
+            //Get Neighbors
+            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
+            neighbors = neighbors.filter(neighbor => isTarget(neighbor.tile.q, neighbor.tile.r) == true || this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
+            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
+
+
+            //assign cost to neighbors and add to search list
+            for (let neighbor of neighbors) {
+
+                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
+
+                let tileCost = this.getTileCost(neighbor.tile)
+
+                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
+
+                if (!inSearch || costToNeighbor < neighbor.g) {
+                    neighbor.moveCost = costToNeighbor
+                    neighbor.connection = current
+
+                    if (!inSearch && neighbor.moveCost <= moveAmount) {
+                        toSearch.push(neighbor)
+                    }
+                }
+
+            }
+
+        }
+        let startIndex = processed.findIndex(node => node.tile.q == start.q && node.tile.r == start.r)
+        processed.splice(startIndex, 1)
+        return processed
+    }
+
     findFullMoveSet = (moveSet, unitPos) => {
 
         let newMoveSet = [...moveSet]

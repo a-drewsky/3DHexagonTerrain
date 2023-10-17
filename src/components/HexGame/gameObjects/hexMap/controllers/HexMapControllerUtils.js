@@ -68,8 +68,11 @@ export default class HexMapControllerUtilsClass {
         if (unit == null) return
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.stats.movement)
-
-        let moveSetPlus1 = this.pathFinder.findFullMoveSet(moveSet, unit.position)
+        let actionMoveSet = this.pathFinder.findActionMoveSet(unit.position, unit.stats.movement+1)
+        let attackMoveSet = this.pathFinder.findAttackMoveSet(unit.position, unit.stats.range)
+        console.log(moveSet)
+        console.log(actionMoveSet)
+        console.log(attackMoveSet)
 
         if (!moveSet) return
 
@@ -86,19 +89,23 @@ export default class HexMapControllerUtilsClass {
         }
 
         //search for structures
-        for (let tileObj of moveSetPlus1) {
+        for (let tileObj of actionMoveSet) {
             let tile = this.tileManager.data.getEntry(tileObj.tile.q, tileObj.tile.r)
             if ((this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'resource')
                 || (this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'flag')) {
                 pathing.action.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
+        }
+        for (let tileObj of attackMoveSet) {
+            let tile = this.tileManager.data.getEntry(tileObj.tile.q, tileObj.tile.r)
             if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null
                 || (this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'bunker')) {
                 pathing.attack.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
         }
+        console.log(pathing)
         this.selectionData.setPathingSelections(pathing)
     }
 

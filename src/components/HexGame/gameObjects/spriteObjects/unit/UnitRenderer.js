@@ -112,6 +112,7 @@ export default class UnitRendererClass {
         }
 
         let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
+        let extraHeight = 0
 
         if (unit.destination != null) {
             //set pos
@@ -134,7 +135,7 @@ export default class UnitRendererClass {
             let newHeight = this.tileData.getEntry(unit.destination.q, unit.destination.r).height
 
             if (newHeight != height) {
-                let extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount
+                extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount
 
                 height = height + (newHeight - height) * percent + extraHeight
             }
@@ -164,7 +165,7 @@ export default class UnitRendererClass {
 
         this.StatusBarRenderer.addHealthBar(tempCanvas, unit)
         this.utils.cropOutTilesJump(tempCanvas, sprite.offset, pos, this.tileData.rotatedMapList[this.cameraData.rotation], height)
-        this.utils.darkenSpriteJump(tempCanvas, unit, closestTile, height)
+        this.utils.darkenSprite(tempCanvas, unit, closestTile, extraHeight)
         unit.images = tempCanvas
     }
 
