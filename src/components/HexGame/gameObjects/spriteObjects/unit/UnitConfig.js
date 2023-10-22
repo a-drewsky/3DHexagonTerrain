@@ -9,7 +9,7 @@ export default class UnitConfig {
         stats: {
             health: 100,
             movement: 4,
-            range: 5,
+            range: 1,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],
@@ -41,7 +41,7 @@ export default class UnitConfig {
         stats: {
             health: 100,
             movement: 4,
-            range: 7,
+            range: 3,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],
@@ -73,7 +73,7 @@ export default class UnitConfig {
         stats: {
             health: 100,
             movement: 4,
-            range: 5,
+            range: 1,
             mining: 3,
             physical_attack: 25,
             physical_attack_modifications: [{name: 'sav-', color: 'orange'}, {name: 'mtn+', color: 'mediumpurple'}, {name: 'des-', color: 'gold'}],

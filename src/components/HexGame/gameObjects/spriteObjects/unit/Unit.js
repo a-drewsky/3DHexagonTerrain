@@ -101,10 +101,6 @@ export default class UnitClass {
         return spriteRotation
     }
 
-    projectilePosition = () => {
-        return this.commonUtils.getAdjacentPos(this.position, this.rotation)
-    }
-
 
     //SET FUNCTIONS
     setDirection = (targetPos) => {

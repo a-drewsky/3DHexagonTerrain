@@ -22,7 +22,7 @@ export default class UnitImagesImperialSoldierClass extends ImageLoaderClass {
 
         this.icon = icon_image
 
-        this.rows = {
+        this.sheet_rows = {
             0: 'frontRight',
             1: 'frontLeft',
             2: 'front',
@@ -90,6 +90,15 @@ export default class UnitImagesImperialSoldierClass extends ImageLoaderClass {
                     1: 'idle_2',
                 }
             }
+        }
+
+        this.animation_rows = {
+            0: 'backRight',
+            1: 'frontRight',
+            2: 'front',
+            3: 'frontLeft',
+            4: 'backLeft',
+            5: 'back'
         }
 
         this.animation_data = {

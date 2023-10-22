@@ -30,8 +30,7 @@ export default class UnitManagerClass {
                     this.data.unselectUnit()
                     switch (unit.id) {
                         case 'mountain_ranger':
-                            let projectilePosition = unit.projectilePosition()
-                            this.projectileData.newProjectile('arrow_projectile', projectilePosition.q, projectilePosition.r, unit.target.position.q, unit.target.position.r)
+                            this.projectileData.newProjectile('arrow_projectile', unit.position, unit.target.position)
                             break
                         default:
                             unit.attackTarget()

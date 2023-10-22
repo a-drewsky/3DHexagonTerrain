@@ -9,6 +9,8 @@ export default class ProjectileClass {
     constructor(loc, pos, target, projectileId, mapData, unitData, structureData, tileData, projectileImages) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
+        console.log(pos, target)
+
         this.loc = loc
 
         this.position = {
@@ -73,13 +75,14 @@ export default class ProjectileClass {
     }
 
     spriteRotation = (cameraRotation) => {
-        let spriteRotation = this.rotation + cameraRotation
-        if (spriteRotation >= 6) spriteRotation -= 6
+        let spriteRotation = this.rotation + cameraRotation * 2
+        if (spriteRotation >= 12) spriteRotation -= 12
         return spriteRotation
     }
 
     travelTime = () => {
-        let travelLength = this.commonUtils.getDistance(this.position, this.target)
+        let nearestPos = this.nearestPosition()
+        let travelLength = this.commonUtils.getDistance(nearestPos, this.target)
         return this.tileTravelTime * travelLength
     }
 
@@ -87,10 +90,24 @@ export default class ProjectileClass {
         return (this.projectileCurTime - this.projectileStartTime) / this.travelTime()
     }
 
-    tileHeight = () => {
-        let posHeight = this.tileData.getEntry(this.position.q, this.position.r).height
+    nearestPosition = () => {
+        return this.commonUtils.roundToNearestHex(this.position.q, this.position.r)
+    }
+
+    spriteHeight = () => {
+        let nearestPos = this.nearestPosition()
+        let posHeight = this.tileData.getEntry(nearestPos.q, nearestPos.r).height
         let targetHeight = this.tileData.getEntry(this.target.q, this.target.r).height
-        return posHeight + (targetHeight - posHeight) * this.travelPercent()
+        return posHeight + (targetHeight - posHeight) * this.travelPercent() + this.height
+    }
+
+    shadowHeight = () => {
+        let nearestPos = this.nearestPosition()
+        let projectilePos = this.tileData.getEntry(nearestPos.q, nearestPos.r).position
+        let targetPos = this.tileData.getEntry(this.target.q, this.target.r).position
+        let lerpPos = this.commonUtils.getLerpPos(projectilePos, targetPos, this.travelPercent())
+        lerpPos = this.commonUtils.roundToNearestHex(lerpPos.q, lerpPos.r)
+        return this.tileData.getEntry(lerpPos.q, lerpPos.r).height
     }
 
 
@@ -111,7 +128,8 @@ export default class ProjectileClass {
     }
 
     setRotation = () => {
-        this.rotation = this.commonUtils.getDirection(this.position, this.target)
+        this.rotation = this.commonUtils.getDoubleAxisDirection(this.position, this.target)
+        this.position = this.commonUtils.getDoubleAxisAdjacentPos(this.position, this.rotation)
     }
     
     updatePath = () => {

@@ -5,7 +5,7 @@ export default class ProjectileConfig {
         sprite: 'arrow',
         name: 'Arrow',
         description: 'Shoot from a unit and attacks a single enemy',
-        height: 3,
+        height: 1,
         animation: { rate: 0, duration: 'continuous', type: 'static' },
         attack: '???'
     }

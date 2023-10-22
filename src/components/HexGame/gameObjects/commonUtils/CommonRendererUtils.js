@@ -83,8 +83,6 @@ export default class CommonRendererUtilsClass {
         if(movementTile !== undefined) spriteTile = this.tileData.getEntry(movementTile.q, movementTile.r)
         else spriteTile = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r)
 
-        console.log(spriteObject.position, movementTile, extraHeight)
-
         let spriteTileHeight = spriteTile.height
 
         let distance = 0

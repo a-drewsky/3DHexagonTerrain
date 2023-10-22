@@ -1,4 +1,4 @@
-export default class UnitImageLoaderClass {
+export default class ImageLoaderClass {
 
     constructor(noRows) {
         this.noRows = noRows
@@ -33,8 +33,8 @@ export default class UnitImageLoaderClass {
             let sprites = this.sheet_data[sheetName].sprites
 
             for (let col in sprites) {
-                for (let row in this.rows) {
-                    this.images[this.rows[row] + '_' + sprites[col]] = {
+                for (let row in this.sheet_rows) {
+                    this.images[this.sheet_rows[row] + '_' + sprites[col]] = {
                         image: new Image(),
                         size: this.sheet_data[sheetName].size,
                         offset: this.sheet_data[sheetName].offset
@@ -65,14 +65,14 @@ export default class UnitImageLoaderClass {
 
         let imageDims = {
             width: sheet.width / spriteCount,
-            height: sheet.height / 6
+            height: sheet.height / Object.keys(this.sheet_rows).length
         }
 
         if(this.noRows) imageDims.height = sheet.height
 
         for (let col in sprites) {
 
-            for (let row in this.rows) {
+            for (let row in this.sheet_rows) {
 
                 let tempCanvas = document.createElement('canvas')
                 tempCanvas.width = imageDims.width
@@ -84,7 +84,7 @@ export default class UnitImageLoaderClass {
 
                 let image = tempCanvas.toDataURL('image/png');
 
-                this[this.rows[row] + '_' + sprites[col]].image.src = image
+                this[this.sheet_rows[row] + '_' + sprites[col]].image.src = image
 
             }
         }
@@ -101,7 +101,11 @@ export default class UnitImageLoaderClass {
             }
 
             for (let frame of data) {
-                this[animation].images.push([this['backRight_' + frame], this['frontRight_' + frame], this['front_' + frame], this['frontLeft_' + frame], this['backLeft_' + frame], this['back_' + frame]])
+                let animationRow = []
+                for(let row in this.animation_rows){
+                    animationRow.push(this[this.animation_rows[row] + '_' + frame])
+                }
+                this[animation].images.push(animationRow)
             }
         }
 

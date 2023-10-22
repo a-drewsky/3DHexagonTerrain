@@ -17,7 +17,7 @@ export default class GoldMineImagesClass extends ImageLoaderClass {
             'resources_lte_25': [{x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}, {x:0,y:18}]  
         }
 
-        this.rows = {
+        this.sheet_rows = {
             0: 'backRight',
             1: 'frontRight',
             2: 'front',
@@ -38,6 +38,15 @@ export default class GoldMineImagesClass extends ImageLoaderClass {
                     3: 'default_4'
                 }
             }
+        }
+
+        this.animation_rows = {
+            0: 'backRight',
+            1: 'frontRight',
+            2: 'front',
+            3: 'frontLeft',
+            4: 'backLeft',
+            5: 'back'
         }
 
         this.animation_data = {
