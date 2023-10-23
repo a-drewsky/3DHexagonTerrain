@@ -107,7 +107,7 @@ export default class HexMapControllerContextMenuClass {
 
         this.spriteManager.units.data.selectedUnit.target = targetStructure
 
-        let neighbors = this.tileManager.data.getNeighborKeys(this.spriteManager.units.data.selectedUnit.position.q, this.spriteManager.units.data.selectedUnit.position.r)
+        let neighbors = this.tileManager.data.getNeighborKeys(this.spriteManager.units.data.selectedUnit.position.q, this.spriteManager.units.data.selectedUnit.position.r, 1)
 
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.spriteManager.units.data.selectedUnit.captureFlag(targetTile)

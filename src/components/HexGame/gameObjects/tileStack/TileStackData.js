@@ -168,44 +168,46 @@ export default class TileStackDataClass {
     }
 
     //returns keys of all neighbors adjacent to (q, r)
-    getNeighborKeys = (q, r) => {
-        let neighbors = [];
+    getNeighbors = (q, r, rows) => {
+        let neighbors = this.getNeighborKeys(q, r, rows)
 
-        if (this.hasTileEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
-        if (this.hasTileEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
-        if (this.hasTileEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
-        if (this.hasTileEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
-        if (this.hasTileEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
-        if (this.hasTileEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
-
-        return neighbors.map(key => this.utils.split(key));
+        return neighbors.map(key => this.getEntry(key.q, key.r))
     }
 
     //returns keys of all neighbors adjacent to (q, r)
-    getDoubleNeighborKeys = (q, r) => {
-        let neighbors = [];
+    getNeighborKeys = (q, r, rows) => {
 
-        if (this.hasTileEntry(q, r - 1)) neighbors.push(this.utils.join(q, r - 1));
-        if (this.hasTileEntry(q + 1, r - 1)) neighbors.push(this.utils.join(q + 1, r - 1));
-        if (this.hasTileEntry(q + 1, r)) neighbors.push(this.utils.join(q + 1, r));
-        if (this.hasTileEntry(q, r + 1)) neighbors.push(this.utils.join(q, r + 1));
-        if (this.hasTileEntry(q - 1, r + 1)) neighbors.push(this.utils.join(q - 1, r + 1));
-        if (this.hasTileEntry(q - 1, r)) neighbors.push(this.utils.join(q - 1, r));
+        let validNewNeighbor = (newQ, newR, neighborList, newNeighborList) => {
+            if(newQ == q && newR == r) return false
+            if(!this.hasTileEntry(newQ, newR)) return false
+            if(neighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
+            if(newNeighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
+            return true
+        }
 
-        if (this.hasTileEntry(q, r - 2)) neighbors.push(this.utils.join(q, r - 2));
-        if (this.hasTileEntry(q + 1, r - 2)) neighbors.push(this.utils.join(q + 1, r - 2));
-        if (this.hasTileEntry(q + 2, r - 2)) neighbors.push(this.utils.join(q + 2, r - 2));
-        if (this.hasTileEntry(q + 2, r - 1)) neighbors.push(this.utils.join(q + 2, r - 1));
-        if (this.hasTileEntry(q + 2, r)) neighbors.push(this.utils.join(q + 2, r));
-        if (this.hasTileEntry(q + 1, r + 1)) neighbors.push(this.utils.join(q + 1, r + 1));
-        if (this.hasTileEntry(q, r + 2)) neighbors.push(this.utils.join(q, r + 2));
-        if (this.hasTileEntry(q - 1, r + 2)) neighbors.push(this.utils.join(q - 1, r + 2));
-        if (this.hasTileEntry(q - 2, r + 2)) neighbors.push(this.utils.join(q - 2, r + 2));
-        if (this.hasTileEntry(q - 2, r + 1)) neighbors.push(this.utils.join(q - 2, r + 1));
-        if (this.hasTileEntry(q - 2, r)) neighbors.push(this.utils.join(q - 2, r));
-        if (this.hasTileEntry(q - 1, r - 1)) neighbors.push(this.utils.join(q - 1, r - 1));
+        let neighbors = []
 
-        return neighbors.map(key => this.utils.split(key));
+        if (this.hasTileEntry(q, r - 1)) neighbors.push({ q: q, r: r - 1 })
+        if (this.hasTileEntry(q + 1, r - 1)) neighbors.push({ q: q + 1, r: r - 1 })
+        if (this.hasTileEntry(q + 1, r)) neighbors.push({ q: q + 1, r: r })
+        if (this.hasTileEntry(q, r + 1)) neighbors.push({ q: q, r: r + 1 })
+        if (this.hasTileEntry(q - 1, r + 1)) neighbors.push({ q: q - 1, r: r + 1  })
+        if (this.hasTileEntry(q - 1, r)) neighbors.push({ q: q - 1, r: r })
+
+        for(let i = 1; i < rows; i++){
+            let newNeighbors = []
+            for(let tile of neighbors) {
+                if (validNewNeighbor(tile.q, tile.r - 1, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q, r: tile.r - 1 })
+                if (validNewNeighbor(tile.q + 1, tile.r - 1, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q + 1, r: tile.r - 1 })
+                if (validNewNeighbor(tile.q + 1, tile.r, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q + 1, r: tile.r })
+                if (validNewNeighbor(tile.q, tile.r + 1, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q, r: tile.r + 1 })
+                if (validNewNeighbor(tile.q - 1, tile.r + 1, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q - 1, r: tile.r + 1 })
+                if (validNewNeighbor(tile.q - 1, tile.r, neighbors, newNeighbors)) newNeighbors.push({ q: tile.q - 1, r: tile.r })
+            }
+            neighbors = neighbors.concat(newNeighbors)
+        }
+
+        return neighbors
     }
 
     getTablePosition = (rotation) => {

@@ -53,9 +53,11 @@ export default class StructureBuilderUtilsClass {
         let terrain = this.structureData.getStructure(tilePosQ, tilePosR)
         if (terrain != null && terrain.type != 'modifier') return false
 
-        let doubleTileNeighbors = this.tileData.getDoubleNeighborKeys(tilePosQ, tilePosR)
+        let doubleTileNeighbors = this.tileData.getNeighborKeys(tilePosQ, tilePosR, 2)
 
-        let tileNeighbors = this.tileData.getNeighborKeys(tilePosQ, tilePosR)
+        console.log(doubleTileNeighbors)
+
+        let tileNeighbors = this.tileData.getNeighborKeys(tilePosQ, tilePosR, 1)
 
 
         if (tileNeighbors.length != 6) return false
@@ -116,7 +118,7 @@ export default class StructureBuilderUtilsClass {
 
         let maxNeighbors = BIOME_CONSTANTS[biome].terrainGenMaxNeighbors
 
-        let neighborKeys = this.tileData.getNeighborKeys(q, r)
+        let neighborKeys = this.tileData.getNeighborKeys(q, r, 1)
 
         let terrainCount = 0;
 

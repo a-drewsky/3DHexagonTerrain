@@ -65,7 +65,6 @@ export default class CommonRendererUtilsClass {
     }
 
     darkenImage = (canvas) => {
-        console.log("ACT")
         let tempctx = canvas.getContext('2d')
 
         tempctx.globalCompositeOperation = 'source-atop'

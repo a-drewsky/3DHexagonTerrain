@@ -44,7 +44,7 @@ export default class HexMapControllerUtilsClass {
         let target = targetTile
         let start = startTile
 
-        let neighbors = this.tileManager.data.getNeighborKeys(target.q, target.r)
+        let neighbors = this.tileManager.data.getNeighborKeys(target.q, target.r, 1)
 
         let path = this.pathFinder.findClosestPath(start, target, neighbors)
 
@@ -68,7 +68,7 @@ export default class HexMapControllerUtilsClass {
         if (unit == null) return
 
         let moveSet = this.pathFinder.findMoveSet(unit.position, unit.stats.movement)
-        let actionMoveSet = this.pathFinder.findActionMoveSet(unit.position, unit.stats.movement+1)
+        let actionMoveSet = this.pathFinder.findActionMoveSet(unit.position, 1)
         let attackMoveSet = this.pathFinder.findAttackMoveSet(unit.position, unit.stats.range)
         console.log(moveSet)
         console.log(actionMoveSet)
@@ -89,24 +89,77 @@ export default class HexMapControllerUtilsClass {
         }
 
         //search for structures
-        for (let tileObj of actionMoveSet) {
-            let tile = this.tileManager.data.getEntry(tileObj.tile.q, tileObj.tile.r)
+        for (let tile of actionMoveSet) {
             if ((this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'resource')
                 || (this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'flag')) {
                 pathing.action.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
         }
-        for (let tileObj of attackMoveSet) {
-            let tile = this.tileManager.data.getEntry(tileObj.tile.q, tileObj.tile.r)
+
+        for (let tile of attackMoveSet) {
             if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null
                 || (this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type == 'bunker')) {
-                pathing.attack.push({ q: tile.position.q, r: tile.position.r })
+                if(this.validTarget(unit.position, tile.position)) pathing.attack.push({ q: tile.position.q, r: tile.position.r })
                 continue
             }
         }
         console.log(pathing)
         this.selectionData.setPathingSelections(pathing)
+    }
+
+    validTarget = (pos, target) => {
+
+        let validateHalfTile = (tile) => {
+            let secondTile = { q: tile.q, r: tile.r }
+            if((secondTile.q-0.5) % 1 == 0 ) secondTile.q -= 0.01
+            if((secondTile.r-0.5) % 1 == 0 ) secondTile.r -= 0.01
+
+            tile = this.commonUtils.roundToNearestHex(tile.q, tile.r)
+            tile = this.tileManager.data.getEntry(tile.q, tile.r)
+            
+            secondTile = this.commonUtils.roundToNearestHex(secondTile.q, secondTile.r)
+            secondTile = this.tileManager.data.getEntry(secondTile.q, secondTile.r)
+
+            let firstTileOpen = true
+            let secondTileOpen = true
+
+            if(tile === null || secondTile === null) return true
+
+            if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null) firstTileOpen = false
+            if(this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type != 'modifier') firstTileOpen = false
+
+            if (this.spriteManager.units.data.getUnit(secondTile.position.q, secondTile.position.r) != null) secondTileOpen = false
+            if(this.spriteManager.structures.data.hasStructure(secondTile.position.q, secondTile.position.r) && this.spriteManager.structures.data.getStructure(secondTile.position.q, secondTile.position.r).type != 'modifier') secondTileOpen = false
+
+            if(firstTileOpen == false && secondTileOpen == false) return false
+            return true
+        }
+
+        let validateTile = (tile) => {
+            tile = this.commonUtils.roundToNearestHex(tile.q, tile.r)
+            tile = this.tileManager.data.getEntry(tile.q, tile.r)
+            if(tile === null) return true
+            if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null) return false
+            if(this.spriteManager.structures.data.hasStructure(tile.position.q, tile.position.r) && this.spriteManager.structures.data.getStructure(tile.position.q, tile.position.r).type != 'modifier') return false
+            return true
+        }
+
+        let dist = this.commonUtils.getDistance(pos, target)
+        let dirVector = {q: target.q - pos.q, r: target.r - pos.r}
+        dirVector.q /= dist
+        dirVector.r /= dist
+
+        for(let i = 1; i < dist; i++){
+            let tile = { q: pos.q + dirVector.q * i, r: pos.r + dirVector.r * i }
+            let validation
+            if( (tile.q-0.5) % 1 == 0 || (tile.r-0.5) % 1 == 0 ) validation = validateHalfTile(tile)
+            else validation = validateTile(tile)
+            if(validation == false) return false
+        }
+
+        return true
+
     }
 
     checkUnitPlacementTile = (tile) => {
@@ -123,7 +176,7 @@ export default class HexMapControllerUtilsClass {
 
         let bunkers = this.spriteManager.structures.data.getBunkersArray()
         for (let bunker of bunkers) {
-            let neighborKeys = this.tileManager.data.getNeighborKeys(bunker.position.q, bunker.position.r)
+            let neighborKeys = this.tileManager.data.getNeighborKeys(bunker.position.q, bunker.position.r, 1)
             for (let neighborKey of neighborKeys) {
                 if (this.pathFinder.isValid(neighborKey.q, neighborKey.r)) {
                     placementSet.add(this.commonUtils.join(neighborKey.q, neighborKey.r))

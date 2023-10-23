@@ -38,7 +38,7 @@ export default class HexMapprerendererClass {
         tileToRender.rendered = true
 
         //check for structures
-        let neighborKeys = this.tileManager.data.getNeighborKeys(tileToRender.position.q, tileToRender.position.r)
+        let neighborKeys = this.tileManager.data.getNeighborKeys(tileToRender.position.q, tileToRender.position.r, 1)
         for(let neighborKey of neighborKeys){
             if(!this.tileManager.data.getAnyEntry(neighborKey.q, neighborKey.r).rendered) continue
             if(!this.spriteManager.structures.data.hasStructure(neighborKey.q, neighborKey.r)) continue

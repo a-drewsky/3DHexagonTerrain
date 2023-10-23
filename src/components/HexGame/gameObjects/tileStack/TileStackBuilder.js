@@ -180,7 +180,7 @@ export default class TileStackBuilderClass {
             let keyObj = this.commonUtils.split(keyString);
             let tileBiome = this.tileData.getEntry(keyObj.q, keyObj.r).biome
 
-            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r)
+            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
             neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey.q, neighborKey.r).biome))
             neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey.q, neighborKey.r)))
 
@@ -203,7 +203,7 @@ export default class TileStackBuilderClass {
 
 
             //check if tile has non-similar biome neighbors
-            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r)
+            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
             neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
             if (neighborKeys.length == 0) return false
 
@@ -287,7 +287,7 @@ export default class TileStackBuilderClass {
 
                 let keyObj = this.commonUtils.split(entry.key);
                 let tile = this.tileData.getEntry(keyObj.q, keyObj.r)
-                let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r)
+                let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
 
                 let isCliff = false
 
