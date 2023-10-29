@@ -39,8 +39,6 @@ export default class UnitManagerClass {
                             unit.attackTarget()
                     }
                     unit.setIdle()
-                    this.mapData.resetState()
-                    this.selectionData.clearAllSelections()
                     return
                 case 'hit':
                     unit.setIdle()

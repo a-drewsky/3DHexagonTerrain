@@ -1,6 +1,5 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
 import TileStackClass from "./TileStack";
-import TileGroundShadowClass from './TileGroundShadow'
 
 export default class TileStackDataClass {
 
@@ -23,7 +22,8 @@ export default class TileStackDataClass {
         return this.getEntry(q, r)
     }
     setShadowEntry = (q, r) => {
-        this.tileMap.set(q + ',' + r, new TileGroundShadowClass({ q: q, r: r }, this.mapData));
+        this.tileMap.set(q + ',' + r, new TileStackClass({ q: q, r: r }, this.mapData));
+        this.getEntry(q, r).groundShadowTile = true
         return this.getEntry(q, r)
     }
 

@@ -70,6 +70,7 @@ export default class HexMapManagerClass {
         this.cameraManager.update()
         this.uiUpdater.update()
         this.spriteManager.update()
+        this.tileManager.render()
         this.spriteManager.render()
     }
 

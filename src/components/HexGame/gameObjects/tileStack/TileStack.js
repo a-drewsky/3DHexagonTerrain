@@ -1,11 +1,23 @@
 export default class TileStackClass {
 
-    constructor(pos, hexMapData, images){
+    constructor(pos, hexMapData, images) {
         this.position = {
             q: pos.q,
             r: pos.r
         }
+
+        this.canvasSize = {
+            width: hexMapData.size * 2,
+            height: hexMapData.size * 2
+        }
+
         this.height = null
+
+        this.groundShadowTile = false
+
+        this.rendered = false
+        this.images = []
+
         this.biome = null
         this.verylowBiome = null
         this.lowBiome = null
@@ -13,19 +25,11 @@ export default class TileStackClass {
         this.highBiome = null
         this.veryhighBiome = null
 
+        if(!images) return
+
         this.imageObject = images.tile
         this.selectionImageObject = images.highlight
-        this.images = []
         this.selectionImages = []
-
-        this.groundShadowTile = false
-
-        this.rendered = false
-
-        this.canvasSize = {
-            width: hexMapData.size * 2,
-            height: hexMapData.size * 2
-         }
     }
 
 }

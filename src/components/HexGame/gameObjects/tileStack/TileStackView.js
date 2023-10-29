@@ -29,14 +29,16 @@ export default class TileStackViewClass {
 
             let tilePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation)
 
-            if (this.cameraData.onScreenCheck({ x: tilePos.x - this.mapData.size, y: tilePos.y - this.mapData.size * this.mapData.squish }, { width: tileObj.images[this.cameraData.rotation].width, height: tileObj.images[this.cameraData.rotation].height }) == true) {
-                drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
+            if (this.cameraData.onScreenCheck({ x: tilePos.x - this.mapData.size, y: tilePos.y - this.mapData.size * this.mapData.squish }, { width: tileObj.images[this.cameraData.rotation].width, height: tileObj.images[this.cameraData.rotation].height }) == false) {
+                continue
             }
+            
+            drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
 
             let tileSelections = this.selectionData.getSelectionNames(value.q, value.r)
 
             for (let tileSelection of tileSelections) {
-                this.drawHighlight(drawctx, value, tileSelection)
+                this.drawHighlight(drawctx, tileObj, tileSelection)
 
             }
 
@@ -45,20 +47,11 @@ export default class TileStackViewClass {
 
     }
 
-    drawHighlight = (drawctx, position, selection) => {
+    drawHighlight = (drawctx, tileObj, selection) => {
 
-        let tile = this.tileData.getAnyEntry(position.q, position.r)
+        let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(tileObj.position.q, tileObj.position.r, this.cameraData.rotation), tileObj.height, this.cameraData.rotation)
 
-        if (!tile.selectionImageObject[selection]) throw Error(`Invalid Tile Selection: (${selection}). Tile selection properties are: [${Object.getOwnPropertyNames(tile.selectionImageObject).splice(3)}]`)
-
-        let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation), tile.height, this.cameraData.rotation)
-
-        //MOVE TO RENDERER
-        if (!tile.selectionImages[selection] || !tile.selectionImages[selection][this.cameraData.rotation]) {
-            this.tileRenderer.renderSelectionImage(tile, selection)
-        }
-
-        let sprite = tile.selectionImages[selection][this.cameraData.rotation]
+        let sprite = tileObj.selectionImages[selection][this.cameraData.rotation]
 
         drawctx.drawImage(sprite, tilePos.x - this.mapData.size, tilePos.y - (this.mapData.size * this.mapData.squish), this.mapData.size * 2, this.mapData.size * 2)
 

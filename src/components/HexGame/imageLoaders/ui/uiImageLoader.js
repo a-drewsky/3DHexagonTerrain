@@ -20,7 +20,7 @@ export default class UiImageLoaderClass {
         let sheet = new Image()
 
         sheet.onload = () => {
-            // let sprites = this.sheet_data[sheetName].sprites
+            
             let imageDims = {
                 width: sheet.width / this.spriteCount,
                 height: sheet.height
@@ -41,6 +41,7 @@ export default class UiImageLoaderClass {
 
 
             }
+            
         }
         sheet.src = this.sprite_sheet
     }
