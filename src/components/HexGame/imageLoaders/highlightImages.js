@@ -17,16 +17,16 @@ export default class HighlighImagesClass {
 
         this.images = {
 
-            action: new Image(),
-            attack: new Image(),
-            tile: new Image(),
-            movement: new Image(),
-            path: new Image(),
+            tile_info: new Image(),
             unit: new Image(),
             rotate: new Image(),
             hover_select: new Image(),
             hover_place: new Image(),
             placement: new Image(),
+            path: new Image(),
+            pathing_action: new Image(),
+            pathing_attack: new Image(),
+            pathing_movement: new Image(),
             target_action: new Image(),
             target_attack: new Image(),
             target_move: new Image(),
@@ -51,19 +51,19 @@ export default class HighlighImagesClass {
         }
 
 
-        this.action.src = action
-        this.attack.src = attack
-        this.tile.src = tile
-        this.path.src = path
+        this.tile_info.src = tile
         this.unit.src = unit
         this.rotate.src = rotate
         this.hover_select.src = hover_select
         this.hover_place.src = hover_place
         this.placement.src = placement
+        this.path.src = path
+        this.pathing_action.src = action
+        this.pathing_attack.src = attack
+        this.pathing_movement.src = movement
         this.target_action.src = action_target
         this.target_attack.src = attack_target
         this.target_move.src = path
-        this.movement.src = movement
 
 
     }

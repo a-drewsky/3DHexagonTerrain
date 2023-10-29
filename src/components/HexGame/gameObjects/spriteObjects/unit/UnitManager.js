@@ -4,6 +4,7 @@ export default class UnitManagerClass {
 
     constructor(hexMapData, images) {
         this.mapData = hexMapData.mapData
+        this.selectionData = hexMapData.selectionData
         this.projectileData = hexMapData.projectileData
         this.data = hexMapData.unitData
         this.renderer = new UnitRendererClass(hexMapData, images)
@@ -26,6 +27,7 @@ export default class UnitManagerClass {
                     unit.collectTargetResources()
                     unit.setIdle()
                     this.mapData.resetState()
+                    this.selectionData.clearAllSelections()
                     return
                 case 'attack':
                     this.data.unselectUnit()
@@ -38,14 +40,19 @@ export default class UnitManagerClass {
                     }
                     unit.setIdle()
                     this.mapData.resetState()
+                    this.selectionData.clearAllSelections()
                     return
                 case 'hit':
                     unit.setIdle()
-                    if (unit.state.current.name != 'death') this.mapData.resetState()
+                    if (unit.state.current.name != 'death') {
+                        this.mapData.resetState()
+                        this.selectionData.clearAllSelections()
+                    }
                     return
                 case 'death':
                     this.data.deleteUnit(unit.position.q, unit.position.r)
                     this.mapData.resetState()
+                    this.selectionData.clearAllSelections()
                     return
             }
         }

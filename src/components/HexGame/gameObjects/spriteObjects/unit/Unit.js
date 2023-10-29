@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, hexMapData, tileData, unitImages, uiController, globalState) {
+    constructor(pos, unitId, mapData, selectionData, tileData, unitImages, uiController, globalState) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = {
@@ -47,7 +47,8 @@ export default class UnitClass {
         this.jumpAmount = JUMP_AMOUNT
 
         //access data
-        this.hexMapData = hexMapData
+        this.mapData = mapData
+        this.selectionData = selectionData
         this.tileData = tileData
         this.uiController = uiController
         this.globalState = globalState
@@ -182,7 +183,7 @@ export default class UnitClass {
         this.destinationCurTime = null
         this.destinationStartTime = null
 
-        this.hexMapData.setState('animation')
+        this.mapData.setState('animation')
 
     }
 
@@ -213,9 +214,9 @@ export default class UnitClass {
 
         this.setIdle()
 
-        this.tileData.setSelection(this.position.q, this.position.r, 'unit')
+        this.selectionData.setInfoSelection('unit', this.position)
 
-        this.hexMapData.setState('chooseRotation')
+        this.mapData.setState('chooseRotation')
 
     }
 
@@ -235,7 +236,7 @@ export default class UnitClass {
         }
 
         this.futureState = null
-        this.hexMapData.selectionData.resetSelected()
+        this.selectionData.clearAllSelections()
 
     }
 
@@ -253,7 +254,7 @@ export default class UnitClass {
 
         let startTile = this.tileData.getEntry(this.position.q, this.position.r)
 
-        this.path = this.hexMapData.selectionData.selections.path
+        this.path = this.selectionData.getPath()
 
         let nextPosition = this.tileData.getEntry(this.path[0].q, this.path[0].r)
 

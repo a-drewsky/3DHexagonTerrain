@@ -33,14 +33,11 @@ export default class TileStackViewClass {
                 drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
             }
 
-            let tileSelections = this.selectionData.getSelections(value.q, value.r)
+            let tileSelections = this.selectionData.getSelectionNames(value.q, value.r)
 
             for (let tileSelection of tileSelections) {
-                if (this.selectionData.stateSelections[tileSelection]) tileSelection = this.selectionData.stateSelections[tileSelection][this.mapData.curState()]
+                this.drawHighlight(drawctx, value, tileSelection)
 
-                if (tileSelection) {
-                    this.drawHighlight(drawctx, value, tileSelection)
-                }
             }
 
 
@@ -52,7 +49,7 @@ export default class TileStackViewClass {
 
         let tile = this.tileData.getAnyEntry(position.q, position.r)
 
-        if(!tile.selectionImageObject[selection]) throw Error(`Invalid Tile Selection: (${selection}). Tile selection properties are: [${Object.getOwnPropertyNames(tile.selectionImageObject).splice(3)}]`)
+        if (!tile.selectionImageObject[selection]) throw Error(`Invalid Tile Selection: (${selection}). Tile selection properties are: [${Object.getOwnPropertyNames(tile.selectionImageObject).splice(3)}]`)
 
         let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation), tile.height, this.cameraData.rotation)
 

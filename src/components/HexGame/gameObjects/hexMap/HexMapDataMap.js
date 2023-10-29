@@ -2,7 +2,7 @@ import { TILE_SIZE, HEXMAP_SQUISH, TILE_HEIGHT, SHADOW_ROTATION, HEXMAP_ELEVATIO
 
 export default class HexMapDataMapClass {
 
-    constructor(canvas, selectionData) {
+    constructor(canvas) {
 
         this.state = {
             selectTile: 'selectTile', //default
@@ -28,7 +28,6 @@ export default class HexMapDataMapClass {
 
         //ui commands
         this.renderBackground = true
-        this.selectionData = selectionData
 
         //will be player data
         this.resources = {
@@ -45,7 +44,6 @@ export default class HexMapDataMapClass {
     }
 
     resetState = () => {
-        this.selectionData.resetSelected()
         this.state.current = this.state.selectTile
         console.log(this.curState())
     }

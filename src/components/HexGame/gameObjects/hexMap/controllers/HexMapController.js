@@ -49,7 +49,7 @@ export default class HexMapControllerClass {
 
             this.cameraManager.data.clickPos = null
 
-            let tileSelected = this.utils.getSelectedTile(clickPos.x, clickPos.y)
+            let tileSelected = this.utils.getSelectionNamesTile(clickPos.x, clickPos.y)
 
             if (!tileSelected) return
 
@@ -62,7 +62,7 @@ export default class HexMapControllerClass {
 
         this.cameraManager.controller.mouseMove(x, y)
 
-        this.selectionData.resetHover()
+        this.selectionData.clearHover()
 
         switch (this.mapData.curState()) {
             case 'selectTile':
@@ -84,7 +84,7 @@ export default class HexMapControllerClass {
 
     zoom = (deltaY) => {
         this.cameraManager.controller.zoom(deltaY)
-        this.selectionData.resetHover()
+        this.selectionData.clearHover()
     }
 
     selectTile = (tileSelected, clickPos) => {
@@ -137,8 +137,8 @@ export default class HexMapControllerClass {
         if (this.mapData.curState() != 'selectTile') return
         if (!this.cardData.canUseCard(this.mapData.resources)) return
 
-        this.selectionData.resetSelected()
-        this.selectionData.resetHover()
+        this.selectionData.clearAllSelections()
+        this.selectionData.clearHover()
         this.utils.findPlacementSet()
         this.spriteManager.units.data.createUnit(this.cardData.cards[this.cardData.selectedCard].unitId)
         this.mapData.setState('placeUnit')
@@ -190,7 +190,7 @@ export default class HexMapControllerClass {
 
 
         this.cameraManager.controller.rotateRight()
-        this.selectionData.resetHover()
+        this.selectionData.clearHover()
         this.mapData.renderBackground = true
     }
 
@@ -227,7 +227,7 @@ export default class HexMapControllerClass {
         );
 
         this.cameraManager.controller.rotateLeft()
-        this.selectionData.resetHover()
+        this.selectionData.clearHover()
         this.mapData.renderBackground = true
     }
 

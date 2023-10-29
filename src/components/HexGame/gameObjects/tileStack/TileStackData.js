@@ -4,9 +4,8 @@ import TileGroundShadowClass from './TileGroundShadow'
 
 export default class TileStackDataClass {
 
-    constructor(mapData, selectionData, images) {
+    constructor(mapData, images) {
         this.mapData = mapData
-        this.selectionData = selectionData
 
         this.images = images
 
@@ -26,10 +25,6 @@ export default class TileStackDataClass {
     setShadowEntry = (q, r) => {
         this.tileMap.set(q + ',' + r, new TileGroundShadowClass({ q: q, r: r }, this.mapData));
         return this.getEntry(q, r)
-    }
-
-    setSelection = (q, r, selection) => {
-        if (this.hasTileEntry(q, r)) this.selectionData.setSelection(q, r, selection)
     }
 
     //delete an entry in the tileMap (void)
