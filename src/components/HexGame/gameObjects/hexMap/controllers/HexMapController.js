@@ -58,6 +58,30 @@ export default class HexMapControllerClass {
         }
     }
 
+    mouseMove = (x, y) => {
+
+        this.cameraManager.controller.mouseMove(x, y)
+
+        this.selectionData.resetHover()
+
+        switch (this.mapData.curState()) {
+            case 'selectTile':
+            case 'placeUnit':
+            case 'animation':
+                this.mouseController.setHover(x, y)
+                return
+            case 'selectMovement':
+                this.mouseController.updatePathSelection(x, y)
+                return
+            case 'chooseRotation':
+                this.mouseController.setUnitMouseDirection(x, y)
+                this.mouseController.setHover(x, y)
+                return
+            case 'selectAction':
+                return
+        }
+    }
+
     zoom = (deltaY) => {
         this.cameraManager.controller.zoom(deltaY)
         this.selectionData.resetHover()
@@ -86,30 +110,6 @@ export default class HexMapControllerClass {
                 return
         }
 
-    }
-
-    mouseMove = (x, y) => {
-
-        this.cameraManager.controller.mouseMove(x, y)
-
-        this.selectionData.resetHover()
-
-        switch (this.mapData.curState()) {
-            case 'selectTile':
-            case 'placeUnit':
-            case 'animation':
-                this.mouseController.setHover(x, y)
-                return
-            case 'selectMovement':
-                this.mouseController.updatePathSelection(x, y)
-                return
-            case 'chooseRotation':
-                this.mouseController.setUnitMouseDirection(x, y)
-                this.mouseController.setHover(x, y)
-                return
-            case 'selectAction':
-                return
-        }
     }
 
 

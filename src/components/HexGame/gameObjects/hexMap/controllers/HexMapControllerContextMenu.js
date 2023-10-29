@@ -124,8 +124,8 @@ export default class HexMapControllerContextMenuClass {
     cancel = () => {
         this.selectionData.resetSelected()
 
-        this.mapData.resetState()
         this.spriteManager.units.data.unselectUnit()
+        this.mapData.resetState()
 
         this.uiController.clearContextMenu()
     }

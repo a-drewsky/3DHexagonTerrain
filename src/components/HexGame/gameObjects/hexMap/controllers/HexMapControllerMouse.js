@@ -7,6 +7,7 @@ export default class HexMapControllerMouseClass {
         this.selectionData = hexMapData.selectionData
         this.cardData = hexMapData.cardData
         this.unitData = hexMapData.unitData
+        this.structureData = hexMapData.structureData
 
         this.tileManager = tileManager
         this.spriteManager = spriteManager
@@ -22,9 +23,9 @@ export default class HexMapControllerMouseClass {
 
         let hoverTile = this.utils.getSelectedTile(x, y)
 
-        if (this.spriteManager.units.data.placementUnit != null) {
-            this.spriteManager.units.data.placementUnit.setPosition(hoverTile)
-            if (!hoverTile) this.spriteManager.units.data.placementUnit.setPosition({ q: null, r: null })
+        if (this.unitData.placementUnit != null) {
+            this.unitData.placementUnit.setPosition(hoverTile)
+            if (!hoverTile) this.unitData.placementUnit.setPosition({ q: null, r: null })
         }
 
         if (!hoverTile) return
@@ -48,9 +49,9 @@ export default class HexMapControllerMouseClass {
         this.selectionData.resetSelected()
         this.cardData.selectedCard = null
 
-        if (this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r) != null) {
+        if (this.unitData.getUnit(tile.position.q, tile.position.r) != null) {
             this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'unit')
-            this.spriteManager.units.data.selectUnit(tile.position.q, tile.position.r)
+            this.unitData.selectUnit(tile.position.q, tile.position.r)
             this.utils.findMoveSet()
             this.mapData.setState('selectMovement')
         }
@@ -64,9 +65,9 @@ export default class HexMapControllerMouseClass {
 
         if (tile === null || this.utils.checkUnitPlacementTile(tile) == false) return
 
-        this.spriteManager.units.data.addUnit(tile.position.q, tile.position.r)
+        this.unitData.addUnit(tile.position.q, tile.position.r)
 
-        this.spriteManager.units.data.eraseUnit()
+        this.unitData.eraseUnit()
         this.mapData.setState('selectTile')
         this.selectionData.resetSelected()
 
@@ -82,12 +83,12 @@ export default class HexMapControllerMouseClass {
 
         let path = this.selectionData.selections.path
 
-        if(path.length > 0){
-            let prevTile = path[path.length-1]
-            if(hoverTile.q == prevTile.q && hoverTile.r == prevTile.r) return
+        if (path.length > 0) {
+            let prevTile = path[path.length - 1]
+            if (hoverTile.q == prevTile.q && hoverTile.r == prevTile.r) return
         }
 
-        let unit = this.spriteManager.units.data.selectedUnit
+        let unit = this.unitData.selectedUnit
 
         if (unit.position.q == hoverTile.q && unit.position.r == hoverTile.r) {
             this.selectionData.selections.path = []
@@ -120,7 +121,7 @@ export default class HexMapControllerMouseClass {
             }
 
             let neighbors
-            if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r,1)
+            if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r, 1)
             else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r, 1)
 
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
@@ -162,7 +163,7 @@ export default class HexMapControllerMouseClass {
 
     setUnitMouseDirection = (x, y) => {
 
-        let unit = this.spriteManager.units.data.selectedUnit
+        let unit = this.unitData.selectedUnit
 
         if (unit == null) return
 
@@ -177,71 +178,56 @@ export default class HexMapControllerMouseClass {
     }
 
     selectMovement = (tile, x, y) => {
-        let unit = this.spriteManager.units.data.selectedUnit
+        let unit = this.unitData.selectedUnit
 
         if (unit == null) return
 
-        let moveSet = this.utils.pathFinder.findMoveSet(unit.position, unit.stats.movement)
+        let pathing = this.selectionData.selections.pathing
 
-        let moveSetPlus1 = this.utils.pathFinder.findFullMoveSet(moveSet, unit.position)
-        let mineMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'resource')
-        let flagMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'flag')
-        let attackMoveSet = moveSetPlus1.filter(tileObj => this.spriteManager.units.data.getUnit(tileObj.tile.q, tileObj.tile.r) != null
-            || (this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r) != null && this.spriteManager.structures.data.getStructure(tileObj.tile.q, tileObj.tile.r).type == 'bunker'))
+        //Check Actions
+        if (pathing.action.some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+            let structure = this.structureData.getStructure(tile.position.q, tile.position.r)
 
-        if (mineMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
             this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'action')
-            this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
 
-            this.uiController.setContextMenu(x, y, ['btnMine', 'btnCancel'])
-            return
+            switch (structure.type) {
+                case 'resource':
+                    this.uiController.setContextMenu(x, y, ['btnMine', 'btnCancel'])
+                    return
+                case 'flag':
+                    this.uiController.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
+                    return
+            }
+
         }
 
-        if (flagMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
-            this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'action')
-            this.spriteManager.units.data.selectedUnit = unit
-            this.mapData.setState('selectAction')
-
-            this.uiController.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
-            return
-        }
-
-        if (attackMoveSet.some(tileObj => tileObj.tile.q == tile.position.q && tileObj.tile.r == tile.position.r)) {
+        //Check Attacks
+        if (pathing.attack.some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
             this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'attack')
-            this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
-
             this.uiController.setContextMenu(x, y, ['btnAttack', 'btnCancel'])
             return
         }
 
-        if (moveSet.some(moveObj => moveObj.tile.q == tile.position.q && moveObj.tile.r == tile.position.r)) {
+        //Check Movement
+        if (pathing.movement.some(moveObj => moveObj.q == tile.position.q && moveObj.r == tile.position.r)) {
             this.selectionData.setTargetSelection(tile.position.q, tile.position.r, 'move')
-            this.spriteManager.units.data.selectedUnit = unit
             this.mapData.setState('selectAction')
-
             this.uiController.setContextMenu(x, y, ['btnMove', 'btnCancel'])
             return
         }
 
-        this.selectionData.resetSelected()
-        let newUnit = this.spriteManager.units.data.getUnit(tile.position.q, tile.position.r)
-        if (newUnit == null) {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'tile')
-            this.spriteManager.units.data.selectedUnit = null
-            this.mapData.setState('selectTile')
-        }
-        else {
-            this.tileManager.data.setSelection(tile.position.q, tile.position.r, 'unit')
-            this.utils.findMoveSet()
-            this.mapData.setState('selectMovement')
-        }
+        //Reset State and check new tile
+        this.unitData.unselectUnit()
+        this.mapData.resetState()
+        this.selectTile(tile)
 
     }
 
     endUnitTurn = () => {
-        this.spriteManager.units.data.unselectUnit()
+        this.unitData.unselectUnit()
+        this.mapData.resetState()
     }
 
 }

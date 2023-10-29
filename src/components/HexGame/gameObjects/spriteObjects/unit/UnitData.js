@@ -57,7 +57,6 @@ export default class UnitDataClass {
 
     unselectUnit = () => {
         this.selectedUnit = null
-        this.hexMapData.resetState()
     }
 
 }

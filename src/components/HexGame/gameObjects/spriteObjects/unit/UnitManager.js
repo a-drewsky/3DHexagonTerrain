@@ -25,6 +25,7 @@ export default class UnitManagerClass {
                     this.data.unselectUnit()
                     unit.collectTargetResources()
                     unit.setIdle()
+                    this.mapData.resetState()
                     return
                 case 'attack':
                     this.data.unselectUnit()
@@ -36,6 +37,7 @@ export default class UnitManagerClass {
                             unit.attackTarget()
                     }
                     unit.setIdle()
+                    this.mapData.resetState()
                     return
                 case 'hit':
                     unit.setIdle()
