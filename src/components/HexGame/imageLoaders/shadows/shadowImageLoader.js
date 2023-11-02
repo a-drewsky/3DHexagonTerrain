@@ -1,4 +1,10 @@
-export default class ShadowImageLoaderClass {
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
+
+export default class ShadowSheetImageLoaderClass {
+
+    constructor(){
+        this.utils = new ImageLoaderUtilsClass()
+    }
 
     loadImages = (startGame) => {
 
@@ -79,6 +85,8 @@ export default class ShadowImageLoaderClass {
             let tempctx = tempCanvas.getContext('2d')
 
             tempctx.drawImage(sheet, 0, imageDims.height * row, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
+
+            tempCanvas = this.utils.upscale(tempCanvas)
 
             let image = tempCanvas.toDataURL('image/png');
 

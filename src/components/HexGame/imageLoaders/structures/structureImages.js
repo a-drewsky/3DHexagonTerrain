@@ -4,6 +4,8 @@ import PropImagesClass from './props/propImages'
 import ResourceImagesClass from './resources/resourceImages'
 import FlagImagesClass from './flags/flagImages'
 
+import ImageLoaderUtilsClass from '../utils/imageLoaderUtils'
+
 export default class StructureImagesClass {
 
     constructor() {
@@ -14,20 +16,13 @@ export default class StructureImagesClass {
             this.resource = new ResourceImagesClass(),
             this.flag = new FlagImagesClass()
         ]
-    }
 
-    loadImages = (startGame) => {
+        this.utils = new ImageLoaderUtilsClass()
+        this.loadImages = this.utils.loadImages
 
-        let totalLoaded = 0;
-        let testLoaded = () => {
-            totalLoaded++
-            if (totalLoaded == this.loaders.length) startGame()
-        }
-
-        for (let loader of this.loaders) {
-            loader.loadImages(testLoaded)
-        }
 
     }
+
+
 
 }

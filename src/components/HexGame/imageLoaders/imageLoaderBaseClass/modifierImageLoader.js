@@ -1,4 +1,10 @@
-export default class ModifierImageLoaderClass {
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
+
+export default class ModifierSheetImageLoaderClass {
+
+    constructor() {
+        this.utils = new ImageLoaderUtilsClass()
+    }
 
     loadImages = (startGame) => {
 
@@ -33,9 +39,31 @@ export default class ModifierImageLoaderClass {
     loadSheetImages = () => {
 
         for (let imageName in this.image_data) {
-            this[imageName].src = this.image_data[imageName].sprite
+
+            let tempImage = new Image()
+
+            tempImage.onload = () => {
+                this.loadSheet(tempImage, imageName)
+            }
+            tempImage.src = this.image_data[imageName].sprite
+            
         }
         
+    }
+
+    loadSheet = (spriteImage, imageName) => {
+        let tempCanvas = document.createElement('canvas')
+        tempCanvas.width = spriteImage.width
+        tempCanvas.height = spriteImage.height
+        let tempctx = tempCanvas.getContext('2d')
+
+        tempctx.drawImage(spriteImage, 0, 0, tempCanvas.width, tempCanvas.height)
+
+        tempCanvas = this.utils.upscale(tempCanvas)
+
+        let image = tempCanvas.toDataURL('image/png');
+
+        this[imageName].src = image
     }
 
     assignImages = (startGame) => {

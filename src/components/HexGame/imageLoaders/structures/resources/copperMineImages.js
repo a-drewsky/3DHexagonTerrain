@@ -1,8 +1,9 @@
-import ImageLoaderClass from '../../imageLoader'
+
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import copper_mine_sheet from '../../../images/resources/copper_mine_sheet.png'
 
-export default class CopperMineImagesClass extends ImageLoaderClass {
+export default class CopperMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

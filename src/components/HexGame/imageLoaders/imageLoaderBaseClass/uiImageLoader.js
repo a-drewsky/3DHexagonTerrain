@@ -1,7 +1,30 @@
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
+
 export default class UiImageLoaderClass {
 
     constructor(sprite_sheet) {
         this.sprite_sheet = sprite_sheet
+        this.utils = new ImageLoaderUtilsClass()
+    }
+
+    loadImages = (startGame) => {
+
+        this.createSheetImages()
+
+        let imagesLoaded = 0;
+        for (let [key, value] of Object.entries(this.images)) {
+            this[key] = value;
+            value.onload = () => {
+                imagesLoaded++;
+                if (imagesLoaded == Object.keys(this.images).length) {
+                    delete this.images;
+                    this.assignImages(startGame)
+                }
+            }
+        }
+
+        this.loadSheetImages()
+
     }
 
     createSheetImages = () => {
@@ -35,6 +58,8 @@ export default class UiImageLoaderClass {
 
                 tempctx.drawImage(sheet, imageDims.width * col, 0, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
 
+                tempCanvas = this.utils.upscale(tempCanvas)
+
                 let image = tempCanvas.toDataURL('image/png');
 
                 this[this.spriteName + '_' + col].src = image
@@ -44,26 +69,6 @@ export default class UiImageLoaderClass {
             
         }
         sheet.src = this.sprite_sheet
-    }
-
-    loadImages = (startGame) => {
-
-        this.createSheetImages()
-
-        let imagesLoaded = 0;
-        for (let [key, value] of Object.entries(this.images)) {
-            this[key] = value;
-            value.onload = () => {
-                imagesLoaded++;
-                if (imagesLoaded == Object.keys(this.images).length) {
-                    delete this.images;
-                    this.assignImages(startGame)
-                }
-            }
-        }
-
-        this.loadSheetImages()
-
     }
 
     assignImages = (startGame) => {

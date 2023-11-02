@@ -7,9 +7,9 @@ import idle_sheet from '../../images/units/villagerUnit/villager_unit_idle_sheet
 
 import icon_image from '../../images/units/villagerUnit/villager_unit_icon.png'
 
-import ImageLoaderClass from '../imageLoader'
+import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
-export default class UnitImagesVillagerClass extends ImageLoaderClass {
+export default class UnitImagesVillagerClass extends SheetImageLoaderClass {
 
     constructor() {
 

@@ -11,13 +11,9 @@ export default class TileStackClass {
             height: hexMapData.size * 2
         }
 
-        this.height = null
-
         this.groundShadowTile = false
 
-        this.rendered = false
-        this.images = []
-
+        this.height = null
         this.biome = null
         this.verylowBiome = null
         this.lowBiome = null
@@ -25,11 +21,11 @@ export default class TileStackClass {
         this.highBiome = null
         this.veryhighBiome = null
 
+        this.images = []
         if(!images) return
 
         this.imageObject = images.tile
         this.selectionImageObject = images.highlight
-        this.selectionImages = []
     }
 
 }

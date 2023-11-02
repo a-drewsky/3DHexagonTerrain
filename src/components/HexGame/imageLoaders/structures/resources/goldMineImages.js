@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import gold_mine_sheet from '../../../images/resources/gold_mine_sheet.png'
 
-export default class GoldMineImagesClass extends ImageLoaderClass {
+export default class GoldMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

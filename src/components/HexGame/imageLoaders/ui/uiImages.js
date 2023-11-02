@@ -1,6 +1,8 @@
 import HealthbarImagesClass from "./healthbarImages";
 import ResourceImagesClass from "./resourcebarImages";
 
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+
 export default class UiImagesClass {
 
     constructor() {
@@ -8,20 +10,10 @@ export default class UiImagesClass {
             this.healthbar = new HealthbarImagesClass(),
             this.resourcebar = new ResourceImagesClass()
         ]
+
+        this.utils = new ImageLoaderUtilsClass()
+        this.loadImages = this.utils.loadImages
     }
 
-    loadImages = (startGame) => {
-
-        let totalLoaded = 0;
-        let testLoaded = () => {
-            totalLoaded++
-            if (totalLoaded == this.loaders.length) startGame()
-        }
-
-        for (let loader of this.loaders) {
-            loader.loadImages(testLoaded)
-        }
-
-    }
 
 }

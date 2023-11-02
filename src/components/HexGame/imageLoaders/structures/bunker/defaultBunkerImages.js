@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import bunker_sheet from '../../../images/bases/base/base_sheet.png'
 
-export default class DefaultBunkerImagesClass extends ImageLoaderClass {
+export default class DefaultBunkerImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

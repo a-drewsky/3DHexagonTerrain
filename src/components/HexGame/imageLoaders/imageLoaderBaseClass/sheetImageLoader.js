@@ -1,7 +1,11 @@
-export default class ImageLoaderClass {
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+
+export default class SheetSheetImageLoaderClass {
 
     constructor(noRows) {
         this.noRows = noRows
+
+        this.utils = new ImageLoaderUtilsClass()
     }
 
     loadImages = (startGame) => {
@@ -58,7 +62,7 @@ export default class ImageLoaderClass {
         }
     }
 
-    loadSheet = (sheet, sheetName) => {    
+    loadSheet = (sheet, sheetName) => {
 
         let spriteCount = Object.keys(this.sheet_data[sheetName].sprites).length
         let sprites = this.sheet_data[sheetName].sprites
@@ -68,7 +72,7 @@ export default class ImageLoaderClass {
             height: sheet.height / Object.keys(this.sheet_rows).length
         }
 
-        if(this.noRows) imageDims.height = sheet.height
+        if (this.noRows) imageDims.height = sheet.height
 
         for (let col in sprites) {
 
@@ -79,8 +83,10 @@ export default class ImageLoaderClass {
                 tempCanvas.height = imageDims.height
                 let tempctx = tempCanvas.getContext('2d')
 
-                if(this.noRows) tempctx.drawImage(sheet, imageDims.width * col, 0, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
+                if (this.noRows) tempctx.drawImage(sheet, imageDims.width * col, 0, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
                 else tempctx.drawImage(sheet, imageDims.width * col, imageDims.height * row, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
+
+                tempCanvas = this.utils.upscale(tempCanvas)
 
                 let image = tempCanvas.toDataURL('image/png');
 
@@ -102,7 +108,7 @@ export default class ImageLoaderClass {
 
             for (let frame of data) {
                 let animationRow = []
-                for(let row in this.animation_rows){
+                for (let row in this.animation_rows) {
                     animationRow.push(this[this.animation_rows[row] + '_' + frame])
                 }
                 this[animation].images.push(animationRow)

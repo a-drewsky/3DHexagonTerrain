@@ -1,9 +1,5 @@
 
-const MAX_ZOOM = 100;
-
-const ZOOM_AMOUNT = 50;
-
-const INIT_CAMERA_ROTATION = 0
+import { MAX_ZOOM, ZOOM_AMOUNT, INIT_CAMERA_ROTATION } from './CameraConstants'
 
 export default class CameraDataClass {
 

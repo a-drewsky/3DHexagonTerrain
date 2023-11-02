@@ -1,8 +1,9 @@
-import ImageLoaderClass from '../../imageLoader'
+
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import amethyst_mine_sheet from '../../../images/resources/amethyst_mine_sheet.png'
 
-export default class AmethystMineImagesClass extends ImageLoaderClass {
+export default class AmethystMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

@@ -45,13 +45,6 @@ export default class TileStackRendererClass {
             stackCanvas.height = this.mapData.size * 2
             let stackctx = stackCanvas.getContext('2d')
 
-            let shadowRotation;
-
-            shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
-
-
-            if (shadowRotation >= 6) shadowRotation -= 6;
-
             //top shadows
 
             stackctx.beginPath()
@@ -107,22 +100,16 @@ export default class TileStackRendererClass {
                 }
 
                 stackctx.drawImage(
-                    tile.imageObject[tileBiome][this.cameraData.rotation],
+                    tile.imageObject[tileBiome],
                     0,
                     tile.height * this.mapData.tileHeight - (i) * this.mapData.tileHeight,
                     this.mapData.size * 2,
                     this.mapData.size * 2
                 )
 
-                let shadowRotation;
+                this.drawWallShadow(stackctx, tile, i);
 
-                shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
-
-                if (shadowRotation >= 6) shadowRotation -= 6;
-
-                this.drawWallShadow(stackctx, shadowRotation, tile, i);
-
-                this.drawAdvWallShadow(stackctx, shadowRotation, tile, i);
+                this.drawAdvWallShadow(stackctx, tile, i);
 
             }
 
@@ -135,14 +122,14 @@ export default class TileStackRendererClass {
 
     }
 
-    drawWallShadow = (stackctx, shadowRotation, stack, tileHeight) => {
+    drawWallShadow = (stackctx, stack, tileHeight) => {
 
-        let shadowImage = this.images.tile_shadows.tile_side_shadows[shadowRotation]
+        let shadowImage = this.images.tile_shadows.tile_side_shadows[this.cameraData.rotation]
 
         stackctx.drawImage(shadowImage, 0, stack.height * this.mapData.tileHeight - (tileHeight) * this.mapData.tileHeight, this.mapData.size * 2, this.mapData.size * 2)
     }
 
-    drawAdvWallShadow = (stackctx, shadowRotation, stack, tileHeight) => {
+    drawAdvWallShadow = (stackctx, stack, tileHeight) => {
 
         let tileHeightRows = this.utils.getShadowRowHeightsDifference(4, stack.position, tileHeight)
 
@@ -201,30 +188,6 @@ export default class TileStackRendererClass {
         let shadowImage = this.images.tile_shadows.casted_shadows[`l${tileShadows.l}_c${tileShadows.c}_r${tileShadows.r}`][this.cameraData.rotation]
 
         stackctx.drawImage(shadowImage, 0, 0, this.mapData.size * 2, this.mapData.size * 2)
-
-    }
-
-    renderSelectionImage = (tileObj, selection) => {
-
-        //assign image
-        let sprite = tileObj.selectionImageObject[selection]
-
-        //create canvas
-        let tempCanvas = document.createElement('canvas')
-        tempCanvas.width = tileObj.canvasSize.width
-        tempCanvas.height = tileObj.canvasSize.height
-        let tempctx = tempCanvas.getContext('2d')
-
-        tempctx.drawImage(sprite, 0, 0, tempCanvas.width, tempCanvas.height)
-
-        if (tileObj.selectionImages[selection] === undefined) tileObj.selectionImages[selection] = []
-
-        //crop image
-        let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-        let keyObj = this.commonUtils.rotateTile(tileObj.position.q, tileObj.position.r, this.cameraData.rotation)
-
-        this.utils.cropOutTiles(tempCanvas, { x: 0, y: 0 }, keyObj, rotatedMap)
-        tileObj.selectionImages[selection][this.cameraData.rotation] = tempCanvas
 
     }
 

@@ -1,6 +1,6 @@
-import tile_shadows from '../../images/shadows/tile_shadows_sheet.png'
-import tile_side_shadows from '../../images/shadows/tile_side_shadows_sheet.png'
-import advanced_tile_side_shadows from '../../images/shadows/advanced_side_tile_shadows_sheet.png'
+import tile_shadows from '../../images/shadows/tile_shadows/tile_shadows_sheet.png'
+import tile_side_shadows from '../../images/shadows/tile_shadows/tile_side_shadows_sheet.png'
+import advanced_tile_side_shadows from '../../images/shadows/tile_shadows/advanced_side_tile_shadows_sheet.png'
 import TileShadowImageLoaderClass from './tileShadowImageLoader'
 
 export default class TileShadowImagesClass extends TileShadowImageLoaderClass {

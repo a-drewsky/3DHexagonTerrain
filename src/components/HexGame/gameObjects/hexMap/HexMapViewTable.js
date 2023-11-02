@@ -59,19 +59,14 @@ export default class HexMapViewTableClass {
       let tempTablePosition = [...tablePosition].sort((a, b) => a.y - b.y)
 
 
-      let shadowRotation = this.mapData.shadowRotation + this.cameraData.rotation;
-
-      if (shadowRotation >= 6) shadowRotation -= 6;
-
-
 
       if (this.cameraData.rotation == 1 || this.cameraData.rotation == 4) {
 
          tempTablePosition.shift();
          tempTablePosition.shift();
 
-         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
 
 
 
@@ -91,7 +86,7 @@ export default class HexMapViewTableClass {
          tempTablePosition.sort((a, b) => a.x - b.x)
 
 
-         let shiftedShadowRotation = this.mapData.shadowRotation + Math.floor(this.cameraData.rotation / 3) * 3;
+         let shiftedShadowRotation = Math.floor(this.cameraData.rotation / 3) * 3;
 
          if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6;
 

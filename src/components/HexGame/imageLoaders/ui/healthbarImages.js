@@ -1,4 +1,4 @@
-import UiImageLoaderClass from './uiImageLoader'
+import UiImageLoaderClass from '../imageLoaderBaseClass/uiImageLoader'
 
 import sprite_sheet from '../../images/ui/healthbar_sheet.png'
 

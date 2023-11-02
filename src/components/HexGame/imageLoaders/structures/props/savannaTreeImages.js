@@ -1,9 +1,9 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import savanna_tree from '../../../images/props/savanna_tree.png'
 
 
-export default class SavannaTreeImagesClass extends ImageLoaderClass {
+export default class SavannaTreeImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

@@ -1,9 +1,8 @@
-
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import large_rock from '../../../images/props/large_rock.png'
 
-export default class LargeRockImagesClass extends ImageLoaderClass {
+export default class LargeRockImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

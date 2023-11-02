@@ -2,6 +2,8 @@ import UnitImagesVillagerClass from "./unitImagesVillager";
 import UnitImagesMountainRangerClass from "./unitImagesMountainRanger";
 import UnitImagesImperialSoldierClass from "./unitImagesImperialSoldier";
 
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+
 export default class UnitImagesClass {
 
     constructor() {
@@ -10,20 +12,10 @@ export default class UnitImagesClass {
             this.mountainRanger = new UnitImagesMountainRangerClass(),
             this.imperialSoldier = new UnitImagesImperialSoldierClass()
         ]
+
+        this.utils = new ImageLoaderUtilsClass()
+        this.loadImages = this.utils.loadImages
     }
 
-    loadImages = (startGame) => {
-
-        let totalLoaded = 0;
-        let testLoaded = () => {
-            totalLoaded++
-            if (totalLoaded == this.loaders.length) startGame()
-        }
-
-        for (let loader of this.loaders) {
-            loader.loadImages(testLoaded)
-        }
-
-    }
 
 }

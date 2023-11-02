@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
-import flag from '../../../images/bases/mainBase/main_base_q0r0.png'
+import flag from '../../../images/flags/flag.png'
 
-export default class DefaultFlagImagesClass extends ImageLoaderClass {
+export default class DefaultFlagImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

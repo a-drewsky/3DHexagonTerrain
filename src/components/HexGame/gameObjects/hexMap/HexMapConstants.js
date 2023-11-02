@@ -5,8 +5,6 @@ export const HEXMAP_SQUISH = 2 / 3
 
 export const TILE_HEIGHT = 12
 
-export const SHADOW_ROTATION = 0
-
 export const INIT_CAMERA_POSITION = 'bottom'
 
 export const PRERENDER_STACKS_PER_FRAME = 3

@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import iron_mine_sheet from '../../../images/resources/iron_mine_sheet.png'
 
-export default class IronMineImagesClass extends ImageLoaderClass {
+export default class IronMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

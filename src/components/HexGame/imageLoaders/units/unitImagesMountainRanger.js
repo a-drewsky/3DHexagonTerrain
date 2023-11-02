@@ -7,9 +7,9 @@ import idle_sheet from '../../images/units/mountainRanger/mountain_ranger_idle_s
 
 import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.png'
 
-import ImageLoaderClass from '../imageLoader'
+import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
-export default class UnitImagesMountainRangerClass extends ImageLoaderClass {
+export default class UnitImagesMountainRangerClass extends SheetImageLoaderClass {
 
     constructor() {
 

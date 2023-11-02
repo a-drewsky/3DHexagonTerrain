@@ -4,9 +4,9 @@ import projectile_sheet from '../../images/projectiles/arrow_projectile_sheet.pn
 
 // import icon_image from '???'
 
-import ImageLoaderClass from '../imageLoader'
+import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
-export default class ProjectileImagesArrowClass extends ImageLoaderClass {
+export default class ProjectileImagesArrowClass extends SheetImageLoaderClass {
 
     constructor() {
 

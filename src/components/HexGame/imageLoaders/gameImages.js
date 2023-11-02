@@ -1,7 +1,7 @@
 
-import TileImagesClass from './tileImages'
+import TileImagesClass from './tiles/tileImages'
 import UnitImagesClass from './units/unitImages'
-import HighlighImagesClass from './highlightImages'
+import HighlighImagesClass from './tiles/highlightImages'
 import UiImagesClass from './ui/uiImages'
 import StructureImagesClass from './structures/structureImages'
 import ProjectileImagesClass from './projectiles/projectileImages'
@@ -13,8 +13,8 @@ export default class GameImagesClass {
     constructor() {
         this.loaders = [
             this.tile = new TileImagesClass(),
-            this.unit = new UnitImagesClass(),
             this.highlight = new HighlighImagesClass(),
+            this.unit = new UnitImagesClass(),
             this.ui = new UiImagesClass(),
             this.structures = new StructureImagesClass(),
             this.projectiles = new ProjectileImagesClass(),
@@ -32,7 +32,8 @@ export default class GameImagesClass {
         }
 
         for (let loader of this.loaders) {
-            loader.loadImages(testLoaded)
+            if(loader.loaders) loader.loadImages(testLoaded, loader.loaders)
+            else loader.loadImages(testLoaded)
         }
 
     }

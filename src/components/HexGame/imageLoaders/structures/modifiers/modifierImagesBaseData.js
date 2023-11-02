@@ -1,6 +1,6 @@
-import ModifierImageLoaderClass from './modifierImageLoader'
+import ModifierSheetImageLoaderClass from '../../imageLoaderBaseClass/modifierImageLoader'
 
-export default class ModifierImagesBaseDataClass extends ModifierImageLoaderClass {
+export default class ModifierImagesBaseDataClass extends ModifierSheetImageLoaderClass {
 
     constructor(shadow_sheet_list){
 

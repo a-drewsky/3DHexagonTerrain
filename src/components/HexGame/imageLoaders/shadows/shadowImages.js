@@ -6,9 +6,9 @@ import large_round_shadow_sheet from '../../images/shadows/large_round_shadow_sh
 import medium_round_shadow_sheet from '../../images/shadows/medium_round_shadow_sheet.png'
 import small_round_shadow_sheet from '../../images/shadows/small_round_shadow_sheet.png'
 
-import ShadowImageLoaderClass from './shadowImageLoader'
+import ShadowSheetImageLoaderClass from './shadowImageLoader'
 
-export default class ShadowImagesClass extends ShadowImageLoaderClass {
+export default class ShadowImagesClass extends ShadowSheetImageLoaderClass {
 
     constructor(){
 

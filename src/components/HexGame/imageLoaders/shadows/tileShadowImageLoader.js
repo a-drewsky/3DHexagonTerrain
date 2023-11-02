@@ -1,4 +1,10 @@
-export default class TileShadowImageLoaderClass {
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
+
+export default class TileShadowSheetImageLoaderClass {
+
+    constructor() {
+        this.utils = new ImageLoaderUtilsClass()
+    }
 
     loadImages = (startGame) => {
 
@@ -118,6 +124,8 @@ export default class TileShadowImageLoaderClass {
 
                 tempctx.drawImage(adv_side_shadow_sheet, imageDims.width * permutationNum, imageDims.height * rowNum, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
 
+                tempCanvas = this.utils.upscale(tempCanvas)
+
                 let image = tempCanvas.toDataURL('image/png');
 
                 this[this.rows[rowNum] + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
@@ -147,6 +155,8 @@ export default class TileShadowImageLoaderClass {
 
                 tempctx.drawImage(shadows_sheet, imageDims.width * permutationNum, imageDims.height * rowNum, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
 
+                tempCanvas = this.utils.upscale(tempCanvas)
+
                 let image = tempCanvas.toDataURL('image/png');
 
                 this[this.rows[rowNum] + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
@@ -172,6 +182,8 @@ export default class TileShadowImageLoaderClass {
             let tempctx = tempCanvas.getContext('2d')
 
             tempctx.drawImage(side_shadows_sheet, 0, imageDims.height * rowNum, imageDims.width, imageDims.height, 0, 0, imageDims.width, imageDims.height)
+
+            tempCanvas = this.utils.upscale(tempCanvas)
 
             let image = tempCanvas.toDataURL('image/png');
 

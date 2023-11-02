@@ -1,8 +1,8 @@
-import ImageLoaderClass from '../../imageLoader'
+import SheetImageLoaderClass from '../../imageLoaderBaseClass/sheetImageLoader'
 
 import ruby_mine_sheet from '../../../images/resources/ruby_mine_sheet.png'
 
-export default class RubyMineImagesClass extends ImageLoaderClass {
+export default class RubyMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 

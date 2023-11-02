@@ -38,22 +38,11 @@ export default class TileStackViewClass {
             let tileSelections = this.selectionData.getSelectionNames(value.q, value.r)
 
             for (let tileSelection of tileSelections) {
-                this.drawHighlight(drawctx, tileObj, tileSelection)
-
+                drawctx.drawImage(tileObj.selectionImageObject[tileSelection], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, this.mapData.size * 2, this.mapData.size * 2)
             }
 
 
         }
-
-    }
-
-    drawHighlight = (drawctx, tileObj, selection) => {
-
-        let tilePos = this.tileData.hexPositionToXYPosition(this.commonUtils.rotateTile(tileObj.position.q, tileObj.position.r, this.cameraData.rotation), tileObj.height, this.cameraData.rotation)
-
-        let sprite = tileObj.selectionImages[selection][this.cameraData.rotation]
-
-        drawctx.drawImage(sprite, tilePos.x - this.mapData.size, tilePos.y - (this.mapData.size * this.mapData.squish), this.mapData.size * 2, this.mapData.size * 2)
 
     }
 

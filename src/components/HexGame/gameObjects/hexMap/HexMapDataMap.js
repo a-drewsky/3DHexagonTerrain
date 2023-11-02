@@ -1,4 +1,4 @@
-import { TILE_SIZE, HEXMAP_SQUISH, TILE_HEIGHT, SHADOW_ROTATION, HEXMAP_ELEVATION_RANGES } from './HexMapConstants'
+import { TILE_SIZE, HEXMAP_SQUISH, TILE_HEIGHT, HEXMAP_ELEVATION_RANGES } from './HexMapConstants'
 
 export default class HexMapDataMapClass {
 
@@ -17,7 +17,6 @@ export default class HexMapDataMapClass {
         this.size = canvas.width / TILE_SIZE;
         this.squish = HEXMAP_SQUISH;
         this.tileHeight = TILE_HEIGHT;
-        this.shadowRotation = SHADOW_ROTATION;
         this.elevationRanges = HEXMAP_ELEVATION_RANGES
 
         // this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
