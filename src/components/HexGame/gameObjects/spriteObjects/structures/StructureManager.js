@@ -1,5 +1,5 @@
 import StructureRendererClass from "./StructureRenderer"
-import ModifierRendererClass from "./ModifierRenderer"
+import ModifierRendererClass from "./modifier/ModifierRenderer"
 import StructureBuilderClass from "./StructureBuilder"
 
 export default class StructureManagerClass {

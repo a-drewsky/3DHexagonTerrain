@@ -242,61 +242,6 @@ export default class HexMapControllerUtilsClass {
                 continue
             }
 
-            let structureData = null
-            if (this.spriteManager.structures.data.hasStructure(rotatedTile.position.q, rotatedTile.position.r)) {
-                structureData = this.spriteManager.structures.data.getStructure(rotatedTile.position.q, rotatedTile.position.r).data
-            }
-            let unitData = null
-            if (this.spriteManager.units.data.hasUnit(rotatedTile.position.q, rotatedTile.position.r)) {
-                unitData = this.spriteManager.units.data.getUnit(rotatedTile.position.q, rotatedTile.position.r)
-            }
-
-            if (structureData && structureData.type != 'modifier') {
-
-                let spriteObj = this.images[structureData.type][structureData.sprite]
-
-                let spritePos = {
-                    x: hexPos.x,
-                    y: hexPos.y
-                }
-
-                let spriteSize = {
-                    width: this.mapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].x / 32 * 2),
-                    height: this.mapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].y / 32)
-                }
-
-                spritePos.x -= this.mapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].x / 32) * this.mapData.size * 2
-                spritePos.y -= (this.mapData.size * this.mapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[structureData.state.current.name][this.cameraData.rotation].y / 32) * this.mapData.size * 2
-
-                if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
-                    tileClicked = testTile
-                    continue
-                }
-
-            }
-
-            if (unitData && unitData.state == 'idle') {
-                let spriteObj = this.images[unitData.type][unitData.sprite]
-
-                let spritePos = {
-                    x: hexPos.x,
-                    y: hexPos.y
-                }
-
-                let spriteSize = {
-                    width: this.mapData.size * 2 * (spriteObj.spriteSize.width - spriteObj.padding[unitData.frame][this.cameraData.rotation].x / 32 * 2),
-                    height: this.mapData.size * 2 * (spriteObj.spriteSize.height - spriteObj.padding[unitData.frame][this.cameraData.rotation].y / 32)
-                }
-
-                spritePos.x -= this.mapData.size + (spriteObj.spriteOffset.x - spriteObj.padding[unitData.frame][this.cameraData.rotation].x / 32) * this.mapData.size * 2
-                spritePos.y -= (this.mapData.size * this.mapData.squish) + (spriteObj.spriteOffset.y - spriteObj.padding[unitData.frame][this.cameraData.rotation].y / 32) * this.mapData.size * 2
-
-                if (this.collision.pointRect(ogPos.x, ogPos.y, spritePos.x, spritePos.y, spriteSize.width, spriteSize.height)) {
-                    tileClicked = testTile
-                    continue
-                }
-            }
-
         }
 
         if (tileClicked === null) return null

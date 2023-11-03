@@ -9,6 +9,8 @@ import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.p
 
 import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
+import { DEFAULT_ROWS } from '../imageLoaderConstants'
+
 export default class UnitImagesMountainRangerClass extends SheetImageLoaderClass {
 
     constructor() {
@@ -16,10 +18,6 @@ export default class UnitImagesMountainRangerClass extends SheetImageLoaderClass
         super()
 
         this.shadow = 'medium_round_shadow'
-
-        this.padding = [
-            [{ x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }, { x: 10, y: 9 }]
-        ]
 
         this.icon = icon_image
 
@@ -92,14 +90,7 @@ export default class UnitImagesMountainRangerClass extends SheetImageLoaderClass
             }
         }
 
-        this.animation_rows = {
-            0: 'backRight',
-            1: 'frontRight',
-            2: 'front',
-            3: 'frontLeft',
-            4: 'backLeft',
-            5: 'back'
-        }
+        this.animation_rows = { ...DEFAULT_ROWS }
 
         this.animation_data = {
             idle: ['idle_1', 'idle_2'],

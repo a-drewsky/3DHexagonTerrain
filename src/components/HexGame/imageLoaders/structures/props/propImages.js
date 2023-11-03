@@ -1,26 +1,19 @@
-import LargeRockImagesClass from "./largeRockImages";
-import SavannaTreeImagesClass from "./savannaTreeImages";
+import LargeRockImagesClass from "./propImages/largeRockImages";
+import SavannaTreeImagesClass from "./propImages/savannaTreeImages";
+
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
 
 export default class PropImagesClass {
 
     constructor() {
 
-        this.large_rock = new LargeRockImagesClass()
-        this.savanna_tree = new SavannaTreeImagesClass()
+        this.loaders = [
+            this.large_rock = new LargeRockImagesClass(),
+            this.savanna_tree = new SavannaTreeImagesClass()
+        ]
+
+        this.utils = new ImageLoaderUtilsClass()
+        this.loadImages = this.utils.loadImages
 
     }
-
-    loadImages = (startGame) => {
-
-        let totalLoaded = 0;
-        let testLoaded = () => {
-            totalLoaded++
-            if(totalLoaded == 2) startGame()
-        }
-
-        this.large_rock.loadImages(testLoaded)
-        this.savanna_tree.loadImages(testLoaded)
-        
-    }
-
 }

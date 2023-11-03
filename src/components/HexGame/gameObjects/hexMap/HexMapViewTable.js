@@ -19,12 +19,12 @@ export default class HexMapViewTableClass {
       this.drawCanvas = null
 
       this.rotationAlpha = {
-         0: 0.9,
-         1: 0.7,
+         0: 0.5,
+         1: 0.5,
          2: 0.5,
          3: 0.5,
-         4: 0.7,
-         5: 0.9,
+         4: 0.5,
+         5: 0.5,
       }
 
    }
@@ -86,7 +86,7 @@ export default class HexMapViewTableClass {
          tempTablePosition.sort((a, b) => a.x - b.x)
 
 
-         let shiftedShadowRotation = Math.floor(this.cameraData.rotation / 3) * 3;
+         let shiftedShadowRotation = Math.floor(this.cameraData.rotation);
 
          if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6;
 
@@ -103,7 +103,7 @@ export default class HexMapViewTableClass {
          tempctx.fill();
          tempctx.stroke();
 
-         shiftedShadowRotation += 3;
+         shiftedShadowRotation += 2;
          if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6
 
          tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`

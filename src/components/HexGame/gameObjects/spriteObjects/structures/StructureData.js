@@ -29,7 +29,7 @@ export default class StructureDataClass {
     }
 
     setModifier = (q, r, structureId) => {
-        let newModifier = new ModifierClass({q: q, r: r}, structureId, this.hexMapData, this.images)
+        let newModifier = new ModifierClass({q: q, r: r}, structureId, this.images.modifier)
         this.structureMap.set(this.commonUtils.join(q, r), newModifier)
         return newModifier
     }

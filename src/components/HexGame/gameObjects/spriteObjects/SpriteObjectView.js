@@ -1,5 +1,5 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
-import ModifierViewClass from "./structures/ModifierView"
+import ModifierViewClass from "./structures/modifier/ModifierView"
 import StructureViewClass from "./structures/StructureView"
 import UnitViewClass from "./unit/UnitView"
 import ProjectileViewClass from "./projectile/ProjectileView"

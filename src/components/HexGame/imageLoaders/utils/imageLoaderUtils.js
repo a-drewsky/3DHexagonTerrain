@@ -43,7 +43,8 @@ export default class ImageLoaderUtilsClass {
         }
 
         for (let loader of loaders) {
-            loader.loadImages(testLoaded)
+            if(loader.loaders) loader.loadImages(testLoaded, loader.loaders)
+            else loader.loadImages(testLoaded)
         }
 
     }

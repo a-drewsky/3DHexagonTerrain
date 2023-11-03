@@ -3,20 +3,15 @@ import ModifierImagesBaseDataClass from './modifierImagesBaseData'
 import desert_tree_1 from '../../../images/modifiers/desert_tree_01.png'
 import desert_tree_2 from '../../../images/modifiers/desert_tree_02.png'
 
+import { DEFAULT_ROWS } from '../../imageLoaderConstants'
+
 export default class DesertTreesImagesClass extends ModifierImagesBaseDataClass {
 
     constructor() {
 
         super()
 
-        this.rows = {
-            0: 'backRight',
-            1: 'frontRight',
-            2: 'front',
-            3: 'frontLeft',
-            4: 'backLeft',
-            5: 'back'
-        }
+        this.rows = { ...DEFAULT_ROWS }
 
         this.image_data = {
             desert_tree_1:{

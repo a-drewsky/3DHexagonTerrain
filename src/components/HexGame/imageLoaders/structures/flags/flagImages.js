@@ -1,23 +1,17 @@
-import DefaultFlagImagesClass from "./defaultFlagImages";
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
+import DefaultFlagImagesClass from "./flagImages/defaultFlagImages";
 
 export default class FlagImagesClass {
 
     constructor() {
 
-        this.default = new DefaultFlagImagesClass()
+        this.loaders = [
+            this.default = new DefaultFlagImagesClass()
+        ]
 
-    }
+        this.utils = new ImageLoaderUtilsClass()
+        this.loadImages = this.utils.loadImages
 
-    loadImages = (startGame) => {
-
-        let totalLoaded = 0;
-        let testLoaded = () => {
-            totalLoaded++
-            if(totalLoaded == 1) startGame()
-        }
-
-        this.default.loadImages(testLoaded)
-        
     }
 
 }

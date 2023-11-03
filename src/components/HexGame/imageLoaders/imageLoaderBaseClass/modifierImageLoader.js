@@ -1,6 +1,6 @@
 import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
-export default class ModifierSheetImageLoaderClass {
+export default class ModifierImageLoaderClass {
 
     constructor() {
         this.utils = new ImageLoaderUtilsClass()
@@ -13,11 +13,11 @@ export default class ModifierSheetImageLoaderClass {
         let imagesLoaded = 0;
         for (let [key, value] of Object.entries(this.images)) {
             this[key] = value;
-            value.onload = () => {
+            value.sprite.onload = () => {
                 imagesLoaded++;
                 if (imagesLoaded == Object.keys(this.images).length) {
-                    delete this.images;
-                    this.assignImages(startGame)
+                    delete this.images
+                    startGame()
                 }
             }
         }
@@ -31,9 +31,12 @@ export default class ModifierSheetImageLoaderClass {
         this.images = {}
 
         for (let imageName in this.image_data) {
-            this.images[imageName] = new Image()
-        }
+            this.images[imageName] = {
+                sprite: new Image(),
+                shadow: this.image_data[imageName].shadow
+            }
 
+        }
     }
 
     loadSheetImages = () => {
@@ -46,9 +49,9 @@ export default class ModifierSheetImageLoaderClass {
                 this.loadSheet(tempImage, imageName)
             }
             tempImage.src = this.image_data[imageName].sprite
-            
+
         }
-        
+
     }
 
     loadSheet = (spriteImage, imageName) => {
@@ -63,21 +66,7 @@ export default class ModifierSheetImageLoaderClass {
 
         let image = tempCanvas.toDataURL('image/png');
 
-        this[imageName].src = image
-    }
-
-    assignImages = (startGame) => {
-
-        this.modifierImages = []
-
-        for (let image in this.image_data) {
-            this.modifierImages.push({
-                image: this[image],
-                shadow: this.image_data[image].shadow
-            })
-        }
-
-        startGame();
+        this[imageName].sprite.src = image
     }
 
 }

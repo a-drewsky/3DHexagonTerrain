@@ -3,20 +3,15 @@ import tile_side_shadows from '../../images/shadows/tile_shadows/tile_side_shado
 import advanced_tile_side_shadows from '../../images/shadows/tile_shadows/advanced_side_tile_shadows_sheet.png'
 import TileShadowImageLoaderClass from './tileShadowImageLoader'
 
+import { DEFAULT_ROWS } from '../imageLoaderConstants'
+
 export default class TileShadowImagesClass extends TileShadowImageLoaderClass {
 
     constructor(){
 
         super()
 
-        this.rows = {
-            0: 'backRight',
-            1: 'frontRight',
-            2: 'front',
-            3: 'frontLeft',
-            4: 'backLeft',
-            5: 'back'
-        }
+        this.rows = { ...DEFAULT_ROWS }
 
         this.tile_side_shadows = tile_side_shadows
 
