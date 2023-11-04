@@ -12,7 +12,7 @@ export default class ModifierConfig {
     static rubblepile = {
         id: 'rubble_pile',
         modifierType: 'singleImage',
-        sprite: 'rubblePile',
+        sprite: 'rubble_pile',
         height: 1,
         stats: {},
         cost: 0

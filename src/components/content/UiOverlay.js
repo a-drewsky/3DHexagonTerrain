@@ -1,6 +1,5 @@
 
 import ResourceBar from '../uiComponents/ResourceBar';
-import ContextMenu from '../uiComponents/ContextMenu';
 import ControlButtons from '../uiComponents/ControlButtons'
 import PauseMenu from '../uiComponents/PauseMenu';
 import EndGameMenu from '../uiComponents/EndGameMenu';
@@ -15,10 +14,6 @@ const UiOverlay = (props) => {
             <ResourceBar resources={props.uiComponents.resources}></ResourceBar>
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
             <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard} selectedSprite={props.uiComponents.selectedSprite}></CardDeck>
-            {
-                (props.uiComponents.contextMenu.show == true) &&
-                <ContextMenu x={props.uiComponents.contextMenu.x} y={props.uiComponents.contextMenu.y} buttonList={props.uiComponents.contextMenu.buttonList} gameClass={props.gameClass}></ContextMenu>
-            }
             {
                 (props.uiComponents.pauseMenu.show == true) &&
                 <PauseMenu gameClass={props.gameClass} endGame={props.endGame}></PauseMenu>

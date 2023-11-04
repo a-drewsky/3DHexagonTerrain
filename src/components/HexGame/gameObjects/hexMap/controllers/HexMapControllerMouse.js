@@ -1,4 +1,5 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import HexMapControllerActionsClass from "./HexMapControllerActions"
 
 export default class HexMapControllerMouseClass {
 
@@ -16,6 +17,7 @@ export default class HexMapControllerMouseClass {
         this.config = config
 
         this.commonUtils = new CommonHexMapUtilsClass()
+        this.actions = new HexMapControllerActionsClass(hexMapData, tileManager, spriteManager, utils, uiController)
 
     }
 
@@ -75,6 +77,8 @@ export default class HexMapControllerMouseClass {
 
     updatePathSelection = (x, y) => {
 
+        if (this.selectionData.getPathLocked()) return
+
         this.selectionData.clearTarget()
 
         let hoverTile = this.utils.getSelectionNamesTile(x, y)
@@ -102,18 +106,14 @@ export default class HexMapControllerMouseClass {
             let actionSelections = [...this.selectionData.getPathingSelection('action')]
             let attackSelections = [...this.selectionData.getPathingSelection('attack')]
 
-            if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1 && attackSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                this.selectionData.clearPath()
-                return
-            }
-
             if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
-                this.selectionData.setTargetSelection(hoverTile, 'action')
+                this.selectionData.clearPath()
+                this.selectionData.setActionHover(hoverTile)
             }
             else if (attackSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
-                this.selectionData.setTargetSelection(hoverTile, 'attack')
+                this.selectionData.clearPath()
+                this.selectionData.setAttackHover(hoverTile)
             }
-            else this.selectionData.setTargetSelection(hoverTile, 'move')
 
             if (this.unitData.selectedUnit.id == 'mountain_ranger') {
                 this.selectionData.clearPath()
@@ -125,7 +125,7 @@ export default class HexMapControllerMouseClass {
             else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r, 1)
 
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                this.selectionData.setPath(this.utils.findClosestAdjacentPath(unit.position, hoverTile)) 
+                this.selectionData.setPath(this.utils.findClosestAdjacentPath(unit.position, hoverTile))
                 return
             }
 
@@ -134,7 +134,7 @@ export default class HexMapControllerMouseClass {
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
                 findNewPath = true
             } else {
-                path.push(hoverTile)
+                this.selectionData.addToPath(hoverTile)
             }
         } else if (path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
             if (path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != path.length - 1) {
@@ -147,7 +147,7 @@ export default class HexMapControllerMouseClass {
             if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
                 findNewPath = true
             } else {
-                path.push(hoverTile)
+                this.selectionData.addToPath(hoverTile)
             }
         }
 
@@ -186,33 +186,67 @@ export default class HexMapControllerMouseClass {
         if (this.selectionData.getPathingSelection('action').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
             let structure = this.structureData.getStructure(tile.position.q, tile.position.r)
 
-            this.selectionData.setTargetSelection(tile.position, 'action')
-            this.mapData.setState('selectAction')
-
-            switch (structure.type) {
-                case 'resource':
-                    this.uiController.setContextMenu(x, y, ['btnMine', 'btnCancel'])
-                    return
-                case 'flag':
-                    this.uiController.setContextMenu(x, y, ['btnCapture', 'btnCancel'])
-                    return
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'action')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) {
+                    switch (structure.type) {
+                        case 'resource':
+                            this.actions.mine()
+                            break
+                        case 'flag':
+                            this.actions.capture()
+                            break
+                    }
+                }
+                else {
+                    this.selectionData.unlockPath()
+                    this.selectionData.clearTarget()
+                    this.updatePathSelection(x, y)
+                }
             }
+
+            return
 
         }
 
         //Check Attacks
         if (this.selectionData.getPathingSelection('attack').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
-            this.selectionData.setTargetSelection(tile.position, 'attack')
-            this.mapData.setState('selectAction')
-            this.uiController.setContextMenu(x, y, ['btnAttack', 'btnCancel'])
+            
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'attack')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) {
+                    this.actions.attack()
+                }
+                else {
+                    this.selectionData.unlockPath()
+                    this.selectionData.clearTarget()
+                    this.updatePathSelection(x, y)
+                }
+            }
+
             return
         }
 
         //Check Movement
         if (this.selectionData.getPathingSelection('movement').some(moveObj => moveObj.q == tile.position.q && moveObj.r == tile.position.r)) {
-            this.selectionData.setTargetSelection(tile.position, 'move')
-            this.mapData.setState('selectAction')
-            this.uiController.setContextMenu(x, y, ['btnMove', 'btnCancel'])
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'move')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) this.actions.move()
+                else {
+                    this.selectionData.unlockPath()
+                    this.selectionData.clearTarget()
+                    this.updatePathSelection(x, y)
+                }
+            }
             return
         }
 

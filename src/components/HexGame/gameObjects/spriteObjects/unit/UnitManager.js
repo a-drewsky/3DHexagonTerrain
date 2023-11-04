@@ -37,6 +37,10 @@ export default class UnitManagerClass {
                             break
                         default:
                             unit.attackTarget()
+                            if (unit.target.type != 'unit') {
+                                this.mapData.resetState()
+                                this.selectionData.clearAllSelections()
+                            }
                     }
                     unit.setIdle()
                     return

@@ -3,8 +3,6 @@ import HexMapControllerUtilsClass from './HexMapControllerUtils';
 import CollisionClass from '../../../utilities/collision';
 
 import HexMapControllerMouseClass from './HexMapControllerMouse';
-import HexMapControllerContextMenuClass from './HexMapControllerContextMenu';
-
 export default class HexMapControllerClass {
 
     constructor(hexMapData, tileManager, spriteManager, cameraManager, canvas, images, uiController, globalState) {
@@ -27,8 +25,6 @@ export default class HexMapControllerClass {
         this.cameraManager = cameraManager
 
         this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.utils, uiController, this.config)
-
-        this.contextMenuController = new HexMapControllerContextMenuClass(hexMapData, tileManager, spriteManager, canvas, this.utils, uiController)
 
     }
 
@@ -110,11 +106,6 @@ export default class HexMapControllerClass {
                 return
         }
 
-    }
-
-
-    contextMenu = (input) => {
-        this.contextMenuController.select(input)
     }
 
     selectCard = (cardNum) => {

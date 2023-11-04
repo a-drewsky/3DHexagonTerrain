@@ -1,4 +1,4 @@
-export default class HexMapControllerContextMenuClass {
+export default class HexMapControllerActionsClass {
 
     constructor(hexMapData, tileManager, spriteManager, canvas, utils, uiController) {
         this.mapData = hexMapData.mapData
@@ -12,30 +12,10 @@ export default class HexMapControllerContextMenuClass {
         this.uiController = uiController
     }
 
-    select = (input) => {
-        switch (input) {
-            case 'move':
-                this.move()
-                return
-            case 'mine':
-                this.mine()
-                return
-            case 'attack':
-                this.attack()
-                return
-            case 'capture':
-                this.capture()
-                return
-            case 'cancel':
-                this.cancel()
-                return
-        }
-    }
-
     move = () => {
         this.unitData.selectedUnit.setMove()
         this.selectionData.clearAllSelections()
-        this.uiController.clearContextMenu()
+        this.mapData.setState('animation')
     }
 
     mine = () => {
@@ -52,12 +32,10 @@ export default class HexMapControllerContextMenuClass {
         if (this.selectionData.getPath().length == 0) {
             this.unitData.selectedUnit.setMine()
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         } else {
             this.unitData.selectedUnit.futureState = 'mine'
             this.unitData.selectedUnit.setMove()
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         }
     }
 
@@ -84,12 +62,10 @@ export default class HexMapControllerContextMenuClass {
         if (this.selectionData.getPath().length == 0 || this.unitData.selectedUnit.id == 'mountain_ranger') {
             this.unitData.selectedUnit.setAttack()
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         } else {
             this.unitData.selectedUnit.futureState = 'attack'
             this.unitData.selectedUnit.setMove()
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         }
     }
 
@@ -111,12 +87,10 @@ export default class HexMapControllerContextMenuClass {
         if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
             this.unitData.selectedUnit.captureFlag(targetTile)
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         } else {
             this.unitData.selectedUnit.futureState = 'capture'
             this.unitData.selectedUnit.setMove()
             this.selectionData.clearAllSelections()
-            this.uiController.clearContextMenu()
         }
     }
 
@@ -124,8 +98,6 @@ export default class HexMapControllerContextMenuClass {
         this.selectionData.clearAllSelections()
         this.unitData.unselectUnit()
         this.mapData.resetState()
-
-        this.uiController.clearContextMenu()
     }
 
 }

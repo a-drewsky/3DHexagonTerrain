@@ -29,15 +29,20 @@ export default class HighlighImagesClass extends TileImageLoaderClass {
             hover_select: hover_select,
             hover_place: hover_place,
             placement: placement,
-            path: path,
+
+            pathing_movement: movement,
             pathing_action: action,
             pathing_action_move: action_move,
             pathing_attack: attack,
             pathing_attack_move: attack_move,
-            pathing_movement: movement,
+
+            path: path,
+            hover_action: action_target,
+            hover_attack: attack_target,
+
+            target_move: path,
             target_action: action_target,
             target_attack: attack_target,
-            target_move: path
 
         }
 

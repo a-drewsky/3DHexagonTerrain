@@ -36,21 +36,6 @@ export default class UiControllerClass {
         this.uiComponents.endGameMenu.show = state
     }
 
-    //create ui controller class
-    clearContextMenu = () => {
-        this.uiComponents.contextMenu.show = false
-        this.uiComponents.contextMenu.x = null
-        this.uiComponents.contextMenu.y = null
-        this.uiComponents.contextMenu.buttonList = []
-    }
-
-    setContextMenu = (x, y, buttonList) => {
-        this.uiComponents.contextMenu.show = true
-        this.uiComponents.contextMenu.x = x
-        this.uiComponents.contextMenu.y = y
-        this.uiComponents.contextMenu.buttonList = buttonList
-    }
-
     setResourceBar = (resources) => {
         this.uiComponents.resources = resources
     }

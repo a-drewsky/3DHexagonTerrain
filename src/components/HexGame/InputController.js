@@ -10,21 +10,6 @@ export default class InputControllerClass {
 
    uiInput = (input) => {
       switch (input) {
-         case 'move':
-            this.gameManager.hexMapManager.controller.contextMenu('move');
-            return
-         case 'mine':
-            this.gameManager.hexMapManager.controller.contextMenu('mine');
-            return
-         case 'attack':
-            this.gameManager.hexMapManager.controller.contextMenu('attack');
-            return
-         case 'capture':
-            this.gameManager.hexMapManager.controller.contextMenu('capture');
-            return
-         case 'cancel':
-            this.gameManager.hexMapManager.controller.contextMenu('cancel');
-            return
          case 'rotateLeft':
             this.gameManager.hexMapManager.controller.rotateLeft()
             return

@@ -15,7 +15,10 @@ export default class SelectionDataClass {
             action: [],
             attack: [],
             path: [],
-            placement: []
+            actionHover: null,
+            attackHover: null,
+            placement: [],
+            locked: false
         }
 
         this.targetSelection = {
@@ -47,6 +50,8 @@ export default class SelectionDataClass {
                 action: 'pathing_action',
                 attack: 'pathing_attack',
                 path: 'path',
+                actionHover: 'hover_action',
+                attackHover: 'hover_attack',
                 placement: 'placement'
             },
             target: {
@@ -88,6 +93,8 @@ export default class SelectionDataClass {
         if (testSelectionArr('pathingSelections', 'attack')) selections.push(this.selectionMapping.pathing.attack)
         if (testSelectionArr('pathingSelections', 'path')) selections.push(this.selectionMapping.pathing.path)
         if (testSelectionArr('pathingSelections', 'placement')) selections.push(this.selectionMapping.pathing.placement)
+        if (testSelection('pathingSelections', 'actionHover')) selections.push(this.selectionMapping.pathing.actionHover)
+        if (testSelection('pathingSelections', 'attackHover')) selections.push(this.selectionMapping.pathing.attackHover)
 
         if (testTargetSelection()) selections.push(this.selectionMapping.target[this.targetSelection.type])
 
@@ -101,6 +108,10 @@ export default class SelectionDataClass {
 
     getPathingSelection = (selection) => {
         return this.pathingSelections[selection]
+    }
+
+    getPathLocked = () => {
+        return this.pathingSelections.locked
     }
 
     getPath = () => {
@@ -124,8 +135,32 @@ export default class SelectionDataClass {
         this.pathingSelections[selection] = value
     }
 
+    lockPath = () => {
+        this.pathingSelections.locked = true
+    }
+
+    unlockPath = () => {
+        this.pathingSelections.locked = false
+    }
+
     setPath = (value) => {
         this.pathingSelections.path = value
+        this.pathingSelections.actionHover = null
+        this.pathingSelections.attackHover = null
+    }
+
+    addToPath = (value) => {
+        this.pathingSelections.path.push(value)
+        this.pathingSelections.actionHover = null
+        this.pathingSelections.attackHover = null
+    }
+
+    setActionHover = (value) => {
+        this.pathingSelections.actionHover = value
+    }
+
+    setAttackHover = (value) => {
+        this.pathingSelections.attackHover = value
     }
 
     setTargetSelection = (position, type) => {
@@ -135,6 +170,8 @@ export default class SelectionDataClass {
 
     clearPath = () => {
         this.pathingSelections.path = []
+        this.pathingSelections.actionHover = null
+        this.pathingSelections.attackHover = null
     }
 
     clearPathing = () => {
@@ -143,7 +180,18 @@ export default class SelectionDataClass {
             action: [],
             attack: [],
             path: [],
-            placement: []
+            actionHover: null,
+            attackHover: null,
+            placement: [],
+            locked: false
+        }
+    }
+
+    clearInfo = () => {
+        this.infoSelections = {
+            hover: null,
+            tile: null,
+            unit: null
         }
     }
 
@@ -157,21 +205,14 @@ export default class SelectionDataClass {
     }
 
     clearAllSelections = () => {
-        this.infoSelections = {
-            hover: null,
-            tile: null,
-            unit: null
-        }
 
-        this.pathingSelections = {
-            movement: [],
-            action: [],
-            attack: [],
-            path: [],
-            placement: []
-        }
+        this.clearInfo()
+
+        this.clearPathing()
 
         this.clearTarget()
+
+        this.clearHover()
     }
 
 }

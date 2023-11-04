@@ -12,9 +12,9 @@ import woodland_tree_2 from '../../../images/modifiers/woodland_tree_02.png'
 
 import { DEFAULT_ROWS } from '../../imageLoaderConstants'
 
-import ModifierImagesBaseDataClass from './modifierImagesBaseData'
+import ModifierImageLoaderClass from '../../imageLoaderBaseClass/modifierImageLoader'
 
-export default class ModifiersImagesClass extends ModifierImagesBaseDataClass {
+export default class ModifiersImagesClass extends ModifierImageLoaderClass {
 
     constructor() {
 
@@ -33,6 +33,35 @@ export default class ModifiersImagesClass extends ModifierImagesBaseDataClass {
             woodland_tree_2: { sprite: woodland_tree_2, shadow: "small_round_shadow" },
             cacti_1:{ sprite: desert_tree_1, shadow: "medium_round_shadow" },
             cacti_2: { sprite: desert_tree_2, shadow: "small_round_shadow" },
+        }        
+
+        this.spriteSize = {
+            width: 1,
+            height: 2
+        }
+        this.offset = {
+            x: 0,
+            y: 1
+        }
+        this.singleImageSize = {
+            width: 1,
+            height: 1.5
+        }
+        this.singleImageOffset = {
+            x: 0,
+            y: 0.5
+        }
+        this.modifierSize = {
+            width: 1,
+            height: 1.5
+        }
+        this.shadowSize = {
+            width: 2,
+            height: 2
+        }
+        this.shadowOffset = {
+            x: 0.5,
+            y: 1
         }
 
     }

@@ -32,12 +32,6 @@ const ContentPanel = () => {
          width: 0,
          height: 0
       },
-      contextMenu: {
-         show: false,
-         x: 0,
-         y: 0,
-         buttonList: []
-      },
       resources: {
          gold: 0,
          copper: 0,
@@ -59,11 +53,10 @@ const ContentPanel = () => {
    //END SETTINGS
 
    const updateUi = (newUi) => {
-      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, contextMenu, resources, cards, selectedCard, selectedSprite }) => ({ 
+      setUiComponents(({ pauseMenu, endGameMenu, bgCanvas, resources, cards, selectedCard, selectedSprite }) => ({ 
          pauseMenu: newUi.pauseMenu, 
          endGameMenu: newUi.endGameMenu,
          bgCanvas: newUi.bgCanvas,
-         contextMenu: newUi.contextMenu, 
          resources: newUi.resources,
          cards: newUi.cards,
          selectedCard: newUi.selectedCard,
