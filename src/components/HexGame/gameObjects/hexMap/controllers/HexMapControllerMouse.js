@@ -5,6 +5,7 @@ export default class HexMapControllerMouseClass {
 
     constructor(hexMapData, tileManager, spriteManager, utils, uiController, config) {
         this.mapData = hexMapData.mapData
+        this.cameraData = hexMapData.cameraData
         this.selectionData = hexMapData.selectionData
         this.cardData = hexMapData.cardData
         this.unitData = hexMapData.unitData
@@ -23,7 +24,7 @@ export default class HexMapControllerMouseClass {
 
     setHover = (x, y) => {
 
-        let hoverTile = this.utils.getSelectionNamesTile(x, y)
+        let hoverTile = this.utils.getSelectedTile(x, y)
 
         if (this.unitData.placementUnit != null) {
             this.unitData.placementUnit.setPosition(hoverTile)
@@ -35,11 +36,11 @@ export default class HexMapControllerMouseClass {
         let tileObj = this.tileManager.data.getEntry(hoverTile.q, hoverTile.r)
 
         switch (this.mapData.curState()) {
-            case 'placeUnit':
             case 'selectTile':
-            case 'chooseRotation':
                 this.selectionData.setInfoSelection('hover', tileObj.position)
                 return
+            case 'placeUnit':
+            case 'chooseRotation':
             case 'selectMovement':
             case 'animation':
             case 'selectAction':
@@ -65,109 +66,107 @@ export default class HexMapControllerMouseClass {
 
     addUnit = (tile) => {
 
-        if (tile === null || this.utils.checkUnitPlacementTile(tile) == false) return
+        if (tile === null) return
 
-        this.unitData.addUnit(tile.position.q, tile.position.r)
+        if (this.selectionData.getPathingSelection('placement').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
 
-        this.unitData.eraseUnit()
-        this.mapData.setState('selectTile')
-        this.selectionData.clearAllSelections()
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'placement')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) {
 
+                    this.unitData.addUnit(tile.position.q, tile.position.r)
+                    this.unitData.eraseUnit()
+                    this.selectionData.clearAllSelections()
+                    this.selectionData.setInfoSelection('unit', tile.position)
+                    this.unitData.selectUnit(tile.position.q, tile.position.r)
+                    this.mapData.setState('chooseRotation')
+
+                }
+                else {
+                    this.selectionData.unlockPath()
+                    this.selectionData.clearTarget()
+                }
+            }
+
+            return
+        }
+
+    }
+
+    updatePlacementSelection = (x, y) => {
+
+        if (this.unitData.placementUnit != null) {
+            this.unitData.placementUnit.rotation = -1*this.cameraData.rotation + 3
+            if(this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
+        }
+
+        if (this.selectionData.getPathLocked()) return
+
+        let hoverTile = this.utils.getSelectedTile(x, y)
+
+        if (this.unitData.placementUnit != null) {
+            this.unitData.placementUnit.setPosition(hoverTile)
+            if (!hoverTile) this.unitData.placementUnit.setPosition({ q: null, r: null })
+        }
+
+        if (!hoverTile) return
+
+        let placementSelections = this.selectionData.getPathingSelection('placement')
+
+        if (placementSelections.some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
+            this.selectionData.clearPath()
+            this.selectionData.setPlacementHover(hoverTile)
+            return
+        } else {
+            this.selectionData.setInfoSelection('hover', hoverTile)
+        }
     }
 
     updatePathSelection = (x, y) => {
 
         if (this.selectionData.getPathLocked()) return
 
+        this.selectionData.clearHover()
         this.selectionData.clearTarget()
 
-        let hoverTile = this.utils.getSelectionNamesTile(x, y)
+        let hoverTile = this.utils.getSelectedTile(x, y)
 
-        if (!hoverTile) return
-
-        let path = this.selectionData.getPath()
-
-        if (path.length > 0) {
-            let prevTile = path[path.length - 1]
-            if (hoverTile.q == prevTile.q && hoverTile.r == prevTile.r) return
-        }
-
-        let unit = this.unitData.selectedUnit
-
-        if (unit.position.q == hoverTile.q && unit.position.r == hoverTile.r) {
+        if (!hoverTile) {
             this.selectionData.clearPath()
             return
         }
 
-        let findNewPath = false
+        this.utils.setPath(hoverTile)
 
-        if (this.selectionData.getPathingSelection('movement').findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
+    }
 
-            let actionSelections = [...this.selectionData.getPathingSelection('action')]
-            let attackSelections = [...this.selectionData.getPathingSelection('attack')]
+    updateEndMoveSelection = (x, y) => {
+        if (this.selectionData.getPathLocked()) return
 
-            if (actionSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
-                this.selectionData.clearPath()
-                this.selectionData.setActionHover(hoverTile)
-            }
-            else if (attackSelections.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
-                this.selectionData.clearPath()
-                this.selectionData.setAttackHover(hoverTile)
-            }
+        this.selectionData.clearTarget()
 
-            if (this.unitData.selectedUnit.id == 'mountain_ranger') {
-                this.selectionData.clearPath()
-                return
-            }
+        let hoverTile = this.utils.getSelectedTile(x, y)
 
-            let neighbors
-            if (path.length > 0) neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r, 1)
-            else neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r, 1)
-
-            if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                this.selectionData.setPath(this.utils.findClosestAdjacentPath(unit.position, hoverTile))
-                return
-            }
-
-        } else if (path.length == 0) {
-            let neighbors = this.tileManager.data.getNeighborKeys(unit.position.q, unit.position.r, 1)
-            if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                findNewPath = true
-            } else {
-                this.selectionData.addToPath(hoverTile)
-            }
-        } else if (path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != -1) {
-            if (path.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) != path.length - 1) {
-                findNewPath = true
-            }
-        } else {
-            let neighbors = this.tileManager.data.getNeighborKeys(path[path.length - 1].q, path[path.length - 1].r, 1)
-            neighbors.push(path[path.length - 1])
-
-            if (neighbors.findIndex(pos => pos.q == hoverTile.q && pos.r == hoverTile.r) == -1) {
-                findNewPath = true
-            } else {
-                this.selectionData.addToPath(hoverTile)
-            }
+        if (!hoverTile) {
+            this.selectionData.clearPath()
+            return
         }
 
-
-        if (this.utils.checkValidPath() == false) findNewPath = true
-
-        if (findNewPath == false) return
-
-        let newPath = this.utils.findPath(unit.position, hoverTile)
-
-        this.selectionData.setPath(newPath)
+        this.utils.setEndMove(hoverTile)
     }
 
     setUnitMouseDirection = (x, y) => {
+
+        if (this.selectionData.getPathLocked()) return
 
         let unit = this.unitData.selectedUnit
 
         if (unit == null) return
 
-        let tileClicked = this.utils.getSelectionNamesTile(x, y)
+        let tileClicked = this.utils.getSelectedTile(x, y)
 
         if (!tileClicked) return
 
@@ -214,7 +213,7 @@ export default class HexMapControllerMouseClass {
 
         //Check Attacks
         if (this.selectionData.getPathingSelection('attack').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
-            
+
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'attack')
@@ -258,10 +257,69 @@ export default class HexMapControllerMouseClass {
 
     }
 
-    endUnitTurn = () => {
-        this.unitData.unselectUnit()
-        this.selectionData.clearAllSelections()
-        this.mapData.resetState()
+    endUnitTurn = (tile) => {
+        let unit = this.unitData.selectedUnit
+
+        if (unit == null) return
+
+        //Check Actions
+        if (this.selectionData.getPathingSelection('action').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+            let structure = this.structureData.getStructure(tile.position.q, tile.position.r)
+
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'action')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) {
+                    switch (structure.type) {
+                        case 'resource':
+                            this.actions.mine()
+                            break
+                        case 'flag':
+                            this.actions.capture()
+                            break
+                    }
+                }
+                else {
+                    this.selectionData.clearPath()
+                    this.selectionData.clearTarget()
+                }
+            }
+
+            return
+
+        }
+
+        //Check Attacks
+        if (this.selectionData.getPathingSelection('attack').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+
+            if (!this.selectionData.getPathLocked()) {
+                this.selectionData.lockPath()
+                this.selectionData.setTargetSelection(tile.position, 'attack')
+            } else {
+                let target = this.selectionData.getTargetSelection()
+                if (tile.position.q == target.q && tile.position.r == target.r) {
+                    this.actions.attack()
+                }
+                else {
+                    this.selectionData.clearPath()
+                    this.selectionData.clearTarget()
+                }
+            }
+
+            return
+        }
+
+        if (!this.selectionData.getPathLocked()) {
+            //end turn
+            this.unitData.unselectUnit()
+            this.selectionData.clearAllSelections()
+            this.mapData.resetState()
+        } else {
+            this.selectionData.clearPath()
+            this.selectionData.clearTarget()
+        }
     }
 
 }

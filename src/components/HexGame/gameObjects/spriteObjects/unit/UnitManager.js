@@ -1,4 +1,5 @@
 import UnitRendererClass from "./UnitRenderer"
+import HexMapControllerUtilsClass from "../../hexMap/controllers/HexMapControllerUtils"
 
 export default class UnitManagerClass {
 
@@ -8,29 +9,39 @@ export default class UnitManagerClass {
         this.projectileData = hexMapData.projectileData
         this.data = hexMapData.unitData
         this.renderer = new UnitRendererClass(hexMapData, images)
+        this.controllerUtils = new HexMapControllerUtilsClass(hexMapData)
     }
 
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
-            if (unit.state.current.type == 'action') unit.render = true
 
-            if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) return
+            if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) continue
 
             switch (unit.state.current.name) {
                 case 'walk':
                 case 'jump':
                     unit.updatePath()
-                    return
+                    if (unit.state.current.name == 'idle') {
+                        this.selectionData.setInfoSelection('unit', unit.position)
+                        this.mapData.setState('chooseRotation')
+                        this.controllerUtils.findActionSet()
+                        this.controllerUtils.findAttackSet()
+                    }
+                    continue
                 case 'mine':
                     this.data.unselectUnit()
                     unit.collectTargetResources()
                     unit.setIdle()
                     this.mapData.resetState()
                     this.selectionData.clearAllSelections()
-                    return
+                    continue
                 case 'attack':
                     this.data.unselectUnit()
+                    //here we will either create a projectile or an attack object
+                    //attack object will have access to units
+                    //projectiles will create an attack object apon termination
+
                     switch (unit.id) {
                         case 'mountain_ranger':
                             this.projectileData.newProjectile('arrow_projectile', unit.position, unit.target.position)
@@ -43,19 +54,19 @@ export default class UnitManagerClass {
                             }
                     }
                     unit.setIdle()
-                    return
+                    continue
                 case 'hit':
                     unit.setIdle()
                     if (unit.state.current.name != 'death') {
                         this.mapData.resetState()
                         this.selectionData.clearAllSelections()
                     }
-                    return
+                    continue
                 case 'death':
                     this.data.deleteUnit(unit.position.q, unit.position.r)
                     this.mapData.resetState()
                     this.selectionData.clearAllSelections()
-                    return
+                    continue
             }
         }
     }

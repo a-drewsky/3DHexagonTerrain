@@ -17,7 +17,7 @@ export default class HexMapDataClass {
         this.selectionData = new SelectionDataClass(this.mapData)
         this.tileData = new TileStackDataClass(this.mapData, images)
         this.structureData = new StructureDataClass(this.mapData, images.structures)
-        this.unitData = new UnitDataClass(this.mapData, this.selectionData, this.tileData, images, uiController, globalState)
+        this.unitData = new UnitDataClass(this.mapData, this.tileData, images, uiController, globalState)
         this.projectileData = new ProjectileDataClass(this.mapData, this.unitData, this.structureData, this.tileData, images)
         this.cameraData = new CameraDataClass(this.mapData, canvas)
 

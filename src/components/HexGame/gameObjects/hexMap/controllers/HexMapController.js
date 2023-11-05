@@ -45,7 +45,7 @@ export default class HexMapControllerClass {
 
             this.cameraManager.data.clickPos = null
 
-            let tileSelected = this.utils.getSelectionNamesTile(clickPos.x, clickPos.y)
+            let tileSelected = this.utils.getSelectedTile(clickPos.x, clickPos.y)
 
             if (!tileSelected) return
 
@@ -62,16 +62,18 @@ export default class HexMapControllerClass {
 
         switch (this.mapData.curState()) {
             case 'selectTile':
-            case 'placeUnit':
             case 'animation':
                 this.mouseController.setHover(x, y)
+                return
+            case 'placeUnit':
+                this.mouseController.updatePlacementSelection(x, y)
                 return
             case 'selectMovement':
                 this.mouseController.updatePathSelection(x, y)
                 return
             case 'chooseRotation':
                 this.mouseController.setUnitMouseDirection(x, y)
-                this.mouseController.setHover(x, y)
+                this.mouseController.updateEndMoveSelection(x, y)
                 return
             case 'selectAction':
                 return
@@ -98,7 +100,7 @@ export default class HexMapControllerClass {
                 this.mouseController.addUnit(tile)
                 return
             case 'chooseRotation':
-                this.mouseController.endUnitTurn()
+                this.mouseController.endUnitTurn(tile)
                 return
             case 'selectAction':
                 return

@@ -12,6 +12,7 @@ import unit from '../../images/highlights/highlight_unit.png'
 import hover_place from '../../images/highlights/highlight_hover_place.png'
 import rotate from '../../images/highlights/highlight_rotate.png'
 import placement from '../../images/highlights/highlight_placement.png'
+import placement_target from '../../images/highlights/highlight_placement_target.png'
 
 import TileImageLoaderClass from '../imageLoaderBaseClass/tileImageLoader'
 
@@ -28,7 +29,7 @@ export default class HighlighImagesClass extends TileImageLoaderClass {
             rotate: rotate,
             hover_select: hover_select,
             hover_place: hover_place,
-            placement: placement,
+
 
             pathing_movement: movement,
             pathing_action: action,
@@ -37,12 +38,15 @@ export default class HighlighImagesClass extends TileImageLoaderClass {
             pathing_attack_move: attack_move,
 
             path: path,
+            placement: placement,
             hover_action: action_target,
             hover_attack: attack_target,
+            hover_placement: placement_target,
 
             target_move: path,
             target_action: action_target,
             target_attack: attack_target,
+            target_placement: placement_target,
 
         }
 

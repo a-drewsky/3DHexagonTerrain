@@ -158,4 +158,10 @@ export default class CommonHexMapUtilsClass {
         }
     }
 
+    tilesEqual = (tile1, tile2) => {
+        if(tile1.q != tile2.q) return false
+        if(tile1.r != tile2.r) return false
+        return true 
+    }
+
 }

@@ -2,11 +2,12 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class HexMapPathFinderClass {
 
-    constructor(hexMapData, tileManager, spriteManager) {
+    constructor(hexMapData) {
 
         this.mapData = hexMapData.mapData
-        this.tileManager = tileManager
-        this.spriteManager = spriteManager
+        this.tileData = hexMapData.tileData
+        this.unitData = hexMapData.unitData
+        this.structureData = hexMapData.structureData
 
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -29,26 +30,26 @@ export default class HexMapPathFinderClass {
     }
 
     createNeighborNodes = (q, r) => {
-        let neighbors = this.tileManager.data.getNeighborKeys(q, r, 1)
+        let neighbors = this.tileData.getNeighborKeys(q, r, 1)
 
         return neighbors.map(neighbor => this.createNode(neighbor.q, neighbor.r))
     }
 
     getHeightDifference = (a, b) => {
-        return Math.abs(this.tileManager.data.getEntry(a.q, a.r).height - this.tileManager.data.getEntry(b.q, b.r).height)
+        return Math.abs(this.tileData.getEntry(a.q, a.r).height - this.tileData.getEntry(b.q, b.r).height)
     }
 
     isValid = (q, r) => {
-        let terrain = this.spriteManager.structures.data.getStructure(q, r)
+        let terrain = this.structureData.getStructure(q, r)
         if(terrain != null && terrain.type != 'modifier') return false
-        let unit = this.spriteManager.units.data.getUnit(q, r)
+        let unit = this.unitData.getUnit(q, r)
         if(unit != null) return false
         return true
     }
 
     getTileCost = (tile) => {
-        if(this.tileManager.data.getEntry(tile.q, tile.r).biome == 'water') return 2
-        let terrain = this.spriteManager.structures.data.getStructure(tile.q, tile.r)
+        if(this.tileData.getEntry(tile.q, tile.r).biome == 'water') return 2
+        let terrain = this.structureData.getStructure(tile.q, tile.r)
         if(terrain && terrain.cost) return terrain.cost
         return 0
     }
@@ -131,11 +132,11 @@ export default class HexMapPathFinderClass {
     }
 
     findAttackMoveSet = (start, range) => {
-        return this.tileManager.data.getNeighbors(start.q, start.r, range)
+        return this.tileData.getNeighbors(start.q, start.r, range)
     }
 
     findActionMoveSet = (start) => {
-        return this.tileManager.data.getNeighbors(start.q, start.r, 1)
+        return this.tileData.getNeighbors(start.q, start.r, 1)
     }
 
     findFullMoveSet = (moveSet, unitPos) => {

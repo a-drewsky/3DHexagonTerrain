@@ -14,6 +14,7 @@ export default class HexMapDataMapClass {
         }
         this.state.current = this.state.selectTile
 
+        this.canvas = canvas
         this.size = canvas.width / TILE_SIZE;
         this.squish = HEXMAP_SQUISH;
         this.tileHeight = TILE_HEIGHT;

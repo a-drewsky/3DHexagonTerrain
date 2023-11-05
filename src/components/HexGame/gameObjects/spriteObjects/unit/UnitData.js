@@ -2,9 +2,8 @@ import UnitClass from "./Unit"
 
 export default class UnitDataClass {
 
-    constructor(mapData, selectionData, tileData, images, uiController, globalState) {
+    constructor(mapData, tileData, images, uiController, globalState) {
         this.mapData = mapData
-        this.selectionData = selectionData
         this.tileData = tileData
         this.images = images
         this.uiController = uiController
@@ -36,7 +35,7 @@ export default class UnitDataClass {
     }
 
     createUnit = (unitId) => {
-        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.selectionData, this.tileData, this.images.unit, this.uiController, this.globalState)
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images.unit, this.uiController, this.globalState)
         this.placementUnit = newUnit
     }
 

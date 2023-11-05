@@ -13,7 +13,7 @@ export default class HexMapControllerActionsClass {
     }
 
     move = () => {
-        this.unitData.selectedUnit.setMove()
+        this.unitData.selectedUnit.setMove(this.selectionData.getPath())
         this.selectionData.clearAllSelections()
         this.mapData.setState('animation')
     }
@@ -29,14 +29,8 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.selectedUnit.target = targetStructure
 
-        if (this.selectionData.getPath().length == 0) {
-            this.unitData.selectedUnit.setMine()
-            this.selectionData.clearAllSelections()
-        } else {
-            this.unitData.selectedUnit.futureState = 'mine'
-            this.unitData.selectedUnit.setMove()
-            this.selectionData.clearAllSelections()
-        }
+        this.unitData.selectedUnit.setMine()
+        this.selectionData.clearAllSelections()
     }
 
     attack = () => {
@@ -59,14 +53,9 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.selectedUnit.target = targetObject
 
-        if (this.selectionData.getPath().length == 0 || this.unitData.selectedUnit.id == 'mountain_ranger') {
-            this.unitData.selectedUnit.setAttack()
-            this.selectionData.clearAllSelections()
-        } else {
-            this.unitData.selectedUnit.futureState = 'attack'
-            this.unitData.selectedUnit.setMove()
-            this.selectionData.clearAllSelections()
-        }
+        this.unitData.selectedUnit.setAttack()
+        this.selectionData.clearAllSelections()
+
     }
 
     capture = () => {
@@ -82,16 +71,8 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.selectedUnit.target = targetStructure
 
-        let neighbors = this.tileManager.data.getNeighborKeys(this.unitData.selectedUnit.position.q, this.unitData.selectedUnit.position.r, 1)
-
-        if (neighbors.filter(tile => tile.q == targetStructure.position.q && tile.r == targetStructure.position.r).length == 1) {
-            this.unitData.selectedUnit.captureFlag(targetTile)
-            this.selectionData.clearAllSelections()
-        } else {
-            this.unitData.selectedUnit.futureState = 'capture'
-            this.unitData.selectedUnit.setMove()
-            this.selectionData.clearAllSelections()
-        }
+        this.unitData.selectedUnit.captureFlag(targetTile)
+        this.selectionData.clearAllSelections()
     }
 
     cancel = () => {

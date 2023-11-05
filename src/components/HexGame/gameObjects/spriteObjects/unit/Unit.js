@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, mapData, selectionData, tileData, unitImages, uiController, globalState) {
+    constructor(pos, unitId, mapData, tileData, unitImages, uiController, globalState) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = {
@@ -40,7 +40,6 @@ export default class UnitClass {
         this.destinationStartTime = null
         this.destinationCurTime = null
         this.target = null
-        this.futureState = null
 
         //settings
         this.travelTime = TRAVEL_TIME
@@ -48,7 +47,6 @@ export default class UnitClass {
 
         //access data
         this.mapData = mapData
-        this.selectionData = selectionData
         this.tileData = tileData
         this.uiController = uiController
         this.globalState = globalState
@@ -120,7 +118,9 @@ export default class UnitClass {
 
     setFrame = () => {
         this.frameCurTime = Date.now()
+        this.animationCurTime = Date.now()
         if (this.state.current.rate == 0) return
+        if (this.destination != null) this.render = true
         if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
             this.render = true
             this.frameStartTime = Date.now()
@@ -131,7 +131,6 @@ export default class UnitClass {
 
         }
 
-        this.animationCurTime = Date.now()
     }
 
     updatePath = () => {
@@ -159,11 +158,7 @@ export default class UnitClass {
 
             } else {
 
-                if (this.futureState == null) {
-                    this.setChooseRotation()
-                } else {
-                    this.setFutureState()
-                }
+                this.setIdle()
 
             }
 
@@ -209,37 +204,6 @@ export default class UnitClass {
 
     }
 
-    setChooseRotation = () => {
-        this.render = true
-
-        this.setIdle()
-
-        this.selectionData.setInfoSelection('unit', this.position)
-
-        this.mapData.setState('chooseRotation')
-
-    }
-
-    setFutureState = () => {
-
-        switch (this.futureState) {
-            case 'mine':
-                this.setMine()
-                break
-            case 'attack':
-                this.setAttack()
-                break
-            case 'capture':
-                this.captureFlag()
-                break
-
-        }
-
-        this.futureState = null
-        this.selectionData.clearAllSelections()
-
-    }
-
     setMine = () => {
         this.setDirection(this.target.position)
         this.setAnimation('mine')
@@ -250,11 +214,11 @@ export default class UnitClass {
         this.setAnimation('attack')
     }
 
-    setMove = () => {
+    setMove = (path) => {
 
         let startTile = this.tileData.getEntry(this.position.q, this.position.r)
 
-        this.path = this.selectionData.getPath()
+        this.path = path
 
         let nextPosition = this.tileData.getEntry(this.path[0].q, this.path[0].r)
 
