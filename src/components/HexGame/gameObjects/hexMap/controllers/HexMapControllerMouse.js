@@ -43,7 +43,6 @@ export default class HexMapControllerMouseClass {
             case 'chooseRotation':
             case 'selectMovement':
             case 'animation':
-            case 'selectAction':
                 return
         }
     }
@@ -64,60 +63,65 @@ export default class HexMapControllerMouseClass {
         }
     }
 
-    addUnit = (tile) => {
+    placeUnit = (tile, x, y) => {
 
         if (tile === null) return
 
-        if (this.selectionData.getPathingSelection('placement').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
-
-            if (!this.selectionData.getPathLocked()) {
-                this.selectionData.lockPath()
-                this.selectionData.setTargetSelection(tile.position, 'placement')
-            } else {
-                let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) {
-
-                    this.unitData.addUnit(tile.position.q, tile.position.r)
-                    this.unitData.eraseUnit()
-                    this.selectionData.clearAllSelections()
-                    this.selectionData.setInfoSelection('unit', tile.position)
-                    this.unitData.selectUnit(tile.position.q, tile.position.r)
-                    this.mapData.setState('chooseRotation')
-
-                }
-                else {
-                    this.selectionData.unlockPath()
-                    this.selectionData.clearTarget()
-                }
-            }
-
+        if (!this.selectionData.getPathingSelection('placement').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+            this.selectionData.unlockPath()
+            this.selectionData.clearTarget()
+            this.updatePlacementSelection(x, y)
             return
         }
+
+        if (!this.selectionData.getPathLocked()) {
+            this.selectionData.lockPath()
+            this.selectionData.setTargetSelection(tile.position, 'placement')
+        } else {
+            let target = this.selectionData.getTargetSelection()
+            if (tile.position.q == target.q && tile.position.r == target.r) {
+
+                this.unitData.addUnit(tile.position.q, tile.position.r)
+                this.unitData.eraseUnit()
+                this.selectionData.clearAllSelections()
+                this.selectionData.setInfoSelection('unit', tile.position)
+                this.unitData.selectUnit(tile.position.q, tile.position.r)
+                this.mapData.setState('chooseRotation')
+
+            } else {
+                this.selectionData.unlockPath()
+                this.selectionData.clearTarget()
+                this.updatePlacementSelection(x, y)
+            }
+        }
+
+        return
+
 
     }
 
     updatePlacementSelection = (x, y) => {
 
         if (this.unitData.placementUnit != null) {
-            this.unitData.placementUnit.rotation = -1*this.cameraData.rotation + 3
-            if(this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
+            this.unitData.placementUnit.rotation = -1 * this.cameraData.rotation + 3
+            if (this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
         }
 
         if (this.selectionData.getPathLocked()) return
 
+        this.selectionData.clearPath()
         let hoverTile = this.utils.getSelectedTile(x, y)
 
-        if (this.unitData.placementUnit != null) {
-            this.unitData.placementUnit.setPosition(hoverTile)
-            if (!hoverTile) this.unitData.placementUnit.setPosition({ q: null, r: null })
-        }
+        this.unitData.placementUnit.setPosition(hoverTile)
 
-        if (!hoverTile) return
+        if (!hoverTile) {
+            this.unitData.placementUnit.setPosition({ q: null, r: null })
+            return
+        }
 
         let placementSelections = this.selectionData.getPathingSelection('placement')
 
         if (placementSelections.some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
-            this.selectionData.clearPath()
             this.selectionData.setPlacementHover(hoverTile)
             return
         } else {

@@ -45,8 +45,7 @@ export default class SelectionDataClass {
                 },
                 unit: {
                     chooseRotation: 'rotate',
-                    selectMovement: 'unit',
-                    selectAction: 'unit'
+                    selectMovement: 'unit'
                 }
             },
             pathing: {

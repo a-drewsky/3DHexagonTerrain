@@ -17,8 +17,7 @@ export default class ModifierClass {
         this.shadowImages = []
 
         this.height = ModifierConfig[modifierId].height
-
-        this.imageObject = images
+        this.imageObject = images.structures.modifier
         this.sprite = ModifierConfig[modifierId].sprite
         this.sprites = ModifierConfig[modifierId].sprites
 
@@ -56,7 +55,6 @@ export default class ModifierClass {
             numSprites++
             chance = this.spriteChance[numSprites+1]
         }
-        console.log(filteredPositions.length, numSprites)
         return filteredPositions
     }
 

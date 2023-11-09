@@ -35,7 +35,7 @@ export default class UnitDataClass {
     }
 
     createUnit = (unitId) => {
-        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images.unit, this.uiController, this.globalState)
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images, this.uiController, this.globalState)
         this.placementUnit = newUnit
     }
 

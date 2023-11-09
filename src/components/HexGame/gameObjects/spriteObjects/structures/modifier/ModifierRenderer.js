@@ -195,13 +195,13 @@ export default class ModifierRendererClass {
 
             shadowImageList[rotation] = tempCanvas
 
-            let croppedImage = this.utils.cropStructureShadow(shadowImageList[rotation], { w: modifier.imageObject.shadowSize.width, h: modifier.imageObject.shadowSize.height }, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
+            let croppedImage = this.utils.cropShadow(shadowImageList[rotation], { w: modifier.imageObject.shadowSize.width, h: modifier.imageObject.shadowSize.height }, modifier.imageObject.shadowOffset, keyObj, rotatedMap)
             shadowImageList[rotation] = croppedImage
 
 
         }
 
-        modifier.shadowImages[0] = shadowImageList
+        modifier.shadowImages = shadowImageList
 
         this.cameraData.rotation = initCameraRotation
     }

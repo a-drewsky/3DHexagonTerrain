@@ -1,6 +1,6 @@
 export default class StructureClass {
 
-    constructor(pos, config, hexMapData, images) {
+    constructor(pos, type, config, hexMapData, images) {
         this.position = {
             q: pos.q,
             r: pos.r
@@ -15,7 +15,8 @@ export default class StructureClass {
         this.height = config.height
         if (config.rotation !== undefined) this.rotation = config.rotation
 
-        this.imageObject = images[config.sprite]
+        this.imageObject = images.structures[type][config.sprite]
+        this.shadowImageObject = images.shadows[this.imageObject.shadow]
         this.hexMapData = hexMapData
 
         this.render = true

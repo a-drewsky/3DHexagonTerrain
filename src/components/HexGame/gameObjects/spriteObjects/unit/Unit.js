@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, mapData, tileData, unitImages, uiController, globalState) {
+    constructor(pos, unitId, mapData, tileData, images, uiController, globalState) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = {
@@ -21,8 +21,11 @@ export default class UnitClass {
         this.height = UnitConfig[unitId].height
 
         //image data
-        this.imageObject = unitImages[UnitConfig[unitId].sprite]
-        this.images = []
+        this.imageObject = images.unit[UnitConfig[unitId].sprite]
+        this.shadowImageObject = images.shadows[this.imageObject.shadow]
+        this.actionImage = null
+        this.staticImages = []
+        this.shadowImage = null
         this.shadowImages = []
 
 
@@ -42,7 +45,7 @@ export default class UnitClass {
         this.target = null
 
         //settings
-        this.travelTime = TRAVEL_TIME
+        this.tileTravelTime = TRAVEL_TIME
         this.jumpAmount = JUMP_AMOUNT
 
         //access data
@@ -100,6 +103,10 @@ export default class UnitClass {
         return spriteRotation
     }
 
+    travelPercent = () => {
+        return (this.destinationCurTime - this.destinationStartTime) / this.tileTravelTime
+    }
+
 
     //SET FUNCTIONS
     setDirection = (targetPos) => {
@@ -135,7 +142,7 @@ export default class UnitClass {
 
     updatePath = () => {
         this.destinationCurTime = Date.now()
-        if (this.destinationCurTime - this.destinationStartTime >= this.travelTime) {
+        if (this.destinationCurTime - this.destinationStartTime >= this.tileTravelTime) {
             this.render = true
             this.position = this.destination
 

@@ -2,13 +2,11 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class StructureViewClass{
 
-    constructor(hexMapData, images, canvas) {
+    constructor(hexMapData) {
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.structureData = hexMapData.structureData
         this.cameraData = hexMapData.cameraData
-        this.images = images
-        this.canvas = canvas
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -30,6 +28,7 @@ export default class StructureViewClass{
       spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
 
       if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+      
       drawctx.drawImage(
          structure.images[0][this.cameraData.rotation],
          spritePos.x,
@@ -42,7 +41,7 @@ export default class StructureViewClass{
    drawShadow = (drawctx, structure) => {
       if (this.commonUtils.checkShadowImages(structure) == false) return
 
-      let shadowImage = this.images.shadows[structure.imageObject.shadow][this.cameraData.rotation]
+      let shadowImage = structure.shadowImageObject[this.cameraData.rotation]
       let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
       let height = this.tileData.getEntry(structure.position.q, structure.position.r).height
 
@@ -62,7 +61,7 @@ export default class StructureViewClass{
       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 
       drawctx.drawImage(
-         structure.shadowImages[0][this.cameraData.rotation],
+         structure.shadowImages[this.cameraData.rotation],
          shadowPos.x,
          shadowPos.y,
          shadowSize.width,

@@ -6,7 +6,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileClass {
 
-    constructor(loc, pos, target, projectileId, mapData, unitData, structureData, tileData, projectileImages) {
+    constructor(loc, pos, target, projectileId, mapData, unitData, structureData, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
         console.log(pos, target)
@@ -26,7 +26,8 @@ export default class ProjectileClass {
         this.height = ProjectileConfig[projectileId].height
 
         //image data
-        this.imageObject = projectileImages[ProjectileConfig[projectileId].sprite]
+        this.imageObject = images.projectiles[ProjectileConfig[projectileId].sprite]
+        this.shadowImageObject = images.shadows[this.imageObject.shadow]
         this.image = null
         this.shadowImage = null
 
@@ -91,7 +92,7 @@ export default class ProjectileClass {
     }
 
     nearestPosition = () => {
-        return this.commonUtils.roundToNearestHex(this.position.q, this.position.r)
+        return this.commonUtils.roundToNearestHex(this.position)
     }
 
     spriteHeight = () => {
@@ -106,7 +107,7 @@ export default class ProjectileClass {
         let projectilePos = this.tileData.getEntry(nearestPos.q, nearestPos.r).position
         let targetPos = this.tileData.getEntry(this.target.q, this.target.r).position
         let lerpPos = this.commonUtils.getLerpPos(projectilePos, targetPos, this.travelPercent())
-        lerpPos = this.commonUtils.roundToNearestHex(lerpPos.q, lerpPos.r)
+        lerpPos = this.commonUtils.roundToNearestHex(lerpPos)
         return this.tileData.getEntry(lerpPos.q, lerpPos.r).height
     }
 

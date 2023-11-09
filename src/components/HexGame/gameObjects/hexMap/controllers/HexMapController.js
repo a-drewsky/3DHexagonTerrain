@@ -32,24 +32,20 @@ export default class HexMapControllerClass {
         this.cameraManager.controller.mouseDown(x, y)
     }
 
-    mouseUp = () => {
+    mouseUp = (x, y) => {
 
         this.cameraManager.controller.mouseUp()
 
         if (this.cameraManager.data.clickPos !== null) {
 
-            let clickPos = {
-                x: this.cameraManager.data.clickPos.x,
-                y: this.cameraManager.data.clickPos.y
-            }
-
             this.cameraManager.data.clickPos = null
+            this.cameraManager.data.clickMovePos = null
 
-            let tileSelected = this.utils.getSelectedTile(clickPos.x, clickPos.y)
+            let tileSelected = this.utils.getSelectedTile(x, y)
 
             if (!tileSelected) return
 
-            this.selectTile(tileSelected, clickPos)
+            this.selectTile(tileSelected, {x: x, y: y})
 
         }
     }
@@ -75,8 +71,6 @@ export default class HexMapControllerClass {
                 this.mouseController.setUnitMouseDirection(x, y)
                 this.mouseController.updateEndMoveSelection(x, y)
                 return
-            case 'selectAction':
-                return
         }
     }
 
@@ -97,12 +91,10 @@ export default class HexMapControllerClass {
                 this.mouseController.selectMovement(tile, clickPos.x, clickPos.y)
                 return
             case 'placeUnit':
-                this.mouseController.addUnit(tile)
+                this.mouseController.placeUnit(tile, clickPos.x, clickPos.y)
                 return
             case 'chooseRotation':
                 this.mouseController.endUnitTurn(tile)
-                return
-            case 'selectAction':
                 return
             case 'animation':
                 return
@@ -164,8 +156,8 @@ export default class HexMapControllerClass {
         let squish = this.mapData.squish;
 
 
-        let vecQ = this.mapData.flatTopVecQ;
-        let vecR = this.mapData.flatTopVecR;
+        let vecQ = this.mapData.vecQ;
+        let vecR = this.mapData.vecR;
 
         centerHexPos.s = -centerHexPos.q - centerHexPos.r
         let newR = centerHexPos.r;
@@ -174,7 +166,7 @@ export default class HexMapControllerClass {
         centerHexPos.q = -newR;
         centerHexPos.r = -newS;
 
-        this.cameraManager.data.setCameraPos(
+        this.cameraManager.data.setPosition(
             vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
             vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
         )
@@ -211,10 +203,10 @@ export default class HexMapControllerClass {
         centerHexPos.r = -newQ;
         centerHexPos.q = -newS;
 
-        let vecQ = this.mapData.flatTopVecQ;
-        let vecR = this.mapData.flatTopVecR;
+        let vecQ = this.mapData.vecQ;
+        let vecR = this.mapData.vecR;
 
-        this.cameraManager.data.setCameraPos(
+        this.cameraManager.data.setPosition(
             vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
             vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
         );

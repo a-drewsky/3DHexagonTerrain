@@ -249,10 +249,10 @@ export default class HexMapControllerUtilsClass {
             if ((secondTile.q - 0.5) % 1 == 0) secondTile.q -= 0.01
             if ((secondTile.r - 0.5) % 1 == 0) secondTile.r -= 0.01
 
-            tile = this.commonUtils.roundToNearestHex(tile.q, tile.r)
+            tile = this.commonUtils.roundToNearestHex(tile)
             tile = this.tileData.getEntry(tile.q, tile.r)
 
-            secondTile = this.commonUtils.roundToNearestHex(secondTile.q, secondTile.r)
+            secondTile = this.commonUtils.roundToNearestHex(secondTile)
             secondTile = this.tileData.getEntry(secondTile.q, secondTile.r)
 
             let firstTileOpen = true
@@ -271,7 +271,7 @@ export default class HexMapControllerUtilsClass {
         }
 
         let validateTile = (tile) => {
-            tile = this.commonUtils.roundToNearestHex(tile.q, tile.r)
+            tile = this.commonUtils.roundToNearestHex(tile)
             tile = this.tileData.getEntry(tile.q, tile.r)
             if (tile === null) return true
             if (this.unitData.getUnit(tile.position.q, tile.position.r) != null) return false
@@ -341,7 +341,7 @@ export default class HexMapControllerUtilsClass {
             r: ((-1 / 3 * x) + (Math.sqrt(3) / 3) * (y * (1 / this.mapData.squish))) / this.mapData.size
         }
 
-        hexClicked = this.commonUtils.roundToNearestHex(hexClicked.q, hexClicked.r)
+        hexClicked = this.commonUtils.roundToNearestHex(hexClicked)
 
 
 

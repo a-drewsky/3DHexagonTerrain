@@ -67,7 +67,7 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.hexMapManager.controller.mouseUp();
+            this.gameManager.hexMapManager.controller.mouseUp(x, y);
             break;
       }
    }

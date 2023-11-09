@@ -2,13 +2,11 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileViewClass {
 
-    constructor(hexMapData, images, canvas) {
+    constructor(hexMapData) {
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.unitData = hexMapData.unitData
         this.cameraData = hexMapData.cameraData
-        this.images = images
-        this.canvas = canvas
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -58,7 +56,7 @@ export default class ProjectileViewClass {
 
         let keyObj = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
         
-        let shadowImage = this.images.shadows[projectile.imageObject.shadow][this.cameraData.rotation]
+        let shadowImage = projectile.shadowImageObject[this.cameraData.rotation]
 
         let pos = {
             q: keyObj.q,

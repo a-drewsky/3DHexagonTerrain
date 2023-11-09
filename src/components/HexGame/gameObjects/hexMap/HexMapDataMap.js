@@ -6,7 +6,6 @@ export default class HexMapDataMapClass {
 
         this.state = {
             selectTile: 'selectTile', //default
-            selectAction: 'selectAction', //waitForUiInput
             animation: 'animation', //waitForAnimation
             selectMovement: 'selectMovement', //movementSelection
             chooseRotation: 'chooseRotation', //rotationSelection
@@ -19,11 +18,9 @@ export default class HexMapDataMapClass {
         this.squish = HEXMAP_SQUISH;
         this.tileHeight = TILE_HEIGHT;
         this.elevationRanges = HEXMAP_ELEVATION_RANGES
-
-        // this.VecQ = { x: Math.sqrt(3) * this.size, y: 0 }
-        // this.VecR = { x: Math.sqrt(3) / 2 * this.size, y: 3 / 2 * this.size }
-        this.flatTopVecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
-        this.flatTopVecR = { x: 0, y: Math.sqrt(3) * this.size }
+        
+        this.vecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
+        this.vecR = { x: 0, y: Math.sqrt(3) * this.size }
         this.sideLength = Math.PI / 3;
 
         //ui commands

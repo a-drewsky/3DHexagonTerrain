@@ -17,10 +17,10 @@ export default class SpriteObjectViewClass {
 
       this.canvas = canvas
 
-      this.modifiers = new ModifierViewClass(hexMapData, images, canvas)
-      this.structures = new StructureViewClass(hexMapData, images, canvas)
-      this.units = new UnitViewClass(hexMapData, images, canvas)
-      this.projectiles = new ProjectileViewClass(hexMapData, images, canvas)
+      this.modifiers = new ModifierViewClass(hexMapData)
+      this.structures = new StructureViewClass(hexMapData)
+      this.units = new UnitViewClass(hexMapData)
+      this.projectiles = new ProjectileViewClass(hexMapData)
    }
 
    buildSpriteList = () => {
@@ -106,7 +106,7 @@ export default class SpriteObjectViewClass {
    setUnitPosition = (spriteListEntry) => {
 
       let unit = spriteListEntry.spriteObject
-      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
+      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.tileTravelTime
 
       let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
 
@@ -140,7 +140,7 @@ export default class SpriteObjectViewClass {
    setUnitLayer = (spriteListEntry) => {
 
       let unit = spriteListEntry.spriteObject
-      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.travelTime
+      let percent = (unit.destinationCurTime - unit.destinationStartTime) / unit.tileTravelTime
       let rotationMap = {
          0: 'up',
          1: 'down',

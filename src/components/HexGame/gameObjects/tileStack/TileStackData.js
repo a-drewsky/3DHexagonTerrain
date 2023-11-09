@@ -67,10 +67,10 @@ export default class TileStackDataClass {
             //Set map hyp
             let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.utils.split(key))
 
-            let mapWidthMax = Math.max(...keys.map(key => this.mapData.flatTopVecQ.x * key.q + this.mapData.flatTopVecR.x * key.r));
-            let mapHeightMax = Math.max(...keys.map(key => this.mapData.flatTopVecQ.y * key.q * this.mapData.squish + this.mapData.flatTopVecR.y * key.r * this.mapData.squish));
-            let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.mapData.flatTopVecQ.x * key.q + this.mapData.flatTopVecR.x * key.r)));
-            let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.mapData.flatTopVecQ.y * key.q * this.mapData.squish + this.mapData.flatTopVecR.y * key.r * this.mapData.squish)));
+            let mapWidthMax = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r));
+            let mapHeightMax = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish));
+            let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)));
+            let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)));
 
             let mapWidth = Math.max(mapWidthMax, mapWidthMin)
             let mapHeight = Math.max(mapHeightMax, mapHeightMin)
@@ -136,6 +136,7 @@ export default class TileStackDataClass {
 
     getEntryRotated = (q, r, rotation) => {
         let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(q, r))
+        if(!rotatedTile) return null
         return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
     }
 
@@ -230,8 +231,8 @@ export default class TileStackDataClass {
             r4: this.utils.rotateTile(maxRminQ - 1, maxR + 1, rotation).r
         }
 
-        let hexVecQ =  { ...this.mapData.flatTopVecQ }
-        let hexVecR = { ...this.mapData.flatTopVecR }
+        let hexVecQ =  { ...this.mapData.vecQ }
+        let hexVecR = { ...this.mapData.vecR }
 
         let tablePosition = [
             {
@@ -274,8 +275,8 @@ export default class TileStackDataClass {
         let xOffset;
         let yOffset;
 
-        xOffset = this.mapData.flatTopVecQ.x * keyObj.q + this.mapData.flatTopVecR.x * keyObj.r;
-        yOffset = this.mapData.flatTopVecQ.y * keyObj.q * this.mapData.squish + this.mapData.flatTopVecR.y * keyObj.r * this.mapData.squish;
+        xOffset = this.mapData.vecQ.x * keyObj.q + this.mapData.vecR.x * keyObj.r;
+        yOffset = this.mapData.vecQ.y * keyObj.q * this.mapData.squish + this.mapData.vecR.y * keyObj.r * this.mapData.squish;
 
 
         return {

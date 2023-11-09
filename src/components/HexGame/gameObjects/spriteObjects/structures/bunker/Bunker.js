@@ -5,7 +5,7 @@ export default class BunkerClass extends StructureClass{
 
     constructor(pos, bunkerId, hexMapData, images){
         if(!BunkerConfig[bunkerId]) throw Error(`Invalid Bunker ID: (${bunkerId}). Bunker config properties are: [${Object.getOwnPropertyNames(BunkerConfig).splice(3)}]`)
-        super(pos, BunkerConfig[bunkerId], hexMapData, images.bunker)
+        super(pos, 'bunker', BunkerConfig[bunkerId], hexMapData, images)
         this.type = 'bunker'
         this.destructionStructure = 'rubblepile'
 

@@ -5,7 +5,7 @@ export default class FlagClass extends StructureClass{
 
     constructor(pos, flagId, hexMapData, images){
         if(!FlagConfig[flagId]) throw Error(`Invalid Flag ID: (${flagId}). Flag config properties are: [${Object.getOwnPropertyNames(FlagConfig).splice(3)}]`)
-        super(pos, FlagConfig[flagId], hexMapData, images.flag)
+        super(pos, 'flag', FlagConfig[flagId], hexMapData, images)
         this.type = 'flag'
         this.state = {
             default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }

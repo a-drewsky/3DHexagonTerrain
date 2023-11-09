@@ -2,13 +2,11 @@ import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 
 export default class ModifierViewClass{
 
-    constructor(hexMapData, images, canvas) {
+    constructor(hexMapData) {
         this.mapData = hexMapData.mapData
         this.tileData = hexMapData.tileData
         this.structureData = hexMapData.structureData
         this.cameraData = hexMapData.cameraData
-        this.images = images
-        this.canvas = canvas
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -139,7 +137,7 @@ export default class ModifierViewClass{
        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
  
        drawctx.drawImage(
-          modifier.shadowImages[0][this.cameraData.rotation],
+          modifier.shadowImages[this.cameraData.rotation],
           shadowPos.x,
           shadowPos.y,
           shadowSize.width,

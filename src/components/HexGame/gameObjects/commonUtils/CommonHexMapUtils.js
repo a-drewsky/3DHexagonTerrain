@@ -1,10 +1,10 @@
 export default class CommonHexMapUtilsClass {
 
     //round floating hex coords to nearest integer hex coords
-    roundToNearestHex = (q, r) => {
-        let fracQ = q;
-        let fracR = r;
-        let fracS = -1 * q - r
+    roundToNearestHex = (key) => {
+        let fracQ = key.q;
+        let fracR = key.r;
+        let fracS = -1 * key.q - key.r
 
         let roundQ = Math.round(fracQ);
         let roundR = Math.round(fracR);
@@ -38,6 +38,11 @@ export default class CommonHexMapUtilsClass {
         if (!spriteObject.shadowImages && !spriteObject.shadowImage) return false
         if (spriteObject.shadowImages && spriteObject.shadowImages.length == 0) return false
         return true
+    }
+
+    checkStateImages = (spriteObject) => {
+        if(spriteObject.imageObject[spriteObject.state.current.name]) return true
+        return false
     }
 
     split = (key) => {

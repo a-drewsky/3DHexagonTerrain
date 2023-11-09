@@ -5,7 +5,7 @@ export default class ResourceClass extends StructureClass {
 
     constructor(pos, resourceId, hexMapData, images) {
         if(!ResourceConfig[resourceId]) throw Error(`Invalid Resource ID: (${resourceId}). Resource config properties are: [${Object.getOwnPropertyNames(ResourceConfig).splice(3)}]`)
-        super(pos, ResourceConfig[resourceId], hexMapData, images.resource)
+        super(pos, 'resource', ResourceConfig[resourceId], hexMapData, images)
         this.type = 'resource'
         this.destructionStructure = 'emptymine'
         this.resource = ResourceConfig[resourceId].resource
