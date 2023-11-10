@@ -50,7 +50,7 @@ export default class UnitRendererClass {
                 let sprite = unit.sprite(this.cameraData.rotation)
 
                 let rotatedMap = this.tileData.rotatedMapList[rotation]
-                let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+                let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
 
                 let tempCanvas = document.createElement('canvas')
                 tempCanvas.width = this.mapData.size * 2 * sprite.size.w
@@ -82,21 +82,21 @@ export default class UnitRendererClass {
 
     renderActionSprite = (unit) => {
 
-        let pos = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+        let pos = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
 
         let closestTile = {
             q: unit.position.q,
             r: unit.position.r
         }
 
-        let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
+        let height = this.tileData.getEntry(unit.position).height
         let extraHeight = 0
 
         if (unit.destination != null) {
 
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
-            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+            pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
             if (percent > 0.5) {
                 closestTile = {
                     q: unit.destination.q,
@@ -104,7 +104,7 @@ export default class UnitRendererClass {
                 }
             }
 
-            let newHeight = this.tileData.getEntry(unit.destination.q, unit.destination.r).height
+            let newHeight = this.tileData.getEntry(unit.destination).height
 
             if (newHeight != height) {
                 extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount

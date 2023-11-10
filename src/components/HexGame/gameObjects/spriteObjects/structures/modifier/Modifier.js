@@ -37,6 +37,10 @@ export default class ModifierClass {
         if (this.spriteChance) this.spritePositions = this.createSpritePosition()
     }
 
+    curState = () => {
+        return this.state.current.name
+    }
+
     createSpritePosition = () => {
         let addSprite = (positions, filteredPositions) => {
             let currentIndex = Math.floor(Math.random() * positions.length)

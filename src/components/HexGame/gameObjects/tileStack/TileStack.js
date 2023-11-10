@@ -1,10 +1,7 @@
 export default class TileStackClass {
 
     constructor(pos, hexMapData, images) {
-        this.position = {
-            q: pos.q,
-            r: pos.r
-        }
+        this.position = { ...pos }
 
         this.canvasSize = {
             width: hexMapData.size * 2,

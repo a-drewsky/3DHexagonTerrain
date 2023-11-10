@@ -10,13 +10,13 @@ export default class ModifierViewClass{
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-    drawSingleImage = (drawctx, spriteObject) => {
+    drawSingleImage = (drawctx, modifier) => {
 
-        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-        let sprite = spriteObject.imageObject
-        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+        let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
+        let sprite = modifier.imageObject
+        let height = this.tileData.getEntry(modifier.position).height
 
         let spriteSize
 
@@ -33,7 +33,7 @@ export default class ModifierViewClass{
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraData.rotation].top,
+            modifier.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -42,18 +42,18 @@ export default class ModifierViewClass{
 
     }
 
-    drawTop = (drawctx, spriteObject) => {
+    drawTop = (drawctx, modifier) => {
 
-        if (spriteObject.modifierType == 'singleImage') {
-            this.drawSingleImage(drawctx, spriteObject)
+        if (modifier.modifierType == 'singleImage') {
+            this.drawSingleImage(drawctx, modifier)
             return
         }
 
-        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-        let sprite = spriteObject.imageObject
-        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+        let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
+        let sprite = modifier.imageObject
+        let height = this.tileData.getEntry(modifier.position).height
 
         let spriteSize
 
@@ -70,7 +70,7 @@ export default class ModifierViewClass{
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraData.rotation].top,
+            modifier.images[0][this.cameraData.rotation].top,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -79,17 +79,17 @@ export default class ModifierViewClass{
 
     }
 
-    drawBottom = (drawctx, spriteObject) => {
+    drawBottom = (drawctx, modifier) => {
 
-        if (spriteObject.modifierType == 'singleImage') {
+        if (modifier.modifierType == 'singleImage') {
             return
         }
 
-        if (this.commonUtils.checkImagesLoaded(spriteObject) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(spriteObject.position.q, spriteObject.position.r, this.cameraData.rotation)
-        let sprite = spriteObject.imageObject
-        let height = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r).height
+        let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
+        let sprite = modifier.imageObject
+        let height = this.tileData.getEntry(modifier.position).height
 
         let spriteSize
 
@@ -106,7 +106,7 @@ export default class ModifierViewClass{
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
-            spriteObject.images[0][this.cameraData.rotation].bottom,
+            modifier.images[0][this.cameraData.rotation].bottom,
             spritePos.x,
             spritePos.y,
             spriteSize.width,
@@ -118,8 +118,8 @@ export default class ModifierViewClass{
     drawShadow = (drawctx, modifier) => {
        if (this.commonUtils.checkShadowImages(modifier) == false) return
 
-       let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
-       let height = this.tileData.getEntry(modifier.position.q, modifier.position.r).height
+       let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
+       let height = this.tileData.getEntry(modifier.position).height
  
        let shadowSize
  

@@ -1,3 +1,5 @@
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+
 export default class SelectionDataClass {
 
     constructor(mapData) {
@@ -68,25 +70,25 @@ export default class SelectionDataClass {
             }
         }
 
+        this.commonUtils = new CommonHexMapUtilsClass()
+
     }
 
-    getSelectionNames = (q, r) => {
+    getSelectionNames = (tile) => {
         let testSelection = (selectionList, selection) => {
             if (!this[selectionList][selection]) return false
-            if (this[selectionList][selection].q != q) return false
-            if (this[selectionList][selection].r != r) return false
+            if (!this.commonUtils.tilesEqual(this[selectionList][selection], tile)) return false
             return true
         }
 
         let testSelectionArr = (selectionList, selection) => {
-            if (this[selectionList][selection].some(val => val.q == q && val.r == r)) return true
+            if (this[selectionList][selection].some(val => this.commonUtils.tilesEqual(val, tile))) return true
             return false
         }
 
         let testTargetSelection = () => {
             if(!this.targetSelection.position) return false
-            if(this.targetSelection.position.q != q) return false
-            if(this.targetSelection.position.r != r) return false
+            if(!this.commonUtils.tilesEqual(this.targetSelection.position, tile)) return false
             return true
         }
 

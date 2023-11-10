@@ -54,7 +54,7 @@ export default class TileStackRendererClass {
             stackctx.save()
             stackctx.clip()
 
-            let rotTile = this.commonUtils.rotateTile(tile.position.q, tile.position.r, rotation)
+            let rotTile = this.commonUtils.rotateTile(tile.position, rotation)
 
             let tilePos = this.tileData.hexPositionToXYPosition(rotTile, tile.height, this.cameraData.rotation)
             tilePos.x -= this.mapData.size

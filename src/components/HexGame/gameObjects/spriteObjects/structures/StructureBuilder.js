@@ -50,7 +50,7 @@ export default class StructureBuilderClass {
             let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
             let selectedTilePos = cellTiles[selectedTileIndex]
             cellTiles.splice(selectedTileIndex, 1)
-            let selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
+            let selectedTile = this.tileData.getEntry(selectedTilePos)
 
 
             while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -58,7 +58,7 @@ export default class StructureBuilderClass {
                selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               selectedTile = this.tileData.getEntry(selectedTilePos)
             }
 
             if (cellTiles.length == 0) break;
@@ -70,7 +70,7 @@ export default class StructureBuilderClass {
 
             this.structureBuilderUtils.flattenTerrain(selectedTilePos.q, selectedTilePos.r, flatList, terrainHeight)
 
-            this.structureData.setBunker(selectedTilePos.q, selectedTilePos.r, 'bunker')
+            this.structureData.setBunker(selectedTilePos, 'bunker')
 
          }
       }
@@ -132,7 +132,7 @@ export default class StructureBuilderClass {
                let selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                let selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
-               let selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
+               let selectedTile = this.tileData.getEntry(selectedTilePos)
 
 
                while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
@@ -140,7 +140,7 @@ export default class StructureBuilderClass {
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
-                  selectedTile = this.tileData.getEntry(selectedTilePos.q, selectedTilePos.r)
+                  selectedTile = this.tileData.getEntry(selectedTilePos)
                }
 
                if (cellTiles.length == 0) break;
@@ -162,7 +162,7 @@ export default class StructureBuilderClass {
                if (closeSection) mineType = closeSpriteList[Math.floor(Math.random() * closeSpriteList.length)]
                else mineType = farSpriteList[Math.floor(Math.random() * farSpriteList.length)]
 
-               this.structureData.setResource(selectedTilePos.q, selectedTilePos.r, mineType)
+               this.structureData.setResource(selectedTilePos, mineType)
             }
 
          }
@@ -187,13 +187,13 @@ export default class StructureBuilderClass {
 
          //generate savanna trees
          if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
-            this.structureData.setProp(keyObj.q, keyObj.r, 'savannaTree')
+            this.structureData.setProp(keyObj, 'savannaTree')
          }
 
          //generate large rocks
-         let terrain = this.structureData.getStructure(keyObj.q, keyObj.r)
+         let terrain = this.structureData.getStructure(keyObj)
          if (terrain != null && terrain.id == 'small_rocks' && spawnChance.largeRock > thresholds.largeRock) {
-            this.structureData.setProp(keyObj.q, keyObj.r, 'largeRock')
+            this.structureData.setProp(keyObj, 'largeRock')
          }
 
       }
@@ -232,15 +232,15 @@ export default class StructureBuilderClass {
             switch (entry.value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  this.structureData.setModifier(keyObj.q, keyObj.r, 'oakTrees')
+                  this.structureData.setModifier(keyObj, 'oakTrees')
                   break;
                case 'tundra':
                case 'snowhill':
-                  this.structureData.setModifier(keyObj.q, keyObj.r, 'spruceTrees')
+                  this.structureData.setModifier(keyObj, 'spruceTrees')
                   break;
                case 'desert':
                case 'sandhill':
-                  this.structureData.setModifier(keyObj.q, keyObj.r, 'cacti')
+                  this.structureData.setModifier(keyObj, 'cacti')
                   break;
                default:
                   continue;
@@ -248,7 +248,7 @@ export default class StructureBuilderClass {
 
 
          } else if (BIOME_CONSTANTS[entry.value.biome].rockGenThreshold && tileRockNoise > BIOME_CONSTANTS[entry.value.biome].rockGenThreshold) {
-            this.structureData.setModifier(keyObj.q, keyObj.r, 'smallRocks')
+            this.structureData.setModifier(keyObj, 'smallRocks')
          }
 
 

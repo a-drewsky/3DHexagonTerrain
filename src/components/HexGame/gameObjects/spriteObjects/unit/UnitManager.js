@@ -18,11 +18,11 @@ export default class UnitManagerClass {
 
             if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) continue
 
-            switch (unit.state.current.name) {
+            switch (unit.curState()) {
                 case 'walk':
                 case 'jump':
                     unit.updatePath()
-                    if (unit.state.current.name == 'idle') {
+                    if (unit.curState() == 'idle') {
                         this.selectionData.setInfoSelection('unit', unit.position)
                         this.mapData.setState('chooseRotation')
                         this.controllerUtils.findActionSet()
@@ -57,13 +57,13 @@ export default class UnitManagerClass {
                     continue
                 case 'hit':
                     unit.setIdle()
-                    if (unit.state.current.name != 'death') {
+                    if (unit.curState() != 'death') {
                         this.mapData.resetState()
                         this.selectionData.clearAllSelections()
                     }
                     continue
                 case 'death':
-                    this.data.deleteUnit(unit.position.q, unit.position.r)
+                    this.data.deleteUnit(unit.position)
                     this.mapData.resetState()
                     this.selectionData.clearAllSelections()
                     continue

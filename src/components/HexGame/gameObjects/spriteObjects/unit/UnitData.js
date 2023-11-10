@@ -1,4 +1,5 @@
 import UnitClass from "./Unit"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class UnitDataClass {
 
@@ -12,24 +13,26 @@ export default class UnitDataClass {
         this.unitList = [];
         this.selectedUnit = null
         this.placementUnit = null
+
+        this.commonUtils = new CommonHexMapUtilsClass()
     }
 
     //return terrain at tile (q, r) or null if the tile has no terrain
-    getUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
+    getUnit = (pos) => {
+        let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
         if (index == -1) return null
         return this.unitList[index]
     }
 
-    hasUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
+    hasUnit = (pos) => {
+        let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
         if (index == -1) return false
         return true
     }
 
     //delete unit at position (q, r)
-    deleteUnit = (q, r) => {
-        let index = this.unitList.findIndex(unit => unit.position.q == q && unit.position.r == r)
+    deleteUnit = (pos) => {
+        let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
         if (index == -1) return
         this.unitList.splice(index, 1)
     }
@@ -43,16 +46,17 @@ export default class UnitDataClass {
         this.placementUnit = null
     }
 
-    addUnit = (q, r) => {
+    addUnit = (pos) => {
         let newUnit = this.placementUnit
         this.placementUnit = null
-        newUnit.position = {q: q, r: r}
+        newUnit.position = { ...pos }
         this.unitList.push(newUnit)
         return newUnit
     }
 
+    //should be removed
     selectUnit = (q, r) => {
-        this.selectedUnit = this.getUnit(q, r)
+        this.selectedUnit = this.getUnit({ q: q, r: r })
     }
 
     unselectUnit = () => {

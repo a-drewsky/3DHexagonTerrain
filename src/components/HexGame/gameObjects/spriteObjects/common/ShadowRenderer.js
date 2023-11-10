@@ -21,9 +21,9 @@ export default class ShadowRendererClass {
         let shadowImage = this.images.shadows[spriteObject.imageObject.shadow][this.cameraData.rotation]
 
         let nearestTile = this.commonUtils.roundToNearestHex(position)
-        nearestTile = this.tileData.getEntry(nearestTile.q, nearestTile.r)
+        nearestTile = this.tileData.getEntry(nearestTile)
 
-        position = this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation)
+        position = this.commonUtils.rotateTile(position, this.cameraData.rotation)
         let shadowPos = this.tileData.hexPositionToXYPosition(position, nearestTile.height, this.cameraData.rotation)
         let shadowSize = {
             width: this.mapData.size * 2 * shadowImage.size.w,
@@ -56,7 +56,7 @@ export default class ShadowRendererClass {
 
             this.cameraData.rotation = rotation;
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-            let keyObj = this.commonUtils.rotateTile(position.q, position.r, this.cameraData.rotation)
+            let keyObj = this.commonUtils.rotateTile(position, this.cameraData.rotation)
 
             let croppedImage = this.utils.cropShadow(shadowImage.image, shadowImage.size, shadowImage.offset, keyObj, rotatedMap)
 

@@ -81,7 +81,7 @@ export default class HexMapControllerClass {
 
     selectTile = (tileSelected, clickPos) => {
 
-        let tile = this.tileManager.data.getEntry(tileSelected.q, tileSelected.r)
+        let tile = this.tileManager.data.getEntry(tileSelected)
 
         switch (this.mapData.curState()) {
             case 'selectTile':

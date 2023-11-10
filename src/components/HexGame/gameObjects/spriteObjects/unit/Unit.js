@@ -8,10 +8,7 @@ export default class UnitClass {
     constructor(pos, unitId, mapData, tileData, images, uiController, globalState) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
-        this.position = {
-            q: pos.q,
-            r: pos.r
-        }
+        this.position = { ...pos }
 
         //static data
         this.id = UnitConfig[unitId].id
@@ -90,11 +87,11 @@ export default class UnitClass {
 
     //HELPER FUNCTIONS
     curState = () => {
-        return this.state.current
+        return this.state.current.name
     }
 
     sprite = (cameraRotation) => {
-        return this.imageObject[this.state.current.name].images[this.frame][this.spriteRotation(cameraRotation)]
+        return this.imageObject[this.curState()].images[this.frame][this.spriteRotation(cameraRotation)]
     }
 
     spriteRotation = (cameraRotation) => {
@@ -134,7 +131,7 @@ export default class UnitClass {
 
             this.frame++
 
-            if (this.frame >= this.imageObject[this.curState().name].images.length) this.frame = 0
+            if (this.frame >= this.imageObject[this.curState()].images.length) this.frame = 0
 
         }
 
@@ -150,9 +147,9 @@ export default class UnitClass {
 
             if (this.path.length > 0) {
 
-                let startPosition = this.tileData.getEntry(this.position.q, this.position.r)
-                let nextPosition = this.tileData.getEntry(this.destination.q, this.destination.r)
-                if (this.curState().name != 'walk') {
+                let startPosition = this.tileData.getEntry(this.position)
+                let nextPosition = this.tileData.getEntry(this.destination)
+                if (this.curState() != 'walk') {
                     this.setAnimation('walk')
                 }
                 if (nextPosition.height != startPosition.height) {
@@ -223,11 +220,11 @@ export default class UnitClass {
 
     setMove = (path) => {
 
-        let startTile = this.tileData.getEntry(this.position.q, this.position.r)
+        let startTile = this.tileData.getEntry(this.position)
 
         this.path = path
 
-        let nextPosition = this.tileData.getEntry(this.path[0].q, this.path[0].r)
+        let nextPosition = this.tileData.getEntry(this.path[0])
 
         if (nextPosition.height != startTile.height) {
             this.setAnimation('jump')

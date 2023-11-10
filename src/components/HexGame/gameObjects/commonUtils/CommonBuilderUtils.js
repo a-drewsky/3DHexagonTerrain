@@ -7,7 +7,7 @@ export default class CommonBuilderUtilsClass {
 
     cloneTile = (tileToClone, keyObj) => {
 
-        let newTile = this.tileData.setEntry(keyObj.q, keyObj.r)
+        let newTile = this.tileData.setEntry(keyObj)
 
         newTile.height = tileToClone.height
         newTile.biome = tileToClone.biome

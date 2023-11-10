@@ -12,7 +12,7 @@ export default class ProjectileViewClass {
 
     drawSprite = (drawctx, projectile) => {
 
-        let keyObj = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
+        let keyObj = this.commonUtils.rotateTile(projectile.position, this.cameraData.rotation)
         let sprite = projectile.imageObject
 
         let pos = {
@@ -26,7 +26,7 @@ export default class ProjectileViewClass {
         let point2 = projectile.target
         let percent = projectile.travelPercent()
         let lerpPos = this.commonUtils.getLerpPos(point1, point2, percent)
-        pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+        pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
         let height = projectile.spriteHeight()
 
         let spriteSize
@@ -54,7 +54,7 @@ export default class ProjectileViewClass {
     drawShadow = (drawctx, projectile) => {
         if (this.commonUtils.checkShadowImages(projectile) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
+        let keyObj = this.commonUtils.rotateTile(projectile.position, this.cameraData.rotation)
         
         let shadowImage = projectile.shadowImageObject[this.cameraData.rotation]
 
@@ -67,7 +67,7 @@ export default class ProjectileViewClass {
         let point2 = projectile.target
         let percent = projectile.travelPercent()
         let lerpPos = this.commonUtils.getLerpPos(point1, point2, percent)
-        pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+        pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
 
         let height = projectile.shadowHeight()
 

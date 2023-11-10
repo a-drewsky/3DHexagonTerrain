@@ -22,9 +22,9 @@ export default class HexMapControllerActionsClass {
 
         let selectionTarget = this.selectionData.getTargetSelection()
         if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget)
 
-        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position)
         if (targetStructure == null) return
 
         this.unitData.selectedUnit.target = targetStructure
@@ -39,15 +39,15 @@ export default class HexMapControllerActionsClass {
 
         let selectionTarget = this.selectionData.getTargetSelection()
         if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget)
 
         let targetObject
 
-        if (this.unitData.getUnit(targetTile.position.q, targetTile.position.r) != null) {
-            targetObject = this.unitData.getUnit(targetTile.position.q, targetTile.position.r)
+        if (this.unitData.getUnit(targetTile.position) != null) {
+            targetObject = this.unitData.getUnit(targetTile.position)
         } else {
-            if (this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r) == null) return
-            targetObject = this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r)
+            if (this.spriteManager.structures.data.getStructure(targetTile.position) == null) return
+            targetObject = this.spriteManager.structures.data.getStructure(targetTile.position)
         }
         if (targetObject == null) return
 
@@ -64,9 +64,9 @@ export default class HexMapControllerActionsClass {
 
         let selectionTarget = this.selectionData.getTargetSelection()
         if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget.q, selectionTarget.r)
+        let targetTile = this.tileManager.data.getEntry(selectionTarget)
 
-        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position.q, targetTile.position.r)
+        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position)
         if (targetStructure == null) return
 
         this.unitData.selectedUnit.target = targetStructure

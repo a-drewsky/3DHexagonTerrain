@@ -13,12 +13,9 @@ export default class HexMapPathFinderClass {
 
     }
 
-    createNode = (q, r) => {
+    createNode = (pos) => {
         return {
-            tile: {
-                q: q,
-                r: r
-            },
+            tile: { ...pos },
             connection: null,
             moveCost: null,
             estimateCost: null
@@ -29,27 +26,27 @@ export default class HexMapPathFinderClass {
         return node.moveCost + node.estimateCost
     }
 
-    createNeighborNodes = (q, r) => {
-        let neighbors = this.tileData.getNeighborKeys(q, r, 1)
+    createNeighborNodes = (tile) => {
+        let neighbors = this.tileData.getNeighborKeys(tile, 1)
 
-        return neighbors.map(neighbor => this.createNode(neighbor.q, neighbor.r))
+        return neighbors.map(neighbor => this.createNode(neighbor))
     }
 
-    getHeightDifference = (a, b) => {
-        return Math.abs(this.tileData.getEntry(a.q, a.r).height - this.tileData.getEntry(b.q, b.r).height)
+    getHeightDifference = (tile1, tile2) => {
+        return Math.abs(this.tileData.getEntry(tile1).height - this.tileData.getEntry(tile2).height)
     }
 
-    isValid = (q, r) => {
-        let terrain = this.structureData.getStructure(q, r)
+    isValidPathTile = (pos) => {
+        let terrain = this.structureData.getStructure(pos)
         if(terrain != null && terrain.type != 'modifier') return false
-        let unit = this.unitData.getUnit(q, r)
+        let unit = this.unitData.getUnit(pos)
         if(unit != null) return false
         return true
     }
 
     getTileCost = (tile) => {
-        if(this.tileData.getEntry(tile.q, tile.r).biome == 'water') return 2
-        let terrain = this.structureData.getStructure(tile.q, tile.r)
+        if(this.tileData.getEntry(tile).biome == 'water') return 2
+        let terrain = this.structureData.getStructure(tile)
         if(terrain && terrain.cost) return terrain.cost
         return 0
     }
@@ -81,7 +78,7 @@ export default class HexMapPathFinderClass {
     }
 
     findMoveSet = (start, moveAmount) => {
-        let startNode = this.createNode(start.q, start.r)
+        let startNode = this.createNode(start)
 
         let toSearch = [startNode]
         let processed = []
@@ -100,8 +97,8 @@ export default class HexMapPathFinderClass {
             toSearch.splice(currentToSearchIndex, 1)
 
             //Get Neighbors
-            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
+            let neighbors = this.createNeighborNodes(current.tile)
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
 
 
@@ -132,11 +129,11 @@ export default class HexMapPathFinderClass {
     }
 
     findAttackMoveSet = (start, range) => {
-        return this.tileData.getNeighbors(start.q, start.r, range)
+        return this.tileData.getNeighbors(start, range)
     }
 
     findActionMoveSet = (start) => {
-        return this.tileData.getNeighbors(start.q, start.r, 1)
+        return this.tileData.getNeighbors(start, 1)
     }
 
     findFullMoveSet = (moveSet, unitPos) => {
@@ -147,7 +144,7 @@ export default class HexMapPathFinderClass {
         for(let node of moveSet){
             let tile = node.tile
 
-            let neighbors = this.createNeighborNodes(tile.q, tile.r)
+            let neighbors = this.createNeighborNodes(tile)
 
             for(let neighborNode of neighbors){
                 if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
@@ -157,7 +154,7 @@ export default class HexMapPathFinderClass {
         }
 
         //unit neighbors
-        let neighbors = this.createNeighborNodes(unitPos.q, unitPos.r)
+        let neighbors = this.createNeighborNodes(unitPos)
 
         for(let neighborNode of neighbors){
             if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
@@ -170,8 +167,8 @@ export default class HexMapPathFinderClass {
     }
 
     findPath = (start, target) => {
-        let startNode = this.createNode(start.q, start.r)
-        let targetNode = this.createNode(target.q, target.r)
+        let startNode = this.createNode(start)
+        let targetNode = this.createNode(target)
 
         let toSearch = [startNode]
         let processed = []
@@ -195,8 +192,8 @@ export default class HexMapPathFinderClass {
             }
 
             //Get Neighbors
-            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
+            let neighbors = this.createNeighborNodes(current.tile)
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
 
 
@@ -227,12 +224,12 @@ export default class HexMapPathFinderClass {
     }
 
     findClosestPath = (start, target, targets) => {
-        let startNode = this.createNode(start.q, start.r)
-        let targetNode = this.createNode(target.q, target.r)
+        let startNode = this.createNode(start)
+        let targetNode = this.createNode(target)
         let adjacentNodes = []
 
         for(let target of targets){
-            adjacentNodes.push(this.createNode(target.q, target.r))
+            adjacentNodes.push(this.createNode(target))
         }
 
         let toSearch = [startNode]
@@ -257,8 +254,8 @@ export default class HexMapPathFinderClass {
             }
 
             //Get Neighbors
-            let neighbors = this.createNeighborNodes(current.tile.q, current.tile.r)
-            neighbors = neighbors.filter(neighbor => this.isValid(neighbor.tile.q, neighbor.tile.r) == true)
+            let neighbors = this.createNeighborNodes(current.tile)
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
 
 

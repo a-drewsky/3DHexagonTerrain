@@ -34,14 +34,14 @@ export default class SpriteObjectViewClass {
 
             spriteList.push({
                spriteObject: value,
-               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
+               rotatedTile: this.commonUtils.rotateTile(value.position, this.cameraData.rotation),
                layer: 1,
                silhouette: false
             })
 
             spriteList.push({
                spriteObject: value,
-               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
+               rotatedTile: this.commonUtils.rotateTile(value.position, this.cameraData.rotation),
                layer: -1,
                silhouette: false
             })
@@ -50,7 +50,7 @@ export default class SpriteObjectViewClass {
 
             spriteList.push({
                spriteObject: value,
-               rotatedTile: this.commonUtils.rotateTile(value.position.q, value.position.r, this.cameraData.rotation),
+               rotatedTile: this.commonUtils.rotateTile(value.position, this.cameraData.rotation),
                layer: 0,
                silhouette: false
             })
@@ -65,7 +65,7 @@ export default class SpriteObjectViewClass {
 
          spriteList.push({
             spriteObject: unitObject,
-            rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
+            rotatedTile: this.commonUtils.rotateTile(unitObject.position, this.cameraData.rotation),
             layer: 0,
             silhouette: false
          })
@@ -79,7 +79,7 @@ export default class SpriteObjectViewClass {
          let unitObject = this.unitData.placementUnit
          spriteList.push({
             spriteObject: unitObject,
-            rotatedTile: this.commonUtils.rotateTile(unitObject.position.q, unitObject.position.r, this.cameraData.rotation),
+            rotatedTile: this.commonUtils.rotateTile(unitObject.position, this.cameraData.rotation),
             layer: 0,
             silhouette: true
          })
@@ -91,7 +91,7 @@ export default class SpriteObjectViewClass {
 
          spriteList.push({
             spriteObject: projectileObject,
-            rotatedTile: this.commonUtils.rotateTile(projectileObject.position.q, projectileObject.position.r, this.cameraData.rotation),
+            rotatedTile: this.commonUtils.rotateTile(projectileObject.position, this.cameraData.rotation),
             layer: 0,
             silhouette: false
          })

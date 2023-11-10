@@ -45,13 +45,13 @@ export default class CommonRendererUtilsClass {
             let row = rows[rowNum]
 
             let l = -1
-            if (this.tileData.hasTileEntry(row.l.q, row.l.r)) l = this.tileData.getEntry(row.l.q, row.l.r).height - height
+            if (this.tileData.hasTileEntry(row.l)) l = this.tileData.getEntry(row.l).height - height
 
             let c = -1
-            if (this.tileData.hasTileEntry(row.c.q, row.c.r)) c = this.tileData.getEntry(row.c.q, row.c.r).height - height
+            if (this.tileData.hasTileEntry(row.c)) c = this.tileData.getEntry(row.c).height - height
 
             let r = -1
-            if (this.tileData.hasTileEntry(row.r.q, row.r.r)) r = this.tileData.getEntry(row.r.q, row.r.r).height - height
+            if (this.tileData.hasTileEntry(row.r)) r = this.tileData.getEntry(row.r).height - height
 
             heightRows[rowNum] = { l: l, c: c, r: r }
         }
@@ -83,8 +83,8 @@ export default class CommonRendererUtilsClass {
         let shadowDirection = { q: -1, r: 1 }
 
         let spriteTile
-        if (movementTile !== undefined) spriteTile = this.tileData.getEntry(movementTile.q, movementTile.r)
-        else spriteTile = this.tileData.getEntry(spriteObject.position.q, spriteObject.position.r)
+        if (movementTile !== undefined) spriteTile = this.tileData.getEntry(movementTile)
+        else spriteTile = this.tileData.getEntry(spriteObject.position)
 
         let distance = 0
         let shadowHeight = 0
@@ -94,10 +94,10 @@ export default class CommonRendererUtilsClass {
             shadowHeight = spriteTile.height + spriteObject.height + 2 * distance
             if (extraHeight) shadowHeight += extraHeight
 
-            let shadowTile = this.tileData.getEntry(
-                spriteTile.position.q + shadowDirection.q + shadowDirection.q * distance,
-                spriteTile.position.r + shadowDirection.r + shadowDirection.r * distance
-            )
+            let shadowTile = this.tileData.getEntry({
+                q: spriteTile.position.q + shadowDirection.q + shadowDirection.q * distance,
+                r: spriteTile.position.r + shadowDirection.r + shadowDirection.r * distance
+            })
 
             if (shadowTile && shadowTile.height > shadowHeight) {
                 this.darkenImage(canvas)
@@ -114,16 +114,16 @@ export default class CommonRendererUtilsClass {
 
         keyObj = this.commonUtils.roundToNearestHex(keyObj)
 
-        let tile = this.tileData.getEntryRotated(keyObj.q, keyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(keyObj, this.cameraData.rotation)
 
         let cropList = [
-            { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, 
-            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, 
-            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, 
+            { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 },
+            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 },
+            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 },
             { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }]
 
         for (let i = 0; i < cropList.length; i++) {
-            let cropListTile = this.tileData.getEntryRotated((keyObj.q + cropList[i].q), (keyObj.r + cropList[i].r), this.cameraData.rotation)
+            let cropListTile = this.tileData.getEntryRotated({ q: keyObj.q + cropList[i].q, r: keyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) continue
 
             let distance = this.commonUtils.getDistance(tile.position, cropListTile.position)
@@ -139,15 +139,15 @@ export default class CommonRendererUtilsClass {
 
         keyObj = this.commonUtils.roundToNearestHex(keyObj)
 
-        let tile = this.tileData.getEntryRotated(keyObj.q, keyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(keyObj, this.cameraData.rotation)
 
         let cropList = [
-            { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, 
+            { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 },
             { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }
         ]
 
         for (let i = 0; i < cropList.length; i++) {
-            let cropListTile = this.tileData.getEntryRotated((keyObj.q + cropList[i].q), (keyObj.r + cropList[i].r), this.cameraData.rotation)
+            let cropListTile = this.tileData.getEntryRotated({ q: keyObj.q + cropList[i].q, r: keyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) return true
 
             if (cropListTile.height != tile.height) {
@@ -163,18 +163,18 @@ export default class CommonRendererUtilsClass {
 
         keyObj = this.commonUtils.roundToNearestHex(keyObj)
 
-        let tile = this.tileData.getEntryRotated(keyObj.q, keyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(keyObj, this.cameraData.rotation)
 
         let cropList = [
-            { q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 }, 
-            { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, 
-            { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, 
-            { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, 
+            { q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 },
+            { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 },
+            { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 },
+            { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 },
             { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }
         ]
 
         for (let i = 0; i < cropList.length; i++) {
-            let cropListTile = this.tileData.getEntryRotated((keyObj.q + cropList[i].q), (keyObj.r + cropList[i].r), this.cameraData.rotation)
+            let cropListTile = this.tileData.getEntryRotated({ q: keyObj.q + cropList[i].q, r: keyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) continue
 
             let distance = this.commonUtils.getDistance(tile.position, cropListTile.position)
@@ -192,7 +192,7 @@ export default class CommonRendererUtilsClass {
         if (!this.needsShadowCropIn(keyObj) && !this.needsShadowCropOut(keyObj)) return image
 
         let roundedKeyObj = this.commonUtils.roundToNearestHex(keyObj)
-        let tile = this.tileData.getEntryRotated(roundedKeyObj.q, roundedKeyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(roundedKeyObj, this.cameraData.rotation)
         let ogPos = this.tileData.hexPositionToXYPosition(keyObj, tile.height, this.cameraData.rotation)
         let newPos = this.tileData.hexPositionToXYPosition(roundedKeyObj, tile.height, this.cameraData.rotation)
 
@@ -207,14 +207,14 @@ export default class CommonRendererUtilsClass {
         let tempctx = tempCanvas.getContext('2d')
 
         let cropList = [
-            { q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, 
+            { q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 },
             { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }
         ]
 
         tempctx.beginPath()
 
         for (let i = 0; i < cropList.length; i++) {
-            let cropListTile = this.tileData.getEntryRotated((roundedKeyObj.q + cropList[i].q), (roundedKeyObj.r + cropList[i].r), this.cameraData.rotation)
+            let cropListTile = this.tileData.getEntryRotated({ q: roundedKeyObj.q + cropList[i].q, r: roundedKeyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) continue
             if (!cropListTile.rendered) continue
             if (cropListTile.height != tile.height) continue
@@ -249,7 +249,7 @@ export default class CommonRendererUtilsClass {
         if (!this.needsCropping(keyObj)) return
 
         let roundedKeyObj = this.commonUtils.roundToNearestHex(keyObj)
-        let tile = this.tileData.getEntryRotated(roundedKeyObj.q, roundedKeyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(roundedKeyObj, this.cameraData.rotation)
         let zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tile.height, this.cameraData.rotation)
         zeroPoint.x = (zeroPoint.x - this.mapData.size - imageOffset.x * this.mapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.mapData.size * this.mapData.squish) - imageOffset.y * this.mapData.size * 2) * -1
@@ -258,8 +258,8 @@ export default class CommonRendererUtilsClass {
 
         let cropList = [
             { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 },
-            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, 
-            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, 
+            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 },
+            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 },
             { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }
         ]
 
@@ -271,7 +271,7 @@ export default class CommonRendererUtilsClass {
         if (!this.needsCropping(keyObj)) return
 
         let roundedKeyObj = this.commonUtils.roundToNearestHex(keyObj)
-        let tile = this.tileData.getEntryRotated(roundedKeyObj.q, roundedKeyObj.r, this.cameraData.rotation)
+        let tile = this.tileData.getEntryRotated(roundedKeyObj, this.cameraData.rotation)
         let zeroPoint = this.tileData.hexPositionToXYPosition(keyObj, tile.height, this.cameraData.rotation)
         zeroPoint.x = (zeroPoint.x - this.mapData.size - imageOffset.x * this.mapData.size * 2) * -1
         zeroPoint.y = (zeroPoint.y - (this.mapData.size * this.mapData.squish) - imageOffset.y * this.mapData.size * 2) * -1
@@ -279,10 +279,10 @@ export default class CommonRendererUtilsClass {
         let tempctx = canvas.getContext('2d')
 
         let cropList = [
-            { q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 }, 
-            { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, 
-            { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, 
-            { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, 
+            { q: 0, r: -1 }, { q: -1, r: 0 }, { q: 1, r: -1 },
+            { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 },
+            { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 },
+            { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 },
             { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }
         ]
 
@@ -299,9 +299,9 @@ export default class CommonRendererUtilsClass {
         let tempctx = canvas.getContext('2d')
 
         let cropList = [
-            { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 }, 
-            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 }, 
-            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 }, 
+            { q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 0 },
+            { q: -1, r: 2 }, { q: 0, r: 2 }, { q: 1, r: 1 },
+            { q: -1, r: 3 }, { q: 0, r: 3 }, { q: 1, r: 2 },
             { q: -1, r: 4 }, { q: 0, r: 4 }, { q: 1, r: 3 }
         ]
 
@@ -311,7 +311,7 @@ export default class CommonRendererUtilsClass {
     cropOutTileList = (tempctx, canvas, cropList, tileObj, zeroPoint, tileHeight) => {
 
         for (let i = 0; i < cropList.length; i++) {
-            let cropListTile = this.tileData.getEntryRotated((tileObj.q + cropList[i].q), (tileObj.r + cropList[i].r), this.cameraData.rotation)
+            let cropListTile = this.tileData.getEntryRotated({ q: tileObj.q + cropList[i].q, r: tileObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) continue
 
             if (cropListTile.height > tileHeight) {

@@ -118,7 +118,7 @@ export default class HexMapViewClass {
             break;
       }
 
-      let camPos = this.commonUtils.rotateTile(camQ, camR, this.cameraData.rotation)
+      let camPos = this.commonUtils.rotateTile({ q: camQ, r: camR }, this.cameraData.rotation)
 
       let mappos = this.tileManager.data.posMap.get(this.cameraData.rotation)
 

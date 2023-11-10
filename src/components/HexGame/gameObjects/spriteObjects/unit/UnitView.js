@@ -38,21 +38,21 @@ export default class UnitViewClass {
     }
 
     drawSilhouette = (drawctx, unit) => {
-        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
-        if(!this.tileData.hasEntry(unit.position.q, unit.position.r)) return
-        let tileObj = this.tileData.getEntry(unit.position.q, unit.position.r)
+        let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
+        if(!this.tileData.hasTileEntry(unit.position)) return
+        let tileObj = this.tileData.getEntry(unit.position)
         let sprite = unit.imageObject
         let height = tileObj.height
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
 
         let spriteSize = {
-            width: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.w, 
-            height: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.h
+            width: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.w, 
+            height: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.h
         }
 
-        spritePos.x -= this.mapData.size + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.globalAlpha = 0.4
@@ -68,18 +68,18 @@ export default class UnitViewClass {
 
     drawStaticUnit = (drawctx, unit) => {
 
-        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
-        let tileObj = this.tileData.getEntry(unit.position.q, unit.position.r)
+        let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
+        let tileObj = this.tileData.getEntry(unit.position)
         let sprite = unit.imageObject
 
         let spriteSize = {
-            width: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.w,
-            height: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.h
+            width: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.w,
+            height: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.h
         }
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation)
-        spritePos.x -= this.mapData.size + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -95,8 +95,8 @@ export default class UnitViewClass {
     drawStaticShadow = (drawctx, unit) => {
         if (this.commonUtils.checkShadowImages(unit) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
-        let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
+        let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
+        let height = this.tileData.getEntry(unit.position).height
 
         let shadowImage = unit.shadowImageObject[this.cameraData.rotation]
         
@@ -122,9 +122,9 @@ export default class UnitViewClass {
     //rename to drawActionSprite
     drawActionUnit = (drawctx, unit) => {
 
-        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+        let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
         let sprite = unit.imageObject
-        let height = this.tileData.getEntry(unit.position.q, unit.position.r).height
+        let height = this.tileData.getEntry(unit.position).height
 
         let pos = {
             q: keyObj.q,
@@ -136,9 +136,9 @@ export default class UnitViewClass {
             
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
-            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+            pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
 
-            let newHeight = this.tileData.getEntry(unit.destination.q, unit.destination.r).height
+            let newHeight = this.tileData.getEntry(unit.destination).height
 
             if (newHeight != height) {
                 let extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount
@@ -152,12 +152,12 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 
         spriteSize = {
-            width: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.w,
-            height: this.mapData.size * 2 * sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].size.h
+            width: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.w,
+            height: this.mapData.size * 2 * sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].size.h
         }
 
-        spritePos.x -= this.mapData.size + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.state.current.name].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
+        spritePos.x -= this.mapData.size + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.x * this.mapData.size * 2
+        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite[unit.curState()].images[unit.frame][this.cameraData.rotation].offset.y * this.mapData.size * 2
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -172,7 +172,7 @@ export default class UnitViewClass {
     drawActionShadow = (drawctx, unit) => {
         if (this.commonUtils.checkShadowImages(unit) == false) return
 
-        let keyObj = this.commonUtils.rotateTile(unit.position.q, unit.position.r, this.cameraData.rotation)
+        let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
 
         let shadowImage = unit.shadowImageObject[this.cameraData.rotation]
 
@@ -189,7 +189,7 @@ export default class UnitViewClass {
         if (unit.destination != null) {
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
-            pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+            pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
             if (percent > 0.5) {
                 closestTile = {
                     q: unit.destination.q,
@@ -199,7 +199,7 @@ export default class UnitViewClass {
         }
 
         let shadowSize
-        let height = this.tileData.getEntry(closestTile.q, closestTile.r).height
+        let height = this.tileData.getEntry(closestTile).height
 
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
 

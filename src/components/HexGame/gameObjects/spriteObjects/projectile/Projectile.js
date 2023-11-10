@@ -97,18 +97,18 @@ export default class ProjectileClass {
 
     spriteHeight = () => {
         let nearestPos = this.nearestPosition()
-        let posHeight = this.tileData.getEntry(nearestPos.q, nearestPos.r).height
-        let targetHeight = this.tileData.getEntry(this.target.q, this.target.r).height
+        let posHeight = this.tileData.getEntry(nearestPos).height
+        let targetHeight = this.tileData.getEntry(this.target).height
         return posHeight + (targetHeight - posHeight) * this.travelPercent() + this.height
     }
 
     shadowHeight = () => {
         let nearestPos = this.nearestPosition()
-        let projectilePos = this.tileData.getEntry(nearestPos.q, nearestPos.r).position
-        let targetPos = this.tileData.getEntry(this.target.q, this.target.r).position
+        let projectilePos = this.tileData.getEntry(nearestPos).position
+        let targetPos = this.tileData.getEntry(this.target).position
         let lerpPos = this.commonUtils.getLerpPos(projectilePos, targetPos, this.travelPercent())
         lerpPos = this.commonUtils.roundToNearestHex(lerpPos)
-        return this.tileData.getEntry(lerpPos.q, lerpPos.r).height
+        return this.tileData.getEntry(lerpPos).height
     }
 
 
@@ -147,12 +147,12 @@ export default class ProjectileClass {
     attackTarget = () => {
 
         //unit
-        let attckedUnit = this.unitData.getUnit(this.target.q, this.target.r)
+        let attckedUnit = this.unitData.getUnit(this.target)
 
         if(attckedUnit) attckedUnit.recieveAttack(25)
 
         //structure
-        let attckedStructure = this.structureData.getStructure(this.target.q, this.target.r)
+        let attckedStructure = this.structureData.getStructure(this.target)
 
         if(attckedStructure && attckedStructure.type == 'bunker') attckedStructure.recieveAttack(25)
 

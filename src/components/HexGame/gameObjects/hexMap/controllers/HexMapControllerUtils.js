@@ -39,7 +39,7 @@ export default class HexMapControllerUtilsClass {
         let target = targetTile
         let start = startTile
 
-        let neighbors = this.tileData.getNeighborKeys(target.q, target.r, 1)
+        let neighbors = this.tileData.getNeighborKeys(target, 1)
 
         let path = this.pathFinder.findClosestPath(start, target, neighbors)
 
@@ -72,23 +72,23 @@ export default class HexMapControllerUtilsClass {
         let attackSet = []
 
         for (let tileObj of moveSet) {
-            let tile = this.tileData.getEntry(tileObj.tile.q, tileObj.tile.r)
+            let tile = this.tileData.getEntry(tileObj.tile)
 
-            movementSet.push({ q: tile.position.q, r: tile.position.r })
+            movementSet.push({ ...tile.position })
         }
 
         //search for structures
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'resource')
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'flag')) {
-                actionSet.push({ q: tile.position.q, r: tile.position.r })
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'flag')) {
+                actionSet.push({ ...tile.position })
             }
         }
 
         for (let tile of attackMoveSet) {
-            if (this.unitData.getUnit(tile.position.q, tile.position.r) != null
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'bunker')) {
-                if (this.validTarget(unit.position, tile.position)) attackSet.push({ q: tile.position.q, r: tile.position.r })
+            if (this.unitData.getUnit(tile.position) != null
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'bunker')) {
+                if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
             }
         }
 
@@ -105,10 +105,10 @@ export default class HexMapControllerUtilsClass {
         let actionSet = []
 
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'resource')
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'flag')) {
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'flag')) {
                 if (this.selectionData.getPathingSelection('action').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                actionSet.push({ q: tile.position.q, r: tile.position.r })
+                actionSet.push({ ...tile.position })
             }
         }
 
@@ -124,10 +124,10 @@ export default class HexMapControllerUtilsClass {
 
         for (let tile of attackMoveSet) {
             if (this.commonUtils.tilesEqual(tile.position, unit.position)) continue
-            if (this.unitData.getUnit(tile.position.q, tile.position.r) != null
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'bunker')) {
+            if (this.unitData.getUnit(tile.position) != null
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                if (this.validTarget(unit.position, tile.position)) attackSet.push({ q: tile.position.q, r: tile.position.r })
+                if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
             }
         }
 
@@ -139,10 +139,10 @@ export default class HexMapControllerUtilsClass {
         let actionSet = []
 
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'resource')
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'flag')) {
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'flag')) {
                 if (this.selectionData.getPathingSelection('action').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                actionSet.push({ q: tile.position.q, r: tile.position.r })
+                actionSet.push({ ...tile.position })
             }
         }
 
@@ -158,10 +158,10 @@ export default class HexMapControllerUtilsClass {
 
         for (let tile of attackMoveSet) {
             if (this.commonUtils.tilesEqual(tile.position, unit.position)) continue
-            if (this.unitData.getUnit(tile.position.q, tile.position.r) != null
-                || (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type == 'bunker')) {
+            if (this.unitData.getUnit(tile.position) != null
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type == 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                if (this.validTarget(tilePos, tile.position)) attackSet.push({ q: tile.position.q, r: tile.position.r })
+                if (this.validTarget(tilePos, tile.position)) attackSet.push({ ...tile.position })
             }
         }
 
@@ -207,7 +207,7 @@ export default class HexMapControllerUtilsClass {
             return
         }
         //check if hoverTile is adjacent to prevTile
-        let prevTileNeighbors = this.tileData.getNeighborKeys(prevTile.q, prevTile.r)
+        let prevTileNeighbors = this.tileData.getNeighborKeys(prevTile)
         if (prevTileNeighbors.some(tileKey => this.commonUtils.tilesEqual(tileKey, hoverTile))) {
             this.selectionData.addToPath(hoverTile)
             this.findActionMoveSet(hoverTile)
@@ -245,26 +245,26 @@ export default class HexMapControllerUtilsClass {
     validTarget = (pos, target) => {
 
         let validateHalfTile = (tile) => {
-            let secondTile = { q: tile.q, r: tile.r }
+            let secondTile = { ...tile }
             if ((secondTile.q - 0.5) % 1 == 0) secondTile.q -= 0.01
             if ((secondTile.r - 0.5) % 1 == 0) secondTile.r -= 0.01
 
             tile = this.commonUtils.roundToNearestHex(tile)
-            tile = this.tileData.getEntry(tile.q, tile.r)
+            tile = this.tileData.getEntry(tile)
 
             secondTile = this.commonUtils.roundToNearestHex(secondTile)
-            secondTile = this.tileData.getEntry(secondTile.q, secondTile.r)
+            secondTile = this.tileData.getEntry(secondTile)
 
             let firstTileOpen = true
             let secondTileOpen = true
 
             if (tile === null || secondTile === null) return true
 
-            if (this.unitData.getUnit(tile.position.q, tile.position.r) != null) firstTileOpen = false
-            if (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type != 'modifier') firstTileOpen = false
+            if (this.unitData.getUnit(tile.position) != null) firstTileOpen = false
+            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type != 'modifier') firstTileOpen = false
 
-            if (this.unitData.getUnit(secondTile.position.q, secondTile.position.r) != null) secondTileOpen = false
-            if (this.structureData.hasStructure(secondTile.position.q, secondTile.position.r) && this.structureData.getStructure(secondTile.position.q, secondTile.position.r).type != 'modifier') secondTileOpen = false
+            if (this.unitData.getUnit(secondTile.position) != null) secondTileOpen = false
+            if (this.structureData.hasStructure(secondTile.position) && this.structureData.getStructure(secondTile.position).type != 'modifier') secondTileOpen = false
 
             if (firstTileOpen == false && secondTileOpen == false) return false
             return true
@@ -272,10 +272,10 @@ export default class HexMapControllerUtilsClass {
 
         let validateTile = (tile) => {
             tile = this.commonUtils.roundToNearestHex(tile)
-            tile = this.tileData.getEntry(tile.q, tile.r)
+            tile = this.tileData.getEntry(tile)
             if (tile === null) return true
-            if (this.unitData.getUnit(tile.position.q, tile.position.r) != null) return false
-            if (this.structureData.hasStructure(tile.position.q, tile.position.r) && this.structureData.getStructure(tile.position.q, tile.position.r).type != 'modifier') return false
+            if (this.unitData.getUnit(tile.position) != null) return false
+            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type != 'modifier') return false
             return true
         }
 
@@ -302,10 +302,10 @@ export default class HexMapControllerUtilsClass {
 
         let bunkers = this.structureData.getBunkersArray()
         for (let bunker of bunkers) {
-            let neighborKeys = this.tileData.getNeighborKeys(bunker.position.q, bunker.position.r, 1)
+            let neighborKeys = this.tileData.getNeighborKeys(bunker.position, 1)
             for (let neighborKey of neighborKeys) {
-                if (this.pathFinder.isValid(neighborKey.q, neighborKey.r)) {
-                    placementSet.add(this.commonUtils.join(neighborKey.q, neighborKey.r))
+                if (this.pathFinder.isValidPathTile(neighborKey)) {
+                    placementSet.add(this.commonUtils.join(neighborKey))
                 }
             }
 
@@ -360,7 +360,7 @@ export default class HexMapControllerUtilsClass {
 
             if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
 
-            let rotatedTile = this.tileData.getEntryRotated(testTile.q, testTile.r, this.cameraData.rotation)
+            let rotatedTile = this.tileData.getEntryRotated(testTile, this.cameraData.rotation)
 
             let hexPos = this.tileData.hexPositionToXYPosition(testTile, rotatedTile.height, this.cameraData.rotation)
 
@@ -379,7 +379,7 @@ export default class HexMapControllerUtilsClass {
 
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
 
-        let tileClickedObj = this.tileData.getEntry(rotatedTile.q, rotatedTile.r)
+        let tileClickedObj = this.tileData.getEntry(rotatedTile)
 
         if (!tileClickedObj || !tileClickedObj.images || tileClickedObj.images.length == 0) return null
 

@@ -26,12 +26,12 @@ export default class ProjectileRendererClass {
 
     renderSprite = (projectile) => {
 
-        let pos = this.commonUtils.rotateTile(projectile.position.q, projectile.position.r, this.cameraData.rotation)
+        let pos = this.commonUtils.rotateTile(projectile.position, this.cameraData.rotation)
 
         //set pos
         let percent = projectile.travelPercent()
         let lerpPos = this.commonUtils.getLerpPos(projectile.position, projectile.target, percent)
-        pos = this.commonUtils.rotateTile(lerpPos.q, lerpPos.r, this.cameraData.rotation)
+        pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
         let closestTile = this.commonUtils.roundToNearestHex(lerpPos)
 
         let height = projectile.spriteHeight()

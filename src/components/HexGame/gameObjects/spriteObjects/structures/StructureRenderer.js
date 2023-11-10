@@ -32,7 +32,7 @@ export default class StructureRendererClass {
 
         let initRotation = this.cameraData.rotation
 
-        for (let i in structure.imageObject[structure.state.current.name].images) {
+        for (let i in structure.imageObject[structure.curState()].images) {
             let imageList = []
             for (let rotation = 0; rotation < 6; rotation++) {
                 
@@ -45,7 +45,7 @@ export default class StructureRendererClass {
 
                 this.cameraData.rotation = rotation;
                 let rotatedMap = this.tileData.rotatedMapList[rotation]
-                let keyObj = this.commonUtils.rotateTile(structure.position.q, structure.position.r, this.cameraData.rotation)
+                let keyObj = this.commonUtils.rotateTile(structure.position, this.cameraData.rotation)
 
                 //create canvas
                 let tempCanvas = document.createElement('canvas')

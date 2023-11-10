@@ -75,7 +75,7 @@ export default class ModifierRendererClass {
 
             this.cameraData.rotation = rotation;
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
+            let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
 
             let filteredPositionsList = []
             for (let j = 0; j < modifier.spritePositions.length; j++) {
@@ -157,7 +157,7 @@ export default class ModifierRendererClass {
 
             this.cameraData.rotation = rotation;
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
+            let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
 
             let filteredPositionsList = []
             for (let j = 0; j < modifier.spritePositions.length; j++) {
@@ -222,7 +222,7 @@ export default class ModifierRendererClass {
 
             this.cameraData.rotation = rotation;
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
-            let keyObj = this.commonUtils.rotateTile(modifier.position.q, modifier.position.r, this.cameraData.rotation)
+            let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
 
 
             let tempCanvas = document.createElement('canvas')

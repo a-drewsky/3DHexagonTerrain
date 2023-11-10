@@ -24,10 +24,6 @@ export default class ResourceClass extends StructureClass {
         this.state.current = this.state.resources_lte_100
     }
 
-    curState = () => {
-        return this.state.current
-    }
-
     setState = (stateName) => {
         this.state.current = this.state[stateName]
     }
@@ -44,7 +40,7 @@ export default class ResourceClass extends StructureClass {
 
         let newStateName = resourcePercent > 75 ? 'resources_lte_100' : resourcePercent > 50 ? 'resources_lte_75' : resourcePercent > 25 ? 'resources_lte_50' : resourcePercent > 0 ? 'resources_lte_25' : 'destroyed'
 
-        if (newStateName == this.curState().name) return
+        if (newStateName == this.curState()) return
 
         this.setState(newStateName)
     }

@@ -1,10 +1,7 @@
 export default class StructureClass {
 
     constructor(pos, type, config, hexMapData, images) {
-        this.position = {
-            q: pos.q,
-            r: pos.r
-        }
+        this.position = { ...pos }
         this.rotation = null
         this.frame = 0
 
@@ -23,6 +20,10 @@ export default class StructureClass {
         this.prerender = false
     }
 
+    curState = () => {
+        return this.state.current.name
+    }
+
     spriteRotation = (cameraRotation) => {
         let spriteRotation = this.rotation + cameraRotation
         if (spriteRotation >= 6) spriteRotation -= 6
@@ -30,7 +31,7 @@ export default class StructureClass {
     }
 
     sprite = (cameraRotation) => {
-        return this.imageObject[this.state.current.name].images[this.frame][this.spriteRotation(cameraRotation)]
+        return this.imageObject[this.curState()].images[this.frame][this.spriteRotation(cameraRotation)]
     }
 
 }

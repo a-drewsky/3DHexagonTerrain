@@ -36,29 +36,29 @@ export default class TileStackBuilderClass {
         if (MIRROR_MAP) {
             for (let r = 0; r < Math.ceil(Rgen / 2); r++) {
                 for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-                    this.tileData.setEntry(q, r);
+                    this.tileData.setEntry({ q: q, r: r });
                 }
             }
         } else {
             for (let r = -groundShadowDistance; r < 0; r++) {
                 for (let q = -1 * Math.floor(r / 2) - groundShadowDistance; q < Qgen - Math.floor(r / 2) + groundShadowDistance; q++) {
-                    this.tileData.setShadowEntry(q, r);
+                    this.tileData.setShadowEntry({ q: q, r: r });
                 }
             }
             for (let r = 0; r < Rgen; r++) {
                 for (let q = -1 * Math.floor(r / 2) - groundShadowDistance; q < -1 * Math.floor(r / 2); q++) {
-                    this.tileData.setShadowEntry(q, r);
+                    this.tileData.setShadowEntry({ q: q, r: r });
                 }
                 for (let q = -1 * Math.floor(r / 2); q < Qgen - Math.floor(r / 2); q++) {
-                    this.tileData.setEntry(q, r);
+                    this.tileData.setEntry({ q: q, r: r });
                 }
                 for (let q = Qgen - Math.floor(r / 2); q < Qgen - Math.floor(r / 2) + groundShadowDistance; q++) {
-                    this.tileData.setShadowEntry(q, r);
+                    this.tileData.setShadowEntry({ q: q, r: r });
                 }
             }
             for (let r = Rgen; r < Rgen + groundShadowDistance; r++) {
                 for (let q = -1 * Math.floor(r / 2) - groundShadowDistance; q < Qgen - Math.floor(r / 2) + groundShadowDistance; q++) {
-                    this.tileData.setShadowEntry(q, r);
+                    this.tileData.setShadowEntry({ q: q, r: r });
                 }
             }
         }
@@ -100,7 +100,7 @@ export default class TileStackBuilderClass {
             //temp generation
             let tileTemp = this.noise.noise([tempSeed1 + keyObj.q / noiseFluctuation, tempSeed1 + keyObj.r / noiseFluctuation]) * this.noise.noise([tempSeed2 + keyObj.q / noiseFluctuation, tempSeed2 + keyObj.r / noiseFluctuation])
 
-            this.generteTileBiomes(this.tileData.getEntry(keyObj.q, keyObj.r), tileHeight, tileTemp)
+            this.generteTileBiomes(this.tileData.getEntry(keyObj), tileHeight, tileTemp)
 
         }
 
@@ -178,18 +178,18 @@ export default class TileStackBuilderClass {
 
             //get tile biome
             let keyObj = this.commonUtils.split(keyString);
-            let tileBiome = this.tileData.getEntry(keyObj.q, keyObj.r).biome
+            let tileBiome = this.tileData.getEntry(keyObj).biome
 
-            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome == tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey.q, neighborKey.r).biome))
-            neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey.q, neighborKey.r)))
+            let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome == tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey).biome))
+            neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey)))
 
 
             if (neighborKeys.length == 0) return keyStrSet
 
             for (let i = 0; i < neighborKeys.length; i++) {
                 //recursion
-                let keyStr = this.commonUtils.join(neighborKeys[i].q, neighborKeys[i].r)
+                let keyStr = this.commonUtils.join(neighborKeys[i])
                 keyStrSet = getBiomeSet(keyStr, keyStrSet)
             }
 
@@ -199,16 +199,16 @@ export default class TileStackBuilderClass {
 
         let smoothTile = (keyString) => {
             let keyObj = this.commonUtils.split(keyString);
-            let tileBiome = this.tileData.getEntry(keyObj.q, keyObj.r).biome
+            let tileBiome = this.tileData.getEntry(keyObj).biome
 
 
             //check if tile has non-similar biome neighbors
-            let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome != tileBiome)
+            let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome != tileBiome)
             if (neighborKeys.length == 0) return false
 
             //get array of neighbor biomes
-            let biomeArr = neighborKeys.map(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome)
+            let biomeArr = neighborKeys.map(neighborKey => this.tileData.getEntry(neighborKey).biome)
 
             //find the most common neighbor biome
             let modeMap = {};
@@ -228,9 +228,9 @@ export default class TileStackBuilderClass {
             }
 
             //clone a tile with most common biome
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey.q, neighborKey.r).biome == maxBiome)
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome == maxBiome)
             let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
-            let tileToClone = this.tileData.getEntry(neighborKeyToClone.q, neighborKeyToClone.r)
+            let tileToClone = this.tileData.getEntry(neighborKeyToClone)
             this.utils.cloneTile(tileToClone, keyObj)
 
             return true
@@ -240,7 +240,7 @@ export default class TileStackBuilderClass {
 
             //get biome
             let keyObj = this.commonUtils.split(keyStrings[0])
-            let biome = this.tileData.getEntry(keyObj.q, keyObj.r).biome
+            let biome = this.tileData.getEntry(keyObj).biome
 
             //get tile set
             let keyStrSet = new Set()
@@ -250,7 +250,7 @@ export default class TileStackBuilderClass {
             //remove set from keyStrings
             for (let i = 0; i < keyStrArr.length; i++) {
                 let keyStrArrObj = this.commonUtils.split(keyStrArr[i])
-                let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+                let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj).biome
 
                 if (keyStrArrObjBiome == biome) {
                     let keyIndex = keyStrings.indexOf(keyStrArr[i]);
@@ -263,7 +263,7 @@ export default class TileStackBuilderClass {
             if (keyStrArr.length < BIOME_CONSTANTS[biome].minBiomeSmoothing) {
                 while (keyStrArr.length > 0) {
                     let keyStrArrObj = this.commonUtils.split(keyStrArr[0])
-                    let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj.q, keyStrArrObj.r).biome
+                    let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj).biome
 
 
                     if (keyStrArrObjBiome != biome) keyStrArr.shift()
@@ -286,13 +286,13 @@ export default class TileStackBuilderClass {
             for (let entry of this.tileData.getTileMap()) {
 
                 let keyObj = this.commonUtils.split(entry.key);
-                let tile = this.tileData.getEntry(keyObj.q, keyObj.r)
-                let neighborKeys = this.tileData.getNeighborKeys(keyObj.q, keyObj.r, 1)
+                let tile = this.tileData.getEntry(keyObj)
+                let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
 
                 let isCliff = false
 
                 for (let neighborKey of neighborKeys) {
-                    let neighborTile = this.tileData.getEntry(neighborKey.q, neighborKey.r)
+                    let neighborTile = this.tileData.getEntry(neighborKey)
 
                     if (tile.height - neighborTile.height > 2) {
                         isCliff = true
@@ -307,7 +307,7 @@ export default class TileStackBuilderClass {
                 while (hasStep == false) {
 
                     for (let neighborKey of neighborKeys) {
-                        let neighborTile = this.tileData.getEntry(neighborKey.q, neighborKey.r)
+                        let neighborTile = this.tileData.getEntry(neighborKey)
 
                         if (tile.height - neighborTile.height > 0 && tile.height - neighborTile.height < 3) {
                             hasStep = true

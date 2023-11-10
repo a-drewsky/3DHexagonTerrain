@@ -16,20 +16,20 @@ export default class TileStackDataClass {
         this.utils = new CommonHexMapUtilsClass()
     }
 
-    //Set an entry in the tileMap (void)
-    setEntry = (q, r) => {
-        this.tileMap.set(q + ',' + r, new TileStackClass({ q: q, r: r }, this.mapData, this.images));
-        return this.getEntry(q, r)
+    //Set an entry in the tileMap
+    setEntry = (pos) => {
+        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData, this.images));
+        return this.getEntry(pos)
     }
-    setShadowEntry = (q, r) => {
-        this.tileMap.set(q + ',' + r, new TileStackClass({ q: q, r: r }, this.mapData));
-        this.getEntry(q, r).groundShadowTile = true
-        return this.getEntry(q, r)
+    setShadowEntry = (pos) => {
+        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData));
+        this.getEntry(pos).groundShadowTile = true
+        return this.getEntry(pos)
     }
 
-    //delete an entry in the tileMap (void)
-    deleteEntry = (q, r) => {
-        this.tileMap.delete(q + "," + r);
+    //delete an entry in the tileMap
+    deleteEntry = (pos) => {
+        this.tileMap.delete(this.utils.join(pos));
     }
 
     setRotatedMapList = () => {
@@ -39,7 +39,7 @@ export default class TileStackDataClass {
             let sortedArr = this.getKeys();
 
             for (let j = 0; j < sortedArr.length; j++) {
-                let rotatedTile = this.utils.rotateTile(sortedArr[j].q, sortedArr[j].r, i)
+                let rotatedTile = this.utils.rotateTile(sortedArr[j], i)
                 sortedArr[j] = {
                     rotPosQ: rotatedTile.q,
                     rotPosR: rotatedTile.r,
@@ -53,7 +53,7 @@ export default class TileStackDataClass {
             let rotatedMap = new Map();
 
             for (let j = 0; j < sortedArr.length; j++) {
-                rotatedMap.set(this.utils.join(sortedArr[j].rotPosQ, sortedArr[j].rotPosR), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR });
+                rotatedMap.set(this.utils.join({ q: sortedArr[j].rotPosQ, r: sortedArr[j].rotPosR }), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR });
             }
 
             this.rotatedMapList[i] = rotatedMap
@@ -124,20 +124,20 @@ export default class TileStackDataClass {
         this.maxHeight = Math.max(...this.getTileMap().map(entry => entry.value.height))
     }
 
-    getEntry = (q, r) => {
-        let entry = this.tileMap.get(q + "," + r)
+    getEntry = (pos) => {
+        let entry = this.tileMap.get(this.utils.join(pos))
         if (entry && entry.groundShadowTile == false) return entry
         return null
     }
 
-    getAnyEntry = (q, r) => {
-        return this.tileMap.get(q + "," + r)
+    getAnyEntry = (pos) => {
+        return this.tileMap.get(this.utils.join(pos))
     }
 
-    getEntryRotated = (q, r, rotation) => {
-        let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(q, r))
+    getEntryRotated = (pos, rotation) => {
+        let rotatedTile = this.rotatedMapList[rotation].get(this.utils.join(pos))
         if(!rotatedTile) return null
-        return this.tileMap.get(rotatedTile.q + "," + rotatedTile.r)
+        return this.tileMap.get(this.utils.join(rotatedTile))
     }
 
     //returns the tileMap
@@ -164,18 +164,18 @@ export default class TileStackDataClass {
     }
 
     //returns keys of all neighbors adjacent to (q, r)
-    getNeighbors = (q, r, rows) => {
-        let neighbors = this.getNeighborKeys(q, r, rows)
+    getNeighbors = (pos, rows) => {
+        let neighbors = this.getNeighborKeys(pos, rows)
 
-        return neighbors.map(key => this.getEntry(key.q, key.r))
+        return neighbors.map(key => this.getEntry(key))
     }
 
     //returns keys of all neighbors adjacent to (q, r)
-    getNeighborKeys = (q, r, rows) => {
+    getNeighborKeys = (pos, rows) => {
 
         let validNewNeighbor = (newQ, newR, neighborList, newNeighborList) => {
-            if(newQ == q && newR == r) return false
-            if(!this.hasTileEntry(newQ, newR)) return false
+            if(newQ == pos.q && newR == pos.r) return false
+            if(!this.hasTileEntry({ q: newQ, r: newR })) return false
             if(neighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
             if(newNeighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
             return true
@@ -183,12 +183,12 @@ export default class TileStackDataClass {
 
         let neighbors = []
 
-        if (this.hasTileEntry(q, r - 1)) neighbors.push({ q: q, r: r - 1 })
-        if (this.hasTileEntry(q + 1, r - 1)) neighbors.push({ q: q + 1, r: r - 1 })
-        if (this.hasTileEntry(q + 1, r)) neighbors.push({ q: q + 1, r: r })
-        if (this.hasTileEntry(q, r + 1)) neighbors.push({ q: q, r: r + 1 })
-        if (this.hasTileEntry(q - 1, r + 1)) neighbors.push({ q: q - 1, r: r + 1  })
-        if (this.hasTileEntry(q - 1, r)) neighbors.push({ q: q - 1, r: r })
+        if (this.hasTileEntry({ q: pos.q, r: pos.r - 1 })) neighbors.push({ q: pos.q, r: pos.r - 1 })
+        if (this.hasTileEntry({ q: pos.q + 1, r: pos.r - 1 })) neighbors.push({ q: pos.q + 1, r: pos.r - 1 })
+        if (this.hasTileEntry({ q: pos.q + 1, r: pos.r })) neighbors.push({ q: pos.q + 1, r: pos.r })
+        if (this.hasTileEntry({ q: pos.q, r: pos.r + 1 })) neighbors.push({ q: pos.q, r: pos.r + 1 })
+        if (this.hasTileEntry({ q: pos.q - 1, r: pos.r + 1 })) neighbors.push({ q: pos.q - 1, r: pos.r + 1  })
+        if (this.hasTileEntry({ q: pos.q - 1, r: pos.r })) neighbors.push({ q: pos.q - 1, r: pos.r })
 
         for(let i = 1; i < rows; i++){
             let newNeighbors = []
@@ -218,17 +218,17 @@ export default class TileStackDataClass {
         let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
 
         let tableDims = {
-            q1: this.utils.rotateTile(minRminQ - 0.5, minR - 1, rotation).q,
-            r1: this.utils.rotateTile(minRminQ - 0.5, minR - 1, rotation).r,
+            q1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1, rotation }).q,
+            r1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1, rotation }).r,
 
-            q2: this.utils.rotateTile(minRmaxQ + 1, minR - 1, rotation).q,
-            r2: this.utils.rotateTile(minRmaxQ + 1, minR - 1, rotation).r,
+            q2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1, rotation }).q,
+            r2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1, rotation }).r,
 
-            q3: this.utils.rotateTile(maxRmaxQ + 0.5, maxR + 1, rotation).q,
-            r3: this.utils.rotateTile(maxRmaxQ + 0.5, maxR + 1, rotation).r,
+            q3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1, rotation }).q,
+            r3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1, rotation }).r,
 
-            q4: this.utils.rotateTile(maxRminQ - 1, maxR + 1, rotation).q,
-            r4: this.utils.rotateTile(maxRminQ - 1, maxR + 1, rotation).r
+            q4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1, rotation }).q,
+            r4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1, rotation }).r
         }
 
         let hexVecQ =  { ...this.mapData.vecQ }
@@ -261,13 +261,13 @@ export default class TileStackDataClass {
 
 
     //check if hexmap has an entry (returns a boolean)
-    hasEntry = (q, r) => {
-        return this.tileMap.has(this.utils.join(q, r));
+    hasEntry = (pos) => {
+        return this.tileMap.has(this.utils.join(pos));
     }
-    hasTileEntry = (q, r) => {
-        if (!this.hasEntry(q, r)) return false
-        let tileObj = this.tileMap.get(this.utils.join(q, r));
-        if (tileObj.groundShadowTile == true) return false
+    hasTileEntry = (pos) => {
+        if (!this.hasEntry(pos)) return false
+        let tileObj = this.getEntry(pos)
+        if (!tileObj) return false
         return true
     }
 

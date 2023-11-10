@@ -33,7 +33,7 @@ export default class HexMapControllerMouseClass {
 
         if (!hoverTile) return
 
-        let tileObj = this.tileManager.data.getEntry(hoverTile.q, hoverTile.r)
+        let tileObj = this.tileManager.data.getEntry(hoverTile)
 
         switch (this.mapData.curState()) {
             case 'selectTile':
@@ -51,7 +51,7 @@ export default class HexMapControllerMouseClass {
         this.selectionData.clearAllSelections()
         this.cardData.selectedCard = null
 
-        if (this.unitData.getUnit(tile.position.q, tile.position.r) != null) {
+        if (this.unitData.getUnit(tile.position) != null) {
             this.selectionData.setInfoSelection('unit', tile.position)
             this.unitData.selectUnit(tile.position.q, tile.position.r)
             this.utils.findMoveSet()
@@ -67,7 +67,7 @@ export default class HexMapControllerMouseClass {
 
         if (tile === null) return
 
-        if (!this.selectionData.getPathingSelection('placement').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+        if (!this.selectionData.getPathingSelection('placement').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
             this.selectionData.unlockPath()
             this.selectionData.clearTarget()
             this.updatePlacementSelection(x, y)
@@ -79,9 +79,9 @@ export default class HexMapControllerMouseClass {
             this.selectionData.setTargetSelection(tile.position, 'placement')
         } else {
             let target = this.selectionData.getTargetSelection()
-            if (tile.position.q == target.q && tile.position.r == target.r) {
+            if (this.commonUtils.tilesEqual(tile.position, target)) {
 
-                this.unitData.addUnit(tile.position.q, tile.position.r)
+                this.unitData.addUnit(tile.position)
                 this.unitData.eraseUnit()
                 this.selectionData.clearAllSelections()
                 this.selectionData.setInfoSelection('unit', tile.position)
@@ -186,15 +186,15 @@ export default class HexMapControllerMouseClass {
         if (unit == null) return
 
         //Check Actions
-        if (this.selectionData.getPathingSelection('action').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
-            let structure = this.structureData.getStructure(tile.position.q, tile.position.r)
+        if (this.selectionData.getPathingSelection('action').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
+            let structure = this.structureData.getStructure(tile.position)
 
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'action')
             } else {
                 let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) {
+                if (this.commonUtils.tilesEqual(tile.position, target)) {
                     switch (structure.type) {
                         case 'resource':
                             this.actions.mine()
@@ -216,14 +216,14 @@ export default class HexMapControllerMouseClass {
         }
 
         //Check Attacks
-        if (this.selectionData.getPathingSelection('attack').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+        if (this.selectionData.getPathingSelection('attack').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
 
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'attack')
             } else {
                 let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) {
+                if (this.commonUtils.tilesEqual(tile.position, target)) {
                     this.actions.attack()
                 }
                 else {
@@ -237,13 +237,13 @@ export default class HexMapControllerMouseClass {
         }
 
         //Check Movement
-        if (this.selectionData.getPathingSelection('movement').some(moveObj => moveObj.q == tile.position.q && moveObj.r == tile.position.r)) {
+        if (this.selectionData.getPathingSelection('movement').some(moveObj => this.commonUtils.tilesEqual(moveObj, tile.position))) {
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'move')
             } else {
                 let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) this.actions.move()
+                if (this.commonUtils.tilesEqual(tile.position, target)) this.actions.move()
                 else {
                     this.selectionData.unlockPath()
                     this.selectionData.clearTarget()
@@ -267,15 +267,15 @@ export default class HexMapControllerMouseClass {
         if (unit == null) return
 
         //Check Actions
-        if (this.selectionData.getPathingSelection('action').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
-            let structure = this.structureData.getStructure(tile.position.q, tile.position.r)
+        if (this.selectionData.getPathingSelection('action').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
+            let structure = this.structureData.getStructure(tile.position)
 
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'action')
             } else {
                 let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) {
+                if (this.commonUtils.tilesEqual(tile.position, target)) {
                     switch (structure.type) {
                         case 'resource':
                             this.actions.mine()
@@ -296,14 +296,14 @@ export default class HexMapControllerMouseClass {
         }
 
         //Check Attacks
-        if (this.selectionData.getPathingSelection('attack').some(tileObj => tileObj.q == tile.position.q && tileObj.r == tile.position.r)) {
+        if (this.selectionData.getPathingSelection('attack').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
 
             if (!this.selectionData.getPathLocked()) {
                 this.selectionData.lockPath()
                 this.selectionData.setTargetSelection(tile.position, 'attack')
             } else {
                 let target = this.selectionData.getTargetSelection()
-                if (tile.position.q == target.q && tile.position.r == target.r) {
+                if (this.commonUtils.tilesEqual(tile.position, target)) {
                     this.actions.attack()
                 }
                 else {

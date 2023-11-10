@@ -41,7 +41,7 @@ export default class CommonHexMapUtilsClass {
     }
 
     checkStateImages = (spriteObject) => {
-        if(spriteObject.imageObject[spriteObject.state.current.name]) return true
+        if(spriteObject.imageObject[spriteObject.curState()]) return true
         return false
     }
 
@@ -53,11 +53,13 @@ export default class CommonHexMapUtilsClass {
         }
     }
 
-    join = (q, r) => {
-        return [q, r].join(',')
+    join = (key) => {
+        return [key.q, key.r].join(',')
     }
 
-    rotateTile = (q, r, rotation) => {
+    rotateTile = (key, rotation) => {
+        let q = key.q
+        let r = key.r
         let s = -q - r;
         let angle = rotation * 30;
 

@@ -23,7 +23,7 @@ export default class TileStackViewClass {
         for (let [key, value] of rotatedMap) {
 
             let keyObj = this.commonUtils.split(key)
-            let tileObj = this.tileData.getAnyEntry(value.q, value.r)
+            let tileObj = this.tileData.getAnyEntry(value)
 
             if (!tileObj.images || tileObj.images.length == 0) continue
 
@@ -35,7 +35,7 @@ export default class TileStackViewClass {
             
             drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
 
-            let tileSelections = this.selectionData.getSelectionNames(value.q, value.r)
+            let tileSelections = this.selectionData.getSelectionNames(value)
 
             for (let tileSelection of tileSelections) {
                 drawctx.drawImage(tileObj.selectionImageObject[tileSelection], tilePos.x - this.mapData.size, tilePos.y - this.mapData.size * this.mapData.squish, this.mapData.size * 2, this.mapData.size * 2)
