@@ -1,6 +1,6 @@
 import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 
-export default class ModifierViewClass{
+export default class ModifierViewClass {
 
     constructor(hexMapData) {
         this.mapData = hexMapData.mapData
@@ -18,18 +18,12 @@ export default class ModifierViewClass{
         let sprite = modifier.imageObject
         let height = this.tileData.getEntry(modifier.position).height
 
-        let spriteSize
-
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
-
-        spriteSize = {
+        let spriteSize = {
             width: this.mapData.size * 2 * sprite.singleImageSize.width,
             height: this.mapData.size * 2 * sprite.singleImageSize.height
         }
 
-        spritePos.x -= this.mapData.size + sprite.singleImageOffset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.singleImageOffset.y * this.mapData.size * 2
-
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.singleImageOffset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -55,18 +49,12 @@ export default class ModifierViewClass{
         let sprite = modifier.imageObject
         let height = this.tileData.getEntry(modifier.position).height
 
-        let spriteSize
-
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
-
-        spriteSize = {
+        let spriteSize = {
             width: this.mapData.size * 2 * sprite.spriteSize.width,
             height: this.mapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
-
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.offset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -91,18 +79,13 @@ export default class ModifierViewClass{
         let sprite = modifier.imageObject
         let height = this.tileData.getEntry(modifier.position).height
 
-        let spriteSize
 
-        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
-
-        spriteSize = {
+        let spriteSize = {
             width: this.mapData.size * 2 * sprite.spriteSize.width,
             height: this.mapData.size * 2 * sprite.spriteSize.height
         }
 
-        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
-
+        let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.offset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
         drawctx.drawImage(
@@ -116,33 +99,27 @@ export default class ModifierViewClass{
     }
 
     drawShadow = (drawctx, modifier) => {
-       if (this.commonUtils.checkShadowImages(modifier) == false) return
+        if (this.commonUtils.checkShadowImages(modifier) == false) return
 
-       let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
-       let height = this.tileData.getEntry(modifier.position).height
- 
-       let shadowSize
- 
-       let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation)
- 
-       shadowSize = {
-          width: this.mapData.size * 2 * modifier.imageObject.shadowSize.width,
-          height: this.mapData.size * 2 * modifier.imageObject.shadowSize.height
-       }
- 
-       shadowPos.x -= this.mapData.size + modifier.imageObject.shadowOffset.x * this.mapData.size * 2
-       shadowPos.y -= (this.mapData.size * this.mapData.squish) + modifier.imageObject.shadowOffset.y * this.mapData.size * 2
- 
- 
-       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
- 
-       drawctx.drawImage(
-          modifier.shadowImages[this.cameraData.rotation],
-          shadowPos.x,
-          shadowPos.y,
-          shadowSize.width,
-          shadowSize.height
-       )
+        let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
+        let height = this.tileData.getEntry(modifier.position).height
+
+        let shadowSize = {
+            width: this.mapData.size * 2 * modifier.imageObject.shadowSize.width,
+            height: this.mapData.size * 2 * modifier.imageObject.shadowSize.height
+        }
+
+        let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, modifier.imageObject.shadowOffset)
+
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+
+        drawctx.drawImage(
+            modifier.shadowImages[this.cameraData.rotation],
+            shadowPos.x,
+            shadowPos.y,
+            shadowSize.width,
+            shadowSize.height
+        )
     }
 
 }

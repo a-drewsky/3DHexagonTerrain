@@ -24,14 +24,11 @@ export default class ShadowRendererClass {
         nearestTile = this.tileData.getEntry(nearestTile)
 
         position = this.commonUtils.rotateTile(position, this.cameraData.rotation)
-        let shadowPos = this.tileData.hexPositionToXYPosition(position, nearestTile.height, this.cameraData.rotation)
         let shadowSize = {
             width: this.mapData.size * 2 * shadowImage.size.w,
             height: this.mapData.size * 2 * shadowImage.size.h
         }
-
-        shadowPos.x -= this.mapData.size + shadowImage.offset.x * this.mapData.size * 2
-        shadowPos.y -= (this.mapData.size * this.mapData.squish) + shadowImage.offset.y * this.mapData.size * 2
+        let shadowPos = this.tileData.hexPositionToXYPosition(position, nearestTile.height, this.cameraData.rotation, shadowImage.offset)
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
 

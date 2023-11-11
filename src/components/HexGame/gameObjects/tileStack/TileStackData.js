@@ -271,13 +271,17 @@ export default class TileStackDataClass {
         return true
     }
 
-    hexPositionToXYPosition = (keyObj, tileHeight, rotation) => {
+    hexPositionToXYPosition = (keyObj, tileHeight, rotation, imageOffset) => {
         let xOffset;
         let yOffset;
 
         xOffset = this.mapData.vecQ.x * keyObj.q + this.mapData.vecR.x * keyObj.r;
         yOffset = this.mapData.vecQ.y * keyObj.q * this.mapData.squish + this.mapData.vecR.y * keyObj.r * this.mapData.squish;
 
+        if(imageOffset !== undefined){ 
+            xOffset -= this.mapData.size + imageOffset.x * this.mapData.size * 2
+            yOffset -= (this.mapData.size * this.mapData.squish) + imageOffset.y * this.mapData.size * 2
+        } 
 
         return {
             x: this.posMap.get(rotation).x + xOffset,

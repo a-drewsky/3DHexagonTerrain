@@ -45,20 +45,12 @@ export default class TileStackRendererClass {
             stackCanvas.height = this.mapData.size * 2
             let stackctx = stackCanvas.getContext('2d')
 
-            //top shadows
-
             stackctx.beginPath()
 
             this.utils.clipFlatHexagonPath(stackctx, this.mapData.size, this.mapData.size * this.mapData.squish)
 
             stackctx.save()
             stackctx.clip()
-
-            let rotTile = this.commonUtils.rotateTile(tile.position, rotation)
-
-            let tilePos = this.tileData.hexPositionToXYPosition(rotTile, tile.height, this.cameraData.rotation)
-            tilePos.x -= this.mapData.size
-            tilePos.y -= this.mapData.size * this.mapData.squish
 
             this.drawShadows(stackctx, tile)
 
@@ -108,9 +100,7 @@ export default class TileStackRendererClass {
                 )
 
                 this.drawWallShadow(stackctx, tile, i);
-
                 this.drawAdvWallShadow(stackctx, tile, i);
-
             }
 
             this.drawShadows(stackctx, tile)
@@ -123,9 +113,7 @@ export default class TileStackRendererClass {
     }
 
     drawWallShadow = (stackctx, stack, tileHeight) => {
-
         let shadowImage = this.images.tile_shadows.tile_side_shadows[this.cameraData.rotation]
-
         stackctx.drawImage(shadowImage, 0, stack.height * this.mapData.tileHeight - (tileHeight) * this.mapData.tileHeight, this.mapData.size * 2, this.mapData.size * 2)
     }
 
@@ -141,7 +129,6 @@ export default class TileStackRendererClass {
             tileShadows.l = Math.min(Math.max(tileShadows.l, this.utils.getSideShadowDistance(rowNum, row.l)), 1)
             tileShadows.c = Math.min(Math.max(tileShadows.c, this.utils.getSideShadowDistance(rowNum, row.c)), 3)
             tileShadows.r = Math.min(Math.max(tileShadows.r, this.utils.getSideShadowDistance(rowNum, row.r)), 1)
-
         }
 
         if(tileShadows.l == 0 && tileShadows.c == 0 && tileShadows.r == 0) return
@@ -175,7 +162,6 @@ export default class TileStackRendererClass {
             tileShadows.l = Math.min(Math.max(tileShadows.l, this.utils.getShadowDistance(rowNum, row.l)), 2)
             tileShadows.c = Math.min(Math.max(tileShadows.c, this.utils.getShadowDistance(rowNum, row.c)), 2)
             tileShadows.r = Math.min(Math.max(tileShadows.r, this.utils.getShadowDistance(rowNum, row.r)), 2)
-
         }
 
         if(tileShadows.l == 0 && tileShadows.c == 0 && tileShadows.r == 0) return

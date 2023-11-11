@@ -115,9 +115,7 @@ export default class UnitRendererClass {
 
         let sprite = unit.sprite(this.cameraData.rotation)
 
-        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
-        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
+        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, sprite.offset)
 
         let spriteSize = {
             width: this.mapData.size * 2 * sprite.size.w,
