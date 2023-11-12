@@ -1,11 +1,8 @@
-import CameraControllerClass from "./CameraController";
 
 export default class CameraManagerClass {
 
-    constructor(hexMapData, canvas) {
-        this.mapData = hexMapData.mapData
+    constructor(hexMapData) {
         this.data = hexMapData.cameraData
-        this.controller = new CameraControllerClass(this.data, canvas)
     }
 
     prerender = (drawCanvas) => {

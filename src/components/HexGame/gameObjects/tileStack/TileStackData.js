@@ -218,21 +218,21 @@ export default class TileStackDataClass {
         let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
 
         let tableDims = {
-            q1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1, rotation }).q,
-            r1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1, rotation }).r,
+            q1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1 }, rotation).q,
+            r1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1 }, rotation).r,
 
-            q2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1, rotation }).q,
-            r2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1, rotation }).r,
+            q2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1 }, rotation ).q,
+            r2: this.utils.rotateTile({ q: minRmaxQ + 1, r: minR - 1 }, rotation ).r,
 
-            q3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1, rotation }).q,
-            r3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1, rotation }).r,
+            q3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1 }, rotation ).q,
+            r3: this.utils.rotateTile({ q: maxRmaxQ + 0.5, r: maxR + 1 }, rotation ).r,
 
-            q4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1, rotation }).q,
-            r4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1, rotation }).r
+            q4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1 }, rotation ).q,
+            r4: this.utils.rotateTile({ q: maxRminQ - 1, r: maxR + 1 }, rotation ).r
         }
 
-        let hexVecQ =  { ...this.mapData.vecQ }
-        let hexVecR = { ...this.mapData.vecR }
+        let hexVecQ =  this.mapData.vecQ
+        let hexVecR = this.mapData.vecR
 
         let tablePosition = [
             {

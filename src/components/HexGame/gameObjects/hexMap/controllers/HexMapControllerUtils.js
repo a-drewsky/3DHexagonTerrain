@@ -322,7 +322,6 @@ export default class HexMapControllerUtilsClass {
         x *= (this.mapData.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount) / this.mapData.canvas.width
         y *= (this.mapData.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.mapData.canvas.height / this.mapData.canvas.width)) / this.mapData.canvas.height
 
-
         let ogPos = {
             x: x,
             y: y
@@ -330,11 +329,8 @@ export default class HexMapControllerUtilsClass {
 
         x += this.cameraData.position.x
         y += this.cameraData.position.y
-
         x -= this.tileData.posMap.get(this.cameraData.rotation).x
-
         y -= this.tileData.posMap.get(this.cameraData.rotation).y
-
 
         let hexClicked = {
             q: ((2 / 3 * x)) / this.mapData.size,
@@ -344,10 +340,7 @@ export default class HexMapControllerUtilsClass {
         hexClicked = this.commonUtils.roundToNearestHex(hexClicked)
 
 
-
         let testList = [{ q: 0, r: 0 }, { q: -1, r: 1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 2 }, { q: 1, r: 1 }, { q: 0, r: 2 }, { q: -1, r: 3 }, { q: 1, r: 2 }, { q: 0, r: 3 }, { q: -1, r: 4 }, { q: 1, r: 3 }, { q: 0, r: 4 }]
-
-
         let tileClicked = null
 
         for (let i = 0; i < testList.length; i++) {
@@ -363,7 +356,6 @@ export default class HexMapControllerUtilsClass {
             let rotatedTile = this.tileData.getEntryRotated(testTile, this.cameraData.rotation)
 
             let hexPos = this.tileData.hexPositionToXYPosition(testTile, rotatedTile.height, this.cameraData.rotation)
-
             hexPos.x -= this.cameraData.position.x
             hexPos.y -= this.cameraData.position.y
 
@@ -376,11 +368,8 @@ export default class HexMapControllerUtilsClass {
         }
 
         if (tileClicked === null) return null
-
         let rotatedTile = rotatedMap.get(tileClicked.q + ',' + tileClicked.r)
-
         let tileClickedObj = this.tileData.getEntry(rotatedTile)
-
         if (!tileClickedObj || !tileClickedObj.images || tileClickedObj.images.length == 0) return null
 
         return rotatedTile
@@ -405,17 +394,24 @@ export default class HexMapControllerUtilsClass {
             y: this.cameraData.position.y + zoom / 2 * (this.mapData.canvas.height / this.mapData.canvas.width) + this.mapData.canvas.height / 2 - this.tileData.posMap.get(rotation).y
         }
 
-
-        let centerHexPos;
-
-
-        centerHexPos = {
+        let centerHexPos = {
             q: ((2 / 3) * centerPos.x) / size,
             r: ((-1 / 3) * centerPos.x + Math.sqrt(3) / 3 * (centerPos.y * (1 / squish))) / size
         }
 
 
         return centerHexPos;
+    }
+
+    getTargetObject = (pos) => {
+        let targetObject
+        if (this.unitData.getUnit(pos) != null) {
+            targetObject = this.unitData.getUnit(pos)
+        } else {
+            if (this.structureData.getStructure(pos) == null) return
+            targetObject = this.structureData.getStructure(pos)
+        }
+        return targetObject
     }
 
 }

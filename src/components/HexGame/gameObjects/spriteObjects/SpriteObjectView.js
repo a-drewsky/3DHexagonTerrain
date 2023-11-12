@@ -6,7 +6,7 @@ import ProjectileViewClass from "./projectile/ProjectileView"
 
 export default class SpriteObjectViewClass {
 
-   constructor(hexMapData, images, canvas) {
+   constructor(hexMapData, canvas) {
 
       this.unitData = hexMapData.unitData
       this.structureData = hexMapData.structureData

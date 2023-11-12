@@ -55,8 +55,6 @@ export default class StructureBuilderUtilsClass {
 
         let doubleTileNeighbors = this.tileData.getNeighborKeys({ q: tilePosQ, r: tilePosR }, 2)
 
-        console.log(doubleTileNeighbors)
-
         let tileNeighbors = this.tileData.getNeighborKeys({ q: tilePosQ, r: tilePosR }, 1)
 
 

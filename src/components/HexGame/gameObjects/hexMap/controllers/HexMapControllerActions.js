@@ -1,15 +1,15 @@
+import HexMapControllerUtilsClass from "./HexMapControllerUtils"
+
 export default class HexMapControllerActionsClass {
 
-    constructor(hexMapData, tileManager, spriteManager, canvas, utils, uiController) {
+    constructor(hexMapData) {
         this.mapData = hexMapData.mapData
         this.selectionData = hexMapData.selectionData
+        this.tileData = hexMapData.tileData
         this.unitData = hexMapData.unitData
+        this.structureData = hexMapData.structureData
 
-        this.tileManager = tileManager
-        this.spriteManager = spriteManager
-        this.canvas = canvas
-        this.utils = utils
-        this.uiController = uiController
+        this.utils = new HexMapControllerUtilsClass(hexMapData)
     }
 
     move = () => {
@@ -18,61 +18,50 @@ export default class HexMapControllerActionsClass {
         this.mapData.setState('animation')
     }
 
-    mine = () => {
-
-        let selectionTarget = this.selectionData.getTargetSelection()
-        if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget)
-
-        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position)
-        if (targetStructure == null) return
-
-        this.unitData.selectedUnit.target = targetStructure
-
-        this.unitData.selectedUnit.setMine()
-        this.selectionData.clearAllSelections()
-    }
-
     attack = () => {
 
         if (this.unitData.selectedUnit == null) return
 
         let selectionTarget = this.selectionData.getTargetSelection()
         if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget)
+        let targetTile = this.tileData.getEntry(selectionTarget)
 
-        let targetObject
-
-        if (this.unitData.getUnit(targetTile.position) != null) {
-            targetObject = this.unitData.getUnit(targetTile.position)
-        } else {
-            if (this.spriteManager.structures.data.getStructure(targetTile.position) == null) return
-            targetObject = this.spriteManager.structures.data.getStructure(targetTile.position)
-        }
+        let targetObject = this.utils.getTargetObject(targetTile.position)
         if (targetObject == null) return
 
-        this.unitData.selectedUnit.target = targetObject
+        this.unitData.selectTarget(targetTile.position)
+        this.unitData.startAttack(targetTile.position)
 
-        this.unitData.selectedUnit.setAttack()
         this.selectionData.clearAllSelections()
 
     }
 
-    capture = () => {
-
-        if (this.unitData.selectedUnit == null) return
+    mine = () => {
 
         let selectionTarget = this.selectionData.getTargetSelection()
         if (selectionTarget == null) return
-        let targetTile = this.tileManager.data.getEntry(selectionTarget)
+        let targetTile = this.tileData.getEntry(selectionTarget)
 
-        let targetStructure = this.spriteManager.structures.data.getStructure(targetTile.position)
+        let targetStructure = this.structureData.getStructure(targetTile.position)
         if (targetStructure == null) return
 
-        this.unitData.selectedUnit.target = targetStructure
-
-        this.unitData.selectedUnit.captureFlag(targetTile)
+        this.unitData.selectTarget(targetTile.position)
+        this.unitData.selectedUnit.setDirection(targetTile.position)
+        this.unitData.selectedUnit.setAnimation('mine')
         this.selectionData.clearAllSelections()
+    }
+
+    capture = () => {
+
+        if (this.selectionData.getTargetSelection() == null) return
+        let targetTile = this.tileData.getEntry(this.selectionData.getTargetSelection())
+
+        let targetStructure = this.structureData.getStructure(targetTile.position)
+        if (targetStructure == null || targetStructure.type != 'flag') return
+
+        this.unitData.selectedUnit.setDirection(targetTile.position)
+        targetStructure.setCaptured()
+
     }
 
     cancel = () => {

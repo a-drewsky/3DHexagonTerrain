@@ -93,6 +93,8 @@ export default class CameraDataClass {
     }
 
     zoomIn = (deltaY) => {
+        if (!((deltaY > 0 && !this.zoomAtMax()) || (deltaY < 0 && !this.zoomAtMin()))) return
+
         this.zoom += deltaY / 100
         this.adjustZoomPosition(deltaY)
     }

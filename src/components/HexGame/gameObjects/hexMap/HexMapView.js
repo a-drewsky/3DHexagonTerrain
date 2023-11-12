@@ -1,29 +1,35 @@
-import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
-import HexMapViewTableClass from "./HexMapViewTable";
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import HexMapViewTableClass from "./HexMapViewTable"
+import SpriteObjectViewClass from "../spriteObjects/SpriteObjectView"
+import TileStackViewClass from '../tileStack/TileStackView'
 
 import { INIT_CAMERA_POSITION } from './HexMapConstants'
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, hexMapData, tileManager, spriteManager, userConstants, images, uiController) {
-      this.ctx = ctx;
-      this.canvas = canvas;
-      this.cameraData = hexMapData.cameraData;
-      this.mapData = hexMapData.mapData;
-      this.tileManager = tileManager
-      this.spriteManager = spriteManager
+   constructor(ctx, canvas, hexMapData, userConstants, images, uiController) {
+      this.ctx = ctx
+      this.canvas = canvas
+      this.cameraData = hexMapData.cameraData
+      this.mapData = hexMapData.mapData
+      this.tileData = hexMapData.tileData
+      this.unitData = hexMapData.unitData
+      this.strucutreData = hexMapData.strucutreData
 
-      this.drawCanvas = null;
-      this.drawctx = null;
+      this.tileView = new TileStackViewClass(hexMapData, canvas)
+      this.spriteView = new SpriteObjectViewClass(hexMapData, canvas)
+
+      this.drawCanvas = null
+      this.drawctx = null
 
       this.uiController = uiController
 
-      this.tableView = new HexMapViewTableClass(hexMapData, tileManager)
+      this.tableView = new HexMapViewTableClass(hexMapData)
 
       //Debug Settings
-      this.DEBUG = userConstants.DEBUG;
+      this.DEBUG = userConstants.DEBUG
 
-      this.images = images;
+      this.images = images
 
       this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -35,9 +41,9 @@ export default class HexMapViewClass {
 
       this.checkAndRenderBackground()
 
-      this.tileManager.view.draw(this.drawctx)
+      this.tileView.draw(this.drawctx)
 
-      this.spriteManager.view.draw(this.drawctx)
+      this.spriteView.draw(this.drawctx)
 
 
       if (this.DEBUG) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
@@ -61,17 +67,17 @@ export default class HexMapViewClass {
    initializeCanvas = () => {
 
       //Set render canvas size
-      let keys = this.tileManager.data.getKeys();
+      let keys = this.tileData.getKeys();
 
       let mapWidth = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)) - Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r));
       let mapHeight = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish));
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
 
       this.drawCanvas = document.createElement('canvas')
-      this.drawCanvas.width = mapHyp / this.mapData.squish;
+      this.drawCanvas.width = mapHyp / this.mapData.squish
       this.drawCanvas.height = mapHyp;
       this.drawCanvas.style.imageRendering = 'pixelated'
-      this.drawctx = this.drawCanvas.getContext("2d");
+      this.drawctx = this.drawCanvas.getContext("2d")
 
       this.uiController.setBgCanvasSize(this.drawCanvas.width, this.drawCanvas.height)
       this.uiController.setBgCanvasZoom(this.drawCanvas.width, this.drawCanvas.height)
@@ -83,7 +89,7 @@ export default class HexMapViewClass {
 
    initializeCamera = () => {
 
-      let keys = this.tileManager.data.getKeys();
+      let keys = this.tileData.getKeys();
 
       //set cameraData rotation
       this.cameraData.rotation = this.cameraData.initCameraRotation;
@@ -120,7 +126,7 @@ export default class HexMapViewClass {
 
       let camPos = this.commonUtils.rotateTile({ q: camQ, r: camR }, this.cameraData.rotation)
 
-      let mappos = this.tileManager.data.posMap.get(this.cameraData.rotation)
+      let mappos = this.tileData.posMap.get(this.cameraData.rotation)
 
       //set the cameraData position
       let vecQ, vecR

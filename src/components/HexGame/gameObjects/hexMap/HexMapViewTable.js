@@ -10,12 +10,12 @@ const TABLE_COLORS = {
 
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData, tileManager) {
+   constructor(hexMapData) {
 
-      this.mapData = hexMapData.mapData;
-      this.cameraData = hexMapData.cameraData;
+      this.mapData = hexMapData.mapData
+      this.tileData = hexMapData.tileData
+      this.cameraData = hexMapData.cameraData
       
-      this.tileManager = tileManager
       this.drawCanvas = null
 
       this.rotationAlpha = {
@@ -41,7 +41,8 @@ export default class HexMapViewTableClass {
       let tempctx = tempCanvas.getContext('2d')
 
       //get table position
-      let tablePosition = this.tileManager.data.getTablePosition(this.cameraData.rotation);
+      let tablePosition = this.tileData.getTablePosition(this.cameraData.rotation);
+      console.log(tablePosition)
 
       tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l}%)`
       tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l}%)`
@@ -67,8 +68,6 @@ export default class HexMapViewTableClass {
 
          tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
          tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
-
-
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);

@@ -3,9 +3,9 @@ import ResourceConfig from "./ResourceConfig";
 
 export default class ResourceClass extends StructureClass {
 
-    constructor(pos, resourceId, hexMapData, images) {
-        if(!ResourceConfig[resourceId]) throw Error(`Invalid Resource ID: (${resourceId}). Resource config properties are: [${Object.getOwnPropertyNames(ResourceConfig).splice(3)}]`)
-        super(pos, 'resource', ResourceConfig[resourceId], hexMapData, images)
+    constructor(pos, resourceId, images) {
+        if (!ResourceConfig[resourceId]) throw Error(`Invalid Resource ID: (${resourceId}). Resource config properties are: [${Object.getOwnPropertyNames(ResourceConfig).splice(3)}]`)
+        super(pos, 'resource', ResourceConfig[resourceId], images)
         this.type = 'resource'
         this.destructionStructure = 'emptymine'
         this.resource = ResourceConfig[resourceId].resource
@@ -24,25 +24,27 @@ export default class ResourceClass extends StructureClass {
         this.state.current = this.state.resources_lte_100
     }
 
-    setState = (stateName) => {
-        this.state.current = this.state[stateName]
+    setState = () => {
+        let resourcePercent = this.stats.resources / this.stats.maxResources * 100
+        let newStateName = resourcePercent > 75 ? 'resources_lte_100'
+            : resourcePercent > 50 ? 'resources_lte_75'
+                : resourcePercent > 25 ? 'resources_lte_50'
+                    : resourcePercent > 0 ? 'resources_lte_25'
+                        : 'destroyed'
+        if (newStateName == this.curState()) return
+        this.state.current = this.state[newStateName]
+        this.render = true
     }
 
-    removeResources = (resources) => {
+    mineResources = (miningLevel) => {
 
-        let minResources = Math.min(this.stats.resources, resources)
+        let minedResources = Math.min(this.stats.resources, miningLevel)
+        this.stats.resources -= minedResources
 
-        this.stats.resources -= minResources
-        this.hexMapData.resources[this.resource] += minResources
+        this.setState()
         this.render = true
-        
-        let resourcePercent = this.stats.resources / this.stats.maxResources * 100
 
-        let newStateName = resourcePercent > 75 ? 'resources_lte_100' : resourcePercent > 50 ? 'resources_lte_75' : resourcePercent > 25 ? 'resources_lte_50' : resourcePercent > 0 ? 'resources_lte_25' : 'destroyed'
-
-        if (newStateName == this.curState()) return
-
-        this.setState(newStateName)
+        return minedResources
     }
 
 }

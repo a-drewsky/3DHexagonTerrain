@@ -8,67 +8,107 @@ export default class UnitManagerClass {
         this.selectionData = hexMapData.selectionData
         this.projectileData = hexMapData.projectileData
         this.data = hexMapData.unitData
+
+        this.structureData = hexMapData.structureData
+
         this.renderer = new UnitRendererClass(hexMapData, images)
-        this.controllerUtils = new HexMapControllerUtilsClass(hexMapData)
+        this.utils = new HexMapControllerUtilsClass(hexMapData)
     }
 
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
 
-            if (unit.state.current.duration != 'continuous' && unit.animationCurTime - unit.animationStartTime < unit.state.current.duration) continue
+            if (!unit.endOfState()) continue
 
             switch (unit.curState()) {
                 case 'walk':
                 case 'jump':
-                    unit.updatePath()
-                    if (unit.curState() == 'idle') {
-                        this.selectionData.setInfoSelection('unit', unit.position)
-                        this.mapData.setState('chooseRotation')
-                        this.controllerUtils.findActionSet()
-                        this.controllerUtils.findAttackSet()
-                    }
+                    this.endMovement(unit)
                     continue
                 case 'mine':
-                    this.data.unselectUnit()
-                    unit.collectTargetResources()
-                    unit.setIdle()
-                    this.mapData.resetState()
-                    this.selectionData.clearAllSelections()
+                    this.endMining(unit)
                     continue
                 case 'attack':
-                    this.data.unselectUnit()
-                    //here we will either create a projectile or an attack object
-                    //attack object will have access to units
-                    //projectiles will create an attack object apon termination
-
-                    switch (unit.id) {
-                        case 'mountain_ranger':
-                            this.projectileData.newProjectile('arrow_projectile', unit.position, unit.target.position)
-                            break
-                        default:
-                            unit.attackTarget()
-                            if (unit.target.type != 'unit') {
-                                this.mapData.resetState()
-                                this.selectionData.clearAllSelections()
-                            }
-                    }
-                    unit.setIdle()
+                    this.endAttack(unit)
                     continue
                 case 'hit':
-                    unit.setIdle()
-                    if (unit.curState() != 'death') {
-                        this.mapData.resetState()
-                        this.selectionData.clearAllSelections()
-                    }
+                    this.endHit(unit)
                     continue
                 case 'death':
-                    this.data.deleteUnit(unit.position)
-                    this.mapData.resetState()
-                    this.selectionData.clearAllSelections()
+                    this.endDeath(unit)
                     continue
             }
         }
+    }
+
+    endHit = (unit) => {
+        unit.setIdle()
+        this.data.clearTarget()
+        if (unit.curState() != 'death') {
+            this.mapData.resetState()
+            this.selectionData.clearAllSelections()
+        }
+    }
+
+    endDeath = (unit) => {
+        this.data.deleteUnit(unit.position)
+        this.mapData.resetState()
+        this.selectionData.clearAllSelections()
+    }
+
+    endAttack = (unit) => {
+        switch (unit.id) {
+            case 'mountain_ranger':
+                this.endProjectileAttack(unit)
+                break
+            default:
+                this.endAdjacentAttack(unit)
+                break
+        }
+        unit.setIdle()
+        this.data.unselectUnit()
+        this.data.clearTarget()
+    }
+
+    endProjectileAttack = (unit) => {
+        this.projectileData.newProjectile('arrow_projectile', unit.position, this.data.unitTarget)
+    }
+
+    endAdjacentAttack = (unit) => {
+
+        let targetObject = this.utils.getTargetObject(this.data.unitTarget)
+        if(!targetObject) return
+
+        targetObject.recieveAttack(25)
+        if (targetObject.type != 'unit') {
+            this.mapData.resetState()
+            this.selectionData.clearAllSelections()
+        }
+    }
+
+    endMovement = (unit) => {
+        unit.updatePath()
+        if (unit.actionComplete) {
+            unit.setIdle()
+            this.data.clearTarget()
+            this.selectionData.setInfoSelection('unit', unit.position)
+            this.mapData.setState('chooseRotation')
+            this.utils.findActionSet()
+            this.utils.findAttackSet()
+        }
+    }
+
+    endMining = (unit) => {
+        this.data.unselectUnit()
+
+        let mine = this.structureData.getStructure(this.data.unitTarget)
+        let minedResources = mine.mineResources(unit.stats.mining)
+        this.mapData.resources[mine.resource] += minedResources
+        unit.setIdle()
+        this.data.clearTarget()
+        this.mapData.resetState()
+        this.selectionData.clearAllSelections()
     }
 
     render = () => {

@@ -2,13 +2,12 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackViewClass {
 
-    constructor(hexMapData, tileRenderer, canvas) {
+    constructor(hexMapData, canvas) {
 
         this.mapData = hexMapData.mapData
         this.selectionData = hexMapData.selectionData
         this.tileData = hexMapData.tileData
         this.cameraData = hexMapData.cameraData
-        this.tileRenderer = tileRenderer
 
         this.commonUtils = new CommonHexMapUtilsClass()
 

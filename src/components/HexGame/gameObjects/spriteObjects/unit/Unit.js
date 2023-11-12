@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, mapData, tileData, images, uiController, globalState) {
+    constructor(pos, unitId, mapData, tileData, images, uiController) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = { ...pos }
@@ -39,7 +39,6 @@ export default class UnitClass {
         this.destination = null
         this.destinationStartTime = null
         this.destinationCurTime = null
-        this.target = null
 
         //settings
         this.tileTravelTime = TRAVEL_TIME
@@ -49,11 +48,11 @@ export default class UnitClass {
         this.mapData = mapData
         this.tileData = tileData
         this.uiController = uiController
-        this.globalState = globalState
         this.commonUtils = new CommonHexMapUtilsClass()
 
         //unit data
         this.render = true
+        this.actionComplete = false
         
         this.stats = {
             health: UnitConfig[unitId].stats.health,
@@ -102,6 +101,12 @@ export default class UnitClass {
 
     travelPercent = () => {
         return (this.destinationCurTime - this.destinationStartTime) / this.tileTravelTime
+    }
+
+    endOfState = () => {
+        if(this.state.current.duration == 'continuous') return true
+        if(this.animationCurTime - this.animationStartTime < this.state.current.duration) return false
+        return true
     }
 
 
@@ -162,7 +167,7 @@ export default class UnitClass {
 
             } else {
 
-                this.setIdle()
+                this.actionComplete = true
 
             }
 
@@ -172,6 +177,7 @@ export default class UnitClass {
     //SET STATE
     setAnimation = (state) => {
         this.render = true
+        this.actionComplete = false
         this.state.current = this.state[state]
         this.frame = 0
         this.animationStartTime = Date.now()
@@ -188,13 +194,13 @@ export default class UnitClass {
 
     setIdle = () => {
         this.render = true
+        this.actionComplete = false
 
         if (this.stats.health <= 0) {
             this.setAnimation('death')
             return
         }
 
-        this.target = null
         this.frame = 0
         this.frameStartTime = Date.now()
         this.frameCurTime = Date.now()
@@ -208,17 +214,9 @@ export default class UnitClass {
 
     }
 
-    setMine = () => {
-        this.setDirection(this.target.position)
-        this.setAnimation('mine')
-    }
-
-    setAttack = () => {
-        this.setDirection(this.target.position)
-        this.setAnimation('attack')
-    }
-
     setMove = (path) => {
+        this.render = true
+        this.actionComplete = false
 
         let startTile = this.tileData.getEntry(this.position)
 
@@ -240,25 +238,6 @@ export default class UnitClass {
         this.setDirection(this.destination)
 
     }
-
-
-    //END STATE
-    collectTargetResources = () => {
-        this.target.removeResources(this.stats.mining)
-    }
-
-    attackTarget = () => {
-        this.target.recieveAttack(25)
-    }
-
-    captureFlag = () => {
-
-        this.setDirection(this.target.position)
-
-        this.globalState.current = this.globalState.pause
-        this.uiController.setEndGameMenu(true)
-    }
-
 
     //RECIEVING
     recieveAttack = (damage) => {

@@ -1,50 +1,45 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 import HexMapControllerActionsClass from "./HexMapControllerActions"
+import HexMapControllerUtilsClass from "./HexMapControllerUtils"
 
-export default class HexMapControllerMouseClass {
+export default class HexMapControllerClickClass {
 
-    constructor(hexMapData, tileManager, spriteManager, utils, uiController, config) {
+    constructor(hexMapData) {
         this.mapData = hexMapData.mapData
         this.cameraData = hexMapData.cameraData
+        this.tileData = hexMapData.tileData
         this.selectionData = hexMapData.selectionData
         this.cardData = hexMapData.cardData
         this.unitData = hexMapData.unitData
         this.structureData = hexMapData.structureData
 
-        this.tileManager = tileManager
-        this.spriteManager = spriteManager
-        this.utils = utils
-        this.uiController = uiController
-        this.config = config
-
+        this.utils = new HexMapControllerUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.actions = new HexMapControllerActionsClass(hexMapData, tileManager, spriteManager, utils, uiController)
 
+        this.actions = new HexMapControllerActionsClass(hexMapData)
     }
 
-    setHover = (x, y) => {
+    click = (tileClicked, clickPos) => {
 
-        let hoverTile = this.utils.getSelectedTile(x, y)
-
-        if (this.unitData.placementUnit != null) {
-            this.unitData.placementUnit.setPosition(hoverTile)
-            if (!hoverTile) this.unitData.placementUnit.setPosition({ q: null, r: null })
-        }
-
-        if (!hoverTile) return
-
-        let tileObj = this.tileManager.data.getEntry(hoverTile)
+        let tile = this.tileData.getEntry(tileClicked)
 
         switch (this.mapData.curState()) {
             case 'selectTile':
-                this.selectionData.setInfoSelection('hover', tileObj.position)
+                this.selectTile(tile)
+                return
+            case 'selectMovement':
+                this.selectMovement(tile, clickPos.x, clickPos.y)
                 return
             case 'placeUnit':
+                this.placeUnit(tile, clickPos.x, clickPos.y)
+                return
             case 'chooseRotation':
-            case 'selectMovement':
+                this.endUnitTurn(tile)
+                return
             case 'animation':
                 return
         }
+
     }
 
     selectTile = (tile) => {
@@ -53,7 +48,7 @@ export default class HexMapControllerMouseClass {
 
         if (this.unitData.getUnit(tile.position) != null) {
             this.selectionData.setInfoSelection('unit', tile.position)
-            this.unitData.selectUnit(tile.position.q, tile.position.r)
+            this.unitData.selectUnit(tile.position)
             this.utils.findMoveSet()
             this.mapData.setState('selectMovement')
         }
@@ -61,123 +56,6 @@ export default class HexMapControllerMouseClass {
             this.selectionData.setInfoSelection('tile', tile.position)
             this.mapData.setState('selectTile')
         }
-    }
-
-    placeUnit = (tile, x, y) => {
-
-        if (tile === null) return
-
-        if (!this.selectionData.getPathingSelection('placement').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
-            this.selectionData.unlockPath()
-            this.selectionData.clearTarget()
-            this.updatePlacementSelection(x, y)
-            return
-        }
-
-        if (!this.selectionData.getPathLocked()) {
-            this.selectionData.lockPath()
-            this.selectionData.setTargetSelection(tile.position, 'placement')
-        } else {
-            let target = this.selectionData.getTargetSelection()
-            if (this.commonUtils.tilesEqual(tile.position, target)) {
-
-                this.unitData.addUnit(tile.position)
-                this.unitData.eraseUnit()
-                this.selectionData.clearAllSelections()
-                this.selectionData.setInfoSelection('unit', tile.position)
-                this.unitData.selectUnit(tile.position.q, tile.position.r)
-                this.mapData.setState('chooseRotation')
-
-            } else {
-                this.selectionData.unlockPath()
-                this.selectionData.clearTarget()
-                this.updatePlacementSelection(x, y)
-            }
-        }
-
-        return
-
-
-    }
-
-    updatePlacementSelection = (x, y) => {
-
-        if (this.unitData.placementUnit != null) {
-            this.unitData.placementUnit.rotation = -1 * this.cameraData.rotation + 3
-            if (this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
-        }
-
-        if (this.selectionData.getPathLocked()) return
-
-        this.selectionData.clearPath()
-        let hoverTile = this.utils.getSelectedTile(x, y)
-
-        this.unitData.placementUnit.setPosition(hoverTile)
-
-        if (!hoverTile) {
-            this.unitData.placementUnit.setPosition({ q: null, r: null })
-            return
-        }
-
-        let placementSelections = this.selectionData.getPathingSelection('placement')
-
-        if (placementSelections.some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
-            this.selectionData.setPlacementHover(hoverTile)
-            return
-        } else {
-            this.selectionData.setInfoSelection('hover', hoverTile)
-        }
-    }
-
-    updatePathSelection = (x, y) => {
-
-        if (this.selectionData.getPathLocked()) return
-
-        this.selectionData.clearHover()
-        this.selectionData.clearTarget()
-
-        let hoverTile = this.utils.getSelectedTile(x, y)
-
-        if (!hoverTile) {
-            this.selectionData.clearPath()
-            return
-        }
-
-        this.utils.setPath(hoverTile)
-
-    }
-
-    updateEndMoveSelection = (x, y) => {
-        if (this.selectionData.getPathLocked()) return
-
-        this.selectionData.clearTarget()
-
-        let hoverTile = this.utils.getSelectedTile(x, y)
-
-        if (!hoverTile) {
-            this.selectionData.clearPath()
-            return
-        }
-
-        this.utils.setEndMove(hoverTile)
-    }
-
-    setUnitMouseDirection = (x, y) => {
-
-        if (this.selectionData.getPathLocked()) return
-
-        let unit = this.unitData.selectedUnit
-
-        if (unit == null) return
-
-        let tileClicked = this.utils.getSelectedTile(x, y)
-
-        if (!tileClicked) return
-
-        if (unit.rotation == this.commonUtils.getDirection(unit.position, tileClicked)) return
-
-        unit.setDirection(tileClicked)
-
     }
 
     selectMovement = (tile, x, y) => {
@@ -261,6 +139,43 @@ export default class HexMapControllerMouseClass {
 
     }
 
+    placeUnit = (tile, x, y) => {
+
+        if (tile === null) return
+
+        if (!this.selectionData.getPathingSelection('placement').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
+            this.selectionData.unlockPath()
+            this.selectionData.clearTarget()
+            this.updatePlacementSelection(x, y)
+            return
+        }
+
+        if (!this.selectionData.getPathLocked()) {
+            this.selectionData.lockPath()
+            this.selectionData.setTargetSelection(tile.position, 'placement')
+        } else {
+            let target = this.selectionData.getTargetSelection()
+            if (this.commonUtils.tilesEqual(tile.position, target)) {
+
+                this.unitData.addUnit(tile.position)
+                this.unitData.eraseUnit()
+                this.selectionData.clearAllSelections()
+                this.selectionData.setInfoSelection('unit', tile.position)
+                this.unitData.selectUnit(tile.position)
+                this.mapData.setState('chooseRotation')
+
+            } else {
+                this.selectionData.unlockPath()
+                this.selectionData.clearTarget()
+                this.updatePlacementSelection(x, y)
+            }
+        }
+
+        return
+
+
+    }
+
     endUnitTurn = (tile) => {
         let unit = this.unitData.selectedUnit
 
@@ -327,4 +242,3 @@ export default class HexMapControllerMouseClass {
     }
 
 }
-

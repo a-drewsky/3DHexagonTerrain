@@ -3,21 +3,21 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class UnitDataClass {
 
-    constructor(mapData, tileData, images, uiController, globalState) {
+    constructor(mapData, tileData, images, uiController) {
         this.mapData = mapData
         this.tileData = tileData
         this.images = images
         this.uiController = uiController
-        this.globalState = globalState
 
         this.unitList = [];
         this.selectedUnit = null
         this.placementUnit = null
+        this.unitTarget = null
 
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-    //return terrain at tile (q, r) or null if the tile has no terrain
+    //unit functions
     getUnit = (pos) => {
         let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
         if (index == -1) return null
@@ -38,12 +38,8 @@ export default class UnitDataClass {
     }
 
     createUnit = (unitId) => {
-        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images, this.uiController, this.globalState)
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images, this.uiController)
         this.placementUnit = newUnit
-    }
-
-    eraseUnit = () => {
-        this.placementUnit = null
     }
 
     addUnit = (pos) => {
@@ -54,13 +50,31 @@ export default class UnitDataClass {
         return newUnit
     }
 
-    //should be removed
-    selectUnit = (q, r) => {
-        this.selectedUnit = this.getUnit({ q: q, r: r })
+    //selections
+    eraseUnit = () => {
+        this.placementUnit = null
+    }
+    
+    selectUnit = (pos) => {
+        this.selectedUnit = this.getUnit(pos)
     }
 
     unselectUnit = () => {
         this.selectedUnit = null
+    }
+
+    selectTarget = (pos) => {
+        this.unitTarget = { ...pos }
+    }
+
+    clearTarget = () => {
+        this.unitTarget = null
+    }
+
+    //action functions
+    startAttack = (targetPos) => {
+        this.selectedUnit.setDirection(targetPos)
+        this.selectedUnit.setAnimation('attack')
     }
 
 }

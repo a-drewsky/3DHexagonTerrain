@@ -4,9 +4,12 @@ import StructureBuilderClass from "./StructureBuilder"
 
 export default class StructureManagerClass {
 
-    constructor(hexMapData, images) {
+    constructor(hexMapData, images, uiController) {
         this.mapData = hexMapData.mapData
+        this.selectionData = hexMapData.selectionData
         this.data = hexMapData.structureData
+
+        this.uiController = uiController
 
         this.structureRenderer = new StructureRendererClass(hexMapData, images)
         this.modifierRenderer = new ModifierRendererClass(hexMapData, images)
@@ -19,6 +22,19 @@ export default class StructureManagerClass {
                 this.data.destroyStructure(value)
                 return
             }
+            switch(value.type){
+                case 'flag':
+                    this.updateFlag(value)
+                    continue
+            }
+        }
+    }
+
+    updateFlag = (flag) => {
+        
+        if(flag.captured){
+            this.selectionData.clearAllSelections()
+            this.uiController.setEndGameMenu(true)
         }
     }
 

@@ -1,6 +1,6 @@
 export default class StructureClass {
 
-    constructor(pos, type, config, hexMapData, images) {
+    constructor(pos, type, config, images) {
         this.position = { ...pos }
         this.rotation = null
         this.frame = 0
@@ -14,7 +14,6 @@ export default class StructureClass {
 
         this.imageObject = images.structures[type][config.sprite]
         this.shadowImageObject = images.shadows[this.imageObject.shadow]
-        this.hexMapData = hexMapData
 
         this.render = true
         this.prerender = false

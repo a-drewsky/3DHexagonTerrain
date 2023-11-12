@@ -1,7 +1,7 @@
 import HexMapControllerClass from "./controllers/HexMapController"
 import HexMapViewClass from "./HexMapView"
 import HexMapDataClass from "./HexMapData"
-import HexMapprerendererClass from "./HexMapPrerenderer"
+import HexMapPrerendererClass from "./HexMapPrerenderer"
 import HexMapUiUpdaterClass from "./HexMapUiUpdater"
 import CameraManagerClass from "../camera/CameraManager"
 import TileStackManagerClass from "../tileStack/TileStackManager"
@@ -9,18 +9,18 @@ import SpriteObjectManagerClass from "../spriteObjects/SpriteObjectManager"
 
 export default class HexMapManagerClass {
 
-    constructor(ctx, canvas, images, userConstants, uiController, globalState) {
+    constructor(ctx, canvas, images, userConstants, uiController) {
 
         this.images = images
 
-        this.data = new HexMapDataClass(canvas, images, uiController, globalState)
-        this.cameraManager = new CameraManagerClass(this.data, canvas)
-        this.tileManager = new TileStackManagerClass(this.data, this.images, canvas)
-        this.spriteManager = new SpriteObjectManagerClass(this.data, this.images, canvas)
+        this.data = new HexMapDataClass(canvas, images, uiController)
+        this.cameraManager = new CameraManagerClass(this.data)
+        this.tileManager = new TileStackManagerClass(this.data, this.images)
+        this.spriteManager = new SpriteObjectManagerClass(this.data, this.images, uiController)
 
-        this.prerenderer = new HexMapprerendererClass(this.data, this.tileManager, this.spriteManager)
-        this.view = new HexMapViewClass(ctx, canvas, this.data, this.tileManager, this.spriteManager, userConstants, images, uiController)
-        this.controller = new HexMapControllerClass(this.data, this.tileManager, this.spriteManager, this.cameraManager, canvas, images, uiController, globalState)
+        this.prerenderer = new HexMapPrerendererClass(this.data, this.tileManager, this.spriteManager)
+        this.view = new HexMapViewClass(ctx, canvas, this.data, userConstants, images, uiController)
+        this.controller = new HexMapControllerClass(this.data, canvas)
         this.uiUpdater = new HexMapUiUpdaterClass(this.data, canvas, uiController)
 
     }

@@ -7,8 +7,7 @@ import ResourceClass from "./resource/Resource"
 
 export default class StructureDataClass {
 
-    constructor(hexMapData, images) {
-        this.hexMapData = hexMapData
+    constructor(images) {
         this.images = images
 
         this.commonUtils = new CommonHexMapUtilsClass()
@@ -17,13 +16,13 @@ export default class StructureDataClass {
     }
 
     setBunker = (pos, structureId) => {
-        let newBunker = new BunkerClass(pos, structureId, this.hexMapData, this.images)
+        let newBunker = new BunkerClass(pos, structureId, this.images)
         this.structureMap.set(this.commonUtils.join(pos), newBunker)
         return newBunker
     }
 
     setFlag = (pos, structureId) => {
-        let newFlag = new FlagClass(pos, structureId, this.hexMapData, this.images)
+        let newFlag = new FlagClass(pos, structureId, this.images)
         this.structureMap.set(this.commonUtils.join(pos), newFlag)
         return newFlag
     }
@@ -35,13 +34,13 @@ export default class StructureDataClass {
     }
 
     setProp = (pos, structureId) => {
-        let newProp = new PropClass(pos, structureId, this.hexMapData, this.images)
+        let newProp = new PropClass(pos, structureId, this.images)
         this.structureMap.set(this.commonUtils.join(pos), newProp)
         return newProp
     }
 
     setResource = (pos, structureId) => {
-        let newResource = new ResourceClass(pos, structureId, this.hexMapData, this.images)
+        let newResource = new ResourceClass(pos, structureId, this.images)
         this.structureMap.set(this.commonUtils.join(pos), newResource)
         return newResource
     }

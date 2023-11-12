@@ -1,7 +1,7 @@
 
 import { PRERENDER_STACKS_PER_FRAME } from "./HexMapConstants"
 
-export default class HexMapprerendererClass {
+export default class HexMapPrerendererClass {
 
     constructor(hexMapData, tileManager, spriteManager) {
 

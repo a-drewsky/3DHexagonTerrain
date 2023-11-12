@@ -1,105 +1,74 @@
 
-import HexMapControllerUtilsClass from './HexMapControllerUtils';
-import CollisionClass from '../../../utilities/collision';
-
-import HexMapControllerMouseClass from './HexMapControllerMouse';
+import HexMapControllerUtilsClass from './HexMapControllerUtils'
+import CollisionClass from '../../../utilities/collision'
+import HexMapControllerClickClass from './HexMapControllerClick'
+import HexMapControllerHoverClass from './HexMapControllerHover'
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, tileManager, spriteManager, cameraManager, canvas, images, uiController, globalState) {
-
+    constructor(hexMapData, canvas) {
         this.mapData = hexMapData.mapData
+        this.cameraData = hexMapData.cameraData
+        this.tileData = hexMapData.tileData
         this.selectionData = hexMapData.selectionData
         this.cardData = hexMapData.cardData
-
-        this.tileManager = tileManager
-        this.spriteManager = spriteManager
+        this.unitData = hexMapData.unitData
 
         this.canvas = canvas
 
-        this.images = images
-
         this.collision = new CollisionClass()
 
-        this.utils = new HexMapControllerUtilsClass(hexMapData, tileManager, spriteManager, canvas, images, uiController, globalState)
+        this.utils = new HexMapControllerUtilsClass(hexMapData)
 
-        this.cameraManager = cameraManager
-
-        this.mouseController = new HexMapControllerMouseClass(hexMapData, tileManager, spriteManager, this.utils, uiController, this.config)
+        this.clickController = new HexMapControllerClickClass(hexMapData)
+        this.hoverController = new HexMapControllerHoverClass(hexMapData)
 
     }
 
     mouseDown = (x, y) => {
-        this.cameraManager.controller.mouseDown(x, y)
+        this.cameraData.setClickPos(x, y)
     }
 
     mouseUp = (x, y) => {
 
-        this.cameraManager.controller.mouseUp()
+        this.cameraData.clearAnchorPoint()
 
-        if (this.cameraManager.data.clickPos !== null) {
+        if (this.cameraData.clickPos !== null) {
 
-            this.cameraManager.data.clickPos = null
-            this.cameraManager.data.clickMovePos = null
+            this.cameraData.clickPos = null
+            this.cameraData.clickMovePos = null
 
-            let tileSelected = this.utils.getSelectedTile(x, y)
+            let tileClicked = this.utils.getSelectedTile(x, y)
 
-            if (!tileSelected) return
+            if (!tileClicked) return
 
-            this.selectTile(tileSelected, {x: x, y: y})
+            this.clickController.click(tileClicked, {x: x, y: y})
 
         }
     }
 
     mouseMove = (x, y) => {
 
-        this.cameraManager.controller.mouseMove(x, y)
-
-        this.selectionData.clearHover()
-
-        switch (this.mapData.curState()) {
-            case 'selectTile':
-            case 'animation':
-                this.mouseController.setHover(x, y)
-                return
-            case 'placeUnit':
-                this.mouseController.updatePlacementSelection(x, y)
-                return
-            case 'selectMovement':
-                this.mouseController.updatePathSelection(x, y)
-                return
-            case 'chooseRotation':
-                this.mouseController.setUnitMouseDirection(x, y)
-                this.mouseController.updateEndMoveSelection(x, y)
-                return
+        if (x < 0 || y < 0 || x > this.canvas.width || y > this.canvas.height) {
+            this.mouseUp()
+            return
         }
+
+        if (this.cameraData.clickPos !== null) this.cameraData.setClickMovePos(x, y)
+        
+        if (this.cameraData.anchorPoint != null) {
+            this.cameraData.setPosition(
+                this.cameraData.anchorPoint.x - x + this.cameraData.mouseAnchorPoint.x,
+                this.cameraData.anchorPoint.y - y + this.cameraData.mouseAnchorPoint.y
+            )
+        }
+
+        this.hoverController.hover(x, y)
     }
 
     zoom = (deltaY) => {
-        this.cameraManager.controller.zoom(deltaY)
+        this.cameraData.clearAnchorPoint()
+        this.cameraData.zoomIn(deltaY)
         this.selectionData.clearHover()
-    }
-
-    selectTile = (tileSelected, clickPos) => {
-
-        let tile = this.tileManager.data.getEntry(tileSelected)
-
-        switch (this.mapData.curState()) {
-            case 'selectTile':
-                this.mouseController.selectTile(tile)
-                return
-            case 'selectMovement':
-                this.mouseController.selectMovement(tile, clickPos.x, clickPos.y)
-                return
-            case 'placeUnit':
-                this.mouseController.placeUnit(tile, clickPos.x, clickPos.y)
-                return
-            case 'chooseRotation':
-                this.mouseController.endUnitTurn(tile)
-                return
-            case 'animation':
-                return
-        }
-
     }
 
     selectCard = (cardNum) => {
@@ -125,7 +94,7 @@ export default class HexMapControllerClass {
         this.selectionData.clearAllSelections()
         this.selectionData.clearHover()
         this.utils.findPlacementSet()
-        this.spriteManager.units.data.createUnit(this.cardData.cards[this.cardData.selectedCard].unitId)
+        this.unitData.createUnit(this.cardData.cards[this.cardData.selectedCard].unitId)
         this.mapData.setState('placeUnit')
 
         this.cardData.useCard(this.mapData.resources)
@@ -141,77 +110,62 @@ export default class HexMapControllerClass {
 
     rotateRight = () => {
 
-        let zoomAmount = this.cameraManager.data.zoomAmount
-        let zoomLevel = this.cameraManager.data.zoom
-
+        let zoomAmount = this.cameraData.zoomAmount
+        let zoomLevel = this.cameraData.zoom
         let zoom = zoomLevel * zoomAmount
-        let newRotation = this.cameraManager.data.rotation
 
-        let centerHexPos = this.utils.getCenterHexPos(newRotation);
+        let newRotation = this.cameraData.rotation
+        let centerHexPos = this.utils.getCenterHexPos(newRotation)
 
         newRotation++
         if (newRotation >= 6) newRotation = newRotation - 6
 
-        //Set camera position
-        let squish = this.mapData.squish;
-
-
-        let vecQ = this.mapData.vecQ;
-        let vecR = this.mapData.vecR;
-
         centerHexPos.s = -centerHexPos.q - centerHexPos.r
-        let newR = centerHexPos.r;
-        let newS = centerHexPos.s;
+        let newR = centerHexPos.r
+        let newS = centerHexPos.s
+        centerHexPos.q = -newR
+        centerHexPos.r = -newS
 
-        centerHexPos.q = -newR;
-        centerHexPos.r = -newS;
+        let newPosX = this.mapData.vecQ.x * centerHexPos.q + this.mapData.vecR.x * centerHexPos.r
+        let newPosY = this.mapData.vecQ.y * centerHexPos.q * this.mapData.squish + this.mapData.vecR.y * centerHexPos.r * this.mapData.squish
 
-        this.cameraManager.data.setPosition(
-            vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-            vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+        this.cameraData.setPosition(
+            newPosX - this.canvas.width / 2 + this.tileData.posMap.get(newRotation).x - zoom / 2,
+            newPosY - this.canvas.height / 2 + this.tileData.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
         )
 
-
-
-
-        this.cameraManager.controller.rotateRight()
+        this.cameraData.rotateRight()
         this.selectionData.clearHover()
         this.mapData.renderBackground = true
     }
 
     rotateLeft = () => {
 
-        let zoomAmount = this.cameraManager.data.zoomAmount
-        let zoomLevel = this.cameraManager.data.zoom
-
+        let zoomAmount = this.cameraData.zoomAmount
+        let zoomLevel = this.cameraData.zoom
         let zoom = zoomLevel * zoomAmount
 
-        let newRotation = this.cameraManager.data.rotation
-
-        let centerHexPos = this.utils.getCenterHexPos(newRotation);
+        let newRotation = this.cameraData.rotation
+        let centerHexPos = this.utils.getCenterHexPos(newRotation)
 
         newRotation--
-        if (newRotation < 0) newRotation = 6 + newRotation;
-
-        //Set camera position
-        let squish = this.mapData.squish;
+        if (newRotation < 0) newRotation = 6 + newRotation
 
         centerHexPos.s = -centerHexPos.r - centerHexPos.q
-        let newQ = centerHexPos.q;
-        let newS = centerHexPos.s;
+        let newQ = centerHexPos.q
+        let newS = centerHexPos.s
+        centerHexPos.r = -newQ
+        centerHexPos.q = -newS
 
-        centerHexPos.r = -newQ;
-        centerHexPos.q = -newS;
+        let newPosX = this.mapData.vecQ.x * centerHexPos.q + this.mapData.vecR.x * centerHexPos.r
+        let newPosY = this.mapData.vecQ.y * centerHexPos.q * this.mapData.squish + this.mapData.vecR.y * centerHexPos.r * this.mapData.squish
 
-        let vecQ = this.mapData.vecQ;
-        let vecR = this.mapData.vecR;
+        this.cameraData.setPosition(
+            newPosX - this.canvas.width / 2 + this.tileData.posMap.get(newRotation).x - zoom / 2,
+            newPosY - this.canvas.height / 2 + this.tileData.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
+        )
 
-        this.cameraManager.data.setPosition(
-            vecQ.x * centerHexPos.q + vecR.x * centerHexPos.r - this.canvas.width / 2 + this.tileManager.data.posMap.get(newRotation).x - zoom / 2,
-            vecQ.y * centerHexPos.q * squish + vecR.y * centerHexPos.r * squish - this.canvas.height / 2 + this.tileManager.data.posMap.get(newRotation).y - zoom / 2 * (this.canvas.height / this.canvas.width)
-        );
-
-        this.cameraManager.controller.rotateLeft()
+        this.cameraData.rotateLeft()
         this.selectionData.clearHover()
         this.mapData.renderBackground = true
     }

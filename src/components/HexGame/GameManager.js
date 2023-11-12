@@ -5,30 +5,27 @@ export default class GameManagerClass {
 
     constructor(ctx, canvas, bgCanvas, images, uiComponents, updateUi) {
 
-        this.ctx = ctx;
-        this.canvas = canvas;
-
-        this.images = images;
+        this.ctx = ctx
+        this.canvas = canvas
+        this.images = images
+        this.updateUi = updateUi
 
         this.hexMapManager = null
-
-        this.updateUi = updateUi
-        this.uiController = new UiControllerClass(uiComponents, bgCanvas)
 
         //create all state objects like this
         this.state = {
             play: 'play',
             pause: 'pause',
-            current: 'prerendering'
         }
         this.state.current = this.state.play
 
+        this.uiController = new UiControllerClass(uiComponents, bgCanvas, this.state)
         //Draw interval that is activated when the game finishes loading
-        this.updateInterval = null;
+        this.updateInterval = null
 
-        this.fps = 0;
-        this.fpsCount = 0;
-        this.fpsTime = Date.now();
+        this.fps = 0
+        this.fpsCount = 0
+        this.fpsTime = Date.now()
     }
 
     createGame = (userConstants) => {
@@ -38,13 +35,12 @@ export default class GameManagerClass {
             this.canvas,
             this.images,
             userConstants,
-            this.uiController,
-            this.state,
+            this.uiController
         )
 
-        this.hexMapManager.build(userConstants.MAP_SIZE);
+        this.hexMapManager.build(userConstants.MAP_SIZE)
         console.log("DONE BUILDING")
-        this.hexMapManager.prerender();
+        this.hexMapManager.prerender()
         console.log("DONE PRERENDERING")
 
     }
@@ -95,7 +91,6 @@ export default class GameManagerClass {
 
     setStatePause = () => {
         console.log("pause")
-        this.state.current = this.state.pause
         this.uiController.setPauseMenu(true)
     }
 
