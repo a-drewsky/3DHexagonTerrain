@@ -1,10 +1,10 @@
-import CopperMineImagesClass from "./resourceImages/copperMineImages";
-import GoldMineImagesClass from "./resourceImages/goldMineImages";
-import IronMineImagesClass from "./resourceImages/ironMineImages";
-import RubyMineImagesClass from "./resourceImages/rubyMineImages";
-import AmethystMineImagesClass from "./resourceImages/amethystMineImages";
+import CopperMineImagesClass from "./resourceImages/copperMineImages"
+import GoldMineImagesClass from "./resourceImages/goldMineImages"
+import IronMineImagesClass from "./resourceImages/ironMineImages"
+import RubyMineImagesClass from "./resourceImages/rubyMineImages"
+import AmethystMineImagesClass from "./resourceImages/amethystMineImages"
 
-import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils"
 
 export default class ResourceImagesClass {
 

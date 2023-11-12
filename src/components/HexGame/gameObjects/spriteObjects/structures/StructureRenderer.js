@@ -43,7 +43,7 @@ export default class StructureRendererClass {
                     height: this.mapData.size * 2 * sprite.size.h
                 }
 
-                this.cameraData.rotation = rotation;
+                this.cameraData.rotation = rotation
                 let rotatedMap = this.tileData.rotatedMapList[rotation]
                 let keyObj = this.commonUtils.rotateTile(structure.position, this.cameraData.rotation)
 

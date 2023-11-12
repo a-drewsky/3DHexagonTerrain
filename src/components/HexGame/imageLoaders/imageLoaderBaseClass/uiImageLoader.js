@@ -11,13 +11,13 @@ export default class UiImageLoaderClass {
 
         this.createSheetImages()
 
-        let imagesLoaded = 0;
+        let imagesLoaded = 0
         for (let [key, value] of Object.entries(this.images)) {
-            this[key] = value;
+            this[key] = value
             value.onload = () => {
-                imagesLoaded++;
+                imagesLoaded++
                 if (imagesLoaded == Object.keys(this.images).length) {
-                    delete this.images;
+                    delete this.images
                     this.assignImages(startGame)
                 }
             }
@@ -60,7 +60,7 @@ export default class UiImageLoaderClass {
 
                 tempCanvas = this.utils.upscale(tempCanvas)
 
-                let image = tempCanvas.toDataURL('image/png');
+                let image = tempCanvas.toDataURL('image/png')
 
                 this[this.spriteName + '_' + col].src = image
 
@@ -81,7 +81,7 @@ export default class UiImageLoaderClass {
             
         }
 
-        startGame();
+        startGame()
     }
 
 }

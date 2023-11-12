@@ -48,7 +48,12 @@ export default class HexMapViewClass {
 
       if (this.DEBUG) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
 
-      this.ctx.drawImage(this.drawCanvas, this.cameraData.position.x, this.cameraData.position.y, this.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount, this.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.canvas.height / this.canvas.width), 0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(
+         this.drawCanvas,
+         this.cameraData.position.x, this.cameraData.position.y,
+         this.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount, this.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.canvas.height / this.canvas.width),
+         0, 0, this.canvas.width, this.canvas.height
+      )
 
       if (this.DEBUG) {
          this.ctx.fillStyle = 'black'
@@ -67,15 +72,15 @@ export default class HexMapViewClass {
    initializeCanvas = () => {
 
       //Set render canvas size
-      let keys = this.tileData.getKeys();
+      let keys = this.tileData.getKeys()
 
-      let mapWidth = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)) - Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r));
-      let mapHeight = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish));
-      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight);
+      let mapWidth = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)) - Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r))
+      let mapHeight = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish))
+      let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight)
 
       this.drawCanvas = document.createElement('canvas')
       this.drawCanvas.width = mapHyp / this.mapData.squish
-      this.drawCanvas.height = mapHyp;
+      this.drawCanvas.height = mapHyp
       this.drawCanvas.style.imageRendering = 'pixelated'
       this.drawctx = this.drawCanvas.getContext("2d")
 
@@ -89,10 +94,10 @@ export default class HexMapViewClass {
 
    initializeCamera = () => {
 
-      let keys = this.tileData.getKeys();
+      let keys = this.tileData.getKeys()
 
       //set cameraData rotation
-      this.cameraData.rotation = this.cameraData.initCameraRotation;
+      this.cameraData.rotation = this.cameraData.initCameraRotation
 
 
       //set cameraData position (top, middle or bottom)
@@ -113,15 +118,15 @@ export default class HexMapViewClass {
          case 'top':
             camQ = medQ + scalar / 2
             camR = medR - scalar
-            break;
+            break
          case 'middle':
             camQ = medQ
             camR = medR
-            break;
+            break
          case 'bottom':
             camQ = medQ - scalar / 2
             camR = medR + scalar
-            break;
+            break
       }
 
       let camPos = this.commonUtils.rotateTile({ q: camQ, r: camR }, this.cameraData.rotation)
@@ -132,7 +137,7 @@ export default class HexMapViewClass {
       let vecQ, vecR
       vecQ = this.mapData.vecQ
       vecR = this.mapData.vecR
-      
+
       this.cameraData.setPosition(
          mappos.x + (camPos.q * vecQ.x + camPos.r * vecR.x) - this.canvas.width / 2,
          mappos.y + (camPos.q * vecQ.y * this.mapData.squish + camPos.r * vecR.y * this.mapData.squish) - this.canvas.height / 2

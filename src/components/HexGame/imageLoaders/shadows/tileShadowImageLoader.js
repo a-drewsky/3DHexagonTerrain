@@ -126,7 +126,7 @@ export default class TileShadowSheetImageLoaderClass {
 
                 tempCanvas = this.utils.upscale(tempCanvas)
 
-                let image = tempCanvas.toDataURL('image/png');
+                let image = tempCanvas.toDataURL('image/png')
 
                 this[this.rows[rowNum] + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
 
@@ -157,7 +157,7 @@ export default class TileShadowSheetImageLoaderClass {
 
                 tempCanvas = this.utils.upscale(tempCanvas)
 
-                let image = tempCanvas.toDataURL('image/png');
+                let image = tempCanvas.toDataURL('image/png')
 
                 this[this.rows[rowNum] + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
 
@@ -185,7 +185,7 @@ export default class TileShadowSheetImageLoaderClass {
 
             tempCanvas = this.utils.upscale(tempCanvas)
 
-            let image = tempCanvas.toDataURL('image/png');
+            let image = tempCanvas.toDataURL('image/png')
 
             this[this.rows[rowNum] + '_side_shadow'].src = image
 

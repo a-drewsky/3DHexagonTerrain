@@ -1,5 +1,5 @@
 
-import CardBuilderClass from "../cards/CardBuilder";
+import CardBuilderClass from "../cards/CardBuilder"
 
 export default class CardDataClass {
 

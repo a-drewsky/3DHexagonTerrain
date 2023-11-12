@@ -1,8 +1,8 @@
-import UnitImagesVillagerClass from "./unitImagesVillager";
-import UnitImagesMountainRangerClass from "./unitImagesMountainRanger";
-import UnitImagesImperialSoldierClass from "./unitImagesImperialSoldier";
+import UnitImagesVillagerClass from "./unitImagesVillager"
+import UnitImagesMountainRangerClass from "./unitImagesMountainRanger"
+import UnitImagesImperialSoldierClass from "./unitImagesImperialSoldier"
 
-import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
 export default class UnitImagesClass {
 

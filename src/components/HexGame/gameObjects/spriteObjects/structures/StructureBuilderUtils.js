@@ -118,7 +118,7 @@ export default class StructureBuilderUtilsClass {
 
         let neighborKeys = this.tileData.getNeighborKeys({ q: q, r: r }, 1)
 
-        let terrainCount = 0;
+        let terrainCount = 0
 
 
         for (let i = 0; i < neighborKeys.length; i++) {

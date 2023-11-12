@@ -1,5 +1,5 @@
-import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
-import DefaultFlagImagesClass from "./flagImages/defaultFlagImages";
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils"
+import DefaultFlagImagesClass from "./flagImages/defaultFlagImages"
 
 export default class FlagImagesClass {
 

@@ -14,14 +14,14 @@ export default class HexMapDataMapClass {
         this.state.current = this.state.selectTile
 
         this.canvas = canvas
-        this.size = canvas.width / TILE_SIZE;
-        this.squish = HEXMAP_SQUISH;
-        this.tileHeight = TILE_HEIGHT;
+        this.size = canvas.width / TILE_SIZE
+        this.squish = HEXMAP_SQUISH
+        this.tileHeight = TILE_HEIGHT
         this.elevationRanges = HEXMAP_ELEVATION_RANGES
         
         this.vecQ = { x: 3 / 2 * this.size, y: Math.sqrt(3) / 2 * this.size }
         this.vecR = { x: 0, y: Math.sqrt(3) * this.size }
-        this.sideLength = Math.PI / 3;
+        this.sideLength = Math.PI / 3
 
         //ui commands
         this.renderBackground = true

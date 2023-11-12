@@ -1,5 +1,5 @@
-import StructureClass from "../Structure";
-import BunkerConfig from "./BunkerConfig";
+import StructureClass from "../Structure"
+import BunkerConfig from "./BunkerConfig"
 
 export default class BunkerClass extends StructureClass{
 

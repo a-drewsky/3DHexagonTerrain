@@ -25,7 +25,7 @@ export default class GameImagesClass {
 
     loadImages = (startGame) => {
 
-        let totalLoaded = 0;
+        let totalLoaded = 0
         let testLoaded = () => {
             totalLoaded++
             if (totalLoaded == this.loaders.length) startGame()

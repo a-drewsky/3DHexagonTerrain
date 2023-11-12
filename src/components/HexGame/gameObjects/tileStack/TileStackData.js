@@ -1,5 +1,5 @@
-import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
-import TileStackClass from "./TileStack";
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import TileStackClass from "./TileStack"
 
 export default class TileStackDataClass {
 
@@ -8,35 +8,35 @@ export default class TileStackDataClass {
 
         this.images = images
 
-        this.tileMap = new Map();
-        this.posMap = new Map();
+        this.tileMap = new Map()
+        this.posMap = new Map()
         this.rotatedMapList = []
-        this.maxHeight = null;
+        this.maxHeight = null
 
         this.utils = new CommonHexMapUtilsClass()
     }
 
     //Set an entry in the tileMap
     setEntry = (pos) => {
-        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData, this.images));
+        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData, this.images))
         return this.getEntry(pos)
     }
     setShadowEntry = (pos) => {
-        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData));
+        this.tileMap.set(this.utils.join(pos), new TileStackClass(pos, this.mapData))
         this.getEntry(pos).groundShadowTile = true
         return this.getEntry(pos)
     }
 
     //delete an entry in the tileMap
     deleteEntry = (pos) => {
-        this.tileMap.delete(this.utils.join(pos));
+        this.tileMap.delete(this.utils.join(pos))
     }
 
     setRotatedMapList = () => {
 
         for (let i = 0; i < 6; i++) {
             //Rotate the hexmap and set the rotatedMap object
-            let sortedArr = this.getKeys();
+            let sortedArr = this.getKeys()
 
             for (let j = 0; j < sortedArr.length; j++) {
                 let rotatedTile = this.utils.rotateTile(sortedArr[j], i)
@@ -45,12 +45,12 @@ export default class TileStackDataClass {
                     rotPosR: rotatedTile.r,
                     ogPosQ: sortedArr[j].q,
                     ogPosR: sortedArr[j].r
-                };
+                }
             }
 
-            sortedArr.sort((a, b) => { return a.rotPosR - b.rotPosR || a.rotPosQ - b.rotPosQ });
+            sortedArr.sort((a, b) => { return a.rotPosR - b.rotPosR || a.rotPosQ - b.rotPosQ })
 
-            let rotatedMap = new Map();
+            let rotatedMap = new Map()
 
             for (let j = 0; j < sortedArr.length; j++) {
                 rotatedMap.set(this.utils.join({ q: sortedArr[j].rotPosQ, r: sortedArr[j].rotPosR }), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR });
@@ -89,27 +89,27 @@ export default class TileStackDataClass {
                 case 0:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
-                    break;
+                    break
                 case 1:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
-                    break;
+                    break
                 case 2:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
-                    break;
+                    break
                 case 3:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
-                    break;
+                    break
                 case 4:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
-                    break;
+                    break
                 case 5:
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
-                    break;
+                    break
             }
 
 
@@ -272,8 +272,8 @@ export default class TileStackDataClass {
     }
 
     hexPositionToXYPosition = (keyObj, tileHeight, rotation, imageOffset) => {
-        let xOffset;
-        let yOffset;
+        let xOffset
+        let yOffset
 
         xOffset = this.mapData.vecQ.x * keyObj.q + this.mapData.vecR.x * keyObj.r;
         yOffset = this.mapData.vecQ.y * keyObj.q * this.mapData.squish + this.mapData.vecR.y * keyObj.r * this.mapData.squish;

@@ -1,7 +1,7 @@
-import LargeRockImagesClass from "./propImages/largeRockImages";
-import SavannaTreeImagesClass from "./propImages/savannaTreeImages";
+import LargeRockImagesClass from "./propImages/largeRockImages"
+import SavannaTreeImagesClass from "./propImages/savannaTreeImages"
 
-import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils"
 
 export default class PropImagesClass {
 

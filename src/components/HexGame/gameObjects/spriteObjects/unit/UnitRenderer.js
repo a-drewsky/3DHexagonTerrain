@@ -44,8 +44,7 @@ export default class UnitRendererClass {
             let imageList = []
             for (let rotation = 0; rotation < 6; rotation++) {
 
-
-                this.cameraData.rotation = rotation;
+                this.cameraData.rotation = rotation
 
                 let sprite = unit.sprite(this.cameraData.rotation)
 

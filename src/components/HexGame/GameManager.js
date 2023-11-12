@@ -1,5 +1,5 @@
-import HexMapManagerClass from "./gameObjects/hexMap/HexMapManager";
-import UiControllerClass from "./UiController";
+import HexMapManagerClass from "./gameObjects/hexMap/HexMapManager"
+import UiControllerClass from "./UiController"
 
 export default class GameManagerClass {
 
@@ -20,6 +20,7 @@ export default class GameManagerClass {
         this.state.current = this.state.play
 
         this.uiController = new UiControllerClass(uiComponents, bgCanvas, this.state)
+
         //Draw interval that is activated when the game finishes loading
         this.updateInterval = null
 
@@ -48,7 +49,7 @@ export default class GameManagerClass {
     clear = () => {
         if(this.hexMapManager) this.hexMapManager.clear()
         this.hexMapManager = null
-        clearInterval(this.updateInterval);
+        clearInterval(this.updateInterval)
     }
 
     startGame = () => {
@@ -58,13 +59,13 @@ export default class GameManagerClass {
             this.update()
             this.draw()
             this.updateUi()
-        }, 1000 / 60);
+        }, 1000 / 60)
     }
 
     update = () => {
         if (this.state.current != this.state.play) return
 
-        this.hexMapManager.update();
+        this.hexMapManager.update()
     }
 
     draw = () => {
@@ -77,10 +78,10 @@ export default class GameManagerClass {
         }
 
         //clear the canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         //draw game objects
-        if (this.hexMapManager.state != 'disabled') this.hexMapManager.draw();
+        if (this.hexMapManager.state != 'disabled') this.hexMapManager.draw()
 
         //draw fps
         this.ctx.font = '30px Arial'

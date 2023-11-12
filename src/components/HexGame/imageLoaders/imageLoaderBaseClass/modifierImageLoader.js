@@ -10,11 +10,11 @@ export default class ModifierImageLoaderClass {
 
         this.createSheetImages()
 
-        let imagesLoaded = 0;
+        let imagesLoaded = 0
         for (let [key, value] of Object.entries(this.images)) {
-            this[key] = value;
+            this[key] = value
             value.sprite.onload = () => {
-                imagesLoaded++;
+                imagesLoaded++
                 if (imagesLoaded == Object.keys(this.images).length) {
                     delete this.images
                     startGame()
@@ -64,7 +64,7 @@ export default class ModifierImageLoaderClass {
 
         tempCanvas = this.utils.upscale(tempCanvas)
 
-        let image = tempCanvas.toDataURL('image/png');
+        let image = tempCanvas.toDataURL('image/png')
 
         this[imageName].sprite.src = image
     }

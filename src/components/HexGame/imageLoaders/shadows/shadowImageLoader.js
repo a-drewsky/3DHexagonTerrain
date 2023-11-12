@@ -88,7 +88,7 @@ export default class ShadowSheetImageLoaderClass {
 
             tempCanvas = this.utils.upscale(tempCanvas)
 
-            let image = tempCanvas.toDataURL('image/png');
+            let image = tempCanvas.toDataURL('image/png')
 
             this[this.rows[row] + '_' + sheetName].image.src = image
 

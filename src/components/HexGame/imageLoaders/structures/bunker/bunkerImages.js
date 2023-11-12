@@ -1,6 +1,6 @@
-import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils";
-import DefaultBunkerImagesClass from "./bunkerImages/defaultBunkerImages";
-import MainBunkerImagesClass from "./bunkerImages/mainBunkerImages";
+import ImageLoaderUtilsClass from "../../utils/imageLoaderUtils"
+import DefaultBunkerImagesClass from "./bunkerImages/defaultBunkerImages"
+import MainBunkerImagesClass from "./bunkerImages/mainBunkerImages"
 
 export default class BunkerImagesClass {
 

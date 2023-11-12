@@ -40,7 +40,7 @@ export default class TileImageLoaderClass {
     
                 tempCanvas = this.utils.upscale(tempCanvas)
 
-                let image = tempCanvas.toDataURL('image/png');
+                let image = tempCanvas.toDataURL('image/png')
     
                 this[imageName].src = image
             }

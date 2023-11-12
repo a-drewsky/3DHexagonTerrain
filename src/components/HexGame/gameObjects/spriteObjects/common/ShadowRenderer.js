@@ -51,7 +51,7 @@ export default class ShadowRendererClass {
 
             let shadowImage = this.images.shadows[spriteObject.imageObject.shadow][rotation]
 
-            this.cameraData.rotation = rotation;
+            this.cameraData.rotation = rotation
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
             let keyObj = this.commonUtils.rotateTile(position, this.cameraData.rotation)
 

@@ -1,4 +1,4 @@
-import CardConfig from "./CardConfig";
+import CardConfig from "./CardConfig"
 import UnitConfig from "../spriteObjects/unit/UnitConfig"
 
 export default class CardBuilderClass {

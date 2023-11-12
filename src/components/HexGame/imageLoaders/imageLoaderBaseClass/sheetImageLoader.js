@@ -1,4 +1,4 @@
-import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
 export default class SheetSheetImageLoaderClass {
 
@@ -12,13 +12,13 @@ export default class SheetSheetImageLoaderClass {
 
         this.createSheetImages()
 
-        let imagesLoaded = 0;
+        let imagesLoaded = 0
         for (let [key, value] of Object.entries(this.images)) {
-            this[key] = value;
+            this[key] = value
             value.image.onload = () => {
-                imagesLoaded++;
+                imagesLoaded++
                 if (imagesLoaded == Object.keys(this.images).length) {
-                    delete this.images;
+                    delete this.images
                     this.assignImages(startGame)
                 }
             }
@@ -88,7 +88,7 @@ export default class SheetSheetImageLoaderClass {
 
                 tempCanvas = this.utils.upscale(tempCanvas)
 
-                let image = tempCanvas.toDataURL('image/png');
+                let image = tempCanvas.toDataURL('image/png')
 
                 this[this.sheet_rows[row] + '_' + sprites[col]].image.src = image
 
@@ -115,7 +115,7 @@ export default class SheetSheetImageLoaderClass {
             }
         }
 
-        startGame();
+        startGame()
     }
 
 }

@@ -1,5 +1,5 @@
-import StructureClass from "../Structure";
-import PropConfig from "./PropConfig";
+import StructureClass from "../Structure"
+import PropConfig from "./PropConfig"
 
 export default class PropClass extends StructureClass{
 

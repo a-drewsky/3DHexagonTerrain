@@ -1,7 +1,7 @@
 export default class InputControllerClass {
 
    constructor(gameManager) {
-      this.gameManager = gameManager;
+      this.gameManager = gameManager
 
       this.mouseMoveTimeStamp = 0
       this.mouseMoveTime = 1000 / 60
@@ -58,8 +58,8 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.hexMapManager.controller.mouseDown(x, y);
-            break;
+            this.gameManager.hexMapManager.controller.mouseDown(x, y)
+            break
       }
    }
 
@@ -67,8 +67,8 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.hexMapManager.controller.mouseUp(x, y);
-            break;
+            this.gameManager.hexMapManager.controller.mouseUp(x, y)
+            break
       }
    }
 
@@ -81,8 +81,8 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.hexMapManager.controller.mouseMove(x, y);
-            break;
+            this.gameManager.hexMapManager.controller.mouseMove(x, y)
+            break
       }
    }
 
@@ -90,8 +90,8 @@ export default class InputControllerClass {
       //State controller functions
       switch (this.gameManager.state.current) {
          case 'play':
-            this.gameManager.hexMapManager.controller.zoom(deltaY);
-            break;
+            this.gameManager.hexMapManager.controller.zoom(deltaY)
+            break
       }
    }
 

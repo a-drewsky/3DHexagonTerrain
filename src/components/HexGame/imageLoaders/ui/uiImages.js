@@ -1,7 +1,7 @@
-import HealthbarImagesClass from "./healthbarImages";
-import ResourceImagesClass from "./resourcebarImages";
+import HealthbarImagesClass from "./healthbarImages"
+import ResourceImagesClass from "./resourcebarImages"
 
-import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
 export default class UiImagesClass {
 

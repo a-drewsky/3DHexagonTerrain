@@ -1,4 +1,4 @@
-import ProjectileClass from "./Projectile";
+import ProjectileClass from "./Projectile"
 
 export default class ProjectileDataClass {
 

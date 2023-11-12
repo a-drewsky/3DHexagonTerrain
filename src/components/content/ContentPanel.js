@@ -1,23 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 
-import GameMainClass from '../HexGame/GameMainClass';
+import GameMainClass from '../HexGame/GameMainClass'
 
-import GameImagesClass from '../HexGame/imageLoaders/gameImages';
+import GameImagesClass from '../HexGame/imageLoaders/gameImages'
 
-import UiOverlay from './UiOverlay';
+import UiOverlay from './UiOverlay'
 
 const ContentPanel = () => {
 
    //SETUP
-   const canvas = useRef(null);
-   const bgCanvas = useRef(null);
+   const canvas = useRef(null)
+   const bgCanvas = useRef(null)
 
-   const [gameClass, setGameClass] = useState(null);
+   const [gameClass, setGameClass] = useState(null)
 
-   const [gameImages, setGameImages] = useState(new GameImagesClass());
+   const [gameImages, setGameImages] = useState(new GameImagesClass())
 
-   const [imagesLoaded, setImagesLoaded] = useState(false);
+   const [imagesLoaded, setImagesLoaded] = useState(false)
 
    const [uiComponents, setUiComponents] = useState({
       pauseMenu: {
@@ -49,7 +49,7 @@ const ContentPanel = () => {
 
 
    //SETTINGS
-   const [sizeSetting, setSize] = useState('small');
+   const [sizeSetting, setSize] = useState('small')
    //END SETTINGS
 
    const updateUi = (newUi) => {
@@ -71,11 +71,11 @@ const ContentPanel = () => {
 
       gameClass.clear();
       setUiComponents(initialUi)
-      gameClass.startGame({ mapSize: sizeSetting });
+      gameClass.startGame({ mapSize: sizeSetting })
    }
 
    const endGame = () => {
-      if (gameClass) gameClass.clear();
+      if (gameClass) gameClass.clear()
       setUiComponents(initialUi)
    }
 
@@ -86,7 +86,7 @@ const ContentPanel = () => {
    //END CREATE NEW GAME METHOD
 
    useEffect(() => {
-      gameImages.loadImages(setImagesLoaded);
+      gameImages.loadImages(setImagesLoaded)
       setGameClass(new GameMainClass(canvas.current,bgCanvas.current,gameImages,uiComponents,updateUi))
    }, [gameImages])
 
@@ -98,44 +98,44 @@ const ContentPanel = () => {
 
    //INPUTS
    const mouseDown = ({ nativeEvent }) => {
-      nativeEvent.preventDefault();
-      nativeEvent.stopPropagation();
-      const { offsetX, offsetY } = nativeEvent;
+      nativeEvent.preventDefault()
+      nativeEvent.stopPropagation()
+      const { offsetX, offsetY } = nativeEvent
 
-      if (gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseDown(offsetX, offsetY)
 
    }
 
    const mouseUp = ({ nativeEvent }) => {
       nativeEvent.preventDefault();
-      const { offsetX, offsetY } = nativeEvent;
+      const { offsetX, offsetY } = nativeEvent
 
-      if (gameClass && gameClass.loaded) gameClass.mouseUp(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseUp(offsetX, offsetY)
 
    }
 
    const mouseMove = ({ nativeEvent }) => {
       nativeEvent.preventDefault();
-      const { offsetX, offsetY } = nativeEvent;
+      const { offsetX, offsetY } = nativeEvent
 
-      if (gameClass && gameClass.loaded) gameClass.mouseMove(offsetX, offsetY);
+      if (gameClass && gameClass.loaded) gameClass.mouseMove(offsetX, offsetY)
 
    }
 
    const mouseWheel = ({ nativeEvent }) => {
-      const { deltaY } = nativeEvent;
+      const { deltaY } = nativeEvent
 
-      if (gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY);
+      if (gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY)
    }
 
    const keyDown = (nativeEvent) => {
-      nativeEvent.preventDefault();
-      if (nativeEvent.repeat) return;
+      nativeEvent.preventDefault()
+      if (nativeEvent.repeat) return
       if (gameClass && gameClass.loaded) gameClass.keyDown(nativeEvent.key)
    }
 
    const keyUp = (nativeEvent) => {
-      nativeEvent.preventDefault();
+      nativeEvent.preventDefault()
       if (gameClass && gameClass.loaded) gameClass.keyUp(nativeEvent.key)
    }
    //END INPUTS

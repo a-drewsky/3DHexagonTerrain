@@ -1,7 +1,7 @@
 import CardObject from "./Card"
-import LargeCardObject from "./LargeCard";
+import LargeCardObject from "./LargeCard"
 
-import { Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap'
 
 import goldIcon from '../HexGame/images/ui/gold_icon.png'
 import copperIcon from '../HexGame/images/ui/copper_icon.png'

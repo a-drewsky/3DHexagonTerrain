@@ -1,6 +1,6 @@
-import NoiseClass from "../../utilities/perlin";
-import CommonBuilderUtilsClass from "../commonUtils/CommonBuilderUtils";
-import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils";
+import NoiseClass from "../../utilities/perlin"
+import CommonBuilderUtilsClass from "../commonUtils/CommonBuilderUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 import { MAX_ELEVATION, SAND_HILL_ELVATION_DIVISOR, ELEVATION_MULTIPLIER, TEMP_RANGES, WATER_TEMP_RANGES, LOW_TERRAIN_GENERATION_RANGES, MIRROR_MAP } from './TileStackConstants'
 
@@ -77,22 +77,22 @@ export default class TileStackBuilderClass {
 
         for (let entry of this.tileData.getTileMap()) {
 
-            let keyObj = this.commonUtils.split(entry.key);
+            let keyObj = this.commonUtils.split(entry.key)
 
             //elevation generation
             let tileHeightNoise = this.noise.noise([elevationSeed1 + keyObj.q / noiseFluctuation, elevationSeed1 + keyObj.r / noiseFluctuation]) * this.noise.noise([elevationSeed2 + keyObj.q / noiseFluctuation, elevationSeed2 + keyObj.r / noiseFluctuation])
 
             let tileHeight = Math.ceil(tileHeightNoise * ELEVATION_MULTIPLIER)
 
-            let heightSet = false;
+            let heightSet = false
             for (let i in LOW_TERRAIN_GENERATION_RANGES) {
                 if (tileHeight <= LOW_TERRAIN_GENERATION_RANGES[i]) {
-                    tileHeight = parseInt(i);
-                    heightSet = true;
-                    break;
+                    tileHeight = parseInt(i)
+                    heightSet = true
+                    break
                 }
             }
-            if (!heightSet) tileHeight -= LOW_TERRAIN_GENERATION_RANGES[4] - 4;
+            if (!heightSet) tileHeight -= LOW_TERRAIN_GENERATION_RANGES[4] - 4
 
             tileHeight = Math.min(tileHeight, MAX_ELEVATION)
 
@@ -104,7 +104,7 @@ export default class TileStackBuilderClass {
 
         }
 
-        this.tileData.setMaxHeight();
+        this.tileData.setMaxHeight()
     }
 
     generteTileBiomes = (tileObj, tileHeight, tileTemp) => {
@@ -127,7 +127,7 @@ export default class TileStackBuilderClass {
         for (let range in TEMP_RANGES) {
             if (tileTemp < TEMP_RANGES[range]) {
                 biome = range
-                break;
+                break
             }
         }
         tileLowBiome = biome
@@ -177,7 +177,7 @@ export default class TileStackBuilderClass {
             keyStrSet.add(keyString)
 
             //get tile biome
-            let keyObj = this.commonUtils.split(keyString);
+            let keyObj = this.commonUtils.split(keyString)
             let tileBiome = this.tileData.getEntry(keyObj).biome
 
             let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
@@ -198,7 +198,7 @@ export default class TileStackBuilderClass {
         }
 
         let smoothTile = (keyString) => {
-            let keyObj = this.commonUtils.split(keyString);
+            let keyObj = this.commonUtils.split(keyString)
             let tileBiome = this.tileData.getEntry(keyObj).biome
 
 
@@ -211,18 +211,18 @@ export default class TileStackBuilderClass {
             let biomeArr = neighborKeys.map(neighborKey => this.tileData.getEntry(neighborKey).biome)
 
             //find the most common neighbor biome
-            let modeMap = {};
+            let modeMap = {}
             let maxBiome = biomeArr[0]
             if (biomeArr.length > 1) {
-                let maxCount = 1;
+                let maxCount = 1
                 for (let i = 0; i < biomeArr.length; i++) {
-                    let biome = biomeArr[i];
-                    if (modeMap[biome] == null) modeMap[biome] = 1;
-                    else modeMap[biome]++;
+                    let biome = biomeArr[i]
+                    if (modeMap[biome] == null) modeMap[biome] = 1
+                    else modeMap[biome]++
 
                     if (modeMap[biome] > maxCount) {
-                        maxBiome = biome;
-                        maxCount = modeMap[biome];
+                        maxBiome = biome
+                        maxCount = modeMap[biome]
                     }
                 }
             }
@@ -253,8 +253,8 @@ export default class TileStackBuilderClass {
                 let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj).biome
 
                 if (keyStrArrObjBiome == biome) {
-                    let keyIndex = keyStrings.indexOf(keyStrArr[i]);
-                    if (keyIndex != -1) keyStrings.splice(keyIndex, 1);
+                    let keyIndex = keyStrings.indexOf(keyStrArr[i])
+                    if (keyIndex != -1) keyStrings.splice(keyIndex, 1)
                 }
             }
 
@@ -269,7 +269,7 @@ export default class TileStackBuilderClass {
                     if (keyStrArrObjBiome != biome) keyStrArr.shift()
                     else if (smoothTile(keyStrArr[0])) keyStrArr.shift()
                     else {
-                        keyStrArr.push(keyStrArr.shift());
+                        keyStrArr.push(keyStrArr.shift())
                     }
                 }
             }

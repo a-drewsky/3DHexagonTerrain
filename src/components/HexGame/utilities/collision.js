@@ -8,43 +8,43 @@ export default class CollisionClass {
          px <= rx + rw &&   // left of the right edge AND
          py >= ry &&        // below the top AND
          py <= ry + rh) {   // above the bottom
-         return true;
+         return true
       }
-      return false;
+      return false
    }
 
    // POLYGON/POINT
    polyPoint = (vertices, px, py) => {
-      let collision = false;
+      let collision = false
 
       // go through each of the vertices, plus
       // the next vertex in the list
-      let next = 0;
+      let next = 0
       for (let current = 0; current < vertices.length; current++) {
 
          // get next vertex in list
          // if we've hit the end, wrap around to 0
-         next = current + 1;
-         if (next == vertices.length) next = 0;
+         next = current + 1
+         if (next == vertices.length) next = 0
 
          // get the PVectors at our current position
          // this makes our if statement a little cleaner
-         let vc = vertices[current];    // c for "current"
-         let vn = vertices[next];       // n for "next"
+         let vc = vertices[current]    // c for "current"
+         let vn = vertices[next]       // n for "next"
 
          // compare position, flip 'collision' variable
          // back and forth
          if (((vc.y >= py && vn.y < py) || (vc.y < py && vn.y >= py)) &&
             (px < (vn.x - vc.x) * (py - vc.y) / (vn.y - vc.y) + vc.x)) {
-            collision = !collision;
+            collision = !collision
          }
       }
-      return collision;
+      return collision
    }
 
    pointHex = (px, py, hx, hy, hsize, hsquish) => {
 
-      let sideLength = Math.PI / 3;
+      let sideLength = Math.PI / 3
 
       let hexPoints = []
 

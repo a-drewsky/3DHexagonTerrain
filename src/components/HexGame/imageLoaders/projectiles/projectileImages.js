@@ -1,6 +1,6 @@
-import ProjectileImagesArrowClass from "./projectileImagesArrow";
+import ProjectileImagesArrowClass from "./projectileImagesArrow"
 
-import ImageLoaderUtilsClass from "../utils/imageLoaderUtils";
+import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
 export default class ProjectileImagesClass {
 

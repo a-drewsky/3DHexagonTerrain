@@ -1,5 +1,5 @@
-import StructureClass from "../Structure";
-import ResourceConfig from "./ResourceConfig";
+import StructureClass from "../Structure"
+import ResourceConfig from "./ResourceConfig"
 
 export default class ResourceClass extends StructureClass {
 

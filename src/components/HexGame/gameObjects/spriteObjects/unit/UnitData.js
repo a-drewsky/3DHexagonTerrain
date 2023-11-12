@@ -9,7 +9,7 @@ export default class UnitDataClass {
         this.images = images
         this.uiController = uiController
 
-        this.unitList = [];
+        this.unitList = []
         this.selectedUnit = null
         this.placementUnit = null
         this.unitTarget = null

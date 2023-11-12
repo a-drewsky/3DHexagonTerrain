@@ -5,7 +5,7 @@ export default class UserConstantsClass {
         
         this.MAP_SIZE = externalSettings.mapSize
 
-        this.DEBUG = false;
+        this.DEBUG = false
 
     }
 

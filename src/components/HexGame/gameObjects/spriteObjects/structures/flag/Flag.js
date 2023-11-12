@@ -1,5 +1,5 @@
-import StructureClass from "../Structure";
-import FlagConfig from "./FlagConfig";
+import StructureClass from "../Structure"
+import FlagConfig from "./FlagConfig"
 
 export default class FlagClass extends StructureClass{
 

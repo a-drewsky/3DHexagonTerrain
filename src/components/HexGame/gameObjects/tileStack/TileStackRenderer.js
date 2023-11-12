@@ -68,7 +68,7 @@ export default class TileStackRendererClass {
 
         for (let rotation = 0; rotation < 6; rotation++) {
 
-            this.cameraData.rotation = rotation;
+            this.cameraData.rotation = rotation
 
             let stackCanvas = document.createElement('canvas')
             stackCanvas.width = this.mapData.size * 2
@@ -76,7 +76,7 @@ export default class TileStackRendererClass {
             let stackctx = stackCanvas.getContext('2d')
 
             for (let i = 1; i <= tile.height; i++) {
-                let tileBiome = tile.verylowBiome;
+                let tileBiome = tile.verylowBiome
 
                 if (i >= this.mapData.elevationRanges['low']) {
                     tileBiome = tile.lowBiome
@@ -99,8 +99,8 @@ export default class TileStackRendererClass {
                     this.mapData.size * 2
                 )
 
-                this.drawWallShadow(stackctx, tile, i);
-                this.drawAdvWallShadow(stackctx, tile, i);
+                this.drawWallShadow(stackctx, tile, i)
+                this.drawAdvWallShadow(stackctx, tile, i)
             }
 
             this.drawShadows(stackctx, tile)

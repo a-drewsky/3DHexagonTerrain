@@ -1,6 +1,6 @@
-import NoiseClass from "../../../utilities/perlin";
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils";
-import StructureBuilderUtilsClass from "./StructureBuilderUtils";
+import NoiseClass from "../../../utilities/perlin"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import StructureBuilderUtilsClass from "./StructureBuilderUtils"
 
 import { SECOND_MINE_CHANCE, THIRD_MINE_CHACE } from './StructureConstants'
 
@@ -123,7 +123,7 @@ export default class StructureBuilderClass {
                }
             }
 
-            let mineCount = 1;
+            let mineCount = 1
 
             if (Math.random() < SECOND_MINE_CHANCE) mineCount++
             if (Math.random() < THIRD_MINE_CHACE) mineCount++
@@ -136,14 +136,14 @@ export default class StructureBuilderClass {
 
 
                while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
-                  if (cellTiles.length == 0) break;
+                  if (cellTiles.length == 0) break
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
                   selectedTile = this.tileData.getEntry(selectedTilePos)
                }
 
-               if (cellTiles.length == 0) break;
+               if (cellTiles.length == 0) break
 
                //flatten tiles
                let flatList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
@@ -233,17 +233,17 @@ export default class StructureBuilderClass {
                case 'woodlands':
                case 'grasshill':
                   this.structureData.setModifier(keyObj, 'oakTrees')
-                  break;
+                  break
                case 'tundra':
                case 'snowhill':
                   this.structureData.setModifier(keyObj, 'spruceTrees')
-                  break;
+                  break
                case 'desert':
                case 'sandhill':
                   this.structureData.setModifier(keyObj, 'cacti')
-                  break;
+                  break
                default:
-                  continue;
+                  continue
             }
 
 

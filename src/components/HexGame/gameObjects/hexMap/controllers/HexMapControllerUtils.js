@@ -14,7 +14,7 @@ export default class HexMapControllerUtilsClass {
         this.tileData = hexMapData.tileData
 
         this.pathFinder = new HexMapPathFinderClass(hexMapData)
-        this.collision = new CollisionClass();
+        this.collision = new CollisionClass()
         this.commonUtils = new CommonHexMapUtilsClass()
 
     }
@@ -351,7 +351,7 @@ export default class HexMapControllerUtilsClass {
             }
 
 
-            if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue;
+            if (!rotatedMap.get(testTile.q + ',' + testTile.r)) continue
 
             let rotatedTile = this.tileData.getEntryRotated(testTile, this.cameraData.rotation)
 
@@ -381,8 +381,8 @@ export default class HexMapControllerUtilsClass {
         let zoomAmount = this.cameraData.zoomAmount
         let zoomLevel = this.cameraData.zoom
 
-        let size = this.mapData.size;
-        let squish = this.mapData.squish;
+        let size = this.mapData.size
+        let squish = this.mapData.squish
 
         let zoom = zoomLevel * zoomAmount
 
@@ -400,7 +400,7 @@ export default class HexMapControllerUtilsClass {
         }
 
 
-        return centerHexPos;
+        return centerHexPos
     }
 
     getTargetObject = (pos) => {
