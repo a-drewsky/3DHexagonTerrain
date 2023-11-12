@@ -41,11 +41,6 @@ export default class HexMapControllerHoverClass {
 
         let hoverTile = this.utils.getSelectedTile(x, y)
 
-        if (this.unitData.placementUnit != null) {
-            this.unitData.placementUnit.setPosition(hoverTile)
-            if (!hoverTile) this.unitData.placementUnit.setPosition({ q: null, r: null })
-        }
-
         if (!hoverTile) return
 
         let tileObj = this.tileData.getEntry(hoverTile)
@@ -70,19 +65,16 @@ export default class HexMapControllerHoverClass {
         }
 
         if (this.selectionData.getPathLocked()) return
-
         this.selectionData.clearPath()
+
         let hoverTile = this.utils.getSelectedTile(x, y)
-
         this.unitData.placementUnit.setPosition(hoverTile)
-
         if (!hoverTile) {
             this.unitData.placementUnit.setPosition({ q: null, r: null })
             return
         }
 
         let placementSelections = this.selectionData.getPathingSelection('placement')
-
         if (placementSelections.some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
             this.selectionData.setPlacementHover(hoverTile)
             return
@@ -99,7 +91,6 @@ export default class HexMapControllerHoverClass {
         this.selectionData.clearTarget()
 
         let hoverTile = this.utils.getSelectedTile(x, y)
-
         if (!hoverTile) {
             this.selectionData.clearPath()
             return
@@ -114,11 +105,9 @@ export default class HexMapControllerHoverClass {
         if (this.selectionData.getPathLocked()) return
 
         let unit = this.unitData.selectedUnit
-
         if (unit == null) return
 
         let tileClicked = this.utils.getSelectedTile(x, y)
-
         if (!tileClicked) return
 
         if (unit.rotation == this.commonUtils.getDirection(unit.position, tileClicked)) return
@@ -129,11 +118,9 @@ export default class HexMapControllerHoverClass {
 
     updateEndMoveSelection = (x, y) => {
         if (this.selectionData.getPathLocked()) return
-
         this.selectionData.clearTarget()
 
         let hoverTile = this.utils.getSelectedTile(x, y)
-
         if (!hoverTile) {
             this.selectionData.clearPath()
             return

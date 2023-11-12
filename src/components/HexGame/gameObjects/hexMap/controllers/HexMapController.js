@@ -19,8 +19,8 @@ export default class HexMapControllerClass {
 
         this.utils = new HexMapControllerUtilsClass(hexMapData)
 
-        this.clickController = new HexMapControllerClickClass(hexMapData)
         this.hoverController = new HexMapControllerHoverClass(hexMapData)
+        this.clickController = new HexMapControllerClickClass(hexMapData, this.hoverController)
 
     }
 
