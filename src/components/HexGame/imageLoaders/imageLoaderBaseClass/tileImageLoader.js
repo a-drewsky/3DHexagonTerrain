@@ -19,7 +19,7 @@ export default class TileImageLoaderClass {
             this[key] = value
             value.onload = () => {
                 imagesLoaded++
-                if (imagesLoaded == Object.keys(this.images).length) {
+                if (imagesLoaded === Object.keys(this.images).length) {
                     delete this.images
                     startGame()
                 }

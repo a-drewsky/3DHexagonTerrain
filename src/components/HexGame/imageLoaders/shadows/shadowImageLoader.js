@@ -15,7 +15,7 @@ export default class ShadowSheetImageLoaderClass {
             this[key] = value
             value.image.onload = () => {
                 imagesLoaded++
-                if (imagesLoaded == Object.keys(this.images).length) {
+                if (imagesLoaded === Object.keys(this.images).length) {
                     delete this.images
                     this.assignImages(startGame)
                 }

@@ -8,7 +8,7 @@ export default class StatusBarRendererClass {
     }    
 
     addHealthBar = (spriteCanvas, spriteObject) => {
-        if (spriteObject.stats.health == 100) return
+        if (spriteObject.stats.health === 100) return
 
         let tempctx = spriteCanvas.getContext('2d')
 
@@ -32,7 +32,7 @@ export default class StatusBarRendererClass {
 
     addResourceBar = (spriteCanvas, spriteObject) => {
 
-        if (spriteObject.stats.resources == spriteObject.stats.maxResources) return spriteCanvas
+        if (spriteObject.stats.resources === spriteObject.stats.maxResources) return spriteCanvas
 
         let tempctx = spriteCanvas.getContext('2d')
 

@@ -72,9 +72,9 @@ export default class HexMapControllerClass {
     }
 
     selectCard = (cardNum) => {
-        if (this.mapData.curState() != 'selectTile') return
+        if (this.mapData.curState() !== 'selectTile') return
 
-        if (this.cardData.selectedCard == cardNum) {
+        if (this.cardData.selectedCard === cardNum) {
             this.cardData.selectedCard = null
             return
         }
@@ -88,7 +88,7 @@ export default class HexMapControllerClass {
     }
 
     useCard = () => {
-        if (this.mapData.curState() != 'selectTile') return
+        if (this.mapData.curState() !== 'selectTile') return
         if (!this.cardData.canUseCard(this.mapData.resources)) return
 
         this.selectionData.clearAllSelections()

@@ -39,6 +39,8 @@ export default class HexMapControllerClickClass {
                 return
             case 'animation':
                 return
+            default:
+                return
         }
 
     }
@@ -47,7 +49,7 @@ export default class HexMapControllerClickClass {
         this.selectionData.clearAllSelections()
         this.cardData.selectedCard = null
 
-        if (this.unitData.getUnit(tile.position) != null) {
+        if (this.unitData.getUnit(tile.position) !== null) {
             this.selectionData.setInfoSelection('unit', tile.position)
             this.unitData.selectUnit(tile.position)
             this.utils.findMoveSet()
@@ -119,7 +121,7 @@ export default class HexMapControllerClickClass {
     endUnitTurn = (tile) => {
         let unit = this.unitData.selectedUnit
 
-        if (unit == null) return
+        if (unit === null) return
 
         if (this.selectionData.getPathingSelection('action').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
             this.confirmAction(tile)
@@ -158,6 +160,8 @@ export default class HexMapControllerClickClass {
                 case 'flag':
                     this.actions.capture()
                     return true
+                default:
+                    break
             }
         }
 

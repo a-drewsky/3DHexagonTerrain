@@ -49,6 +49,8 @@ export default class InputControllerClass {
          case 'scrap_card':
             this.gameManager.hexMapManager.controller.scrapCard()
             return
+         default:
+            return
 
       }
    }
@@ -59,7 +61,9 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.hexMapManager.controller.mouseDown(x, y)
-            break
+            return
+         default:
+            return
       }
    }
 
@@ -68,7 +72,9 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.hexMapManager.controller.mouseUp(x, y)
-            break
+            return
+         default:
+            return
       }
    }
 
@@ -82,7 +88,9 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.hexMapManager.controller.mouseMove(x, y)
-            break
+            return
+         default:
+            return
       }
    }
 
@@ -91,7 +99,9 @@ export default class InputControllerClass {
       switch (this.gameManager.state.current) {
          case 'play':
             this.gameManager.hexMapManager.controller.zoom(deltaY)
-            break
+            return
+         default:
+            return
       }
    }
 

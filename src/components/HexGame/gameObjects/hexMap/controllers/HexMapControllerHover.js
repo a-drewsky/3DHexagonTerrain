@@ -34,6 +34,8 @@ export default class HexMapControllerHoverClass {
                 this.setUnitMouseDirection(x, y)
                 this.updateEndMoveSelection(x, y)
                 return
+            default:
+                return
         }
     }
 
@@ -54,12 +56,14 @@ export default class HexMapControllerHoverClass {
             case 'selectMovement':
             case 'animation':
                 return
+            default:
+                return
         }
     }
 
     updatePlacementSelection = (x, y) => {
 
-        if (this.unitData.placementUnit != null) {
+        if (this.unitData.placementUnit !== null) {
             this.unitData.placementUnit.rotation = -1 * this.cameraData.rotation + 3
             if (this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
         }
@@ -105,12 +109,12 @@ export default class HexMapControllerHoverClass {
         if (this.selectionData.getPathLocked()) return
 
         let unit = this.unitData.selectedUnit
-        if (unit == null) return
+        if (unit === null) return
 
         let tileClicked = this.utils.getSelectedTile(x, y)
         if (!tileClicked) return
 
-        if (unit.rotation == this.commonUtils.getDirection(unit.position, tileClicked)) return
+        if (unit.rotation === this.commonUtils.getDirection(unit.position, tileClicked)) return
 
         unit.setDirection(tileClicked)
 

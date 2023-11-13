@@ -20,14 +20,14 @@ export default class HexMapControllerActionsClass {
 
     attack = () => {
 
-        if (this.unitData.selectedUnit == null) return
+        if (this.unitData.selectedUnit === null) return
 
         let selectionTarget = this.selectionData.getTargetSelection()
-        if (selectionTarget == null) return
+        if (selectionTarget === null) return
         let targetTile = this.tileData.getEntry(selectionTarget)
 
         let targetObject = this.utils.getTargetObject(targetTile.position)
-        if (targetObject == null) return
+        if (targetObject === null) return
 
         this.unitData.selectTarget(targetTile.position)
         this.unitData.startAttack(targetTile.position)
@@ -39,11 +39,11 @@ export default class HexMapControllerActionsClass {
     mine = () => {
 
         let selectionTarget = this.selectionData.getTargetSelection()
-        if (selectionTarget == null) return
+        if (selectionTarget === null) return
         let targetTile = this.tileData.getEntry(selectionTarget)
 
         let targetStructure = this.structureData.getStructure(targetTile.position)
-        if (targetStructure == null) return
+        if (targetStructure === null) return
 
         this.unitData.selectTarget(targetTile.position)
         this.unitData.selectedUnit.setDirection(targetTile.position)
@@ -53,11 +53,11 @@ export default class HexMapControllerActionsClass {
 
     capture = () => {
 
-        if (this.selectionData.getTargetSelection() == null) return
+        if (this.selectionData.getTargetSelection() === null) return
         let targetTile = this.tileData.getEntry(this.selectionData.getTargetSelection())
 
         let targetStructure = this.structureData.getStructure(targetTile.position)
-        if (targetStructure == null || targetStructure.type != 'flag') return
+        if (targetStructure === null || targetStructure.type !== 'flag') return
 
         this.unitData.selectedUnit.setDirection(targetTile.position)
         targetStructure.setCaptured()

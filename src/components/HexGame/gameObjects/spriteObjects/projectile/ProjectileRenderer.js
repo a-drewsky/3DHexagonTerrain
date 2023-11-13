@@ -47,7 +47,7 @@ export default class ProjectileRendererClass {
             height: this.mapData.size * 2 * sprite.size.h
         }
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
 
         let spriteImage = sprite.image
 

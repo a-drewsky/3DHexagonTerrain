@@ -63,7 +63,7 @@ export default class StructureDataClass {
     }
 
     getBunkersArray = () => {
-        return Array.from(this.structureMap.values()).filter(structure => structure.type == 'bunker')
+        return Array.from(this.structureMap.values()).filter(structure => structure.type === 'bunker')
     }
 
     deleteStructure = (pos) => {

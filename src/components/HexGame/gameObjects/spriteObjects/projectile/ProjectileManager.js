@@ -16,9 +16,9 @@ export default class ProjectileManagerClass {
         for (let projectile of this.data.projectileList) {
             projectile.setFrame()
             projectile.updatePath()
-            if(projectile.state.current == projectile.state.destroy){
+            if(projectile.state.current === projectile.state.destroy){
                 let targetUnit = this.unitData.getUnit(projectile.target)
-                if(targetUnit == null){
+                if(targetUnit === null){
                     this.mapData.resetState()
                     this.selectionData.clearAllSelections()
                 }

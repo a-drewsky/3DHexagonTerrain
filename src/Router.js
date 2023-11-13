@@ -1,11 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import ContentPanel from './components/content/ContentPanel'
 import Navigation from './components/layout/Navigation'
 import { Container } from 'react-bootstrap'
 
 const Router = () => {
-
 
    return (
       <BrowserRouter>

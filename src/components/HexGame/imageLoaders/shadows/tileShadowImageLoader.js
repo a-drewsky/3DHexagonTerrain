@@ -15,7 +15,7 @@ export default class TileShadowSheetImageLoaderClass {
             this[key] = value
             value.onload = () => {
                 imagesLoaded++
-                if (imagesLoaded == Object.keys(this.images).length) {
+                if (imagesLoaded === Object.keys(this.images).length) {
                     delete this.images
                     this.assignImages(startGame)
                 }
@@ -36,24 +36,24 @@ export default class TileShadowSheetImageLoaderClass {
         for (let permutationNum in this.shadow_permutations) {
             let permutation = this.shadow_permutations[permutationNum]
             this.casted_shadows['l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r] = [
-                this['backRight' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['frontRight' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['front' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['frontLeft' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['backLeft' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['back' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r]
+                this['backRight_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['frontRight_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['front_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['frontLeft_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['backLeft_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['back_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r]
             ]
         }
 
         for (let permutationNum in this.adv_side_shadow_permutations) {
             let permutation = this.adv_side_shadow_permutations[permutationNum]
             this.adv_side_shadows['l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r] = [
-                this['backRight' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['frontRight' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['front' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['frontLeft' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['backLeft' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
-                this['back' + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r]
+                this['backRight_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['frontRight_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['front_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['frontLeft_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['backLeft_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r], 
+                this['back_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r]
             ]
         }
 
@@ -77,7 +77,7 @@ export default class TileShadowSheetImageLoaderClass {
             for (let permutationNum in this.adv_side_shadow_permutations) {
                 let permutation = this.adv_side_shadow_permutations[permutationNum]
                 
-                this.images[this.rows[row] + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r] = new Image()
+                this.images[this.rows[row] + '_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r] = new Image()
             }
         }
 
@@ -128,7 +128,7 @@ export default class TileShadowSheetImageLoaderClass {
 
                 let image = tempCanvas.toDataURL('image/png')
 
-                this[this.rows[rowNum] + '_side_shadow' + '_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
+                this[this.rows[rowNum] + '_side_shadow_l' + permutation.l + '_c' + permutation.c + '_r' + permutation.r].src = image
 
             }
 

@@ -145,7 +145,7 @@ const ContentPanel = () => {
       <>
          {/*LOADING TEXT*/}
          {
-            (imagesLoaded == false)
+            (imagesLoaded === false)
             &&
             <>
                <h1>Loading Images...</h1>
@@ -155,7 +155,7 @@ const ContentPanel = () => {
 
 
          {/*CANVAS*/}
-         <div className={(gameClass == null || gameClass.loaded == false || imagesLoaded == false) && 'd-none'}>
+         <div className={(gameClass === null || gameClass.loaded === false || imagesLoaded === false) && 'd-none'}>
             <Row className='py-2'>
                <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
                <canvas

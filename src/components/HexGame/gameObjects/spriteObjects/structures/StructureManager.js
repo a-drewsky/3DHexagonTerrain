@@ -18,13 +18,15 @@ export default class StructureManagerClass {
 
     update = () => {
         for (let [key, value] of this.data.structureMap) {
-            if (value.curState() == 'destroyed') {
+            if (value.curState() === 'destroyed') {
                 this.data.destroyStructure(value)
                 return
             }
             switch(value.type){
                 case 'flag':
                     this.updateFlag(value)
+                    continue
+                default:
                     continue
             }
         }
@@ -41,7 +43,7 @@ export default class StructureManagerClass {
     render = () => {
         for (let [key, value] of this.data.structureMap) {
             if (value.render && !value.prerender){
-                if(value.type != 'modifier') this.structureRenderer.renderSprite(value)
+                if(value.type !== 'modifier') this.structureRenderer.renderSprite(value)
                 else this.modifierRenderer.renderSprite(value)
             } 
             value.render = false

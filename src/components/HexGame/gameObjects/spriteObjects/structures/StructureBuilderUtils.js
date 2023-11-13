@@ -36,7 +36,7 @@ export default class StructureBuilderUtilsClass {
 
     getAverageHeight = (q, r, tileList) => {
         let heightList = tileList.map(tile => this.tileData.getEntry({ q: q + tile.q, r: r + tile.r }).height || null)
-        heightList.filter(height => height != null)
+        heightList.filter(height => height !== null)
 
         let terrainHeight = Math.floor(heightList.reduce((a, b) => a + b, 0) / heightList.length)
 
@@ -48,21 +48,21 @@ export default class StructureBuilderUtilsClass {
     }
 
     isValidStructureTile = (tilePosQ, tilePosR, selectedTile) => {
-        if (selectedTile.biome == 'water' || selectedTile.biome == 'frozenwater') return false
+        if (selectedTile.biome === 'water' || selectedTile.biome === 'frozenwater') return false
 
         let terrain = this.structureData.getStructure({ q: tilePosQ, r: tilePosR })
-        if (terrain != null && terrain.type != 'modifier') return false
+        if (terrain !== null && terrain.type !== 'modifier') return false
 
         let doubleTileNeighbors = this.tileData.getNeighborKeys({ q: tilePosQ, r: tilePosR }, 2)
 
         let tileNeighbors = this.tileData.getNeighborKeys({ q: tilePosQ, r: tilePosR }, 1)
 
 
-        if (tileNeighbors.length != 6) return false
+        if (tileNeighbors.length !== 6) return false
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
             let nieghborTerrain = this.structureData.getStructure(doubleTileNeighbors[i])
-            if (nieghborTerrain != null && nieghborTerrain.type != 'modifier') return false
+            if (nieghborTerrain !== null && nieghborTerrain.type !== 'modifier') return false
         }
 
         return true
@@ -90,16 +90,16 @@ export default class StructureBuilderUtilsClass {
                 r: cropList[i].r
             }
 
-            if (posName.q == -1) posName.q = 'm1'
-            if (posName.r == -1) posName.r = 'm1'
+            if (posName.q === -1) posName.q = 'm1'
+            if (posName.r === -1) posName.r = 'm1'
             
             //set main base rotation
-            if(posName.q == 1 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey, 'main_bunker_0')
-            else if(posName.q == 1 && posName.r == 0) this.structureData.setBunker(tileToSetKey, 'main_bunker_1')
-            else if(posName.q == 0 && posName.r == 1) this.structureData.setBunker(tileToSetKey, 'main_bunker_2')
-            else if(posName.q == 'm1' && posName.r == 1) this.structureData.setBunker(tileToSetKey, 'main_bunker_3')
-            else if(posName.q == 'm1' && posName.r == 0) this.structureData.setBunker(tileToSetKey, 'main_bunker_4')
-            else if(posName.q == 0 && posName.r == 'm1') this.structureData.setBunker(tileToSetKey, 'main_bunker_5')
+            if(posName.q === 1 && posName.r === 'm1') this.structureData.setBunker(tileToSetKey, 'main_bunker_0')
+            else if(posName.q === 1 && posName.r === 0) this.structureData.setBunker(tileToSetKey, 'main_bunker_1')
+            else if(posName.q === 0 && posName.r === 1) this.structureData.setBunker(tileToSetKey, 'main_bunker_2')
+            else if(posName.q === 'm1' && posName.r === 1) this.structureData.setBunker(tileToSetKey, 'main_bunker_3')
+            else if(posName.q === 'm1' && posName.r === 0) this.structureData.setBunker(tileToSetKey, 'main_bunker_4')
+            else if(posName.q === 0 && posName.r === 'm1') this.structureData.setBunker(tileToSetKey, 'main_bunker_5')
 
             
 
@@ -123,7 +123,7 @@ export default class StructureBuilderUtilsClass {
 
         for (let i = 0; i < neighborKeys.length; i++) {
             let tile = this.tileData.getEntry(neighborKeys[i])
-            if (tile.biome == biome && tile.terrain != null) terrainCount++
+            if (tile.biome === biome && tile.terrain !== null) terrainCount++
         }
 
         if (terrainCount > maxNeighbors) return true

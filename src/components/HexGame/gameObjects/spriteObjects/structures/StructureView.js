@@ -11,7 +11,7 @@ export default class StructureViewClass{
     }
 
    draw = (drawctx, structure) => {
-      if (this.commonUtils.checkImagesLoaded(structure) == false) return
+      if (this.commonUtils.checkImagesLoaded(structure) === false) return
 
       let keyObj = this.commonUtils.rotateTile(structure.position, this.cameraData.rotation)
       let sprite = structure.imageObject[structure.curState()].images[structure.frame][this.cameraData.rotation]
@@ -24,7 +24,7 @@ export default class StructureViewClass{
 
       let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.offset)
 
-      if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+      if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
       
       drawctx.drawImage(
          structure.images[0][this.cameraData.rotation],
@@ -36,7 +36,7 @@ export default class StructureViewClass{
    }
 
    drawShadow = (drawctx, structure) => {
-      if (this.commonUtils.checkShadowImages(structure) == false) return
+      if (this.commonUtils.checkShadowImages(structure) === false) return
 
       let shadowImage = structure.shadowImageObject[this.cameraData.rotation]
       let keyObj = this.commonUtils.rotateTile(structure.position, this.cameraData.rotation)
@@ -51,7 +51,7 @@ export default class StructureViewClass{
       let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, shadowImage.offset)
 
 
-      if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+      if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
 
       drawctx.drawImage(
          structure.shadowImages[this.cameraData.rotation],

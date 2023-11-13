@@ -26,7 +26,7 @@ export default class ProjectileViewClass {
 
         let spritePos = this.tileData.hexPositionToXYPosition(pos, projectile.spriteHeight(), this.cameraData.rotation, sprite.offset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             projectile.image,
             spritePos.x,
@@ -37,7 +37,7 @@ export default class ProjectileViewClass {
     }
 
     drawShadow = (drawctx, projectile) => {
-        if (this.commonUtils.checkShadowImages(projectile) == false) return
+        if (this.commonUtils.checkShadowImages(projectile) === false) return
         
         let shadowImage = projectile.shadowImageObject[this.cameraData.rotation]
 
@@ -54,7 +54,7 @@ export default class ProjectileViewClass {
 
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, shadowImage.offset)
 
-        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
         drawctx.drawImage(
             projectile.shadowImage,
             shadowPos.x,

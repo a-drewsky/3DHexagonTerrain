@@ -61,7 +61,7 @@ export default class HexMapViewTableClass {
 
 
 
-      if (this.cameraData.rotation == 1 || this.cameraData.rotation == 4) {
+      if (this.cameraData.rotation === 1 || this.cameraData.rotation === 4) {
 
          tempTablePosition.shift();
          tempTablePosition.shift();

@@ -20,20 +20,20 @@ export default class UnitDataClass {
     //unit functions
     getUnit = (pos) => {
         let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
-        if (index == -1) return null
+        if (index === -1) return null
         return this.unitList[index]
     }
 
     hasUnit = (pos) => {
         let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
-        if (index == -1) return false
+        if (index === -1) return false
         return true
     }
 
     //delete unit at position (q, r)
     deleteUnit = (pos) => {
         let index = this.unitList.findIndex(unit => this.commonUtils.tilesEqual(unit.position, pos))
-        if (index == -1) return
+        if (index === -1) return
         this.unitList.splice(index, 1)
     }
 

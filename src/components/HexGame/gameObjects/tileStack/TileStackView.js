@@ -24,11 +24,11 @@ export default class TileStackViewClass {
             let keyObj = this.commonUtils.split(key)
             let tileObj = this.tileData.getAnyEntry(value)
 
-            if (!tileObj.images || tileObj.images.length == 0) continue
+            if (!tileObj.images || tileObj.images.length === 0) continue
 
             let tilePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation, {x: 0, y: 0})
 
-            if (this.cameraData.onScreenCheck(tilePos, tileObj.images[this.cameraData.rotation]) == false) {
+            if (this.cameraData.onScreenCheck(tilePos, tileObj.images[this.cameraData.rotation]) === false) {
                 continue
             }
             

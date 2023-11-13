@@ -28,7 +28,7 @@ export default class HexMapPrerendererClass {
 
     renderTileStack = () => {
         let tileToRender = this.renderStack.pop()
-        if (tileToRender.groundShadowTile == false) {
+        if (tileToRender.groundShadowTile === false) {
             let tileObj = this.tileManager.data.getAnyEntry(tileToRender.position)
             this.tileManager.renderer.renderTileStack(tileObj)
         } else {
@@ -43,13 +43,13 @@ export default class HexMapPrerendererClass {
             if(!this.tileManager.data.getAnyEntry(neighborKey).rendered) continue
             if(!this.spriteManager.structures.data.hasStructure(neighborKey)) continue
             let structure = this.spriteManager.structures.data.getStructure(neighborKey)
-            if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.renderShadows(structure)
+            if (structure.type === 'modifier') this.spriteManager.structures.modifierRenderer.renderShadows(structure)
             else this.spriteManager.structures.structureRenderer.renderShadow(structure)
         }
 
         if (this.spriteManager.structures.data.hasStructure(tileToRender.position)) {
             let structure = this.spriteManager.structures.data.getStructure(tileToRender.position)
-            if (structure.type == 'modifier') this.spriteManager.structures.modifierRenderer.renderAll(structure)
+            if (structure.type === 'modifier') this.spriteManager.structures.modifierRenderer.renderAll(structure)
             else this.spriteManager.structures.structureRenderer.renderAll(structure)
             structure.render = false
             structure.prerender = false
@@ -58,13 +58,13 @@ export default class HexMapPrerendererClass {
 
     update = () => {
         //check render stack
-        if (this.renderStack.length == 0) return
+        if (this.renderStack.length === 0) return
 
         for(let i=0; i<PRERENDER_STACKS_PER_FRAME; i++){
             this.renderTileStack()
         }
 
-        if (this.renderStack.length == 0) console.log("done rendering")
+        if (this.renderStack.length === 0) console.log("done rendering")
 
     }
 

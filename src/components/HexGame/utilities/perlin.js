@@ -98,7 +98,7 @@ function grad2(hash, x, y) {
 function grad3(hash, x, y, z) {
     let h = hash & 15;     // Convert low 4 bits of hash code into 12 simple
     let u = h < 8 ? x : y; // gradient directions, and compute dot product.
-    let v = h < 4 ? y : h == 12 || h == 14 ? x : z; // Fix repeats at h = 12 to 15
+    let v = h < 4 ? y : h === 12 || h === 14 ? x : z; // Fix repeats at h = 12 to 15
     return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
 }
 

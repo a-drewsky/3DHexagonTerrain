@@ -25,7 +25,7 @@ export default class CollisionClass {
          // get next vertex in list
          // if we've hit the end, wrap around to 0
          next = current + 1
-         if (next == vertices.length) next = 0
+         if (next === vertices.length) next = 0
 
          // get the PVectors at our current position
          // this makes our if statement a little cleaner

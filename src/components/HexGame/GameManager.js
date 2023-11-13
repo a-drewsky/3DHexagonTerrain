@@ -63,7 +63,7 @@ export default class GameManagerClass {
     }
 
     update = () => {
-        if (this.state.current != this.state.play) return
+        if (this.state.current !== this.state.play) return
 
         this.hexMapManager.update()
     }
@@ -81,7 +81,7 @@ export default class GameManagerClass {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         //draw game objects
-        if (this.hexMapManager.state != 'disabled') this.hexMapManager.draw()
+        if (this.hexMapManager.state !== 'disabled') this.hexMapManager.draw()
 
         //draw fps
         this.ctx.font = '30px Arial'

@@ -30,13 +30,15 @@ export default class UnitRendererClass {
                 this.renderActionSprite(unit)
                 this.renderActionShadow(unit)
                 return
+            default:
+                return
         }
 
     }
 
     renderStaticSprites = (unit) => {
 
-        if (unit.position.q == null || unit.position.r == null) return
+        if (unit.position.q === null || unit.position.r === null) return
 
         let initRotation = this.cameraData.rotation
 
@@ -74,7 +76,7 @@ export default class UnitRendererClass {
 
     renderStaticShadows = (unit) => {
 
-        if (unit.position.q == null || unit.position.r == null || !unit.imageObject.shadow) return
+        if (unit.position.q === null || unit.position.r === null || !unit.imageObject.shadow) return
 
         this.shadowRenderer.renderAllShadows(unit, unit.position)
     }
@@ -91,7 +93,7 @@ export default class UnitRendererClass {
         let height = this.tileData.getEntry(unit.position).height
         let extraHeight = 0
 
-        if (unit.destination != null) {
+        if (unit.destination !== null) {
 
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
@@ -105,7 +107,7 @@ export default class UnitRendererClass {
 
             let newHeight = this.tileData.getEntry(unit.destination).height
 
-            if (newHeight != height) {
+            if (newHeight !== height) {
                 extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount
 
                 height = height + (newHeight - height) * percent + extraHeight
@@ -121,7 +123,7 @@ export default class UnitRendererClass {
             height: this.mapData.size * 2 * sprite.size.h
         }
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
 
         let spriteImage = sprite.image
 
@@ -144,7 +146,7 @@ export default class UnitRendererClass {
 
         let lerpPos = unit.position
 
-        if (unit.destination != null) {
+        if (unit.destination !== null) {
             let percent = unit.travelPercent()
             lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
         }

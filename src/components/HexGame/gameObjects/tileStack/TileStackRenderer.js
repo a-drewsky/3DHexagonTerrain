@@ -1,9 +1,7 @@
 import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
-import { SHADOW_SIZE, HEXMAP_SIDE_COLOR_MULTIPLIER } from '../commonConstants/CommonConstants'
-
-const HEXMAP_LINE_WIDTH = 3
+import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
 
 export default class TileStackRendererClass {
 
@@ -131,14 +129,14 @@ export default class TileStackRendererClass {
             tileShadows.r = Math.min(Math.max(tileShadows.r, this.utils.getSideShadowDistance(rowNum, row.r)), 1)
         }
 
-        if(tileShadows.l == 0 && tileShadows.c == 0 && tileShadows.r == 0) return
+        if(tileShadows.l === 0 && tileShadows.c === 0 && tileShadows.r === 0) return
 
-        if(tileShadows.c == 3){
+        if(tileShadows.c === 3){
             tileShadows.l = 0
             tileShadows.r = 0
         }
 
-        if(tileShadows.l == 1 && tileShadows.r == 1 && tileShadows.c > 0){
+        if(tileShadows.l === 1 && tileShadows.r === 1 && tileShadows.c > 0){
             tileShadows.c = 3
             tileShadows.l = 0
             tileShadows.r = 0
@@ -164,9 +162,9 @@ export default class TileStackRendererClass {
             tileShadows.r = Math.min(Math.max(tileShadows.r, this.utils.getShadowDistance(rowNum, row.r)), 2)
         }
 
-        if(tileShadows.l == 0 && tileShadows.c == 0 && tileShadows.r == 0) return
+        if(tileShadows.l === 0 && tileShadows.c === 0 && tileShadows.r === 0) return
 
-        if(tileShadows.c == 2){
+        if(tileShadows.c === 2){
             tileShadows.l = 0
             tileShadows.r = 0
         }

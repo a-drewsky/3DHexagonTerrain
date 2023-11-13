@@ -56,11 +56,11 @@ export default class StructureRendererClass {
                 tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
 
-                if (structure.type == 'resource') {
+                if (structure.type === 'resource') {
                     this.StatusBarRenderer.addResourceBar(imageList[rotation], structure)
                 }
 
-                if (structure.type == 'bunker') {
+                if (structure.type === 'bunker') {
                     this.StatusBarRenderer.addHealthBar(imageList[rotation], structure)
                 }
 

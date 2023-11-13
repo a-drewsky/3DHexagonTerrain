@@ -38,6 +38,8 @@ export default class UnitManagerClass {
                 case 'death':
                     this.endDeath(unit)
                     continue
+                default:
+                    continue
             }
         }
     }
@@ -45,7 +47,7 @@ export default class UnitManagerClass {
     endHit = (unit) => {
         unit.setIdle()
         this.data.clearTarget()
-        if (unit.curState() != 'death') {
+        if (unit.curState() !== 'death') {
             this.mapData.resetState()
             this.selectionData.clearAllSelections()
         }
@@ -81,7 +83,7 @@ export default class UnitManagerClass {
         if(!targetObject) return
 
         targetObject.recieveAttack(25)
-        if (targetObject.type != 'unit') {
+        if (targetObject.type !== 'unit') {
             this.mapData.resetState()
             this.selectionData.clearAllSelections()
         }

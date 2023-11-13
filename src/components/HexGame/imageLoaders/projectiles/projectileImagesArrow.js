@@ -1,8 +1,4 @@
-import shadow_sheet from '../../images/shadows/arrow_shadow_sheet.png'
-
 import projectile_sheet from '../../images/projectiles/arrow_projectile_sheet.png'
-
-// import icon_image from '???'
 
 import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
@@ -13,8 +9,6 @@ export default class ProjectileImagesArrowClass extends SheetImageLoaderClass {
         super()
 
         this.shadow = 'projectile_shadow'
-
-        // this.icon = icon_image
 
         this.sheet_rows = {
              0: 'backRight',

@@ -104,7 +104,7 @@ export default class UnitClass {
     }
 
     endOfState = () => {
-        if(this.state.current.duration == 'continuous') return true
+        if(this.state.current.duration === 'continuous') return true
         if(this.animationCurTime - this.animationStartTime < this.state.current.duration) return false
         return true
     }
@@ -128,8 +128,8 @@ export default class UnitClass {
     setFrame = () => {
         this.frameCurTime = Date.now()
         this.animationCurTime = Date.now()
-        if (this.state.current.rate == 0) return
-        if (this.destination != null) this.render = true
+        if (this.state.current.rate === 0) return
+        if (this.destination !== null) this.render = true
         if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
             this.render = true
             this.frameStartTime = Date.now()
@@ -154,10 +154,10 @@ export default class UnitClass {
 
                 let startPosition = this.tileData.getEntry(this.position)
                 let nextPosition = this.tileData.getEntry(this.destination)
-                if (this.curState() != 'walk') {
+                if (this.curState() !== 'walk') {
                     this.setAnimation('walk')
                 }
-                if (nextPosition.height != startPosition.height) {
+                if (nextPosition.height !== startPosition.height) {
                     this.setAnimation('jump')
                 }
                 this.destination = this.path[0]
@@ -224,7 +224,7 @@ export default class UnitClass {
 
         let nextPosition = this.tileData.getEntry(this.path[0])
 
-        if (nextPosition.height != startTile.height) {
+        if (nextPosition.height !== startTile.height) {
             this.setAnimation('jump')
         } else {
             this.setAnimation('walk')

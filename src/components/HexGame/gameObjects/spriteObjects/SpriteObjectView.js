@@ -30,7 +30,7 @@ export default class SpriteObjectViewClass {
       for (let [key, value] of this.structureData.getStructureMap()) {
 
          //modifier top or bottom
-         if (value.type == 'modifier') {
+         if (value.type === 'modifier') {
 
             spriteList.push({
                spriteObject: value,
@@ -70,7 +70,7 @@ export default class SpriteObjectViewClass {
             silhouette: false
          })
 
-         if (unitObject.destination != null) {
+         if (unitObject.destination !== null) {
             this.setUnitPosition(spriteList[spriteList.length - 1])
             this.setUnitLayer(spriteList[spriteList.length - 1])
          }
@@ -132,6 +132,8 @@ export default class SpriteObjectViewClass {
             case 5:
                spriteListEntry.rotatedTile.r -= 1
                return
+            default:
+               return
          }
       }
 
@@ -153,8 +155,8 @@ export default class SpriteObjectViewClass {
       let spriteRotation = unit.spriteRotation(this.cameraData.rotation)
       let direction = rotationMap[spriteRotation]
 
-      if (percent > 0.3 && percent < 0.5 && direction == 'up' || percent < 0.7 && percent >= 0.5 && direction == 'down') spriteListEntry.layer = -2
-      if (percent > 0.3 && percent < 0.5 && direction == 'down' || percent < 0.7 && percent >= 0.5 && direction == 'up') spriteListEntry.layer = 2
+      if ((percent > 0.3 && percent < 0.5 && direction === 'up') || (percent < 0.7 && percent >= 0.5 && direction === 'down')) spriteListEntry.layer = -2
+      if ((percent > 0.3 && percent < 0.5 && direction === 'down') || (percent < 0.7 && percent >= 0.5 && direction === 'up')) spriteListEntry.layer = 2
 
    }
 
@@ -169,7 +171,7 @@ export default class SpriteObjectViewClass {
 
    drawShadows = (drawctx, spriteList) => {
       for (let i = 0; i < spriteList.length; i++) {
-         if (spriteList[i].layer == -1) continue
+         if (spriteList[i].layer === -1) continue
          if (spriteList[i].silhouette) continue
 
          let spriteObject = spriteList[i].spriteObject
@@ -190,6 +192,8 @@ export default class SpriteObjectViewClass {
             case 'modifier':
                this.modifiers.drawShadow(drawctx, spriteObject)
                continue
+            default:
+               continue
          }
 
       }
@@ -208,8 +212,8 @@ export default class SpriteObjectViewClass {
                this.structures.draw(drawctx, spriteObject)
                continue
             case 'modifier':
-               if (spriteList[i].layer == -1) this.modifiers.drawTop(drawctx, spriteObject)
-               if (spriteList[i].layer == 1) this.modifiers.drawBottom(drawctx, spriteObject)
+               if (spriteList[i].layer === -1) this.modifiers.drawTop(drawctx, spriteObject)
+               if (spriteList[i].layer === 1) this.modifiers.drawBottom(drawctx, spriteObject)
                continue
             case 'unit':
                if (spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
@@ -217,6 +221,8 @@ export default class SpriteObjectViewClass {
                continue
             case 'projectile':
                this.projectiles.drawSprite(drawctx, spriteObject)
+               continue
+            default:
                continue
          }
 

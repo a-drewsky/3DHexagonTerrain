@@ -31,7 +31,7 @@ export default class ResourceClass extends StructureClass {
                 : resourcePercent > 25 ? 'resources_lte_50'
                     : resourcePercent > 0 ? 'resources_lte_25'
                         : 'destroyed'
-        if (newStateName == this.curState()) return
+        if (newStateName === this.curState()) return
         this.state.current = this.state[newStateName]
         this.render = true
     }

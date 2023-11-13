@@ -16,8 +16,8 @@ const CardObject = (props) => {
                         {props.card.cost.map((cost, index) =>
                                     <span
                                         className={` 
-                                        ${(index == 0 && props.card.cost.length > 1) && 'me-1'}
-                                        ${(index == props.card.cost.length - 1 && props.card.cost.length > 2) && 'ms-1'}
+                                        ${(index === 0 && props.card.cost.length > 1) && 'me-1'}
+                                        ${(index === props.card.cost.length - 1 && props.card.cost.length > 2) && 'ms-1'}
                                         `}
                                         key={index}>
                                         {cost.amount}<img src={props.resourceIcons[cost.resource]} className='mb-1' style={{height: '0.7rem'}}/>

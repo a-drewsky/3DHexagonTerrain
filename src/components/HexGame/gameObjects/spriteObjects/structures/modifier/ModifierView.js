@@ -12,7 +12,7 @@ export default class ModifierViewClass {
 
     drawSingleImage = (drawctx, modifier) => {
 
-        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) === false) return
 
         let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
         let sprite = modifier.imageObject
@@ -25,7 +25,7 @@ export default class ModifierViewClass {
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.singleImageOffset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             modifier.images[0][this.cameraData.rotation].top,
             spritePos.x,
@@ -38,12 +38,12 @@ export default class ModifierViewClass {
 
     drawTop = (drawctx, modifier) => {
 
-        if (modifier.modifierType == 'singleImage') {
+        if (modifier.modifierType === 'singleImage') {
             this.drawSingleImage(drawctx, modifier)
             return
         }
 
-        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) === false) return
 
         let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
         let sprite = modifier.imageObject
@@ -56,7 +56,7 @@ export default class ModifierViewClass {
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.offset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             modifier.images[0][this.cameraData.rotation].top,
             spritePos.x,
@@ -69,11 +69,11 @@ export default class ModifierViewClass {
 
     drawBottom = (drawctx, modifier) => {
 
-        if (modifier.modifierType == 'singleImage') {
+        if (modifier.modifierType === 'singleImage') {
             return
         }
 
-        if (this.commonUtils.checkImagesLoaded(modifier) == false) return
+        if (this.commonUtils.checkImagesLoaded(modifier) === false) return
 
         let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
         let sprite = modifier.imageObject
@@ -87,7 +87,7 @@ export default class ModifierViewClass {
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, sprite.offset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             modifier.images[0][this.cameraData.rotation].bottom,
             spritePos.x,
@@ -99,7 +99,7 @@ export default class ModifierViewClass {
     }
 
     drawShadow = (drawctx, modifier) => {
-        if (this.commonUtils.checkShadowImages(modifier) == false) return
+        if (this.commonUtils.checkShadowImages(modifier) === false) return
 
         let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
         let height = this.tileData.getEntry(modifier.position).height
@@ -111,7 +111,7 @@ export default class ModifierViewClass {
 
         let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, modifier.imageObject.shadowOffset)
 
-        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
 
         drawctx.drawImage(
             modifier.shadowImages[this.cameraData.rotation],

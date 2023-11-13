@@ -30,13 +30,13 @@ export default class CommonHexMapUtilsClass {
     }
 
     checkImagesLoaded = (spriteObject) => {
-        if (!spriteObject.images || spriteObject.images.length == 0) return false
+        if (!spriteObject.images || spriteObject.images.length === 0) return false
         return true
     }
 
     checkShadowImages = (spriteObject) => {
         if (!spriteObject.shadowImages && !spriteObject.shadowImage) return false
-        if (spriteObject.shadowImages && spriteObject.shadowImages.length == 0) return false
+        if (spriteObject.shadowImages && spriteObject.shadowImages.length === 0) return false
         return true
     }
 
@@ -109,7 +109,7 @@ export default class CommonHexMapUtilsClass {
         let rotatePosMap = directionMap.map(pos => { return { q: pos1.q - pos.q, r: pos1.r - pos.r } })
 
         let closestPos
-        if (rotatePosMap.findIndex(pos => pos.q == pos2.q && pos.r == pos2.r) != -1) {
+        if (rotatePosMap.findIndex(pos => pos.q === pos2.q && pos.r === pos2.r) !== -1) {
             closestPos = pos2
         } else {
             closestPos = this.getClosestPos(pos2, rotatePosMap)
@@ -120,7 +120,7 @@ export default class CommonHexMapUtilsClass {
             r: closestPos.r - pos1.r
         }
 
-        return directionMap.findIndex(pos => pos.q == direction.q && pos.r == direction.r)
+        return directionMap.findIndex(pos => pos.q === direction.q && pos.r === direction.r)
 
     }
 
@@ -141,7 +141,7 @@ export default class CommonHexMapUtilsClass {
         
         let direction = directionMap[rotation]
 
-        if(direction == null) return null
+        if(direction === null) return null
 
         return { q: pos.q + direction.q, r: pos.r + direction.r}
 
@@ -152,7 +152,7 @@ export default class CommonHexMapUtilsClass {
         
         let direction = directionMap[rotation]
 
-        if(direction == null) return null
+        if(direction === null) return null
 
         return { q: pos.q + direction.q, r: pos.r + direction.r}
 
@@ -166,8 +166,8 @@ export default class CommonHexMapUtilsClass {
     }
 
     tilesEqual = (tile1, tile2) => {
-        if(tile1.q != tile2.q) return false
-        if(tile1.r != tile2.r) return false
+        if(tile1.q !== tile2.q) return false
+        if(tile1.r !== tile2.r) return false
         return true 
     }
 

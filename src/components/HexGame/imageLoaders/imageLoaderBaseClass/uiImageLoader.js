@@ -16,7 +16,7 @@ export default class UiImageLoaderClass {
             this[key] = value
             value.onload = () => {
                 imagesLoaded++
-                if (imagesLoaded == Object.keys(this.images).length) {
+                if (imagesLoaded === Object.keys(this.images).length) {
                     delete this.images
                     this.assignImages(startGame)
                 }

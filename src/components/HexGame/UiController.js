@@ -32,13 +32,13 @@ export default class UiControllerClass {
     setPauseMenu = (state) => {
         this.uiComponents.pauseMenu.show = state
         
-        if(state == true) this.globalState.current = this.globalState.pause
+        if(state === true) this.globalState.current = this.globalState.pause
     }
 
     setEndGameMenu = (state) => {
         this.uiComponents.endGameMenu.show = state
 
-        if(state == true) this.globalState.current = this.globalState.pause
+        if(state === true) this.globalState.current = this.globalState.pause
     }
 
     setResourceBar = (resources) => {

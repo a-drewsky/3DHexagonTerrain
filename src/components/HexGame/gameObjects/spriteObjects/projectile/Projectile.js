@@ -115,7 +115,7 @@ export default class ProjectileClass {
     //SET FUNCTIONS
     setFrame = () => {
         this.frameCurTime = Date.now()
-        if (this.animation.rate == 0) return
+        if (this.animation.rate === 0) return
         if (this.frameCurTime - this.frameStartTime > this.animation.rate) {
             this.frameStartTime = Date.now()
 
@@ -154,7 +154,7 @@ export default class ProjectileClass {
         //structure
         let attckedStructure = this.structureData.getStructure(this.target)
 
-        if(attckedStructure && attckedStructure.type == 'bunker') attckedStructure.recieveAttack(25)
+        if(attckedStructure && attckedStructure.type === 'bunker') attckedStructure.recieveAttack(25)
 
         
     }

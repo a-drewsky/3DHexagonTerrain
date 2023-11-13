@@ -38,14 +38,14 @@ export default class HexMapPathFinderClass {
 
     isValidPathTile = (pos) => {
         let terrain = this.structureData.getStructure(pos)
-        if(terrain != null && terrain.type != 'modifier') return false
+        if(terrain !== null && terrain.type !== 'modifier') return false
         let unit = this.unitData.getUnit(pos)
-        if(unit != null) return false
+        if(unit !== null) return false
         return true
     }
 
     getTileCost = (tile) => {
-        if(this.tileData.getEntry(tile).biome == 'water') return 2
+        if(this.tileData.getEntry(tile).biome === 'water') return 2
         let terrain = this.structureData.getStructure(tile)
         if(terrain && terrain.cost) return terrain.cost
         return 0
@@ -54,7 +54,7 @@ export default class HexMapPathFinderClass {
     getPath = (startNode, endNode) => {
         let currentPathNode = endNode
         let path = []
-        while (!(currentPathNode.tile.q == startNode.tile.q && currentPathNode.tile.r == startNode.tile.r)) {
+        while (!(currentPathNode.tile.q === startNode.tile.q && currentPathNode.tile.r === startNode.tile.r)) {
             path.push(currentPathNode)
             currentPathNode = currentPathNode.connection
         }
@@ -64,9 +64,8 @@ export default class HexMapPathFinderClass {
     pathCost = (path) => {
 
         let cost = 0
-
         for(let index in path){
-            if(index==0) continue
+            if(index === '0') continue
             let tile = path[index]
             let tileCost = this.getTileCost(tile)
 
@@ -93,19 +92,19 @@ export default class HexMapPathFinderClass {
             }
 
             processed.push(current)
-            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
+            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q === current.tile.q && node.tile.r === current.tile.r)
             toSearch.splice(currentToSearchIndex, 1)
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
-            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
+            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
 
 
             //assign cost to neighbors and add to search list
             for (let neighbor of neighbors) {
 
-                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
+                let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
 
                 let tileCost = this.getTileCost(neighbor.tile)
 
@@ -123,7 +122,7 @@ export default class HexMapPathFinderClass {
             }
 
         }
-        let startIndex = processed.findIndex(node => node.tile.q == start.q && node.tile.r == start.r)
+        let startIndex = processed.findIndex(node => node.tile.q === start.q && node.tile.r === start.r)
         processed.splice(startIndex, 1)
         return processed
     }
@@ -147,8 +146,8 @@ export default class HexMapPathFinderClass {
             let neighbors = this.createNeighborNodes(tile)
 
             for(let neighborNode of neighbors){
-                if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
-                if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q == neighborNode.tile.q && moveSetNode.tile.r == neighborNode.tile.r) != -1) continue
+                if(neighborNode.tile.q === unitPos.q && neighborNode.tile.r === unitPos.r) continue
+                if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q === neighborNode.tile.q && moveSetNode.tile.r === neighborNode.tile.r) !== -1) continue
                 newMoveSet.push(neighborNode)
             }
         }
@@ -157,8 +156,8 @@ export default class HexMapPathFinderClass {
         let neighbors = this.createNeighborNodes(unitPos)
 
         for(let neighborNode of neighbors){
-            if(neighborNode.tile.q == unitPos.q && neighborNode.tile.r == unitPos.r) continue
-            if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q == neighborNode.tile.q && moveSetNode.tile.r == neighborNode.tile.r) != -1) continue
+            if(neighborNode.tile.q === unitPos.q && neighborNode.tile.r === unitPos.r) continue
+            if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q === neighborNode.tile.q && moveSetNode.tile.r === neighborNode.tile.r) !== -1) continue
             newMoveSet.push(neighborNode)
         }
 
@@ -177,30 +176,30 @@ export default class HexMapPathFinderClass {
             let current = toSearch[0]
 
             for (let t of toSearch) {
-                if (this.GetF(t) < this.GetF(current) || this.GetF(t) == this.GetF(current) && t.estimateCost < current.h){
+                if (this.GetF(t) < this.GetF(current) || (this.GetF(t) === this.GetF(current) && t.estimateCost < current.h)){
                     current = t
                 } 
             }
 
             processed.push(current)
-            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
+            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q === current.tile.q && node.tile.r === current.tile.r)
             toSearch.splice(currentToSearchIndex, 1)
 
             //check if current tile is the target
-            if (current.tile.q == targetNode.tile.q && current.tile.r == targetNode.tile.r) {
+            if (current.tile.q === targetNode.tile.q && current.tile.r === targetNode.tile.r) {
                 return this.getPath(startNode, current)
             }
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
-            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
+            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
 
 
             //assign cost to neighbors and add to search list
             for (let neighbor of neighbors) {
 
-                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
+                let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
 
                 let tileCost = this.getTileCost(neighbor.tile)
 
@@ -239,30 +238,30 @@ export default class HexMapPathFinderClass {
             let current = toSearch[0]
 
             for (let t of toSearch) {
-                if (this.GetF(t) < this.GetF(current) || this.GetF(t) == this.GetF(current) && t.estimateCost < current.h){
+                if (this.GetF(t) < this.GetF(current) || (this.GetF(t) === this.GetF(current) && t.estimateCost < current.h)){
                     current = t
                 } 
             }
 
             processed.push(current)
-            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q == current.tile.q && node.tile.r == current.tile.r)
+            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q === current.tile.q && node.tile.r === current.tile.r)
             toSearch.splice(currentToSearchIndex, 1)
 
             //check if current tile is the target
-            if(adjacentNodes.filter(node => current.tile.q == node.tile.q && current.tile.r == node.tile.r).length > 0) {
+            if(adjacentNodes.filter(node => current.tile.q === node.tile.q && current.tile.r === node.tile.r).length > 0) {
                 return this.getPath(startNode, current)
             }
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) == true)
-            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r))
+            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
+            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
 
 
             //assign cost to neighbors and add to search list
             for (let neighbor of neighbors) {
 
-                let inSearch = toSearch.some(node => node.tile.q == neighbor.tile.q && node.tile.r == neighbor.tile.r)
+                let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
 
                 let tileCost = this.getTileCost(neighbor.tile)
 

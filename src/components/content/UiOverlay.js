@@ -15,11 +15,11 @@ const UiOverlay = (props) => {
             <ControlButtons gameClass={props.gameClass}></ControlButtons>
             <CardDeck gameClass={props.gameClass} cards={props.uiComponents.cards} selectedCard={props.uiComponents.selectedCard} selectedSprite={props.uiComponents.selectedSprite}></CardDeck>
             {
-                (props.uiComponents.pauseMenu.show == true) &&
+                (props.uiComponents.pauseMenu.show === true) &&
                 <PauseMenu gameClass={props.gameClass} endGame={props.endGame}></PauseMenu>
             }
             {
-                (props.uiComponents.endGameMenu.show == true) &&
+                (props.uiComponents.endGameMenu.show === true) &&
                 <EndGameMenu gameClass={props.gameClass} endGame={props.endGame} restartGame={props.restartGame}></EndGameMenu>
             }
         </Container>

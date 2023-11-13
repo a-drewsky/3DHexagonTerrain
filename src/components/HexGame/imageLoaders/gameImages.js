@@ -28,7 +28,7 @@ export default class GameImagesClass {
         let totalLoaded = 0
         let testLoaded = () => {
             totalLoaded++
-            if (totalLoaded == this.loaders.length) startGame()
+            if (totalLoaded === this.loaders.length) startGame()
         }
 
         for (let loader of this.loaders) {

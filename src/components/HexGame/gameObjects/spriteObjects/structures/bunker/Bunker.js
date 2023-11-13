@@ -33,7 +33,7 @@ export default class BunkerClass extends StructureClass{
 
         let newStateName = this.stats.health > 75 ? 'health_lte_100' : this.stats.health > 50 ? 'health_lte_75' : this.stats.health > 25 ? 'health_lte_50' : this.stats.health > 0 ? 'health_lte_25' : 'destroyed'
 
-        if (newStateName == this.curState()) return
+        if (newStateName === this.curState()) return
         
         this.setState(newStateName)
     }

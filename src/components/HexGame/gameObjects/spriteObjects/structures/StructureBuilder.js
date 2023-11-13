@@ -54,14 +54,14 @@ export default class StructureBuilderClass {
 
 
             while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
-               if (cellTiles.length == 0) break;
+               if (cellTiles.length === 0) break;
                selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                selectedTilePos = cellTiles[selectedTileIndex]
                cellTiles.splice(selectedTileIndex, 1)
                selectedTile = this.tileData.getEntry(selectedTilePos)
             }
 
-            if (cellTiles.length == 0) break;
+            if (cellTiles.length === 0) break;
 
             //flatten tiles
             let flatList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
@@ -136,14 +136,14 @@ export default class StructureBuilderClass {
 
 
                while (!this.structureBuilderUtils.isValidStructureTile(selectedTilePos.q, selectedTilePos.r, selectedTile)) {
-                  if (cellTiles.length == 0) break
+                  if (cellTiles.length === 0) break
                   selectedTileIndex = Math.floor(Math.random() * cellTiles.length)
                   selectedTilePos = cellTiles[selectedTileIndex]
                   cellTiles.splice(selectedTileIndex, 1)
                   selectedTile = this.tileData.getEntry(selectedTilePos)
                }
 
-               if (cellTiles.length == 0) break
+               if (cellTiles.length === 0) break
 
                //flatten tiles
                let flatList = [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }]
@@ -154,7 +154,7 @@ export default class StructureBuilderClass {
 
                let closeSection = false
 
-               if (rGen == 0 || rGen == mapSize.r - 1) closeSection = true
+               if (rGen === 0 || rGen === mapSize.r - 1) closeSection = true
 
 
                let mineType
@@ -186,13 +186,13 @@ export default class StructureBuilderClass {
          }
 
          //generate savanna trees
-         if ((entry.value.biome == 'savanna' || entry.value.biome == 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
+         if ((entry.value.biome === 'savanna' || entry.value.biome === 'savannahill') && spawnChance.savannaTree > thresholds.savannaTree && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
             this.structureData.setProp(keyObj, 'savannaTree')
          }
 
          //generate large rocks
          let terrain = this.structureData.getStructure(keyObj)
-         if (terrain != null && terrain.id == 'small_rocks' && spawnChance.largeRock > thresholds.largeRock) {
+         if (terrain !== null && terrain.id === 'small_rocks' && spawnChance.largeRock > thresholds.largeRock) {
             this.structureData.setProp(keyObj, 'largeRock')
          }
 

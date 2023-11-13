@@ -39,7 +39,7 @@ export default class ImageLoaderUtilsClass {
         let totalLoaded = 0
         let testLoaded = () => {
             totalLoaded++
-            if (totalLoaded == loaders.length) startGame()
+            if (totalLoaded === loaders.length) startGame()
         }
 
         for (let loader of loaders) {

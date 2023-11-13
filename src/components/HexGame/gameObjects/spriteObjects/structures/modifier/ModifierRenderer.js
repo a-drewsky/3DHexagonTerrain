@@ -56,7 +56,7 @@ export default class ModifierRendererClass {
 
     renderSprite = (modifier) => {
 
-        if (modifier.modifierType == 'singleImage') {
+        if (modifier.modifierType === 'singleImage') {
             this.renderSingleImage(modifier)
             return
         }

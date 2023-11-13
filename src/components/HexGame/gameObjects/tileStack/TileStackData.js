@@ -35,7 +35,7 @@ export default class TileStackDataClass {
     setRotatedMapList = () => {
 
         for (let i = 0; i < 6; i++) {
-            //Rotate the hexmap and set the rotatedMap object
+            
             let sortedArr = this.getKeys()
 
             for (let j = 0; j < sortedArr.length; j++) {
@@ -67,18 +67,15 @@ export default class TileStackDataClass {
             //Set map hyp
             let keys = [...this.rotatedMapList[rotation].keys()].map(key => this.utils.split(key))
 
-            let mapWidthMax = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r));
-            let mapHeightMax = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish));
-            let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)));
-            let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)));
+            let mapWidthMax = Math.max(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r))
+            let mapHeightMax = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish))
+            let mapWidthMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.x * key.q + this.mapData.vecR.x * key.r)))
+            let mapHeightMin = Math.abs(Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)))
 
             let mapWidth = Math.max(mapWidthMax, mapWidthMin)
             let mapHeight = Math.max(mapHeightMax, mapHeightMin)
 
-            let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight) - 250; //need a variable for this or something (must be half of value used for hyp in hex map view)
-
-
-            //Set the hexmap position to the center of the canvas
+            let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight) - 250
 
             let renderHexMapPos = {
                 x: 0,
@@ -110,13 +107,15 @@ export default class TileStackDataClass {
                     renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
                     renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
                     break
+                default:
+                    break
             }
-
 
             this.posMap.set(rotation, {
                 x: renderHexMapPos.x,
                 y: renderHexMapPos.y
             })
+
         }
     }
 
@@ -126,7 +125,7 @@ export default class TileStackDataClass {
 
     getEntry = (pos) => {
         let entry = this.tileMap.get(this.utils.join(pos))
-        if (entry && entry.groundShadowTile == false) return entry
+        if (entry && entry.groundShadowTile === false) return entry
         return null
     }
 
@@ -143,7 +142,7 @@ export default class TileStackDataClass {
     //returns the tileMap
     getTileMap = () => {
         let map = Array.from(this.tileMap, ([key, value]) => ({ key, value }));
-        let filteredMap = map.filter(entry => entry.value.groundShadowTile == false)
+        let filteredMap = map.filter(entry => entry.value.groundShadowTile === false)
         return filteredMap
     }
 
@@ -174,10 +173,10 @@ export default class TileStackDataClass {
     getNeighborKeys = (pos, rows) => {
 
         let validNewNeighbor = (newQ, newR, neighborList, newNeighborList) => {
-            if(newQ == pos.q && newR == pos.r) return false
+            if(newQ === pos.q && newR === pos.r) return false
             if(!this.hasTileEntry({ q: newQ, r: newR })) return false
-            if(neighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
-            if(newNeighborList.some(neighbor => neighbor.q == newQ && neighbor.r == newR )) return false
+            if(neighborList.some(neighbor => neighbor.q === newQ && neighbor.r === newR )) return false
+            if(newNeighborList.some(neighbor => neighbor.q === newQ && neighbor.r === newR )) return false
             return true
         }
 
@@ -212,10 +211,10 @@ export default class TileStackDataClass {
 
         let minR = Math.min(...keys.map(key => key.r));
         let maxR = Math.max(...keys.map(key => key.r));
-        let minRminQ = Math.min(...keys.filter(key => key.r == minR).map(key => key.q));
-        let minRmaxQ = Math.max(...keys.filter(key => key.r == minR).map(key => key.q));
-        let maxRminQ = Math.min(...keys.filter(key => key.r == maxR).map(key => key.q));
-        let maxRmaxQ = Math.max(...keys.filter(key => key.r == maxR).map(key => key.q));
+        let minRminQ = Math.min(...keys.filter(key => key.r === minR).map(key => key.q));
+        let minRmaxQ = Math.max(...keys.filter(key => key.r === minR).map(key => key.q));
+        let maxRminQ = Math.min(...keys.filter(key => key.r === maxR).map(key => key.q));
+        let maxRmaxQ = Math.max(...keys.filter(key => key.r === maxR).map(key => key.q));
 
         let tableDims = {
             q1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1 }, rotation).q,

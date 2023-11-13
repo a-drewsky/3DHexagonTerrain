@@ -19,6 +19,8 @@ export default class UnitViewClass {
             case 'action':
                 this.drawActionUnit(drawctx, unit)
                 return
+            default:
+                return
         }
 
     }
@@ -31,6 +33,8 @@ export default class UnitViewClass {
                 return
             case 'action':
                 this.drawActionShadow(drawctx, unit)
+                return
+            default:
                 return
         }
 
@@ -59,7 +63,7 @@ export default class UnitViewClass {
 
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation, sprite.offset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             unit.staticImages[unit.frame][this.cameraData.rotation],
             spritePos.x,
@@ -71,7 +75,7 @@ export default class UnitViewClass {
     }
 
     drawStaticShadow = (drawctx, unit) => {
-        if (this.commonUtils.checkShadowImages(unit) == false) return
+        if (this.commonUtils.checkShadowImages(unit) === false) return
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
         let height = this.tileData.getEntry(unit.position).height
@@ -85,7 +89,7 @@ export default class UnitViewClass {
 
         let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, shadowSprite.offset)
 
-        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
         drawctx.drawImage(
             unit.shadowImages[this.cameraData.rotation],
             shadowPos.x,
@@ -107,14 +111,14 @@ export default class UnitViewClass {
         }
 
 
-        if (unit.destination != null) {
+        if (unit.destination !== null) {
 
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
             pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
 
             let newHeight = this.tileData.getEntry(unit.destination).height
-            if (newHeight != height) {
+            if (newHeight !== height) {
                 let extraHeight = Math.sin(percent * Math.PI) * unit.jumpAmount
                 height = height + (newHeight - height) * percent + extraHeight
             }
@@ -126,7 +130,7 @@ export default class UnitViewClass {
         }
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, sprite.offset)
 
-        if (this.cameraData.onScreenCheck(spritePos, spriteSize) == false) return
+        if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
         drawctx.drawImage(
             unit.actionImage,
             spritePos.x,
@@ -137,7 +141,7 @@ export default class UnitViewClass {
     }
 
     drawActionShadow = (drawctx, unit) => {
-        if (this.commonUtils.checkShadowImages(unit) == false) return
+        if (this.commonUtils.checkShadowImages(unit) === false) return
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
 
@@ -153,7 +157,7 @@ export default class UnitViewClass {
             r: unit.position.r
         }
 
-        if (unit.destination != null) {
+        if (unit.destination !== null) {
             let percent = unit.travelPercent()
             let lerpPos = this.commonUtils.getLerpPos(unit.position, unit.destination, percent)
             pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
@@ -173,7 +177,7 @@ export default class UnitViewClass {
         }
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, shadowSprite.offset)
 
-        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
         drawctx.drawImage(
             unit.shadowImage,
             shadowPos.x,

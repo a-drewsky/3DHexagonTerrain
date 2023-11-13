@@ -150,7 +150,7 @@ export default class CommonRendererUtilsClass {
             let cropListTile = this.tileData.getEntryRotated({ q: keyObj.q + cropList[i].q, r: keyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) return true
 
-            if (cropListTile.height != tile.height) {
+            if (cropListTile.height !== tile.height) {
                 return true
             }
         }
@@ -217,7 +217,7 @@ export default class CommonRendererUtilsClass {
             let cropListTile = this.tileData.getEntryRotated({ q: roundedKeyObj.q + cropList[i].q, r: roundedKeyObj.r + cropList[i].r }, this.cameraData.rotation)
             if (!cropListTile) continue
             if (!cropListTile.rendered) continue
-            if (cropListTile.height != tile.height) continue
+            if (cropListTile.height !== tile.height) continue
 
             let tilePos = {
                 x: this.mapData.size + this.mapData.size * 2 * imageOffset.x + diff.x,

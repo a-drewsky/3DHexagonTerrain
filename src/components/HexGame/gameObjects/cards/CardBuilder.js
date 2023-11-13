@@ -18,10 +18,11 @@ export default class CardBuilderClass {
         switch(CardConfig[cardId].type){
             case 'unit':
                 card.stats = this.buildUnitStats(CardConfig[cardId].unitId)
-                break
+                return card
+            default:
+                return card
         }
-
-        return card
+ 
     }
 
     buildUnitStats = (unitId) => {

@@ -62,7 +62,7 @@ export default class HexMapViewClass {
    }
 
    checkAndRenderBackground = () => {
-      if (this.mapData.renderBackground == true) {
+      if (this.mapData.renderBackground === true) {
          let tempCanvas = this.tableView.render()
          this.uiController.setBgCanvasImage(tempCanvas)
          this.mapData.renderBackground = false
@@ -126,6 +126,8 @@ export default class HexMapViewClass {
          case 'bottom':
             camQ = medQ - scalar / 2
             camR = medR + scalar
+            break
+         default:
             break
       }
 

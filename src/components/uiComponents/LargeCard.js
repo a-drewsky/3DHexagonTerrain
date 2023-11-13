@@ -24,8 +24,8 @@ const LargeCardObject = (props) => {
                                 {props.card.stats.physical_attack_modifications.map((mod, index) =>
                                     <span
                                         className={`rounded px-1 
-                                        ${(index == 0 && props.card.stats.physical_attack_modifications.length > 1) && 'me-1'}
-                                        ${(index == props.card.stats.physical_attack_modifications.length - 1 && props.card.stats.physical_attack_modifications.length > 2) && 'ms-1'}
+                                        ${(index === 0 && props.card.stats.physical_attack_modifications.length > 1) && 'me-1'}
+                                        ${(index === props.card.stats.physical_attack_modifications.length - 1 && props.card.stats.physical_attack_modifications.length > 2) && 'ms-1'}
                                         `}
                                         key={index}
                                         style={{ backgroundColor: mod.color }}>
@@ -38,8 +38,8 @@ const LargeCardObject = (props) => {
                                 {props.card.stats.elemental_attack_modifications.map((mod, index) =>
                                     <span
                                         className={`rounded px-1 
-                                    ${(index == 0 && props.card.stats.elemental_attack_modifications.length > 1) && 'me-1'}
-                                    ${(index == props.card.stats.elemental_attack_modifications.length - 1 && props.card.stats.elemental_attack_modifications.length > 2) && 'ms-1'}
+                                    ${(index === 0 && props.card.stats.elemental_attack_modifications.length > 1) && 'me-1'}
+                                    ${(index === props.card.stats.elemental_attack_modifications.length - 1 && props.card.stats.elemental_attack_modifications.length > 2) && 'ms-1'}
                                     `}
                                         key={index}
                                         style={{ backgroundColor: mod.color }}>
@@ -54,8 +54,8 @@ const LargeCardObject = (props) => {
                                 {props.card.stats.physical_resistance_modifications.map((mod, index) =>
                                     <span
                                         className={`rounded px-1 
-                                    ${(index == 0 && props.card.stats.physical_resistance_modifications.length > 1) && 'me-1'}
-                                    ${(index == props.card.stats.physical_resistance_modifications.length - 1 && props.card.stats.physical_resistance_modifications.length > 2) && 'ms-1'}
+                                    ${(index === 0 && props.card.stats.physical_resistance_modifications.length > 1) && 'me-1'}
+                                    ${(index === props.card.stats.physical_resistance_modifications.length - 1 && props.card.stats.physical_resistance_modifications.length > 2) && 'ms-1'}
                                     `}
                                         key={index}
                                         style={{ backgroundColor: mod.color }}>
@@ -68,8 +68,8 @@ const LargeCardObject = (props) => {
                                 {props.card.stats.elemental_resistance_modifications.map((mod, index) =>
                                     <span
                                         className={`rounded px-1 
-                                    ${(index == 0 && props.card.stats.elemental_resistance_modifications.length > 1) && 'me-1'}
-                                    ${(index == props.card.stats.elemental_resistance_modifications.length - 1 && props.card.stats.elemental_resistance_modifications.length > 2) && 'ms-1'}
+                                    ${(index === 0 && props.card.stats.elemental_resistance_modifications.length > 1) && 'me-1'}
+                                    ${(index === props.card.stats.elemental_resistance_modifications.length - 1 && props.card.stats.elemental_resistance_modifications.length > 2) && 'ms-1'}
                                     `}
                                         key={index}
                                         style={{ backgroundColor: mod.color }}>

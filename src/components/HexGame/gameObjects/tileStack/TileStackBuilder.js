@@ -181,11 +181,11 @@ export default class TileStackBuilderClass {
             let tileBiome = this.tileData.getEntry(keyObj).biome
 
             let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome == tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey).biome))
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome === tileBiome || BIOME_CONSTANTS[tileBiome].biomeGroup.includes(this.tileData.getEntry(neighborKey).biome))
             neighborKeys = neighborKeys.filter(neighborKey => !keyStrSet.has(this.commonUtils.join(neighborKey)))
 
 
-            if (neighborKeys.length == 0) return keyStrSet
+            if (neighborKeys.length === 0) return keyStrSet
 
             for (let i = 0; i < neighborKeys.length; i++) {
                 //recursion
@@ -204,8 +204,8 @@ export default class TileStackBuilderClass {
 
             //check if tile has non-similar biome neighbors
             let neighborKeys = this.tileData.getNeighborKeys(keyObj, 1)
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome != tileBiome)
-            if (neighborKeys.length == 0) return false
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome !== tileBiome)
+            if (neighborKeys.length === 0) return false
 
             //get array of neighbor biomes
             let biomeArr = neighborKeys.map(neighborKey => this.tileData.getEntry(neighborKey).biome)
@@ -217,7 +217,7 @@ export default class TileStackBuilderClass {
                 let maxCount = 1
                 for (let i = 0; i < biomeArr.length; i++) {
                     let biome = biomeArr[i]
-                    if (modeMap[biome] == null) modeMap[biome] = 1
+                    if (modeMap[biome] === null) modeMap[biome] = 1
                     else modeMap[biome]++
 
                     if (modeMap[biome] > maxCount) {
@@ -228,7 +228,7 @@ export default class TileStackBuilderClass {
             }
 
             //clone a tile with most common biome
-            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome == maxBiome)
+            neighborKeys = neighborKeys.filter(neighborKey => this.tileData.getEntry(neighborKey).biome === maxBiome)
             let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
             let tileToClone = this.tileData.getEntry(neighborKeyToClone)
             this.utils.cloneTile(tileToClone, keyObj)
@@ -252,9 +252,9 @@ export default class TileStackBuilderClass {
                 let keyStrArrObj = this.commonUtils.split(keyStrArr[i])
                 let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj).biome
 
-                if (keyStrArrObjBiome == biome) {
+                if (keyStrArrObjBiome === biome) {
                     let keyIndex = keyStrings.indexOf(keyStrArr[i])
-                    if (keyIndex != -1) keyStrings.splice(keyIndex, 1)
+                    if (keyIndex !== -1) keyStrings.splice(keyIndex, 1)
                 }
             }
 
@@ -266,7 +266,7 @@ export default class TileStackBuilderClass {
                     let keyStrArrObjBiome = this.tileData.getEntry(keyStrArrObj).biome
 
 
-                    if (keyStrArrObjBiome != biome) keyStrArr.shift()
+                    if (keyStrArrObjBiome !== biome) keyStrArr.shift()
                     else if (smoothTile(keyStrArr[0])) keyStrArr.shift()
                     else {
                         keyStrArr.push(keyStrArr.shift())
@@ -281,7 +281,7 @@ export default class TileStackBuilderClass {
     reduceTileHeights = () => {
         let reduced = true
 
-        while (reduced == true) {
+        while (reduced === true) {
             reduced = false
             for (let entry of this.tileData.getTileMap()) {
 
@@ -300,11 +300,11 @@ export default class TileStackBuilderClass {
                     }
                 }
 
-                if (isCliff == false) continue
+                if (isCliff === false) continue
 
                 let hasStep = false
 
-                while (hasStep == false) {
+                while (hasStep === false) {
 
                     for (let neighborKey of neighborKeys) {
                         let neighborTile = this.tileData.getEntry(neighborKey)
@@ -314,7 +314,7 @@ export default class TileStackBuilderClass {
                             break
                         }
                     }
-                    if (hasStep == false) {
+                    if (hasStep === false) {
                         tile.height--
                         reduced = true
                     }

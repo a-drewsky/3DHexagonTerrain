@@ -30,7 +30,7 @@ export default class ShadowRendererClass {
         }
         let shadowPos = this.tileData.hexPositionToXYPosition(position, nearestTile.height, this.cameraData.rotation, shadowImage.offset)
 
-        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) == false) return
+        if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
 
         let croppedImage = this.utils.cropShadow(shadowImage.image, shadowImage.size, shadowImage.offset, position, this.tileData.rotatedMapList[this.cameraData.rotation])
 

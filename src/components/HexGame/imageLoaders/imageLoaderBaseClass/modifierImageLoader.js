@@ -15,7 +15,7 @@ export default class ModifierImageLoaderClass {
             this[key] = value
             value.sprite.onload = () => {
                 imagesLoaded++
-                if (imagesLoaded == Object.keys(this.images).length) {
+                if (imagesLoaded === Object.keys(this.images).length) {
                     delete this.images
                     startGame()
                 }
