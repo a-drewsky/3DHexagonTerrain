@@ -27,10 +27,8 @@ export default class HexMapUiUpdaterClass {
         this.uiController.selectCard(this.cardData.selectedCard)
         this.uiController.selectSprite(this.unitData.placementUnit || this.unitData.selectedUnit)
 
-        let zoom = this.cameraData.zoom * this.cameraData.zoomAmount
-
         //set background
-        let scale = this.canvas.width / (this.canvas.width + zoom)
+        let scale = this.canvas.width / (this.canvas.width + (this.cameraData.zoom * this.cameraData.zoomAmount))
         this.uiController.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
         this.uiController.setBgCanvasZoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
 

@@ -8,15 +8,18 @@ export default class FlagClass extends StructureClass{
         super(pos, 'flag', FlagConfig[flagId], images)
         this.type = 'flag'
         this.state = {
-            default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
+            default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' },
+            captured: { name: 'captured', rate: 'static', duration: 'continuous', type: 'static' }
         }
         this.state.current = this.state.default
-
-        this.captured = false
     }
 
     setCaptured = () => {
-        this.captured = true
+        this.state.current = this.state.captured
+    }
+
+    isCaptured = () => {
+        return this.state.current.name === 'captured'
     }
 
 }

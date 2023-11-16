@@ -1,11 +1,11 @@
 export default class TileStackClass {
 
-    constructor(pos, hexMapData, images) {
+    constructor(pos, mapData, images) {
         this.position = { ...pos }
 
         this.canvasSize = {
-            width: hexMapData.size * 2,
-            height: hexMapData.size * 2
+            width: mapData.size * 2,
+            height: mapData.size * 2
         }
 
         this.groundShadowTile = false

@@ -19,74 +19,81 @@ export default class UnitManagerClass {
         for (let unit of this.data.unitList) {
             unit.setFrame()
 
-            if (!unit.endOfState()) continue
+            if (unit.endOfState()) this.endUnitState(unit)
+        }
+    }
 
-            switch (unit.curState()) {
-                case 'walk':
-                case 'jump':
-                    this.endMovement(unit)
-                    continue
-                case 'mine':
-                    this.endMining(unit)
-                    continue
-                case 'attack':
-                    this.endAttack(unit)
-                    continue
-                case 'hit':
-                    this.endHit(unit)
-                    continue
-                case 'death':
-                    this.endDeath(unit)
-                    continue
-                default:
-                    continue
-            }
+    endUnitState = (unit) => {
+        switch (unit.curState()) {
+            case 'walk':
+            case 'jump':
+                this.endMovement(unit)
+                return
+            case 'mine':
+                this.endMining(unit)
+                return
+            case 'attack':
+                this.endAttack(unit)
+                return
+            case 'hit':
+                this.endHit(unit)
+                return
+            case 'death':
+                this.endDeath(unit)
+                return
+            case 'capture':
+                this.endCapture(unit)
+                return
+            default:
+                return
         }
     }
 
     endHit = (unit) => {
-        unit.setIdle()
-        this.data.clearTarget()
-        if (unit.curState() !== 'death') {
-            this.mapData.resetState()
-            this.selectionData.clearAllSelections()
+        if (unit.stats.health <= 0) {
+            unit.setAnimation('death')
+            this.mapData.setState('animation')
+            return
         }
+        unit.setIdle()
+        this.mapData.resetState()
     }
 
     endDeath = (unit) => {
         this.data.deleteUnit(unit.position)
         this.mapData.resetState()
-        this.selectionData.clearAllSelections()
     }
 
     endAttack = (unit) => {
         switch (unit.id) {
             case 'mountain_ranger':
                 this.endProjectileAttack(unit)
-                break
+                return
             default:
                 this.endAdjacentAttack(unit)
-                break
+                return
         }
-        unit.setIdle()
-        this.data.unselectUnit()
-        this.data.clearTarget()
     }
 
     endProjectileAttack = (unit) => {
         this.projectileData.newProjectile('arrow_projectile', unit.position, this.data.unitTarget)
+        this.endAction(unit)
+        this.mapData.setState('animation')
     }
 
     endAdjacentAttack = (unit) => {
-
         let targetObject = this.utils.getTargetObject(this.data.unitTarget)
-        if(!targetObject) return
+        targetObject.stats.health -= 25
 
-        targetObject.recieveAttack(25)
-        if (targetObject.type !== 'unit') {
+        this.endAction(unit)
+
+        if (targetObject.type === 'unit') {
+            targetObject.setAnimation('hit')
+            this.mapData.setState('animation')
+        } else {
+            targetObject.updateState()
             this.mapData.resetState()
-            this.selectionData.clearAllSelections()
-        }
+        }    
     }
 
     endMovement = (unit) => {
@@ -98,19 +105,33 @@ export default class UnitManagerClass {
             this.mapData.setState('chooseRotation')
             this.utils.findActionSet()
             this.utils.findAttackSet()
+        } else {
+            this.mapData.setState('animation')
         }
     }
 
     endMining = (unit) => {
-        this.data.unselectUnit()
-
         let mine = this.structureData.getStructure(this.data.unitTarget)
-        let minedResources = mine.mineResources(unit.stats.mining)
-        this.mapData.resources[mine.resource] += minedResources
-        unit.setIdle()
-        this.data.clearTarget()
+        let resourcesToMine = Math.min(mine.stats.resources, unit.stats.mining)
+        mine.stats.resources -= resourcesToMine
+        this.mapData.resources[mine.resource] += resourcesToMine
+        mine.updateState()
+
+        this.endAction(unit)
         this.mapData.resetState()
-        this.selectionData.clearAllSelections()
+    }
+
+    endCapture = (unit) => {
+        let flag = this.structureData.getStructure(this.data.unitTarget)
+        flag.setCaptured()
+
+        this.endAction(unit)
+        this.mapData.resetState()
+    }
+
+    endAction = (unit) => {
+        unit.setIdle()
+        this.data.unselectUnit()
     }
 
     render = () => {

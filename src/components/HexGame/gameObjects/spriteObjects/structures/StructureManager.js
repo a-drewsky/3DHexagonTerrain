@@ -18,11 +18,13 @@ export default class StructureManagerClass {
 
     update = () => {
         for (let [key, value] of this.data.structureMap) {
-            if (value.curState() === 'destroyed') {
-                this.data.destroyStructure(value)
-                return
-            }
-            switch(value.type){
+            switch (value.type) {
+                case 'bunker':
+                    this.updateBunker(value)
+                    continue
+                case 'resource':
+                    this.updateResource(value)
+                    continue
                 case 'flag':
                     this.updateFlag(value)
                     continue
@@ -32,23 +34,29 @@ export default class StructureManagerClass {
         }
     }
 
-    updateFlag = (flag) => {
-        
-        if(flag.captured){
-            this.selectionData.clearAllSelections()
-            this.uiController.setEndGameMenu(true)
-        }
-    }
-
+    //fix the prerender thing
     render = () => {
         for (let [key, value] of this.data.structureMap) {
-            if (value.render && !value.prerender){
-                if(value.type !== 'modifier') this.structureRenderer.renderSprite(value)
+            if (value.render && !value.prerender) {
+                if (value.type !== 'modifier') this.structureRenderer.renderSprite(value)
                 else this.modifierRenderer.renderSprite(value)
-            } 
+            }
             value.render = false
             value.prerender = false
         }
+    }
+
+    updateFlag = (flag) => {
+        //set hexmap state to end and update this in the hexmap ui updater
+        if (flag.isCaptured()) this.uiController.setEndGameMenu(true)
+    }
+
+    updateResource = (resource) => {
+        if (resource.curState() === 'destroyed') this.data.destroyStructure(resource)
+    }
+
+    updateBunker = (bunker) => {
+        if (bunker.curState() === 'destroyed') this.data.destroyStructure(bunker)
     }
 
 }

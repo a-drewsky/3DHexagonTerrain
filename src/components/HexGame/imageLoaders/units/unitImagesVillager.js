@@ -93,46 +93,14 @@ export default class UnitImagesVillagerClass extends SheetImageLoaderClass {
         this.animation_rows = { ...DEFAULT_ROWS }
 
         this.animation_data = {
-            idle: [
-                'idle_1',
-                'idle_2'
-            ],
-            walk: [
-                'walk_1',
-                'idle_1',
-                'walk_2',
-                'idle_1'
-            ],
-            jump: [
-                'jump_1',
-                'jump_2'
-            ],
-            mine: [
-                'mine_1',
-                'mine_2',
-                'mine_3',
-                'mine_4',
-                'mine_5',
-                'mine_6'
-            ],
-            attack: [
-                'attack_1',
-                'attack_2',
-                'attack_3',
-                'attack_4',
-                'attack_5'
-            ],
-            hit: [
-                'hit_1',
-                'hit_2',
-                'hit_3'
-            ],
-            death: [
-                'death_1',
-                'death_2',
-                'death_2',
-                'death_2'
-            ]
+            idle: [ 'idle_1', 'idle_2' ],
+            walk: [ 'walk_1', 'idle_1', 'walk_2', 'idle_1' ],
+            jump: [ 'jump_1', 'jump_2' ],
+            mine: [ 'mine_1', 'mine_2', 'mine_3', 'mine_4', 'mine_5', 'mine_6' ],
+            attack: [ 'attack_1', 'attack_2', 'attack_3', 'attack_4', 'attack_5' ],
+            hit: [ 'hit_1', 'hit_2', 'hit_3' ],
+            death: [ 'death_1', 'death_2', 'death_2', 'death_2' ],
+            capture: ['idle_1', 'idle_2']
         }
 
     }

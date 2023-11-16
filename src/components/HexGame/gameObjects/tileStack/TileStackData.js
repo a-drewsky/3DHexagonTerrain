@@ -32,6 +32,11 @@ export default class TileStackDataClass {
         this.tileMap.delete(this.utils.join(pos))
     }
 
+    initMapPosition  = (drawCanvas) => {
+        this.setRotatedMapList()
+        this.setMapPos(drawCanvas)
+    }
+
     setRotatedMapList = () => {
 
         for (let i = 0; i < 6; i++) {

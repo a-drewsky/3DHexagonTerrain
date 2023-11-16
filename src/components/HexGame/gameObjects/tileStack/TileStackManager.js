@@ -14,6 +14,11 @@ export default class TileStackManagerClass {
         this.utils = new CommonHexMapUtilsClass()
     }
 
+    update = () => {
+
+        this.render()
+    }
+
     render = () => {
         //Will be needed for level editor
 

@@ -27,7 +27,8 @@ export default class UnitConfig {
             mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
             attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
             hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
-            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' },
+            capture: { name: 'capture', rate: 450, duration: 900, type: 'action' }
         },
         abilities: {}
     }
@@ -59,7 +60,8 @@ export default class UnitConfig {
             mine: { name: 'mine', rate: 150, duration: 900, type: 'action' },
             attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
             hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
-            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' },
+            capture: { name: 'capture', rate: 450, duration: 900, type: 'action' }
         },
         abilities: {}
     }
@@ -91,7 +93,8 @@ export default class UnitConfig {
             mine: { name: 'mine', rate: 150, duration: 1050, type: 'action' },
             attack: { name: 'attack', rate: 150, duration: 750, type: 'action' },
             hit: { name: 'hit', rate: 150, duration: 450, type: 'action' },
-            death: { name: 'death', rate: 150, duration: 600, type: 'action' }
+            death: { name: 'death', rate: 150, duration: 600, type: 'action' },
+            capture: { name: 'capture', rate: 450, duration: 900, type: 'action' }
         },
         abilities: {}
     }

@@ -17,8 +17,8 @@ export default class SpriteObjectViewClass {
 
       this.canvas = canvas
 
-      this.modifiers = new ModifierViewClass(hexMapData)
       this.structures = new StructureViewClass(hexMapData)
+      this.modifiers = new ModifierViewClass(hexMapData)
       this.units = new UnitViewClass(hexMapData)
       this.projectiles = new ProjectileViewClass(hexMapData)
    }

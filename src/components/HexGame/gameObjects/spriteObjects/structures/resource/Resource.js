@@ -24,27 +24,15 @@ export default class ResourceClass extends StructureClass {
         this.state.current = this.state.resources_lte_100
     }
 
-    setState = () => {
-        let resourcePercent = this.stats.resources / this.stats.maxResources * 100
-        let newStateName = resourcePercent > 75 ? 'resources_lte_100'
-            : resourcePercent > 50 ? 'resources_lte_75'
-                : resourcePercent > 25 ? 'resources_lte_50'
-                    : resourcePercent > 0 ? 'resources_lte_25'
-                        : 'destroyed'
-        if (newStateName === this.curState()) return
-        this.state.current = this.state[newStateName]
-        this.render = true
+    setState = (stateName) => {
+        this.state.current = this.state[stateName]
     }
 
-    mineResources = (miningLevel) => {
-
-        let minedResources = Math.min(this.stats.resources, miningLevel)
-        this.stats.resources -= minedResources
-
-        this.setState()
+    updateState = () => {
         this.render = true
-
-        return minedResources
+        let resourcePercent = this.stats.resources / this.stats.maxResources * 100
+        let newStateName = resourcePercent > 75 ? 'resources_lte_100' : resourcePercent > 50 ? 'resources_lte_75' : resourcePercent > 25 ? 'resources_lte_50' : resourcePercent > 0 ? 'resources_lte_25' : 'destroyed'
+        if (newStateName !== this.curState()) this.setState(newStateName)
     }
 
 }

@@ -63,4 +63,14 @@ export default class CardDataClass {
         return true
     }
 
+    initializeCards = () => {
+        this.addCard()
+        this.flipCard()
+        this.addCard()
+        this.flipCard()
+        this.addCard()
+        this.flipCard()
+        this.addCard()
+    }
+
 }

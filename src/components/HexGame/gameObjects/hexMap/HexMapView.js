@@ -16,6 +16,7 @@ export default class HexMapViewClass {
       this.unitData = hexMapData.unitData
       this.strucutreData = hexMapData.strucutreData
 
+      this.tableView = new HexMapViewTableClass(hexMapData)
       this.tileView = new TileStackViewClass(hexMapData, canvas)
       this.spriteView = new SpriteObjectViewClass(hexMapData, canvas)
 
@@ -23,8 +24,6 @@ export default class HexMapViewClass {
       this.drawctx = null
 
       this.uiController = uiController
-
-      this.tableView = new HexMapViewTableClass(hexMapData)
 
       //Debug Settings
       this.DEBUG = userConstants.DEBUG

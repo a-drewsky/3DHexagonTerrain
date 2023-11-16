@@ -4,10 +4,10 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 export default class ProjectileManagerClass {
 
     constructor(hexMapData, images) {
-        this.mapData = hexMapData.mapData
-        this.selectionData = hexMapData.selectionData
-        this.unitData = hexMapData.unitData
         this.data = hexMapData.projectileData
+        this.mapData = hexMapData.mapData
+        this.unitData = hexMapData.unitData
+        this.structureData = hexMapData.structureData
         this.renderer = new ProjectileRendererClass(hexMapData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
@@ -16,14 +16,9 @@ export default class ProjectileManagerClass {
         for (let projectile of this.data.projectileList) {
             projectile.setFrame()
             projectile.updatePath()
-            if(projectile.state.current === projectile.state.destroy){
-                let targetUnit = this.unitData.getUnit(projectile.target)
-                if(targetUnit === null){
-                    this.mapData.resetState()
-                    this.selectionData.clearAllSelections()
-                }
-                this.data.deleteProjectile(projectile.loc)
-            } 
+            if (projectile.actionComplete) {
+                this.end(projectile)
+            }
         }
     }
 
@@ -31,6 +26,22 @@ export default class ProjectileManagerClass {
         for (let projectile of this.data.projectileList) {
             this.renderer.render(projectile)
         }
+    }
+
+    end = (projectile) => {
+        
+        let targetObject = this.unitData.getUnit(projectile.target) || this.structureData.getStructure(projectile.target)
+        targetObject.stats.health -= 25
+
+        if(targetObject && targetObject.type === 'unit'){
+            targetObject.setAnimation('hit')
+            this.mapData.setState('animation')
+        } else if(targetObject && targetObject.type === 'bunker') {
+            targetObject.updateState()
+            this.mapData.resetState()
+        }
+
+        this.data.deleteProjectile(projectile.loc)
     }
 
 }

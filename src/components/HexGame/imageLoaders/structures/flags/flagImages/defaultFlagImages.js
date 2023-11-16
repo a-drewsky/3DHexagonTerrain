@@ -31,6 +31,9 @@ export default class DefaultFlagImagesClass extends SheetImageLoaderClass {
             default: [
                 'default'
             ],
+            captured: [
+                'default'
+            ],
         }
 
     }

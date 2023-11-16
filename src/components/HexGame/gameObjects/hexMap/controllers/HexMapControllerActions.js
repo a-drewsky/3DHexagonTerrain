@@ -20,47 +20,35 @@ export default class HexMapControllerActionsClass {
 
     attack = () => {
 
-        if (this.unitData.selectedUnit === null) return
-
         let selectionTarget = this.selectionData.getTargetSelection()
-        if (selectionTarget === null) return
         let targetTile = this.tileData.getEntry(selectionTarget)
 
-        let targetObject = this.utils.getTargetObject(targetTile.position)
-        if (targetObject === null) return
-
-        this.unitData.selectTarget(targetTile.position)
         this.unitData.startAttack(targetTile.position)
 
         this.selectionData.clearAllSelections()
-
+        this.mapData.setState('animation')
     }
 
     mine = () => {
 
         let selectionTarget = this.selectionData.getTargetSelection()
-        if (selectionTarget === null) return
         let targetTile = this.tileData.getEntry(selectionTarget)
 
-        let targetStructure = this.structureData.getStructure(targetTile.position)
-        if (targetStructure === null) return
+        this.unitData.startMining(targetTile.position)
 
-        this.unitData.selectTarget(targetTile.position)
-        this.unitData.selectedUnit.setDirection(targetTile.position)
-        this.unitData.selectedUnit.setAnimation('mine')
         this.selectionData.clearAllSelections()
+        this.mapData.setState('animation')
     }
 
     capture = () => {
 
-        if (this.selectionData.getTargetSelection() === null) return
-        let targetTile = this.tileData.getEntry(this.selectionData.getTargetSelection())
+        let selectionTarget = this.selectionData.getTargetSelection()
+        let targetTile = this.tileData.getEntry(selectionTarget)
 
-        let targetStructure = this.structureData.getStructure(targetTile.position)
-        if (targetStructure === null || targetStructure.type !== 'flag') return
+        this.unitData.startCapture(targetTile.position)
 
-        this.unitData.selectedUnit.setDirection(targetTile.position)
-        targetStructure.setCaptured()
+        this.selectionData.clearAllSelections()
+        this.mapData.setState('animation')
 
     }
 

@@ -3,8 +3,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class UnitDataClass {
 
-    constructor(mapData, tileData, images, uiController) {
-        this.mapData = mapData
+    constructor(tileData, images, uiController) {
         this.tileData = tileData
         this.images = images
         this.uiController = uiController
@@ -38,7 +37,7 @@ export default class UnitDataClass {
     }
 
     createUnit = (unitId) => {
-        let newUnit = new UnitClass({q: null, r: null}, unitId, this.mapData, this.tileData, this.images, this.uiController)
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.tileData, this.images, this.uiController)
         this.placementUnit = newUnit
     }
 
@@ -61,6 +60,7 @@ export default class UnitDataClass {
 
     unselectUnit = () => {
         this.selectedUnit = null
+        this.clearTarget()
     }
 
     selectTarget = (pos) => {
@@ -73,8 +73,21 @@ export default class UnitDataClass {
 
     //action functions
     startAttack = (targetPos) => {
+        this.selectTarget(targetPos)
         this.selectedUnit.setDirection(targetPos)
         this.selectedUnit.setAnimation('attack')
+    }
+    
+    startMining = (targetPos) => {
+        this.selectTarget(targetPos)
+        this.selectedUnit.setDirection(targetPos)
+        this.selectedUnit.setAnimation('mine')
+    }
+    
+    startCapture = (targetPos) => {
+        this.selectTarget(targetPos)
+        this.selectedUnit.setDirection(targetPos)
+        this.selectedUnit.setAnimation('capture')
     }
 
 }

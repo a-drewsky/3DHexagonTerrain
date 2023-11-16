@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, mapData, tileData, images, uiController) {
+    constructor(pos, unitId, tileData, images, uiController) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = { ...pos }
@@ -45,7 +45,6 @@ export default class UnitClass {
         this.jumpAmount = JUMP_AMOUNT
 
         //access data
-        this.mapData = mapData
         this.tileData = tileData
         this.uiController = uiController
         this.commonUtils = new CommonHexMapUtilsClass()
@@ -78,7 +77,8 @@ export default class UnitClass {
             mine: UnitConfig[unitId].animations.mine,
             attack: UnitConfig[unitId].animations.attack,
             hit: UnitConfig[unitId].animations.hit,
-            death: UnitConfig[unitId].animations.death
+            death: UnitConfig[unitId].animations.death,
+            capture: UnitConfig[unitId].animations.capture
         }
         this.state.current = this.state.idle
 
@@ -135,9 +135,7 @@ export default class UnitClass {
             this.frameStartTime = Date.now()
 
             this.frame++
-
             if (this.frame >= this.imageObject[this.curState()].images.length) this.frame = 0
-
         }
 
     }
@@ -188,18 +186,11 @@ export default class UnitClass {
         this.destinationCurTime = null
         this.destinationStartTime = null
 
-        this.mapData.setState('animation')
-
     }
 
     setIdle = () => {
         this.render = true
         this.actionComplete = false
-
-        if (this.stats.health <= 0) {
-            this.setAnimation('death')
-            return
-        }
 
         this.frame = 0
         this.frameStartTime = Date.now()

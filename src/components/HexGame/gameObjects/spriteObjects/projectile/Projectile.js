@@ -6,17 +6,14 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileClass {
 
-    constructor(loc, pos, target, projectileId, mapData, unitData, structureData, tileData, images) {
+    constructor(loc, pos, target, projectileId, unitData, structureData, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
         console.log(pos, target)
 
         this.loc = loc
 
-        this.position = {
-            q: pos.q,
-            r: pos.r
-        }
+        this.position = { ...pos }
 
         //static data
         this.id = ProjectileConfig[projectileId].id
@@ -43,24 +40,16 @@ export default class ProjectileClass {
         this.frameCurTime = Date.now()
 
         //projectile data
+        this.actionComplete = false
         this.projectileStartTime = Date.now()
         this.projectileCurTime = Date.now()
-        this.target = {
-            q: target.q,
-            r: target.r
-        }
+        this.target = { ...target }
 
-        this.state = {
-            animation: 'animation',
-            destroy: 'destroy'
-        }
-        this.state.current = this.state.animation
 
         //settings
         this.tileTravelTime = TRAVEL_TIME
 
         //access data
-        this.mapData = mapData
         this.unitData = unitData
         this.structureData = structureData
         this.tileData = tileData
@@ -112,7 +101,6 @@ export default class ProjectileClass {
     }
 
 
-    //SET FUNCTIONS
     setFrame = () => {
         this.frameCurTime = Date.now()
         if (this.animation.rate === 0) return
@@ -137,26 +125,8 @@ export default class ProjectileClass {
         this.projectileCurTime = Date.now()
         
         if (this.projectileCurTime - this.projectileStartTime >= this.travelTime()) {
-            this.attackTarget()
-            this.state = this.state.destroy
+            this.actionComplete = true
         }
-
-    }
-
-    //END STATE
-    attackTarget = () => {
-
-        //unit
-        let attckedUnit = this.unitData.getUnit(this.target)
-
-        if(attckedUnit) attckedUnit.recieveAttack(25)
-
-        //structure
-        let attckedStructure = this.structureData.getStructure(this.target)
-
-        if(attckedStructure && attckedStructure.type === 'bunker') attckedStructure.recieveAttack(25)
-
-        
     }
 
 }
