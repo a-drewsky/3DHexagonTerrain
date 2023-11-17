@@ -5,8 +5,8 @@ export default class CameraManagerClass {
         this.data = hexMapData.cameraData
     }
 
-    prerender = (drawCanvas) => {
-        this.data.drawCanvas = drawCanvas
+    prerender = (hexmapCanvas) => {
+        this.data.hexmapCanvas = hexmapCanvas
     }
 
     update = () => {

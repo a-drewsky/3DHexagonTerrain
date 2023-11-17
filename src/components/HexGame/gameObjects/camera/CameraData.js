@@ -8,7 +8,7 @@ export default class CameraDataClass {
     constructor(mapData) {
 
         this.mapData = mapData
-        this.drawCanvas = null
+        this.hexmapCanvas = null
 
         this.position = {
             x: 0,
@@ -122,9 +122,9 @@ export default class CameraDataClass {
     checkEdges = () => {
         let zoom = this.zoom * this.zoomAmount
         if (this.position.x + zoom / 2 < 0 - this.mapData.canvas.width / 2) this.position.x = 0 - this.mapData.canvas.width / 2 - zoom / 2
-        if (this.position.x + zoom / 2 > this.drawCanvas.width - this.mapData.canvas.width / 2) this.position.x = this.drawCanvas.width - this.mapData.canvas.width / 2 - zoom / 2
+        if (this.position.x + zoom / 2 > this.hexmapCanvas.width - this.mapData.canvas.width / 2) this.position.x = this.hexmapCanvas.width - this.mapData.canvas.width / 2 - zoom / 2
         if (this.position.y + zoom / 2 * this.mapData.squish < 0 - this.mapData.canvas.height / 2) this.position.y = 0 - this.mapData.canvas.height / 2 - zoom / 2 * this.mapData.squish
-        if (this.position.y + zoom / 2 * this.mapData.squish > this.drawCanvas.height - this.mapData.canvas.height / 2) this.position.y = this.drawCanvas.height - this.mapData.canvas.height / 2 - zoom / 2 * this.mapData.squish
+        if (this.position.y + zoom / 2 * this.mapData.squish > this.hexmapCanvas.height - this.mapData.canvas.height / 2) this.position.y = this.hexmapCanvas.height - this.mapData.canvas.height / 2 - zoom / 2 * this.mapData.squish
     }
 
 }

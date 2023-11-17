@@ -20,8 +20,8 @@ export default class HexMapViewClass {
       this.tileView = new TileStackViewClass(hexMapData, canvas)
       this.spriteView = new SpriteObjectViewClass(hexMapData, canvas)
 
-      this.drawCanvas = null
-      this.drawctx = null
+      this.hexmapCanvas = null
+      this.hexmapCtx = null
 
       this.uiController = uiController
 
@@ -36,19 +36,18 @@ export default class HexMapViewClass {
 
    draw = () => {
 
-      this.drawctx.clearRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
+      this.drawTable()
 
-      this.checkAndRenderBackground()
+      this.hexmapCtx.clearRect(0, 0, this.hexmapCanvas.width, this.hexmapCanvas.height)
 
-      this.tileView.draw(this.drawctx)
+      this.tileView.draw(this.hexmapCtx)
 
-      this.spriteView.draw(this.drawctx)
+      this.spriteView.draw(this.hexmapCtx)
 
-
-      if (this.DEBUG) this.drawctx.strokeRect(0, 0, this.drawCanvas.width, this.drawCanvas.height)
+      if (this.DEBUG) this.hexmapCtx.strokeRect(0, 0, this.hexmapCanvas.width, this.hexmapCanvas.height)
 
       this.ctx.drawImage(
-         this.drawCanvas,
+         this.hexmapCanvas,
          this.cameraData.position.x, this.cameraData.position.y,
          this.canvas.width + this.cameraData.zoom * this.cameraData.zoomAmount, this.canvas.height + this.cameraData.zoom * this.cameraData.zoomAmount * (this.canvas.height / this.canvas.width),
          0, 0, this.canvas.width, this.canvas.height
@@ -60,7 +59,7 @@ export default class HexMapViewClass {
       }
    }
 
-   checkAndRenderBackground = () => {
+   drawTable = () => {
       if (this.mapData.renderBackground === true) {
          let tempCanvas = this.tableView.render()
          this.uiController.setBgCanvasImage(tempCanvas)
@@ -77,18 +76,18 @@ export default class HexMapViewClass {
       let mapHeight = Math.max(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish)) - Math.min(...keys.map(key => this.mapData.vecQ.y * key.q * this.mapData.squish + this.mapData.vecR.y * key.r * this.mapData.squish))
       let mapHyp = Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight)
 
-      this.drawCanvas = document.createElement('canvas')
-      this.drawCanvas.width = mapHyp / this.mapData.squish
-      this.drawCanvas.height = mapHyp
-      this.drawCanvas.style.imageRendering = 'pixelated'
-      this.drawctx = this.drawCanvas.getContext("2d")
+      this.hexmapCanvas = document.createElement('canvas')
+      this.hexmapCanvas.width = mapHyp / this.mapData.squish
+      this.hexmapCanvas.height = mapHyp
+      this.hexmapCanvas.style.imageRendering = 'pixelated'
+      this.hexmapCtx = this.hexmapCanvas.getContext("2d")
 
-      this.uiController.setBgCanvasSize(this.drawCanvas.width, this.drawCanvas.height)
-      this.uiController.setBgCanvasZoom(this.drawCanvas.width, this.drawCanvas.height)
+      this.uiController.setBgCanvasSize(this.hexmapCanvas.width, this.hexmapCanvas.height)
+      this.uiController.setBgCanvasZoom(this.hexmapCanvas.width, this.hexmapCanvas.height)
 
-      this.tableView.prerender(this.drawCanvas)
+      this.tableView.prerender(this.hexmapCanvas)
 
-      return this.drawCanvas
+      return this.hexmapCanvas
    }
 
    initializeCamera = () => {

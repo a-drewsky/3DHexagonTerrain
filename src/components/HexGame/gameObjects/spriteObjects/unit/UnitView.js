@@ -10,14 +10,14 @@ export default class UnitViewClass {
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-    draw = (drawctx, unit) => {
+    draw = (hexmapCtx, unit) => {
 
         switch (unit.state.current.type) {
             case 'static':
-                this.drawStaticUnit(drawctx, unit)
+                this.drawStaticUnit(hexmapCtx, unit)
                 return
             case 'action':
-                this.drawActionUnit(drawctx, unit)
+                this.drawActionUnit(hexmapCtx, unit)
                 return
             default:
                 return
@@ -25,14 +25,14 @@ export default class UnitViewClass {
 
     }
 
-    drawShadow = (drawctx, unit) => {
+    drawShadow = (hexmapCtx, unit) => {
 
         switch (unit.state.current.type) {
             case 'static':
-                this.drawStaticShadow(drawctx, unit)
+                this.drawStaticShadow(hexmapCtx, unit)
                 return
             case 'action':
-                this.drawActionShadow(drawctx, unit)
+                this.drawActionShadow(hexmapCtx, unit)
                 return
             default:
                 return
@@ -40,17 +40,17 @@ export default class UnitViewClass {
 
     }
 
-    drawSilhouette = (drawctx, unit) => {
+    drawSilhouette = (hexmapCtx, unit) => {
         if (!this.tileData.hasTileEntry(unit.position)) return
 
-        drawctx.globalAlpha = 0.4
+        hexmapCtx.globalAlpha = 0.4
 
-        this.drawStaticUnit(drawctx, unit)
+        this.drawStaticUnit(hexmapCtx, unit)
 
-        drawctx.globalAlpha = 1
+        hexmapCtx.globalAlpha = 1
     }
 
-    drawStaticUnit = (drawctx, unit) => {
+    drawStaticUnit = (hexmapCtx, unit) => {
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
         let tileObj = this.tileData.getEntry(unit.position)
@@ -64,7 +64,7 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(keyObj, tileObj.height, this.cameraData.rotation, sprite.offset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             unit.staticImages[unit.frame][this.cameraData.rotation],
             spritePos.x,
             spritePos.y,
@@ -74,7 +74,7 @@ export default class UnitViewClass {
 
     }
 
-    drawStaticShadow = (drawctx, unit) => {
+    drawStaticShadow = (hexmapCtx, unit) => {
         if (this.commonUtils.checkShadowImages(unit) === false) return
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
@@ -90,7 +90,7 @@ export default class UnitViewClass {
         let shadowPos = this.tileData.hexPositionToXYPosition(keyObj, height, this.cameraData.rotation, shadowSprite.offset)
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             unit.shadowImages[this.cameraData.rotation],
             shadowPos.x,
             shadowPos.y,
@@ -99,7 +99,7 @@ export default class UnitViewClass {
         )
     }
 
-    drawActionUnit = (drawctx, unit) => {
+    drawActionUnit = (hexmapCtx, unit) => {
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
         let sprite = unit.imageObject[unit.curState()].images[unit.frame][this.cameraData.rotation]
@@ -131,7 +131,7 @@ export default class UnitViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, sprite.offset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             unit.actionImage,
             spritePos.x,
             spritePos.y,
@@ -140,7 +140,7 @@ export default class UnitViewClass {
         )
     }
 
-    drawActionShadow = (drawctx, unit) => {
+    drawActionShadow = (hexmapCtx, unit) => {
         if (this.commonUtils.checkShadowImages(unit) === false) return
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
@@ -178,7 +178,7 @@ export default class UnitViewClass {
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, shadowSprite.offset)
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             unit.shadowImage,
             shadowPos.x,
             shadowPos.y,

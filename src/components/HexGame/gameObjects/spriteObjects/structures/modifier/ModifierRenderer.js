@@ -63,24 +63,17 @@ export default class ModifierRendererClass {
 
         let initCameraRotation = this.cameraData.rotation
 
-        //set canvas size
-        let canvasSize = {
-            width: this.mapData.size * 2 * modifier.imageObject.spriteSize.width,
-            height: this.mapData.size * 2 * modifier.imageObject.spriteSize.height
-        }
-
         let imageList = []
 
         for (let rotation = 0; rotation < 6; rotation++) {
 
-            this.cameraData.rotation = rotation;
-            let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
+            this.cameraData.rotation = rotation
             let keyObj = this.commonUtils.rotateTile(modifier.position, this.cameraData.rotation)
 
             let filteredPositionsList = []
             for (let j = 0; j < modifier.spritePositions.length; j++) {
 
-                let index = modifier.spritePositions[j].position - Math.floor(rotation / 2);
+                let index = modifier.spritePositions[j].position - rotation
                 if (index < 0) index += 6
 
                 filteredPositionsList.push({ ...this.positionsList[index], image: modifier.spritePositions[j].image })
@@ -91,6 +84,11 @@ export default class ModifierRendererClass {
 
 
             //create canvas
+            let canvasSize = {
+                width: this.mapData.size * 2 * modifier.imageObject.spriteSize.width,
+                height: this.mapData.size * 2 * modifier.imageObject.spriteSize.height
+            }
+
             let tempCanvasTop = document.createElement('canvas')
             tempCanvasTop.width = canvasSize.width
             tempCanvasTop.height = canvasSize.height
@@ -127,10 +125,10 @@ export default class ModifierRendererClass {
                 bottom: tempCanvasBottom
             }
 
-            this.utils.cropOutTiles(imageList[rotation].top, modifier.imageObject.offset, keyObj, rotatedMap, true)
+            this.utils.cropOutTiles(imageList[rotation].top, modifier.imageObject.offset, keyObj)
             this.utils.darkenSprite(imageList[rotation].top, modifier)
 
-            this.utils.cropOutTiles(imageList[rotation].bottom, modifier.imageObject.offset, keyObj, rotatedMap, true)
+            this.utils.cropOutTiles(imageList[rotation].bottom, modifier.imageObject.offset, keyObj)
             this.utils.darkenSprite(imageList[rotation].bottom, modifier)
 
 
@@ -162,7 +160,7 @@ export default class ModifierRendererClass {
             let filteredPositionsList = []
             for (let j = 0; j < modifier.spritePositions.length; j++) {
 
-                let index = modifier.spritePositions[j].position - Math.floor(rotation / 2);
+                let index = modifier.spritePositions[j].position - rotation
                 if (index < 0) index += 6
 
                 filteredPositionsList.push({ ...this.positionsList[index], image: modifier.spritePositions[j].image })

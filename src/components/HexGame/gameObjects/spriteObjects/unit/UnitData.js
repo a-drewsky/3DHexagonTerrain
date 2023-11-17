@@ -3,10 +3,9 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class UnitDataClass {
 
-    constructor(tileData, images, uiController) {
+    constructor(tileData, images) {
         this.tileData = tileData
         this.images = images
-        this.uiController = uiController
 
         this.unitList = []
         this.selectedUnit = null
@@ -37,7 +36,7 @@ export default class UnitDataClass {
     }
 
     createUnit = (unitId) => {
-        let newUnit = new UnitClass({q: null, r: null}, unitId, this.tileData, this.images, this.uiController)
+        let newUnit = new UnitClass({q: null, r: null}, unitId, this.tileData, this.images)
         this.placementUnit = newUnit
     }
 

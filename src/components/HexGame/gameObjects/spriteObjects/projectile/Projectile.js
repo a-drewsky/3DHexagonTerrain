@@ -6,7 +6,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileClass {
 
-    constructor(loc, pos, target, projectileId, unitData, structureData, tileData, images) {
+    constructor(loc, pos, target, projectileId, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
         console.log(pos, target)
@@ -50,8 +50,6 @@ export default class ProjectileClass {
         this.tileTravelTime = TRAVEL_TIME
 
         //access data
-        this.unitData = unitData
-        this.structureData = structureData
         this.tileData = tileData
         this.commonUtils = new CommonHexMapUtilsClass()
 

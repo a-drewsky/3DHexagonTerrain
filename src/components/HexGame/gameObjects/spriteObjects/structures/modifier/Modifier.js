@@ -54,7 +54,7 @@ export default class ModifierClass {
         let roll = Math.random()
         let numSprites = 0
         let chance = 1.0
-        while (roll <= chance && numSprites < 6) {
+        while (roll <= chance && numSprites < 5) {
             addSprite(positions, filteredPositions)
             numSprites++
             chance = this.spriteChance[numSprites+1]

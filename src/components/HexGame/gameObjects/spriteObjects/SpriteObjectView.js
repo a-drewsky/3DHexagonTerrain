@@ -160,17 +160,18 @@ export default class SpriteObjectViewClass {
 
    }
 
-   draw = (drawctx) => {
+   draw = (hexmapCtx) => {
 
       let spriteList = this.buildSpriteList()
 
-      this.drawShadows(drawctx, spriteList)
-      this.drawSprites(drawctx, spriteList)
+      this.drawShadows(hexmapCtx, spriteList)
+      this.drawSprites(hexmapCtx, spriteList)
 
    }
 
-   drawShadows = (drawctx, spriteList) => {
-      for (let i = 0; i < spriteList.length; i++) {
+   drawShadows = (hexmapCtx, spriteList) => {
+      for (let i in spriteList) {
+         
          if (spriteList[i].layer === -1) continue
          if (spriteList[i].silhouette) continue
 
@@ -178,19 +179,19 @@ export default class SpriteObjectViewClass {
 
          switch (spriteObject.type) {
             case 'unit':
-               this.units.drawShadow(drawctx, spriteObject)
+               this.units.drawShadow(hexmapCtx, spriteObject)
                continue
             case 'projectile':
-               this.projectiles.drawShadow(drawctx, spriteObject)
+               this.projectiles.drawShadow(hexmapCtx, spriteObject)
                continue
             case 'bunker':
             case 'prop':
             case 'resource':
             case 'flag':
-               this.structures.drawShadow(drawctx, spriteObject)
+               this.structures.drawShadow(hexmapCtx, spriteObject)
                continue
             case 'modifier':
-               this.modifiers.drawShadow(drawctx, spriteObject)
+               this.modifiers.drawShadow(hexmapCtx, spriteObject)
                continue
             default:
                continue
@@ -199,8 +200,8 @@ export default class SpriteObjectViewClass {
       }
    }
 
-   drawSprites = (drawctx, spriteList) => {
-      for (let i = 0; i < spriteList.length; i++) {
+   drawSprites = (hexmapCtx, spriteList) => {
+      for (let i in spriteList) {
 
          let spriteObject = spriteList[i].spriteObject
 
@@ -209,18 +210,18 @@ export default class SpriteObjectViewClass {
             case 'prop':
             case 'resource':
             case 'flag':
-               this.structures.draw(drawctx, spriteObject)
+               this.structures.draw(hexmapCtx, spriteObject)
                continue
             case 'modifier':
-               if (spriteList[i].layer === -1) this.modifiers.drawTop(drawctx, spriteObject)
-               if (spriteList[i].layer === 1) this.modifiers.drawBottom(drawctx, spriteObject)
+               if (spriteList[i].layer === -1) this.modifiers.drawTop(hexmapCtx, spriteObject)
+               if (spriteList[i].layer === 1) this.modifiers.drawBottom(hexmapCtx, spriteObject)
                continue
             case 'unit':
-               if (spriteList[i].silhouette) this.units.drawSilhouette(drawctx, spriteObject)
-               else this.units.draw(drawctx, spriteObject)
+               if (spriteList[i].silhouette) this.units.drawSilhouette(hexmapCtx, spriteObject)
+               else this.units.draw(hexmapCtx, spriteObject)
                continue
             case 'projectile':
-               this.projectiles.drawSprite(drawctx, spriteObject)
+               this.projectiles.drawSprite(hexmapCtx, spriteObject)
                continue
             default:
                continue

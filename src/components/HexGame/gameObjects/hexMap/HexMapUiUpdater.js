@@ -9,7 +9,7 @@ export default class HexMapUiUpdaterClass {
         this.cameraData = hexMapData.cameraData
         
         this.canvas = canvas
-        this.drawCanvas = null
+        this.hexmapCanvas = null
 
         this.uiController = uiController
 
@@ -17,8 +17,8 @@ export default class HexMapUiUpdaterClass {
 
     }
 
-    prerender = (drawCanvas) => {
-        this.drawCanvas = drawCanvas
+    prerender = (hexmapCanvas) => {
+        this.hexmapCanvas = hexmapCanvas
     }
 
     update = () => {
@@ -26,11 +26,12 @@ export default class HexMapUiUpdaterClass {
         this.uiController.setCards(this.cardData.cards)
         this.uiController.selectCard(this.cardData.selectedCard)
         this.uiController.selectSprite(this.unitData.placementUnit || this.unitData.selectedUnit)
+        this.uiController.setEndGameMenu(this.mapData.curState() === 'end')
 
         //set background
         let scale = this.canvas.width / (this.canvas.width + (this.cameraData.zoom * this.cameraData.zoomAmount))
         this.uiController.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
-        this.uiController.setBgCanvasZoom(this.drawCanvas.width * scale, this.drawCanvas.height * scale)
+        this.uiController.setBgCanvasZoom(this.hexmapCanvas.width * scale, this.hexmapCanvas.height * scale)
 
     }
 

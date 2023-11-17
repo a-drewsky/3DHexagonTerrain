@@ -15,7 +15,7 @@ export default class TileStackViewClass {
 
     }
 
-    draw = (drawctx) => {
+    draw = (hexmapCtx) => {
 
         let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]
 
@@ -32,12 +32,12 @@ export default class TileStackViewClass {
                 continue
             }
             
-            drawctx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x, tilePos.y, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
+            hexmapCtx.drawImage(tileObj.images[this.cameraData.rotation], tilePos.x, tilePos.y, tileObj.images[this.cameraData.rotation].width, tileObj.images[this.cameraData.rotation].height)
 
             let tileSelections = this.selectionData.getSelectionNames(value)
 
             for (let tileSelection of tileSelections) {
-                drawctx.drawImage(tileObj.selectionImageObject[tileSelection], tilePos.x, tilePos.y, this.mapData.size * 2, this.mapData.size * 2)
+                hexmapCtx.drawImage(tileObj.selectionImageObject[tileSelection], tilePos.x, tilePos.y, this.mapData.size * 2, this.mapData.size * 2)
             }
 
 

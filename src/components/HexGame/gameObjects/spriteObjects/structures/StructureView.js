@@ -10,7 +10,7 @@ export default class StructureViewClass{
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-   draw = (drawctx, structure) => {
+   draw = (hexmapCtx, structure) => {
       if (this.commonUtils.checkImagesLoaded(structure) === false) return
 
       let keyObj = this.commonUtils.rotateTile(structure.position, this.cameraData.rotation)
@@ -26,7 +26,7 @@ export default class StructureViewClass{
 
       if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
       
-      drawctx.drawImage(
+      hexmapCtx.drawImage(
          structure.images[0][this.cameraData.rotation],
          spritePos.x,
          spritePos.y,
@@ -35,7 +35,7 @@ export default class StructureViewClass{
       )
    }
 
-   drawShadow = (drawctx, structure) => {
+   drawShadow = (hexmapCtx, structure) => {
       if (this.commonUtils.checkShadowImages(structure) === false) return
 
       let shadowImage = structure.shadowImageObject[this.cameraData.rotation]
@@ -53,7 +53,7 @@ export default class StructureViewClass{
 
       if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
 
-      drawctx.drawImage(
+      hexmapCtx.drawImage(
          structure.shadowImages[this.cameraData.rotation],
          shadowPos.x,
          shadowPos.y,

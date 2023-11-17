@@ -34,21 +34,8 @@ export default class StructureManagerClass {
         }
     }
 
-    //fix the prerender thing
-    render = () => {
-        for (let [key, value] of this.data.structureMap) {
-            if (value.render && !value.prerender) {
-                if (value.type !== 'modifier') this.structureRenderer.renderSprite(value)
-                else this.modifierRenderer.renderSprite(value)
-            }
-            value.render = false
-            value.prerender = false
-        }
-    }
-
     updateFlag = (flag) => {
-        //set hexmap state to end and update this in the hexmap ui updater
-        if (flag.isCaptured()) this.uiController.setEndGameMenu(true)
+        if (flag.isCaptured()) this.mapData.setState('end')
     }
 
     updateResource = (resource) => {
@@ -57,6 +44,16 @@ export default class StructureManagerClass {
 
     updateBunker = (bunker) => {
         if (bunker.curState() === 'destroyed') this.data.destroyStructure(bunker)
+    }
+
+    render = () => {
+        for (let [key, value] of this.data.structureMap) {
+            if (value.render && !value.prerender) {
+                if (value.type !== 'modifier') this.structureRenderer.renderSprite(value)
+                else this.modifierRenderer.renderSprite(value)
+                value.render = false
+            }
+        }
     }
 
 }

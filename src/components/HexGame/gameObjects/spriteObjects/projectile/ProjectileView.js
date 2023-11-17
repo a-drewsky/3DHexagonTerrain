@@ -10,7 +10,7 @@ export default class ProjectileViewClass {
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
-    drawSprite = (drawctx, projectile) => {
+    drawSprite = (hexmapCtx, projectile) => {
 
         let sprite = projectile.imageObject['default'].images[projectile.frame][this.cameraData.rotation]
 
@@ -27,7 +27,7 @@ export default class ProjectileViewClass {
         let spritePos = this.tileData.hexPositionToXYPosition(pos, projectile.spriteHeight(), this.cameraData.rotation, sprite.offset)
 
         if (this.cameraData.onScreenCheck(spritePos, spriteSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             projectile.image,
             spritePos.x,
             spritePos.y,
@@ -36,7 +36,7 @@ export default class ProjectileViewClass {
         )
     }
 
-    drawShadow = (drawctx, projectile) => {
+    drawShadow = (hexmapCtx, projectile) => {
         if (this.commonUtils.checkShadowImages(projectile) === false) return
         
         let shadowImage = projectile.shadowImageObject[this.cameraData.rotation]
@@ -55,7 +55,7 @@ export default class ProjectileViewClass {
         let shadowPos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, shadowImage.offset)
 
         if (this.cameraData.onScreenCheck(shadowPos, shadowSize) === false) return
-        drawctx.drawImage(
+        hexmapCtx.drawImage(
             projectile.shadowImage,
             shadowPos.x,
             shadowPos.y,

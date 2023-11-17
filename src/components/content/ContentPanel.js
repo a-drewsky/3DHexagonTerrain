@@ -218,17 +218,6 @@ const ContentPanel = () => {
                {/*END GAME CREATION FORM*/}
 
             </Col>
-            <Col xs={3}>
-               {/*DEBUG MENU FORM*/}
-               <Form className='mt-5 mb-5 border w-100 p-3 mx-auto' onSubmit={startNewGame}>
-
-                  <Form.Group className='d-flex justify-content-center'>
-                     <Button className='m-1' onClick={() => { gameClass.uiInput('switchView') }}>Switch view</Button>
-                  </Form.Group>
-
-               </Form>
-               {/*END DEBUG MENU FORM*/}
-            </Col>
          </Row>
       </>
    )

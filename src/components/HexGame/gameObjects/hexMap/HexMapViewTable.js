@@ -16,7 +16,7 @@ export default class HexMapViewTableClass {
       this.tileData = hexMapData.tileData
       this.cameraData = hexMapData.cameraData
       
-      this.drawCanvas = null
+      this.hexmapCanvas = null
 
       this.rotationAlpha = {
          0: 0.5,
@@ -29,15 +29,15 @@ export default class HexMapViewTableClass {
 
    }
 
-   prerender = (drawCanvas) => {
-      this.drawCanvas = drawCanvas
+   prerender = (hexmapCanvas) => {
+      this.hexmapCanvas = hexmapCanvas
    }
 
    render = () => {
 
       let tempCanvas = document.createElement('canvas')
-      tempCanvas.width = this.drawCanvas.width
-      tempCanvas.height = this.drawCanvas.height
+      tempCanvas.width = this.hexmapCanvas.width
+      tempCanvas.height = this.hexmapCanvas.height
       let tempctx = tempCanvas.getContext('2d')
 
       //get table position

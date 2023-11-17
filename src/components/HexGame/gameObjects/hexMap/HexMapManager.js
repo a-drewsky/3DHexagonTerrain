@@ -13,7 +13,7 @@ export default class HexMapManagerClass {
 
         this.images = images
 
-        this.data = new HexMapDataClass(canvas, images, uiController)
+        this.data = new HexMapDataClass(canvas, images)
         this.cameraManager = new CameraManagerClass(this.data)
         this.tileManager = new TileStackManagerClass(this.data, this.images)
         this.spriteManager = new SpriteObjectManagerClass(this.data, this.images, uiController)
@@ -48,11 +48,11 @@ export default class HexMapManagerClass {
     }
 
     prerender = () => {
-        let drawCanvas = this.view.initializeCanvas()
-        this.prerenderer.prerender(drawCanvas)
-        this.uiUpdater.prerender(drawCanvas)
-        this.cameraManager.prerender(drawCanvas)
-        this.data.tileData.initMapPosition(drawCanvas)
+        let hexmapCanvas = this.view.initializeCanvas()
+        this.prerenderer.prerender(hexmapCanvas)
+        this.uiUpdater.prerender(hexmapCanvas)
+        this.cameraManager.prerender(hexmapCanvas)
+        this.data.tileData.initMapPosition(hexmapCanvas)
         this.view.initializeCamera()
     }
 

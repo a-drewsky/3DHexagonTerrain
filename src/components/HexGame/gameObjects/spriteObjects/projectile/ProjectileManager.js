@@ -14,24 +14,24 @@ export default class ProjectileManagerClass {
 
     update = () => {
         for (let projectile of this.data.projectileList) {
-            projectile.setFrame()
-            projectile.updatePath()
-            if (projectile.actionComplete) {
-                this.end(projectile)
-            }
+            this.updateProjectile(projectile)
         }
     }
 
-    render = () => {
-        for (let projectile of this.data.projectileList) {
-            this.renderer.render(projectile)
+    updateProjectile = (projectile) => {
+        projectile.setFrame()
+        projectile.updatePath()
+        if (projectile.actionComplete) {
+            this.endProjectile(projectile)
         }
     }
 
-    end = (projectile) => {
+    endProjectile = (projectile) => {
         
         let targetObject = this.unitData.getUnit(projectile.target) || this.structureData.getStructure(projectile.target)
         targetObject.stats.health -= 25
+        
+        this.data.deleteProjectile(projectile.loc)
 
         if(targetObject && targetObject.type === 'unit'){
             targetObject.setAnimation('hit')
@@ -41,7 +41,12 @@ export default class ProjectileManagerClass {
             this.mapData.resetState()
         }
 
-        this.data.deleteProjectile(projectile.loc)
+    }
+
+    render = () => {
+        for (let projectile of this.data.projectileList) {
+            this.renderer.render(projectile)
+        }
     }
 
 }

@@ -10,6 +10,7 @@ export default class HexMapDataMapClass {
             selectMovement: 'selectMovement', //movementSelection
             chooseRotation: 'chooseRotation', //rotationSelection
             placeUnit: 'placeUnit', //spritePlacement
+            end: 'end', //game has ended
         }
         this.state.current = this.state.selectTile
 

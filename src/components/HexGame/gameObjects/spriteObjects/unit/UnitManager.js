@@ -135,14 +135,17 @@ export default class UnitManagerClass {
     }
 
     render = () => {
+
         for (let unit of this.data.unitList) {
             if (unit.render) this.renderer.render(unit)
             unit.render = false
         }
+
         if (this.data.placementUnit) {
             if (this.data.placementUnit.render) this.renderer.render(this.data.placementUnit)
             this.data.placementUnit.render = false
         }
+        
     }
 
 }

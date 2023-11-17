@@ -5,7 +5,7 @@ import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
 export default class UnitClass {
 
-    constructor(pos, unitId, tileData, images, uiController) {
+    constructor(pos, unitId, tileData, images) {
         if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
         this.position = { ...pos }
@@ -46,7 +46,6 @@ export default class UnitClass {
 
         //access data
         this.tileData = tileData
-        this.uiController = uiController
         this.commonUtils = new CommonHexMapUtilsClass()
 
         //unit data

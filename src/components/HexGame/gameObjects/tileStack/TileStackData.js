@@ -32,9 +32,9 @@ export default class TileStackDataClass {
         this.tileMap.delete(this.utils.join(pos))
     }
 
-    initMapPosition  = (drawCanvas) => {
+    initMapPosition  = (hexmapCanvas) => {
         this.setRotatedMapList()
-        this.setMapPos(drawCanvas)
+        this.setMapPos(hexmapCanvas)
     }
 
     setRotatedMapList = () => {
@@ -65,7 +65,7 @@ export default class TileStackDataClass {
         }
     }
 
-    setMapPos = (drawCanvas) => {
+    setMapPos = (hexmapCanvas) => {
 
         for (let rotation = 0; rotation < 6; rotation++) {
 
@@ -89,28 +89,28 @@ export default class TileStackDataClass {
 
             switch (rotation) {
                 case 0:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 13)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 3.5)
                     break
                 case 1:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 22)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9.5)
                     break
                 case 2:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 19)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 15)
                     break
                 case 3:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 11)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 20.5)
                     break
                 case 4:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 2)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 14.5)
                     break
                 case 5:
-                    renderHexMapPos.x = drawCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
-                    renderHexMapPos.y = drawCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
+                    renderHexMapPos.x = hexmapCanvas.width / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 5)
+                    renderHexMapPos.y = hexmapCanvas.height / 2 - mapHyp / 2 * Math.cos(Math.PI / 24 * 9)
                     break
                 default:
                     break
