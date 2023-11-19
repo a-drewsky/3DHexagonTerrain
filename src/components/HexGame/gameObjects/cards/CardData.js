@@ -26,6 +26,14 @@ export default class CardDataClass {
         this.cards.push(this.cardBuilder.buildCard(card_options[Math.floor(Math.random() * card_options.length)]))
     }
 
+    getCard = (cardNum) => {
+        return this.cards[cardNum]
+    }
+
+    getSelectedCard = () => {
+        return this.getCard(this.selectedCard)
+    }
+
     flipCard = () => {
         this.cards[this.cards.length - 1].flipped = false
     }
@@ -44,6 +52,7 @@ export default class CardDataClass {
             playerResources[cost.resource] += Math.floor(cost.amount/2)
         }
         this.removeCard()
+        this.resetSelectedCard()
     }
 
     useCard = (playerResources) => {
@@ -54,6 +63,7 @@ export default class CardDataClass {
         }
 
         this.removeCard()
+        this.resetSelectedCard()
     }
 
     canUseCard = (playerResources) => {
@@ -71,6 +81,15 @@ export default class CardDataClass {
         this.addCard()
         this.flipCard()
         this.addCard()
+    }
+
+    //SELECTIONS
+    setSelectedCard = (cardNum) => {
+        this.selectedCard = cardNum
+    }
+
+    resetSelectedCard = () => {
+        this.selectedCard = null
     }
 
 }

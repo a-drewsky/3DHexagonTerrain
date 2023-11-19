@@ -1,8 +1,9 @@
 
-import HexMapControllerUtilsClass from './HexMapControllerUtils'
+import HexMapControllerUtilsClass from './utils/HexMapControllerUtils'
 import CollisionClass from '../../../utilities/collision'
 import HexMapControllerClickClass from './HexMapControllerClick'
 import HexMapControllerHoverClass from './HexMapControllerHover'
+import HexMapPathFinderClass from './utils/HexMapPathFinder'
 export default class HexMapControllerClass {
 
     constructor(hexMapData, canvas) {
@@ -18,6 +19,7 @@ export default class HexMapControllerClass {
         this.collision = new CollisionClass()
 
         this.utils = new HexMapControllerUtilsClass(hexMapData)
+        this.pathfinder = new HexMapPathFinderClass(hexMapData)
 
         this.hoverController = new HexMapControllerHoverClass(hexMapData)
         this.clickController = new HexMapControllerClickClass(hexMapData, this.hoverController)
@@ -74,16 +76,15 @@ export default class HexMapControllerClass {
     selectCard = (cardNum) => {
         if (this.mapData.curState() !== 'selectTile') return
 
-        if (this.cardData.selectedCard === cardNum) {
-            this.cardData.selectedCard = null
-            return
-        }
-        this.cardData.selectedCard = null
-        if (this.cardData.cards[cardNum].flipped) {
+        let curSelectedNum = this.cardData.selectedCard
+        this.cardData.resetSelectedCard()
+        if (curSelectedNum === cardNum) return
+        
+        if (this.cardData.getCard(cardNum).flipped) {
             this.cardData.flipCard()
             this.cardData.addCard()
         } else {
-            this.cardData.selectedCard = cardNum
+            this.cardData.setSelectedCard(cardNum)
         }
     }
 
@@ -91,21 +92,15 @@ export default class HexMapControllerClass {
         if (this.mapData.curState() !== 'selectTile') return
         if (!this.cardData.canUseCard(this.mapData.resources)) return
 
-        this.selectionData.clearAllSelections()
-        this.selectionData.clearHover()
-        this.utils.findPlacementSet()
-        this.unitData.createUnit(this.cardData.cards[this.cardData.selectedCard].unitId)
-        this.mapData.setState('placeUnit')
+        this.utils.setStartPlacement()
 
         this.cardData.useCard(this.mapData.resources)
         this.cardData.addCard()
-        this.cardData.selectedCard = null
     }
 
     scrapCard = () => {
         this.cardData.scrapCard(this.mapData.resources)
         this.cardData.addCard()
-        this.cardData.selectedCard = null
     }
 
     rotateRight = () => {

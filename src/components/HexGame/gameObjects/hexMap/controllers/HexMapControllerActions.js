@@ -1,4 +1,4 @@
-import HexMapControllerUtilsClass from "./HexMapControllerUtils"
+import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
 
 export default class HexMapControllerActionsClass {
 

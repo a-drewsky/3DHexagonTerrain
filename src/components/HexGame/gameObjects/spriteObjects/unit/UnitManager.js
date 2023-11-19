@@ -1,5 +1,5 @@
 import UnitRendererClass from "./UnitRenderer"
-import HexMapControllerUtilsClass from "../../hexMap/controllers/HexMapControllerUtils"
+import HexMapControllerUtilsClass from "../../hexMap/controllers/utils/HexMapControllerUtils"
 
 export default class UnitManagerClass {
 
@@ -21,6 +21,9 @@ export default class UnitManagerClass {
 
             if (unit.endOfState()) this.endUnitState(unit)
         }
+
+        if(this.mapData.curState() === 'chooseRotation') return
+        if(this.data.unitList.some(unit => unit.curState() !== 'idle')) this.mapData.setState('animation')
     }
 
     endUnitState = (unit) => {
@@ -52,7 +55,6 @@ export default class UnitManagerClass {
     endHit = (unit) => {
         if (unit.stats.health <= 0) {
             unit.setAnimation('death')
-            this.mapData.setState('animation')
             return
         }
         unit.setIdle()
@@ -78,7 +80,6 @@ export default class UnitManagerClass {
     endProjectileAttack = (unit) => {
         this.projectileData.newProjectile('arrow_projectile', unit.position, this.data.unitTarget)
         this.endAction(unit)
-        this.mapData.setState('animation')
     }
 
     endAdjacentAttack = (unit) => {
@@ -89,7 +90,6 @@ export default class UnitManagerClass {
 
         if (targetObject.type === 'unit') {
             targetObject.setAnimation('hit')
-            this.mapData.setState('animation')
         } else {
             targetObject.updateState()
             this.mapData.resetState()
@@ -100,13 +100,8 @@ export default class UnitManagerClass {
         unit.updatePath()
         if (unit.actionComplete) {
             unit.setIdle()
-            this.data.clearTarget()
-            this.selectionData.setInfoSelection('unit', unit.position)
-            this.mapData.setState('chooseRotation')
-            this.utils.findActionSet()
-            this.utils.findAttackSet()
+            this.utils.setChooseRotation(unit)
         } else {
-            this.mapData.setState('animation')
         }
     }
 
@@ -145,7 +140,7 @@ export default class UnitManagerClass {
             if (this.data.placementUnit.render) this.renderer.render(this.data.placementUnit)
             this.data.placementUnit.render = false
         }
-        
+
     }
 
 }

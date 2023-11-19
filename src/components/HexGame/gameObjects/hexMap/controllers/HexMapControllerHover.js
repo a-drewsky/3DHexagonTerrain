@@ -1,5 +1,6 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import HexMapControllerUtilsClass from "./HexMapControllerUtils"
+import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
+import HexMapPathFinderClass from "./utils/HexMapPathFinder"
 
 export default class HexMapControllerHoverClass {
 
@@ -13,6 +14,7 @@ export default class HexMapControllerHoverClass {
         this.structureData = hexMapData.structureData
 
         this.utils = new HexMapControllerUtilsClass(hexMapData)
+        this.pathfinder = new HexMapPathFinderClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
@@ -25,14 +27,14 @@ export default class HexMapControllerHoverClass {
                 this.setHover(x, y)
                 return
             case 'placeUnit':
-                this.updatePlacementSelection(x, y)
+                this.updatePlacementHover(x, y)
                 return
             case 'selectMovement':
-                this.updatePathSelection(x, y)
+                this.updatePathHover(x, y)
                 return
             case 'chooseRotation':
                 this.setUnitMouseDirection(x, y)
-                this.updateEndMoveSelection(x, y)
+                this.updateEndMoveHover(x, y)
                 return
             default:
                 return
@@ -46,48 +48,28 @@ export default class HexMapControllerHoverClass {
         if (!hoverTile) return
 
         let tileObj = this.tileData.getEntry(hoverTile)
-
-        switch (this.mapData.curState()) {
-            case 'selectTile':
-                this.selectionData.setInfoSelection('hover', tileObj.position)
-                return
-            case 'placeUnit':
-            case 'chooseRotation':
-            case 'selectMovement':
-            case 'animation':
-                return
-            default:
-                return
-        }
+        this.selectionData.setInfoSelection('hover', tileObj.position)
     }
 
-    updatePlacementSelection = (x, y) => {
+    updatePlacementHover = (x, y) => {
 
-        if (this.unitData.placementUnit !== null) {
-            this.unitData.placementUnit.rotation = -1 * this.cameraData.rotation + 3
-            if (this.unitData.placementUnit.rotation < 0) this.unitData.placementUnit.rotation += 6
-        }
+        this.utils.setPlacementUnitRotation()
 
         if (this.selectionData.getPathLocked()) return
         this.selectionData.clearPath()
 
         let hoverTile = this.utils.getSelectedTile(x, y)
-        this.unitData.placementUnit.setPosition(hoverTile)
-        if (!hoverTile) {
-            this.unitData.placementUnit.setPosition({ q: null, r: null })
-            return
-        }
+        this.utils.setPlacementUnitPosition(hoverTile)
 
-        let placementSelections = this.selectionData.getPathingSelection('placement')
-        if (placementSelections.some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
+        if (hoverTile && this.selectionData.getPathingSelection('placement').some(pos => this.commonUtils.tilesEqual(hoverTile, pos))) {
             this.selectionData.setPlacementHover(hoverTile)
             return
-        } else {
-            this.selectionData.setInfoSelection('hover', hoverTile)
         }
+        this.selectionData.setInfoSelection('hover', hoverTile)
+
     }
 
-    updatePathSelection = (x, y) => {
+    updatePathHover = (x, y) => {
 
         if (this.selectionData.getPathLocked()) return
 
@@ -99,8 +81,7 @@ export default class HexMapControllerHoverClass {
             this.selectionData.clearPath()
             return
         }
-
-        this.utils.setPath(hoverTile)
+        this.pathfinder.setPath(hoverTile)
 
     }
 
@@ -120,7 +101,7 @@ export default class HexMapControllerHoverClass {
 
     }
 
-    updateEndMoveSelection = (x, y) => {
+    updateEndMoveHover = (x, y) => {
         if (this.selectionData.getPathLocked()) return
         this.selectionData.clearTarget()
 
@@ -130,7 +111,7 @@ export default class HexMapControllerHoverClass {
             return
         }
 
-        this.utils.setEndMove(hoverTile)
+        this.utils.setEndMoveHover(hoverTile)
     }
 
 }

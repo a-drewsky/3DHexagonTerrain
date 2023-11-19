@@ -229,10 +229,4 @@ export default class UnitClass {
 
     }
 
-    //RECIEVING
-    recieveAttack = (damage) => {
-        this.stats.health -= damage
-        this.setAnimation('hit')
-    }
-
 }

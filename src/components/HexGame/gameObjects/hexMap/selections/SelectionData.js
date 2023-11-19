@@ -42,7 +42,6 @@ export default class SelectionDataClass {
                 tile: 'tile_info',
                 hover: {
                     selectTile: 'hover_select',
-                    chooseRotation: 'hover_select',
                     placeUnit: 'hover_place'
                 },
                 unit: {
@@ -94,8 +93,8 @@ export default class SelectionDataClass {
 
         let selections = []
         if (testSelection('infoSelections', 'tile')) selections.push(this.selectionMapping.info.tile)
-        if (testSelection('infoSelections', 'hover')) selections.push(this.selectionMapping.info.hover[this.mapData.state.current])
-        if (testSelection('infoSelections', 'unit')) selections.push(this.selectionMapping.info.unit[this.mapData.state.current])
+        if (testSelection('infoSelections', 'hover') && this.mapData.curState() !== 'animation') selections.push(this.selectionMapping.info.hover[this.mapData.curState()])
+        if (testSelection('infoSelections', 'unit')) selections.push(this.selectionMapping.info.unit[this.mapData.curState()])
 
         if (testSelectionArr('pathingSelections', 'movement')) selections.push(this.selectionMapping.pathing.movement)
         if (testSelectionArr('pathingSelections', 'action')) selections.push(this.selectionMapping.pathing.action)

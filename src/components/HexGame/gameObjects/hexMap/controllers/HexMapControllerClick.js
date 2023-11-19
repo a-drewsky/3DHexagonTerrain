@@ -1,6 +1,7 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 import HexMapControllerActionsClass from "./HexMapControllerActions"
-import HexMapControllerUtilsClass from "./HexMapControllerUtils"
+import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
+import HexMapPathFinderClass from "./utils/HexMapPathFinder"
 
 export default class HexMapControllerClickClass {
 
@@ -13,6 +14,7 @@ export default class HexMapControllerClickClass {
         this.unitData = hexMapData.unitData
         this.structureData = hexMapData.structureData
 
+        this.pathfinder = new HexMapPathFinderClass(hexMapData)
         this.utils = new HexMapControllerUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
@@ -50,47 +52,12 @@ export default class HexMapControllerClickClass {
         this.cardData.selectedCard = null
 
         if (this.unitData.getUnit(tile.position) !== null) {
-            this.selectionData.setInfoSelection('unit', tile.position)
-            this.unitData.selectUnit(tile.position)
-            this.utils.findMoveSet()
-            this.mapData.setState('selectMovement')
-        }
-        else {
-            this.selectionData.setInfoSelection('tile', tile.position)
-            this.mapData.setState('selectTile')
-        }
-    }
-
-    placeUnit = (tile, x, y) => {
-
-        if (tile === null) return
-
-        if (!this.selectionData.getPathingSelection('placement').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
-            this.selectionData.unlockPath()
-            this.selectionData.clearTarget()
-            this.hoverController.updatePlacementSelection(x, y)
+            this.utils.setSelectedUnit(tile.position)
             return
         }
 
-        if (!this.selectionData.getPathLocked()) {
-            this.selectionData.lockPath()
-            this.selectionData.setTargetSelection(tile.position, 'placement')
-            return
-        }
-
-        if (this.commonUtils.tilesEqual(tile.position, this.selectionData.getTargetSelection())) {
-            this.unitData.addUnit(tile.position)
-            this.unitData.eraseUnit()
-            this.selectionData.clearAllSelections()
-            this.selectionData.setInfoSelection('unit', tile.position)
-            this.unitData.selectUnit(tile.position)
-            this.mapData.setState('chooseRotation')
-            return
-        }
-
-        this.selectionData.unlockPath()
-        this.selectionData.clearTarget()
-        this.hoverController.updatePlacementSelection(x, y)
+        this.selectionData.setInfoSelection('tile', tile.position)
+        this.mapData.setState('selectTile')
 
     }
 
@@ -98,19 +65,19 @@ export default class HexMapControllerClickClass {
 
         if (this.selectionData.getPathingSelection('action').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
             let actioning = this.confirmAction(tile)
-            if (!actioning) this.hoverController.updatePathSelection(x, y)
+            if (!actioning) this.hoverController.updatePathHover(x, y)
             return
         }
 
         if (this.selectionData.getPathingSelection('attack').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
             let attacking = this.confirmAttack(tile)
-            if (!attacking) this.hoverController.updatePathSelection(x, y)
+            if (!attacking) this.hoverController.updatePathHover(x, y)
             return
         }
 
         if (this.selectionData.getPathingSelection('movement').some(moveObj => this.commonUtils.tilesEqual(moveObj, tile.position))) {
             let moving = this.confirmMovement(tile)
-            if (!moving) this.hoverController.updatePathSelection(x, y)
+            if (!moving) this.hoverController.updatePathHover(x, y)
             return
         }
 
@@ -118,11 +85,36 @@ export default class HexMapControllerClickClass {
         this.selectTile(tile)
     }
 
+    placeUnit = (tile, x, y) => {
+
+        if (tile === null) {
+            this.utils.unlockPlacementSelection()
+            return
+        }
+
+        if (!this.selectionData.getPathingSelection('placement').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
+            this.utils.unlockPlacementSelection()
+            this.hoverController.updatePlacementHover(x, y)
+            return
+        }
+
+        if (!this.selectionData.getPathLocked()) {
+            this.utils.lockPlacementSelection(tile.position)
+            return
+        }
+
+        if (this.commonUtils.tilesEqual(tile.position, this.selectionData.getTargetSelection())) {
+            this.unitData.addUnit(tile.position)
+            this.utils.setEndPlacement(tile.position)
+            return
+        }
+
+        this.utils.unlockPlacementSelection()
+        this.hoverController.updatePlacementHover(x, y)
+
+    }
+
     endUnitTurn = (tile) => {
-        let unit = this.unitData.selectedUnit
-
-        if (unit === null) return
-
         if (this.selectionData.getPathingSelection('action').some(tileObj => this.commonUtils.tilesEqual(tileObj, tile.position))) {
             this.confirmAction(tile)
             return

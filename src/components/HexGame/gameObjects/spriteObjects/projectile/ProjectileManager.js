@@ -16,6 +16,7 @@ export default class ProjectileManagerClass {
         for (let projectile of this.data.projectileList) {
             this.updateProjectile(projectile)
         }
+        if(this.data.projectileList.length > 0) this.mapData.setState('animation')
     }
 
     updateProjectile = (projectile) => {
@@ -35,7 +36,6 @@ export default class ProjectileManagerClass {
 
         if(targetObject && targetObject.type === 'unit'){
             targetObject.setAnimation('hit')
-            this.mapData.setState('animation')
         } else if(targetObject && targetObject.type === 'bunker') {
             targetObject.updateState()
             this.mapData.resetState()

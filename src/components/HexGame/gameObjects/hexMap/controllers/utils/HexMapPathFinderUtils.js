@@ -1,6 +1,6 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 
-export default class HexMapPathFinderClass {
+export default class HexMapPathFinderUtilsClass {
 
     constructor(hexMapData) {
 
@@ -187,68 +187,6 @@ export default class HexMapPathFinderClass {
 
             //check if current tile is the target
             if (current.tile.q === targetNode.tile.q && current.tile.r === targetNode.tile.r) {
-                return this.getPath(startNode, current)
-            }
-
-            //Get Neighbors
-            let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
-            neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
-
-
-            //assign cost to neighbors and add to search list
-            for (let neighbor of neighbors) {
-
-                let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
-
-                let tileCost = this.getTileCost(neighbor.tile)
-
-                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
-
-                if (!inSearch || costToNeighbor < neighbor.g) {
-                    neighbor.moveCost = costToNeighbor
-                    neighbor.connection = current
-
-                    if (!inSearch) {
-                        neighbor.estimateCost = this.commonUtils.getDistance(neighbor.tile, targetNode.tile) + tileCost + this.getHeightDifference(neighbor.tile, targetNode.tile)
-                        toSearch.push(neighbor)
-                    }
-                }
-
-            }
-
-        }
-
-        return null
-    }
-
-    findClosestPath = (start, target, targets) => {
-        let startNode = this.createNode(start)
-        let targetNode = this.createNode(target)
-        let adjacentNodes = []
-
-        for(let target of targets){
-            adjacentNodes.push(this.createNode(target))
-        }
-
-        let toSearch = [startNode]
-        let processed = []
-
-        while (toSearch.length > 0) {
-            let current = toSearch[0]
-
-            for (let t of toSearch) {
-                if (this.GetF(t) < this.GetF(current) || (this.GetF(t) === this.GetF(current) && t.estimateCost < current.h)){
-                    current = t
-                } 
-            }
-
-            processed.push(current)
-            let currentToSearchIndex = toSearch.findIndex(node => node.tile.q === current.tile.q && node.tile.r === current.tile.r)
-            toSearch.splice(currentToSearchIndex, 1)
-
-            //check if current tile is the target
-            if(adjacentNodes.filter(node => current.tile.q === node.tile.q && current.tile.r === node.tile.r).length > 0) {
                 return this.getPath(startNode, current)
             }
 

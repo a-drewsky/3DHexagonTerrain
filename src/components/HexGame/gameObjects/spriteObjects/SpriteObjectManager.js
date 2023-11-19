@@ -11,9 +11,9 @@ export default class SpriteObjectManagerClass{
     }
 
     update = () => {
+        this.projectiles.update()
         this.units.update()
         this.structures.update()
-        this.projectiles.update()
         
         this.render()
     }

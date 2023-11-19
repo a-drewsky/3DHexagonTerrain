@@ -9,17 +9,14 @@ export default class ProjectileClass {
     constructor(loc, pos, target, projectileId, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
-        console.log(pos, target)
-
         this.loc = loc
 
         this.position = { ...pos }
+        this.target = { ...target }
 
         //static data
         this.id = ProjectileConfig[projectileId].id
         this.type = 'projectile'
-        this.name = ProjectileConfig[projectileId].name
-        this.description = ProjectileConfig[projectileId].description
         this.height = ProjectileConfig[projectileId].height
 
         //image data
@@ -43,7 +40,6 @@ export default class ProjectileClass {
         this.actionComplete = false
         this.projectileStartTime = Date.now()
         this.projectileCurTime = Date.now()
-        this.target = { ...target }
 
 
         //settings

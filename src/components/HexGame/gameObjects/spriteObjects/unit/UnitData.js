@@ -47,11 +47,6 @@ export default class UnitDataClass {
         this.unitList.push(newUnit)
         return newUnit
     }
-
-    //selections
-    eraseUnit = () => {
-        this.placementUnit = null
-    }
     
     selectUnit = (pos) => {
         this.selectedUnit = this.getUnit(pos)

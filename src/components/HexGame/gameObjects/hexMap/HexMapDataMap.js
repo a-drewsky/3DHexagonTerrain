@@ -43,7 +43,6 @@ export default class HexMapDataMapClass {
 
     resetState = () => {
         this.state.current = this.state.selectTile
-        console.log(this.curState())
     }
 
     setState = (state) => {
