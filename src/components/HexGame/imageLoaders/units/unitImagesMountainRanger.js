@@ -17,8 +17,6 @@ export default class UnitImagesMountainRangerClass extends SheetImageLoaderClass
 
         super()
 
-        this.shadow = 'medium_round_shadow'
-
         this.icon = icon_image
 
         this.sheet_rows = {

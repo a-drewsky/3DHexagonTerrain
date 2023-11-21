@@ -1,6 +1,6 @@
-import CollisionClass from "../../utilities/collision"
+import CollisionClass from "../../commonUtils/CollisionUtils"
 
-export default class HexMapUiUpdaterClass {
+export default class HexMapUiManagerClass {
 
     constructor(hexMapData, canvas, uiController) {
         this.mapData = hexMapData.mapData

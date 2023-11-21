@@ -1,12 +1,20 @@
 import StructureClass from "../Structure"
 import ResourceConfig from "./ResourceConfig"
 
+const RESOURCE_STATE = {
+    resources_lte_100: { name: 'resources_lte_100', rate: 'static', duration: 'continuous', type: 'static' },
+    resources_lte_75: { name: 'resources_lte_75', rate: 'static', duration: 'continuous', type: 'static' },
+    resources_lte_50: { name: 'resources_lte_50', rate: 'static', duration: 'continuous', type: 'static' },
+    resources_lte_25: { name: 'resources_lte_25', rate: 'static', duration: 'continuous', type: 'static' },
+    destroyed: { name: 'destroyed', rate: null, duration: null, type: null }
+}
+
 export default class ResourceClass extends StructureClass {
 
     constructor(pos, resourceId, images) {
         if (!ResourceConfig[resourceId]) throw Error(`Invalid Resource ID: (${resourceId}). Resource config properties are: [${Object.getOwnPropertyNames(ResourceConfig).splice(3)}]`)
-        super(pos, 'resource', ResourceConfig[resourceId], images)
-        this.type = 'resource'
+        super(pos, 'resource', ResourceConfig[resourceId], RESOURCE_STATE, 'resources_lte_100', images)
+        this.spriteType = 'resource'
         this.destructionStructure = 'emptymine'
         this.resource = ResourceConfig[resourceId].resource
 
@@ -14,14 +22,6 @@ export default class ResourceClass extends StructureClass {
             resources: ResourceConfig[resourceId].stats.resources,
             maxResources: ResourceConfig[resourceId].stats.resources
         }
-        this.state = {
-            resources_lte_100: { name: 'resources_lte_100', rate: 'static', duration: 'continuous', type: 'static' },
-            resources_lte_75: { name: 'resources_lte_75', rate: 'static', duration: 'continuous', type: 'static' },
-            resources_lte_50: { name: 'resources_lte_50', rate: 'static', duration: 'continuous', type: 'static' },
-            resources_lte_25: { name: 'resources_lte_25', rate: 'static', duration: 'continuous', type: 'static' },
-            destroyed: { name: 'destroyed', rate: null, duration: null, type: null },
-        }
-        this.state.current = this.state.resources_lte_100
     }
 
     setState = (stateName) => {

@@ -1,4 +1,4 @@
-import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
+import HexMapControllerUtilsClass from "../../commonUtils/controllerUtils/HexMapControllerUtils"
 
 export default class HexMapControllerActionsClass {
 
@@ -14,8 +14,7 @@ export default class HexMapControllerActionsClass {
 
     move = () => {
         this.unitData.selectedUnit.setMove(this.selectionData.getPath())
-        this.selectionData.clearAllSelections()
-        this.mapData.setState('animation')
+        this.utils.setStartAnimation()
     }
 
     attack = () => {
@@ -25,8 +24,7 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.startAttack(targetTile.position)
 
-        this.selectionData.clearAllSelections()
-        this.mapData.setState('animation')
+        this.utils.setStartAnimation()
     }
 
     mine = () => {
@@ -36,8 +34,7 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.startMining(targetTile.position)
 
-        this.selectionData.clearAllSelections()
-        this.mapData.setState('animation')
+        this.utils.setStartAnimation()
     }
 
     capture = () => {
@@ -47,8 +44,7 @@ export default class HexMapControllerActionsClass {
 
         this.unitData.startCapture(targetTile.position)
 
-        this.selectionData.clearAllSelections()
-        this.mapData.setState('animation')
+        this.utils.setStartAnimation()
 
     }
 

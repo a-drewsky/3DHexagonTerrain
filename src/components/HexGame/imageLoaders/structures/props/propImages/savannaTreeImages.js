@@ -11,8 +11,6 @@ export default class SavannaTreeImagesClass extends SheetImageLoaderClass {
 
         super(true)
 
-        this.shadow = 'savanna_tree_shadow'
-
         this.sheet_rows = { ...DEFAULT_ROWS }
 
         this.sheet_data = {

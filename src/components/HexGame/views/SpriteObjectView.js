@@ -1,8 +1,8 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
-import ModifierViewClass from "./structures/modifier/ModifierView"
-import StructureViewClass from "./structures/StructureView"
-import UnitViewClass from "./unit/UnitView"
-import ProjectileViewClass from "./projectile/ProjectileView"
+import ModifierViewClass from "./ModifierView"
+import StructureViewClass from "./StructureView"
+import UnitViewClass from "./UnitView"
+import ProjectileViewClass from "./ProjectileView"
 
 export default class SpriteObjectViewClass {
 
@@ -30,7 +30,7 @@ export default class SpriteObjectViewClass {
       for (let [key, value] of this.structureData.getStructureMap()) {
 
          //modifier top or bottom
-         if (value.type === 'modifier') {
+         if (value.spriteType === 'modifier') {
 
             spriteList.push({
                spriteObject: value,
@@ -177,7 +177,7 @@ export default class SpriteObjectViewClass {
 
          let spriteObject = spriteList[i].spriteObject
 
-         switch (spriteObject.type) {
+         switch (spriteObject.spriteType) {
             case 'unit':
                this.units.drawShadow(hexmapCtx, spriteObject)
                continue
@@ -205,7 +205,7 @@ export default class SpriteObjectViewClass {
 
          let spriteObject = spriteList[i].spriteObject
 
-         switch (spriteObject.type) {
+         switch (spriteObject.spriteType) {
             case 'bunker':
             case 'prop':
             case 'resource':

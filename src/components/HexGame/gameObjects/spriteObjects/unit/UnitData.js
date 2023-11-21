@@ -1,5 +1,5 @@
 import UnitClass from "./Unit"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 
 export default class UnitDataClass {
 

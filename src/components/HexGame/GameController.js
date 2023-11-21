@@ -1,4 +1,4 @@
-export default class InputControllerClass {
+export default class GameControllerClass {
 
    constructor(gameManager) {
       this.gameManager = gameManager
@@ -18,9 +18,6 @@ export default class InputControllerClass {
             return
          case 'addUnit':
             this.gameManager.hexMapManager.controller.selectCard()
-            return
-         case 'switchView':
-            if (this.gameManager.userConstants.DEBUG) this.gameManager.hexMapManager.switchView()
             return
          case 'pause':
             this.gameManager.setStatePause()

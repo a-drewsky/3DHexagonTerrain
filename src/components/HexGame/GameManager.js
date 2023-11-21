@@ -1,14 +1,14 @@
-import HexMapManagerClass from "./gameObjects/hexMap/HexMapManager"
-import UiControllerClass from "./UiController"
+import HexMapManagerClass from './gameObjects/hexMap/HexMapManager'
+import UiControllerClass from './controllers/UiController'
+import GameViewClass from './GameView'
 
 export default class GameManagerClass {
 
-    constructor(ctx, canvas, bgCanvas, images, uiComponents, updateUi) {
+    constructor(ctx, canvas, images, uiController) {
 
         this.ctx = ctx
         this.canvas = canvas
         this.images = images
-        this.updateUi = updateUi
 
         this.hexMapManager = null
 
@@ -19,31 +19,24 @@ export default class GameManagerClass {
         }
         this.state.current = this.state.play
 
-        this.uiController = new UiControllerClass(uiComponents, bgCanvas, this.state)
-
-        //Draw interval that is activated when the game finishes loading
-        this.updateInterval = null
+        this.uiController = uiController
 
         this.fps = 0
         this.fpsCount = 0
         this.fpsTime = Date.now()
+
     }
 
     createGame = (userConstants) => {
 
-        this.hexMapManager = new HexMapManagerClass(
-            this.ctx,
-            this.canvas,
-            this.images,
-            userConstants,
-            this.uiController
-        )
+        this.hexMapManager = new HexMapManagerClass(this.canvas, this.images, this.uiController)
 
         this.hexMapManager.build(userConstants.MAP_SIZE)
-        console.log("DONE BUILDING")
-        this.hexMapManager.prerender()
-        console.log("DONE PRERENDERING")
 
+    }
+
+    prerender = (hexMapCanvas) => {
+        this.hexMapManager.prerender(hexMapCanvas)
     }
 
     clear = () => {
@@ -52,46 +45,15 @@ export default class GameManagerClass {
         clearInterval(this.updateInterval)
     }
 
-    startGame = () => {
-        console.log("start")
-        this.setStatePlay()
-        this.updateInterval = setInterval(() => {
-            this.update()
-            this.draw()
-            this.updateUi()
-        }, 1000 / 60)
-    }
-
     update = () => {
         if (this.state.current !== this.state.play) return
 
         this.hexMapManager.update()
     }
 
-    draw = () => {
-
-        this.fps++
-        if (Date.now() - this.fpsTime >= 1000) {
-            this.fpsCount = this.fps
-            this.fpsTime = Date.now()
-            this.fps = 0
-        }
-
-        //clear the canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-        //draw game objects
-        if (this.hexMapManager.state !== 'disabled') this.hexMapManager.draw()
-
-        //draw fps
-        this.ctx.font = '30px Arial'
-        this.ctx.fillStyle = 'yellow'
-        this.ctx.fillText(this.fpsCount, this.canvas.width - 100, 100)
-
-    }
-
     setStatePause = () => {
         console.log("pause")
+        this.state.current = this.state.pause
         this.uiController.setPauseMenu(true)
     }
 

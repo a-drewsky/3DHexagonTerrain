@@ -1,15 +1,14 @@
-import HexMapControllerClass from "./controllers/HexMapController"
-import HexMapViewClass from "./HexMapView"
+import HexMapControllerClass from "../../controllers/hexmapControllers/HexMapController"
 import HexMapDataClass from "./HexMapData"
 import HexMapPrerendererClass from "./HexMapPrerenderer"
-import HexMapUiUpdaterClass from "./HexMapUiUpdater"
+import HexMapUiManagerClass from "./HexMapUiManager"
 import CameraManagerClass from "../camera/CameraManager"
 import TileStackManagerClass from "../tileStack/TileStackManager"
 import SpriteObjectManagerClass from "../spriteObjects/SpriteObjectManager"
 
 export default class HexMapManagerClass {
 
-    constructor(ctx, canvas, images, userConstants, uiController) {
+    constructor(canvas, images, uiController) {
 
         this.images = images
 
@@ -18,10 +17,9 @@ export default class HexMapManagerClass {
         this.tileManager = new TileStackManagerClass(this.data, this.images)
         this.spriteManager = new SpriteObjectManagerClass(this.data, this.images, uiController)
 
-        this.view = new HexMapViewClass(ctx, canvas, this.data, userConstants, images, uiController)
         this.prerenderer = new HexMapPrerendererClass(this.data, this.tileManager, this.spriteManager)
         this.controller = new HexMapControllerClass(this.data, canvas)
-        this.uiUpdater = new HexMapUiUpdaterClass(this.data, canvas, uiController)
+        this.uiManager = new HexMapUiManagerClass(this.data, canvas, uiController)
 
     }
 
@@ -34,9 +32,8 @@ export default class HexMapManagerClass {
         this.data = null
         this.spriteManager = null
         this.prerenderer = null
-        this.view = null
         this.controller = null
-        this.uiUpdater = null
+        this.uiManager = null
     }
 
     build = (mapSizeConstant) => {
@@ -47,25 +44,19 @@ export default class HexMapManagerClass {
         this.data.cardData.initializeCards()
     }
 
-    prerender = () => {
-        let hexmapCanvas = this.view.initializeCanvas()
+    prerender = (hexmapCanvas) => {
         this.prerenderer.prerender(hexmapCanvas)
-        this.uiUpdater.prerender(hexmapCanvas)
+        this.uiManager.prerender(hexmapCanvas)
         this.cameraManager.prerender(hexmapCanvas)
         this.data.tileData.initMapPosition(hexmapCanvas)
-        this.view.initializeCamera()
     }
 
     update = () => {
         this.prerenderer.update()
         this.cameraManager.update()
-        this.uiUpdater.update()
+        this.uiManager.update()
         this.spriteManager.update()
         this.tileManager.update()
-    }
-
-    draw = () => {
-        this.view.draw()
     }
 
 }

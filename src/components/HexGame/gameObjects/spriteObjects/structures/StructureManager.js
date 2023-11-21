@@ -18,7 +18,7 @@ export default class StructureManagerClass {
 
     update = () => {
         for (let [key, value] of this.data.structureMap) {
-            switch (value.type) {
+            switch (value.spriteType) {
                 case 'bunker':
                     this.updateBunker(value)
                     continue
@@ -49,7 +49,7 @@ export default class StructureManagerClass {
     render = () => {
         for (let [key, value] of this.data.structureMap) {
             if (value.render && !value.prerender) {
-                if (value.type !== 'modifier') this.structureRenderer.renderSprite(value)
+                if (value.spriteType !== 'modifier') this.structureRenderer.renderSprite(value)
                 else this.modifierRenderer.renderSprite(value)
                 value.render = false
             }

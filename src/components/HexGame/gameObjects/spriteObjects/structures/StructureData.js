@@ -1,4 +1,4 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import BunkerClass from "./bunker/Bunker"
 import FlagClass from "./flag/Flag"
 import ModifierClass from "./modifier/Modifier"
@@ -63,7 +63,7 @@ export default class StructureDataClass {
     }
 
     getBunkersArray = () => {
-        return Array.from(this.structureMap.values()).filter(structure => structure.type === 'bunker')
+        return Array.from(this.structureMap.values()).filter(structure => structure.spriteType === 'bunker')
     }
 
     deleteStructure = (pos) => {

@@ -51,7 +51,7 @@ export default class StructureBuilderUtilsClass {
         if (selectedTile.biome === 'water' || selectedTile.biome === 'frozenwater') return false
 
         let terrain = this.structureData.getStructure({ q: tilePosQ, r: tilePosR })
-        if (terrain !== null && terrain.type !== 'modifier') return false
+        if (terrain !== null && terrain.spriteType !== 'modifier') return false
 
         let doubleTileNeighbors = this.tileData.getNeighborKeys({ q: tilePosQ, r: tilePosR }, 2)
 
@@ -62,7 +62,7 @@ export default class StructureBuilderUtilsClass {
 
         for (let i = 0; i < doubleTileNeighbors.length; i++) {
             let nieghborTerrain = this.structureData.getStructure(doubleTileNeighbors[i])
-            if (nieghborTerrain !== null && nieghborTerrain.type !== 'modifier') return false
+            if (nieghborTerrain !== null && nieghborTerrain.spriteType !== 'modifier') return false
         }
 
         return true

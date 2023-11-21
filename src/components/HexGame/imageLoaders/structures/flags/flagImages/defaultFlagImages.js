@@ -10,8 +10,6 @@ export default class DefaultFlagImagesClass extends SheetImageLoaderClass {
 
         super(true)
 
-        this.shadow = 'small_round_shadow'
-
         this.sheet_rows = { ...DEFAULT_ROWS }
 
         this.sheet_data = {

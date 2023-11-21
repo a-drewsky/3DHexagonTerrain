@@ -1,9 +1,9 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 import HexMapViewTableClass from "./HexMapViewTable"
-import SpriteObjectViewClass from "../spriteObjects/SpriteObjectView"
-import TileStackViewClass from '../tileStack/TileStackView'
+import SpriteObjectViewClass from "./SpriteObjectView"
+import TileStackViewClass from './TileStackView'
 
-import { INIT_CAMERA_POSITION } from './HexMapConstants'
+import { INIT_CAMERA_POSITION } from '../gameObjects/hexMap/HexMapConstants'
 
 export default class HexMapViewClass {
 

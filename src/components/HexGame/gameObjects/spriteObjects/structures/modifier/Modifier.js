@@ -24,7 +24,7 @@ export default class ModifierClass {
         this.render = true
         this.prerender = false
 
-        this.type = 'modifier'
+        this.spriteType = 'modifier'
         this.modifierType = ModifierConfig[modifierId].modifierType
         if (ModifierConfig[modifierId].spriteChance) this.spriteChance = ModifierConfig[modifierId].spriteChance
         if (ModifierConfig[modifierId].cost) this.cost = ModifierConfig[modifierId].cost

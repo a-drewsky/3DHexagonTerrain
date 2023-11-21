@@ -1,9 +1,9 @@
 
-import HexMapControllerUtilsClass from './utils/HexMapControllerUtils'
-import CollisionClass from '../../../utilities/collision'
+import HexMapControllerUtilsClass from '../../commonUtils/controllerUtils/HexMapControllerUtils'
+import CollisionClass from '../../commonUtils/CollisionUtils'
 import HexMapControllerClickClass from './HexMapControllerClick'
 import HexMapControllerHoverClass from './HexMapControllerHover'
-import HexMapPathFinderClass from './utils/HexMapPathFinder'
+import HexMapPathFinderClass from '../../commonUtils/controllerUtils/HexMapPathFinder'
 export default class HexMapControllerClass {
 
     constructor(hexMapData, canvas) {

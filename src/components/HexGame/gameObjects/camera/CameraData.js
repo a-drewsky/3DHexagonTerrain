@@ -1,5 +1,5 @@
 
-import CollisionClass from "../../utilities/collision"
+import CollisionClass from "../../commonUtils/CollisionUtils"
 
 import { MAX_ZOOM, ZOOM_AMOUNT, INIT_CAMERA_ROTATION, CLICK_MOVE_DIST } from './CameraConstants'
 

@@ -1,4 +1,4 @@
-import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../CommonHexMapUtils"
 
 export default class HexMapPathFinderUtilsClass {
 
@@ -38,7 +38,7 @@ export default class HexMapPathFinderUtilsClass {
 
     isValidPathTile = (pos) => {
         let terrain = this.structureData.getStructure(pos)
-        if(terrain !== null && terrain.type !== 'modifier') return false
+        if(terrain !== null && terrain.spriteType !== 'modifier') return false
         let unit = this.unitData.getUnit(pos)
         if(unit !== null) return false
         return true

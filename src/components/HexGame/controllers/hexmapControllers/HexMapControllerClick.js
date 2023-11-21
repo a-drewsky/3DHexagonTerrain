@@ -1,7 +1,7 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 import HexMapControllerActionsClass from "./HexMapControllerActions"
-import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
-import HexMapPathFinderClass from "./utils/HexMapPathFinder"
+import HexMapControllerUtilsClass from "../../commonUtils/controllerUtils/HexMapControllerUtils"
+import HexMapPathFinderClass from "../../commonUtils/controllerUtils/HexMapPathFinder"
 
 export default class HexMapControllerClickClass {
 
@@ -57,7 +57,6 @@ export default class HexMapControllerClickClass {
         }
 
         this.selectionData.setInfoSelection('tile', tile.position)
-        this.mapData.setState('selectTile')
 
     }
 
@@ -145,7 +144,7 @@ export default class HexMapControllerClickClass {
         let target = this.selectionData.getTargetSelection()
         if (this.commonUtils.tilesEqual(tile.position, target)) {
             let structure = this.structureData.getStructure(tile.position)
-            switch (structure.type) {
+            switch (structure.spriteType) {
                 case 'resource':
                     this.actions.mine()
                     return true

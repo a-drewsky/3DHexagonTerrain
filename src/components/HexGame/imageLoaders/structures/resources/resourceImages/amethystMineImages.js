@@ -11,8 +11,6 @@ export default class AmethystMineImagesClass extends SheetImageLoaderClass {
 
         super(true)
 
-        this.shadow = 'large_round_shadow'
-
         this.sheet_rows = { ...DEFAULT_ROWS }
 
         this.sheet_data = {

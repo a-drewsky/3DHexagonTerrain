@@ -1,7 +1,7 @@
 
 import HexMapPathFinderUtilsClass from "./HexMapPathFinderUtils"
-import CollisionClass from "../../../../utilities/collision"
-import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
+import CollisionClass from "../CollisionUtils"
+import CommonHexMapUtilsClass from "../CommonHexMapUtils"
 
 export default class HexMapPathFinderClass {
 
@@ -56,15 +56,15 @@ export default class HexMapPathFinderClass {
 
         //search for structures
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'resource')
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'flag')) {
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'flag')) {
                 actionSet.push({ ...tile.position })
             }
         }
 
         for (let tile of attackMoveSet) {
             if (this.unitData.getUnit(tile.position) !== null
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'bunker')) {
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
                 if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
             }
         }
@@ -82,8 +82,8 @@ export default class HexMapPathFinderClass {
         let actionSet = []
 
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'resource')
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'flag')) {
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'flag')) {
                 if (this.selectionData.getPathingSelection('action').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
                 actionSet.push({ ...tile.position })
             }
@@ -102,7 +102,7 @@ export default class HexMapPathFinderClass {
         for (let tile of attackMoveSet) {
             if (this.commonUtils.tilesEqual(tile.position, unit.position)) continue
             if (this.unitData.getUnit(tile.position) !== null
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'bunker')) {
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
                 if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
             }
@@ -116,8 +116,8 @@ export default class HexMapPathFinderClass {
         let actionSet = []
 
         for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'resource')
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'flag')) {
+            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'resource')
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'flag')) {
                 if (this.selectionData.getPathingSelection('action').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
                 actionSet.push({ ...tile.position })
             }
@@ -136,7 +136,7 @@ export default class HexMapPathFinderClass {
         for (let tile of attackMoveSet) {
             if (this.commonUtils.tilesEqual(tile.position, unit.position)) continue
             if (this.unitData.getUnit(tile.position) !== null
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type === 'bunker')) {
+                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
                 if (this.validTarget(tilePos, tile.position)) attackSet.push({ ...tile.position })
             }
@@ -240,10 +240,10 @@ export default class HexMapPathFinderClass {
             if (tile === null || secondTile === null) return true
 
             if (this.unitData.getUnit(tile.position) !== null) firstTileOpen = false
-            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type !== 'modifier') firstTileOpen = false
+            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType !== 'modifier') firstTileOpen = false
 
             if (this.unitData.getUnit(secondTile.position) !== null) secondTileOpen = false
-            if (this.structureData.hasStructure(secondTile.position) && this.structureData.getStructure(secondTile.position).type !== 'modifier') secondTileOpen = false
+            if (this.structureData.hasStructure(secondTile.position) && this.structureData.getStructure(secondTile.position).spriteType !== 'modifier') secondTileOpen = false
 
             if (firstTileOpen === false && secondTileOpen === false) return false
             return true
@@ -254,7 +254,7 @@ export default class HexMapPathFinderClass {
             tile = this.tileData.getEntry(tile)
             if (tile === null) return true
             if (this.unitData.getUnit(tile.position) !== null) return false
-            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).type !== 'modifier') return false
+            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType !== 'modifier') return false
             return true
         }
 

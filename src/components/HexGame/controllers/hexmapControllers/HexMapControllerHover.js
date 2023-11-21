@@ -1,6 +1,6 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
-import HexMapPathFinderClass from "./utils/HexMapPathFinder"
+import HexMapControllerUtilsClass from "../../commonUtils/controllerUtils/HexMapControllerUtils"
+import HexMapPathFinderClass from "../../commonUtils/controllerUtils/HexMapPathFinder"
 
 export default class HexMapControllerHoverClass {
 

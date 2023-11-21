@@ -3,6 +3,7 @@ export default class UnitConfig {
     static villager_unit = {
         id: 'villager_unit',
         sprite: 'villager',
+        shadow: 'medium_round_shadow',
         name: 'Billager',
         description: 'An average villager. Has no unique abilities.',
         height: 2,
@@ -20,7 +21,7 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        animations: {
+        state: {
             idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
             walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
             jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
@@ -36,6 +37,7 @@ export default class UnitConfig {
     static mountain_ranger = {
         id: 'mountain_ranger',
         sprite: 'mountainRanger',
+        shadow: 'medium_round_shadow',
         name: 'Mountain Ranger',
         description: 'An archer from the highland realm',
         height: 3,
@@ -53,7 +55,7 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        animations: {
+        state: {
             idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
             walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
             jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },
@@ -69,6 +71,7 @@ export default class UnitConfig {
     static imperial_soldier = {
         id: 'imperial_soldier',
         sprite: 'imperialSoldier',
+        shadow: 'medium_round_shadow',
         name: 'Imperial Soldier',
         description: 'Strong soldier boi',
         height: 3,
@@ -86,7 +89,7 @@ export default class UnitConfig {
             elemental_resistance: 10,
             elemental_resistance_modifications: [{name: 'des+', color: 'gold'}],
         },
-        animations: {
+        state: {
             idle: { name: 'idle', rate: 900, duration: 'continuous', type: 'static' },
             walk: { name: 'walk', rate: 150, duration: 'continuous', type: 'action' },
             jump: { name: 'jump', rate: 250, duration: 'continuous', type: 'action' },

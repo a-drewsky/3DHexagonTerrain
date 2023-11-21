@@ -1,4 +1,4 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class UnitViewClass {
 

@@ -54,7 +54,7 @@ export default class HexMapPrerendererClass {
 
         if (this.structureData.hasStructure(tileObj.position)) {
             let structure = this.structureData.getStructure(tileObj.position)
-            if (structure.type === 'modifier'){
+            if (structure.spriteType === 'modifier'){
                 this.modifierRenderer.renderAll(structure)
             } else {
                 this.structureRenderer.renderAll(structure)
@@ -69,7 +69,7 @@ export default class HexMapPrerendererClass {
             if(!this.structureData.hasStructure(neighborKey)) continue
 
             let structure = this.structureData.getStructure(neighborKey)
-            if (structure.type === 'modifier') this.modifierRenderer.renderShadows(structure)
+            if (structure.spriteType === 'modifier') this.modifierRenderer.renderShadows(structure)
             else this.structureRenderer.renderShadow(structure)
         }
         

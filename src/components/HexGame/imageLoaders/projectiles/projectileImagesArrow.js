@@ -8,8 +8,6 @@ export default class ProjectileImagesArrowClass extends SheetImageLoaderClass {
 
         super()
 
-        this.shadow = 'projectile_shadow'
-
         this.sheet_rows = {
              0: 'backRight',
              1: 'right',

@@ -1,36 +1,18 @@
-export default class StructureClass {
 
-    constructor(pos, type, config, images) {
-        this.position = { ...pos }
-        this.rotation = null
-        this.frame = 0
+import SpriteObjectClass from "../SpriteObject"
+
+export default class StructureClass extends SpriteObjectClass {
+
+    constructor(pos, type, config, stateObj, initState, images) {
+
+        super(type, config.id, stateObj, initState, pos, config.height, images.structures[type][config.sprite], images.shadows[config.shadow])
 
         this.images = []
         this.shadowImages = []
 
-        this.id = config.id
-        this.height = config.height
         if (config.rotation !== undefined) this.rotation = config.rotation
 
-        this.imageObject = images.structures[type][config.sprite]
-        this.shadowImageObject = images.shadows[this.imageObject.shadow]
-
-        this.render = true
         this.prerender = false
-    }
-
-    curState = () => {
-        return this.state.current.name
-    }
-
-    spriteRotation = (cameraRotation) => {
-        let spriteRotation = this.rotation + cameraRotation
-        if (spriteRotation >= 6) spriteRotation -= 6
-        return spriteRotation
-    }
-
-    sprite = (cameraRotation) => {
-        return this.imageObject[this.curState()].images[this.frame][this.spriteRotation(cameraRotation)]
     }
 
 }

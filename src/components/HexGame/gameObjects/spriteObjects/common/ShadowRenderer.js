@@ -1,4 +1,4 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
 
 export default class ShadowRendererClass {
@@ -16,9 +16,7 @@ export default class ShadowRendererClass {
 
     renderActionShadow = (spriteObject, position) => {
 
-        if (!spriteObject.imageObject.shadow) return
-
-        let shadowImage = this.images.shadows[spriteObject.imageObject.shadow][this.cameraData.rotation]
+        let shadowImage = spriteObject.shadowImageObject[this.cameraData.rotation]
 
         let nearestTile = this.commonUtils.roundToNearestHex(position)
         nearestTile = this.tileData.getEntry(nearestTile)
@@ -42,14 +40,12 @@ export default class ShadowRendererClass {
 
         let initRotation = this.cameraData.rotation
 
-        if (!spriteObject.imageObject.shadow) return
-
         spriteObject.shadowImages = []
 
         //prerender shadow images
         for (let rotation = 0; rotation < 6; rotation++) {
 
-            let shadowImage = this.images.shadows[spriteObject.imageObject.shadow][rotation]
+            let shadowImage = spriteObject.shadowImageObject[rotation]
 
             this.cameraData.rotation = rotation
             let rotatedMap = this.tileData.rotatedMapList[this.cameraData.rotation]

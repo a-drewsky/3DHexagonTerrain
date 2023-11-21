@@ -10,8 +10,6 @@ export default class DefaultBunkerImagesClass extends SheetImageLoaderClass {
 
         super(false)
 
-        this.shadow = 'base_shadow'
-
         this.sheet_rows = { ...DEFAULT_ROWS }
 
         this.sheet_data = {

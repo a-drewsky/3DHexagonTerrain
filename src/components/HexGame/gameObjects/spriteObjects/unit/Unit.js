@@ -1,38 +1,35 @@
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import UnitConfig from "./UnitConfig"
+
+import SpriteObjectClass from "../SpriteObject"
 
 import { TRAVEL_TIME, JUMP_AMOUNT } from './UnitConstants'
 
-export default class UnitClass {
+export default class UnitClass extends SpriteObjectClass {
 
     constructor(pos, unitId, tileData, images) {
-        if(!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
+        if (!UnitConfig[unitId]) throw Error(`Invalid Unit ID: (${unitId}). Unit config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
 
-        this.position = { ...pos }
+        super(
+            'unit',
+            UnitConfig[unitId].id,
+            UnitConfig[unitId].state,
+            'idle',
+            pos,
+            UnitConfig[unitId].height,
+            images.unit[UnitConfig[unitId].sprite],
+            images.shadows[UnitConfig[unitId].shadow]
+        )
 
         //static data
-        this.id = UnitConfig[unitId].id
-        this.type = 'unit'
         this.name = UnitConfig[unitId].name
         this.description = UnitConfig[unitId].description
-        this.height = UnitConfig[unitId].height
 
         //image data
-        this.imageObject = images.unit[UnitConfig[unitId].sprite]
-        this.shadowImageObject = images.shadows[this.imageObject.shadow]
         this.actionImage = null
         this.staticImages = []
         this.shadowImage = null
         this.shadowImages = []
-
-
-        //animation data
-        this.rotation = 5
-        this.frame = 0
-        this.frameStartTime = Date.now()
-        this.frameCurTime = Date.now()
-        this.animationStartTime = null
-        this.animationCurTime = null
 
         //pathing data
         this.path = []
@@ -51,94 +48,24 @@ export default class UnitClass {
         //unit data
         this.render = true
         this.actionComplete = false
-        
-        this.stats = {
-            health: UnitConfig[unitId].stats.health,
-            movement: UnitConfig[unitId].stats.movement,
-            range: UnitConfig[unitId].stats.range,
-            mining: UnitConfig[unitId].stats.mining,
-            physical_attack: UnitConfig[unitId].stats.physical_attack,
-            physical_attack_modifications: UnitConfig[unitId].stats.physical_attack_modifications,
-            elemental_attack: UnitConfig[unitId].stats.elemental_attack,
-            elemental_attack_modifications: UnitConfig[unitId].stats.elemental_attack_modifications,
-            physical_resistance: UnitConfig[unitId].stats.physical_resistance,
-            physical_resistance_modifications: UnitConfig[unitId].stats.physical_resistance_modifications,
-            elemental_resistance: UnitConfig[unitId].stats.elemental_resistance,
-            elemental_resistance_modifications: UnitConfig[unitId].stats.elemental_resistance_modifications,
-        }
-
-        this.abilities = UnitConfig[unitId].abilities
-
-        this.state = {
-            idle: UnitConfig[unitId].animations.idle,
-            walk: UnitConfig[unitId].animations.walk,
-            jump: UnitConfig[unitId].animations.jump,
-            mine: UnitConfig[unitId].animations.mine,
-            attack: UnitConfig[unitId].animations.attack,
-            hit: UnitConfig[unitId].animations.hit,
-            death: UnitConfig[unitId].animations.death,
-            capture: UnitConfig[unitId].animations.capture
-        }
-        this.state.current = this.state.idle
+        this.stats = { ...UnitConfig[unitId].stats }
+        this.abilities = { ...UnitConfig[unitId].abilities }
 
     }
 
     //HELPER FUNCTIONS
-    curState = () => {
-        return this.state.current.name
-    }
-
-    sprite = (cameraRotation) => {
-        return this.imageObject[this.curState()].images[this.frame][this.spriteRotation(cameraRotation)]
-    }
-
-    spriteRotation = (cameraRotation) => {
-        let spriteRotation = this.rotation + cameraRotation
-        if (spriteRotation >= 6) spriteRotation -= 6
-        return spriteRotation
-    }
-
     travelPercent = () => {
         return (this.destinationCurTime - this.destinationStartTime) / this.tileTravelTime
     }
 
     endOfState = () => {
-        if(this.state.current.duration === 'continuous') return true
-        if(this.animationCurTime - this.animationStartTime < this.state.current.duration) return false
+        if (this.state.current.duration === 'continuous') return true
+        if (this.animationCurTime - this.animationStartTime < this.state.current.duration) return false
         return true
     }
 
 
     //SET FUNCTIONS
-    setDirection = (targetPos) => {
-        this.render = true
-
-        this.rotation = this.commonUtils.getDirection(this.position, targetPos)
-
-    }
-
-    setPosition = (position) => {
-        this.render = true
-
-        this.position = position
-
-    }
-
-    setFrame = () => {
-        this.frameCurTime = Date.now()
-        this.animationCurTime = Date.now()
-        if (this.state.current.rate === 0) return
-        if (this.destination !== null) this.render = true
-        if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
-            this.render = true
-            this.frameStartTime = Date.now()
-
-            this.frame++
-            if (this.frame >= this.imageObject[this.curState()].images.length) this.frame = 0
-        }
-
-    }
-
     updatePath = () => {
         this.destinationCurTime = Date.now()
         if (this.destinationCurTime - this.destinationStartTime >= this.tileTravelTime) {

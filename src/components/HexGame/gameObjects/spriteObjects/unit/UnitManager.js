@@ -1,5 +1,5 @@
 import UnitRendererClass from "./UnitRenderer"
-import HexMapControllerUtilsClass from "../../hexMap/controllers/utils/HexMapControllerUtils"
+import HexMapControllerUtilsClass from "../../../commonUtils/controllerUtils/HexMapControllerUtils"
 
 export default class UnitManagerClass {
 
@@ -18,6 +18,7 @@ export default class UnitManagerClass {
     update = () => {
         for (let unit of this.data.unitList) {
             unit.setFrame()
+            if (unit.destination !== null) unit.render = true
 
             if (unit.endOfState()) this.endUnitState(unit)
         }
@@ -88,7 +89,7 @@ export default class UnitManagerClass {
 
         this.endAction(unit)
 
-        if (targetObject.type === 'unit') {
+        if (targetObject.spriteType === 'unit') {
             targetObject.setAnimation('hit')
         } else {
             targetObject.updateState()

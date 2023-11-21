@@ -1,5 +1,5 @@
 
-import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../commonConstants/CommonConstants'
+import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../gameObjects/commonConstants/CommonConstants'
 
 const TABLE_HEIGHT = 40
 
@@ -42,7 +42,6 @@ export default class HexMapViewTableClass {
 
       //get table position
       let tablePosition = this.tileData.getTablePosition(this.cameraData.rotation);
-      console.log(tablePosition)
 
       tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l}%)`
       tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l}%)`

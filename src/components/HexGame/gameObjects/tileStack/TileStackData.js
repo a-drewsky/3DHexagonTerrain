@@ -1,4 +1,4 @@
-import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 import TileStackClass from "./TileStack"
 
 export default class TileStackDataClass {

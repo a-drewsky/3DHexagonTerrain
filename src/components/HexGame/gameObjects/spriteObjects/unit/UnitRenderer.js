@@ -1,5 +1,5 @@
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import StatusBarRendererClass from "../common/StatusBarRenderer"
 import ShadowRendererClass from "../common/ShadowRenderer"
 
@@ -76,7 +76,7 @@ export default class UnitRendererClass {
 
     renderStaticShadows = (unit) => {
 
-        if (unit.position.q === null || unit.position.r === null || !unit.imageObject.shadow) return
+        if (unit.position.q === null || unit.position.r === null) return
 
         this.shadowRenderer.renderAllShadows(unit, unit.position)
     }
@@ -141,8 +141,6 @@ export default class UnitRendererClass {
     }
 
     renderActionShadow = (unit) => {
-
-        if (!unit.imageObject.shadow) return
 
         let lerpPos = unit.position
 

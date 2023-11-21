@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 
-import GameMainClass from '../HexGame/GameMainClass'
+import GameMainClass from '../HexGame/GameMain'
 
 import GameImagesClass from '../HexGame/imageLoaders/gameImages'
 

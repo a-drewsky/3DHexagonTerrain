@@ -1,5 +1,5 @@
-import NoiseClass from "../../../utilities/perlin"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import NoiseClass from "../../../commonUtils/PerlinUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import StructureBuilderUtilsClass from "./StructureBuilderUtils"
 
 import { SECOND_MINE_CHANCE, THIRD_MINE_CHACE } from './StructureConstants'

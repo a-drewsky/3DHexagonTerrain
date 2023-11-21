@@ -1,5 +1,5 @@
 import ProjectileRendererClass from "./ProjectileRenderer"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileManagerClass {
 
@@ -34,9 +34,9 @@ export default class ProjectileManagerClass {
         
         this.data.deleteProjectile(projectile.loc)
 
-        if(targetObject && targetObject.type === 'unit'){
+        if(targetObject && targetObject.spriteType === 'unit'){
             targetObject.setAnimation('hit')
-        } else if(targetObject && targetObject.type === 'bunker') {
+        } else if(targetObject && targetObject.spriteType === 'bunker') {
             targetObject.updateState()
             this.mapData.resetState()
         }

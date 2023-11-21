@@ -1,67 +1,49 @@
 import ProjectileConfig from "./ProjectileConfig"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
+import SpriteObjectClass from "../SpriteObject"
 
 import { TRAVEL_TIME } from "./ProjectileConstants"
 
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+const PROJECTILE_STATE = {
+    default: { name: 'default', rate: 0, duration: 'continuous', type: 'static' }
+}
 
-export default class ProjectileClass {
+export default class ProjectileClass extends SpriteObjectClass {
 
     constructor(loc, pos, target, projectileId, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
-        this.loc = loc
+        super(
+            'projectile',
+            ProjectileConfig[projectileId].id,
+            PROJECTILE_STATE,
+            'default',
+            pos,
+            ProjectileConfig[projectileId].height,
+            images.projectiles[ProjectileConfig[projectileId].sprite],
+            images.shadows[ProjectileConfig[projectileId].shadow]
+        )
 
-        this.position = { ...pos }
+        //access data
+        this.tileData = tileData
+        this.commonUtils = new CommonHexMapUtilsClass()
+
+        this.loc = loc
+        this.rotation = this.commonUtils.getDoubleAxisDirection(pos, target)
+        this.position = this.commonUtils.getDoubleAxisAdjacentPos(pos, this.rotation)
         this.target = { ...target }
 
-        //static data
-        this.id = ProjectileConfig[projectileId].id
-        this.type = 'projectile'
-        this.height = ProjectileConfig[projectileId].height
-
         //image data
-        this.imageObject = images.projectiles[ProjectileConfig[projectileId].sprite]
-        this.shadowImageObject = images.shadows[this.imageObject.shadow]
         this.image = null
         this.shadowImage = null
-
-        //animation data
-        this.animation = { 
-            rate: ProjectileConfig[projectileId].animation.rate, 
-            duration: ProjectileConfig[projectileId].animation.duration, 
-            type: ProjectileConfig[projectileId].animation.type
-        }
-        this.rotation = null
-        this.frame = 0
-        this.frameStartTime = Date.now()
-        this.frameCurTime = Date.now()
 
         //projectile data
         this.actionComplete = false
         this.projectileStartTime = Date.now()
         this.projectileCurTime = Date.now()
 
-
         //settings
         this.tileTravelTime = TRAVEL_TIME
-
-        //access data
-        this.tileData = tileData
-        this.commonUtils = new CommonHexMapUtilsClass()
-
-        this.setRotation()
-    }
-
-
-    //HELPER FUNCTIONS
-    sprite = (cameraRotation) => {
-        return this.imageObject['default'].images[this.frame][this.spriteRotation(cameraRotation)]
-    }
-
-    spriteRotation = (cameraRotation) => {
-        let spriteRotation = this.rotation + cameraRotation * 2
-        if (spriteRotation >= 12) spriteRotation -= 12
-        return spriteRotation
     }
 
     travelTime = () => {
@@ -94,30 +76,9 @@ export default class ProjectileClass {
         return this.tileData.getEntry(lerpPos).height
     }
 
-
-    setFrame = () => {
-        this.frameCurTime = Date.now()
-        if (this.animation.rate === 0) return
-        if (this.frameCurTime - this.frameStartTime > this.animation.rate) {
-            this.frameStartTime = Date.now()
-
-            this.frame++
-
-            if (this.frame >= this.imageObject['default'].images.length) this.frame = 0
-
-        }
-
-        this.animationCurTime = Date.now()
-    }
-
-    setRotation = () => {
-        this.rotation = this.commonUtils.getDoubleAxisDirection(this.position, this.target)
-        this.position = this.commonUtils.getDoubleAxisAdjacentPos(this.position, this.rotation)
-    }
-    
     updatePath = () => {
         this.projectileCurTime = Date.now()
-        
+
         if (this.projectileCurTime - this.projectileStartTime >= this.travelTime()) {
             this.actionComplete = true
         }

@@ -1,5 +1,5 @@
 import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import StatusBarRendererClass from "../common/StatusBarRenderer"
 import ShadowRendererClass from "../common/ShadowRenderer"
 
@@ -56,11 +56,11 @@ export default class StructureRendererClass {
                 tempctx.drawImage(sprite.image, 0, 0, tempCanvas.width, tempCanvas.height)
                 imageList[rotation] = tempCanvas
 
-                if (structure.type === 'resource') {
+                if (structure.spriteType === 'resource') {
                     this.StatusBarRenderer.addResourceBar(imageList[rotation], structure)
                 }
 
-                if (structure.type === 'bunker') {
+                if (structure.spriteType === 'bunker') {
                     this.StatusBarRenderer.addHealthBar(imageList[rotation], structure)
                 }
 

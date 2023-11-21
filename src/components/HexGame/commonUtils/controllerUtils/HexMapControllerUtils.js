@@ -1,6 +1,6 @@
 
-import CollisionClass from "../../../../utilities/collision"
-import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
+import CollisionClass from "../CollisionUtils"
+import CommonHexMapUtilsClass from "../CommonHexMapUtils"
 import HexMapPathFinderClass from "./HexMapPathFinder"
 
 export default class HexMapControllerUtilsClass {
@@ -96,6 +96,11 @@ export default class HexMapControllerUtilsClass {
         this.unitData.selectUnit(pos)
         this.pathfinder.findMoveSet()
         this.mapData.setState('selectMovement')
+    }
+
+    setStartAnimation = () => {
+        this.selectionData.clearAllSelections()
+        this.mapData.setState('animation')
     }
 
     getSelectedTile = (x, y) => {

@@ -1,11 +1,15 @@
 export default class UiControllerClass {
 
-    constructor(uiComponents, bgCanvas, globalState) {
+    constructor(uiComponents, setUiComponents, bgCanvas) {
 
         this.uiComponents = uiComponents
+        this.setUiComponents = setUiComponents
         this.bgCanvas = bgCanvas
-        this.globalState = globalState
 
+    }
+
+    updateUiComponents = () => {
+        this.setUiComponents(this.uiComponents)
     }
 
     setBgCanvasZoom = (width, height) => {
@@ -31,14 +35,10 @@ export default class UiControllerClass {
 
     setPauseMenu = (state) => {
         this.uiComponents.pauseMenu.show = state
-        
-        if(state === true) this.globalState.current = this.globalState.pause
     }
 
     setEndGameMenu = (state) => {
         this.uiComponents.endGameMenu.show = state
-
-        if(state === true) this.globalState.current = this.globalState.pause
     }
 
     setResourceBar = (resources) => {

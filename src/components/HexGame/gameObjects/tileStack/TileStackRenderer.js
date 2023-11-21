@@ -1,5 +1,5 @@
 import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
-import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
 
