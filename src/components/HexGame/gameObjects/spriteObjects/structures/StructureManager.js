@@ -1,5 +1,5 @@
 import StructureRendererClass from "./StructureRenderer"
-import ModifierRendererClass from "./modifier/ModifierRenderer"
+import ModifierRendererClass from "./ModifierRenderer"
 import StructureBuilderClass from "./StructureBuilder"
 
 export default class StructureManagerClass {
@@ -35,7 +35,10 @@ export default class StructureManagerClass {
     }
 
     updateFlag = (flag) => {
-        if (flag.isCaptured()) this.mapData.setState('end')
+        if (flag.isCaptured()) {
+            this.mapData.setState('end')
+            this.selectionData.clearAllSelections()
+        }
     }
 
     updateResource = (resource) => {

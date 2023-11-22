@@ -1,6 +1,6 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
-import { SHADOW_SIZE } from '../commonConstants/CommonConstants'
+import { SHADOW_SIZE } from '../../CommonConstants'
 
 export default class CommonRendererUtilsClass {
 

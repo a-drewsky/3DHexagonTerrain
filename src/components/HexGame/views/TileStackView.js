@@ -37,6 +37,7 @@ export default class TileStackViewClass {
             let tileSelections = this.selectionData.getSelectionNames(value)
 
             for (let tileSelection of tileSelections) {
+                if(!tileObj.selectionImageObject[tileSelection]) throw Error(`Invalid Tile Selection: (${tileSelection}).`)
                 hexmapCtx.drawImage(tileObj.selectionImageObject[tileSelection], tilePos.x, tilePos.y, this.mapData.size * 2, this.mapData.size * 2)
             }
 

@@ -1,5 +1,5 @@
 import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
-import UnitConfig from "./UnitConfig"
+import UnitConfig from "../../../config/UnitConfig"
 
 import SpriteObjectClass from "../SpriteObject"
 
@@ -49,6 +49,7 @@ export default class UnitClass extends SpriteObjectClass {
         this.render = true
         this.actionComplete = false
         this.stats = { ...UnitConfig[unitId].stats }
+        this.health = this.stats['max_health']
         this.abilities = { ...UnitConfig[unitId].abilities }
 
     }

@@ -30,7 +30,7 @@ export default class ProjectileManagerClass {
     endProjectile = (projectile) => {
         
         let targetObject = this.unitData.getUnit(projectile.target) || this.structureData.getStructure(projectile.target)
-        targetObject.stats.health -= 25
+        targetObject.health -= 25
         
         this.data.deleteProjectile(projectile.loc)
 

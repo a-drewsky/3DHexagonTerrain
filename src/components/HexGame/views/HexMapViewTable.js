@@ -1,5 +1,5 @@
 
-import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../gameObjects/commonConstants/CommonConstants'
+import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../CommonConstants'
 
 const TABLE_HEIGHT = 40
 

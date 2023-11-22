@@ -4,7 +4,7 @@ import StructureBuilderUtilsClass from "./StructureBuilderUtils"
 
 import { SECOND_MINE_CHANCE, THIRD_MINE_CHACE } from './StructureConstants'
 
-import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../../commonConstants/CommonConstants'
+import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../../../CommonConstants'
 
 export default class StructureBuilderClass {
 
@@ -232,15 +232,15 @@ export default class StructureBuilderClass {
             switch (entry.value.biome) {
                case 'woodlands':
                case 'grasshill':
-                  this.structureData.setModifier(keyObj, 'oakTrees')
+                  this.structureData.setCombinedImageModifier(keyObj, 'oakTrees')
                   break
                case 'tundra':
                case 'snowhill':
-                  this.structureData.setModifier(keyObj, 'spruceTrees')
+                  this.structureData.setCombinedImageModifier(keyObj, 'spruceTrees')
                   break
                case 'desert':
                case 'sandhill':
-                  this.structureData.setModifier(keyObj, 'cacti')
+                  this.structureData.setCombinedImageModifier(keyObj, 'cacti')
                   break
                default:
                   continue
@@ -248,7 +248,7 @@ export default class StructureBuilderClass {
 
 
          } else if (BIOME_CONSTANTS[entry.value.biome].rockGenThreshold && tileRockNoise > BIOME_CONSTANTS[entry.value.biome].rockGenThreshold) {
-            this.structureData.setModifier(keyObj, 'smallRocks')
+            this.structureData.setCombinedImageModifier(keyObj, 'smallRocks')
          }
 
 

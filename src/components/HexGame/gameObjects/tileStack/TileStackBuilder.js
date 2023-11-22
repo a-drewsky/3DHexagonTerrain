@@ -4,7 +4,7 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 import { MAX_ELEVATION, SAND_HILL_ELVATION_DIVISOR, ELEVATION_MULTIPLIER, TEMP_RANGES, WATER_TEMP_RANGES, LOW_TERRAIN_GENERATION_RANGES, MIRROR_MAP } from './TileStackConstants'
 
-import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../commonConstants/CommonConstants'
+import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../../CommonConstants'
 
 export default class TileStackBuilderClass {
 
@@ -166,6 +166,7 @@ export default class TileStackBuilderClass {
         tileObj.midBiome = tileMidBiome
         tileObj.highBiome = tileHighBiome
         tileObj.veryhighBiome = tileVeryhighBiome
+        tileObj.biomeName = BIOME_CONSTANTS[tileBiome].biomeName
 
     }
 

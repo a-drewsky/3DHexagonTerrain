@@ -54,7 +54,7 @@ export default class UnitManagerClass {
     }
 
     endHit = (unit) => {
-        if (unit.stats.health <= 0) {
+        if (unit.health <= 0) {
             unit.setAnimation('death')
             return
         }
@@ -85,7 +85,7 @@ export default class UnitManagerClass {
 
     endAdjacentAttack = (unit) => {
         let targetObject = this.utils.getTargetObject(this.data.unitTarget)
-        targetObject.stats.health -= 25
+        targetObject.health -= 25
 
         this.endAction(unit)
 
@@ -108,8 +108,8 @@ export default class UnitManagerClass {
 
     endMining = (unit) => {
         let mine = this.structureData.getStructure(this.data.unitTarget)
-        let resourcesToMine = Math.min(mine.stats.resources, unit.stats.mining)
-        mine.stats.resources -= resourcesToMine
+        let resourcesToMine = Math.min(mine.resources, unit.stats.mining)
+        mine.resources -= resourcesToMine
         this.mapData.resources[mine.resource] += resourcesToMine
         mine.updateState()
 

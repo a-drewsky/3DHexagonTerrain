@@ -1,44 +1,19 @@
-import ModifierConfig from "./ModifierConfig"
 
-export default class ModifierClass {
+import ModifierConfig from "../../../../../config/ModifierConfig"
 
+import ModifierClass from "./Modifier"
+
+export default class CombinedImageModifierClass extends ModifierClass {
     constructor(pos, modifierId, images) {
         if (!ModifierConfig[modifierId]) throw Error(`Invalid Modifier ID: (${modifierId}). Modifier config properties are: [${Object.getOwnPropertyNames(ModifierConfig).splice(3)}]`)
-        
-        this.id = ModifierConfig[modifierId].id
-        
-        this.position = {
-            q: pos.q,
-            r: pos.r
-        }
-        this.rotation = null
+        super(pos, modifierId, images)
 
-        this.images = []
-        this.shadowImages = []
-
-        this.height = ModifierConfig[modifierId].height
-        this.imageObject = images.structures.modifier
-        this.sprite = ModifierConfig[modifierId].sprite
         this.sprites = ModifierConfig[modifierId].sprites
 
-        this.render = true
-        this.prerender = false
-
-        this.spriteType = 'modifier'
-        this.modifierType = ModifierConfig[modifierId].modifierType
         if (ModifierConfig[modifierId].spriteChance) this.spriteChance = ModifierConfig[modifierId].spriteChance
         if (ModifierConfig[modifierId].cost) this.cost = ModifierConfig[modifierId].cost
 
-        this.state = {
-            default: { name: 'default', rate: 'static', duration: 'continuous', type: 'static' }
-        }
-        this.state.current = this.state.default
-
         if (this.spriteChance) this.spritePositions = this.createSpritePosition()
-    }
-
-    curState = () => {
-        return this.state.current.name
     }
 
     createSpritePosition = () => {
@@ -61,5 +36,4 @@ export default class ModifierClass {
         }
         return filteredPositions
     }
-
 }

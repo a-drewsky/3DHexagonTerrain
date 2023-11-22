@@ -1,5 +1,5 @@
 
-import { BIOME_CONSTANTS } from '../../commonConstants/CommonConstants'
+import { BIOME_CONSTANTS } from '../../../CommonConstants'
 
 export default class StructureBuilderUtilsClass {
 

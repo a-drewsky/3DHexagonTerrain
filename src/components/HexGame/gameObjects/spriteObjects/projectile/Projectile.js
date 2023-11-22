@@ -1,4 +1,4 @@
-import ProjectileConfig from "./ProjectileConfig"
+import ProjectileConfig from "../../../config/ProjectileConfig"
 import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
 import SpriteObjectClass from "../SpriteObject"
 

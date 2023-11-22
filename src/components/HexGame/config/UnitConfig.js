@@ -8,7 +8,7 @@ export default class UnitConfig {
         description: 'An average villager. Has no unique abilities.',
         height: 2,
         stats: {
-            health: 100,
+            max_health: 100,
             movement: 4,
             range: 1,
             mining: 3,
@@ -42,7 +42,7 @@ export default class UnitConfig {
         description: 'An archer from the highland realm',
         height: 3,
         stats: {
-            health: 100,
+            max_health: 100,
             movement: 4,
             range: 3,
             mining: 3,
@@ -76,7 +76,7 @@ export default class UnitConfig {
         description: 'Strong soldier boi',
         height: 3,
         stats: {
-            health: 100,
+            max_health: 100,
             movement: 4,
             range: 1,
             mining: 3,

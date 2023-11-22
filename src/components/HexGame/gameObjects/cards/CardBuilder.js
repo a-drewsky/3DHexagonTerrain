@@ -1,5 +1,5 @@
-import CardConfig from "./CardConfig"
-import UnitConfig from "../spriteObjects/unit/UnitConfig"
+import CardConfig from "../../config/CardConfig"
+import UnitConfig from "../../config/UnitConfig"
 
 export default class CardBuilderClass {
 
@@ -27,7 +27,7 @@ export default class CardBuilderClass {
 
     buildUnitStats = (unitId) => {
         return {
-            health: UnitConfig[unitId].stats.health,
+            health: UnitConfig[unitId].health,
             movement: UnitConfig[unitId].stats.movement,
             mining: UnitConfig[unitId].stats.mining,
             physical_attack: UnitConfig[unitId].stats.physical_attack,

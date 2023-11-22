@@ -1,9 +1,11 @@
 import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
-import BunkerClass from "./bunker/Bunker"
-import FlagClass from "./flag/Flag"
-import ModifierClass from "./modifier/Modifier"
-import PropClass from "./prop/Prop"
-import ResourceClass from "./resource/Resource"
+import BunkerClass from "./structureObjects/Bunker"
+import FlagClass from "./structureObjects/Flag"
+import PropClass from "./structureObjects/Prop"
+import ResourceClass from "./structureObjects/Resource"
+
+import SingleImageModifierClass from "./structureObjects/modifier/SingleImageModifier"
+import CombinedImageModifierClass from "./structureObjects/modifier/CombinedImageModifier"
 
 export default class StructureDataClass {
 
@@ -27,8 +29,14 @@ export default class StructureDataClass {
         return newFlag
     }
 
-    setModifier = (pos, structureId) => {
-        let newModifier = new ModifierClass(pos, structureId, this.images)
+    setSingleImageModifier = (pos, structureId) => {
+        let newModifier = new SingleImageModifierClass(pos, structureId, this.images)
+        this.structureMap.set(this.commonUtils.join(pos), newModifier)
+        return newModifier
+    }
+
+    setCombinedImageModifier = (pos, structureId) => {
+        let newModifier = new CombinedImageModifierClass(pos, structureId, this.images)
         this.structureMap.set(this.commonUtils.join(pos), newModifier)
         return newModifier
     }
@@ -46,7 +54,7 @@ export default class StructureDataClass {
     }
 
     destroyStructure = (structure) => {
-        this.setModifier(structure.position, structure.destructionStructure)
+        this.setSingleImageModifier(structure.position, structure.destructionStructure)
     }
 
     getStructure = (pos) => {

@@ -8,11 +8,11 @@ export default class StatusBarRendererClass {
     }    
 
     addHealthBar = (spriteCanvas, spriteObject) => {
-        if (spriteObject.stats.health === 100) return
+        if (spriteObject.health === 100) return
 
         let tempctx = spriteCanvas.getContext('2d')
 
-        let healthBarIndex = 10 - Math.floor(spriteObject.stats.health / 10)
+        let healthBarIndex = 10 - Math.floor(spriteObject.health / spriteObject.stats['max_health'] * 10)
 
         let healthBarSprite = this.images.ui.healthbar
 
@@ -32,11 +32,11 @@ export default class StatusBarRendererClass {
 
     addResourceBar = (spriteCanvas, spriteObject) => {
 
-        if (spriteObject.stats.resources === spriteObject.stats.maxResources) return spriteCanvas
+        if (spriteObject.resources === spriteObject.stats['max_resources']) return spriteCanvas
 
         let tempctx = spriteCanvas.getContext('2d')
 
-        let resourceBarIndex = 10 - Math.floor(spriteObject.stats.resources / spriteObject.stats.maxResources * 10)
+        let resourceBarIndex = 10 - Math.floor(spriteObject.resources / spriteObject.stats['max_resources'] * 10)
 
         let resourceBarSprite = this.images.ui.resourcebar
 
