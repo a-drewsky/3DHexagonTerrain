@@ -1,5 +1,5 @@
-import ProjectileRendererClass from "./ProjectileRenderer"
-import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
+import ProjectileRendererClass from "../renderers/ProjectileRenderer"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileManagerClass {
 

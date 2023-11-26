@@ -1,33 +1,34 @@
 import CardConfig from "../../config/CardConfig"
 import UnitConfig from "../../config/UnitConfig"
 
-export default class CardBuilderClass {
+export default class CardClass {
 
-    buildCard = (cardId) => {
-        if(!UnitConfig[cardId]) throw Error(`Invalid Card ID: (${cardId}). Card config properties are: [${Object.getOwnPropertyNames(UnitConfig).splice(3)}]`)
-        let card = {
-            name: CardConfig[cardId].name,
-            unitId: CardConfig[cardId].unitId,
-            cost: CardConfig[cardId].cost,
-            image: CardConfig[cardId].image,
-            description: CardConfig[cardId].description,
-            type: CardConfig[cardId].type,
-            flipped: true
-        }
+    constructor(cardId) {
+        if (!CardConfig[cardId]) throw Error(`Invalid Card ID: (${cardId}). Card config properties are: [${Object.getOwnPropertyNames(CardConfig).splice(3)}]`)
 
-        switch(CardConfig[cardId].type){
+        this.name = CardConfig[cardId].name
+        this.unitId = CardConfig[cardId].unitId
+        this.cost = CardConfig[cardId].cost
+        this.image = CardConfig[cardId].image
+        this.description = CardConfig[cardId].description
+        this.type = CardConfig[cardId].type
+        this.flipped = true
+        this.stats = null
+
+
+        switch (CardConfig[cardId].type) {
             case 'unit':
-                card.stats = this.buildUnitStats(CardConfig[cardId].unitId)
-                return card
+                this.buildUnitStats(CardConfig[cardId].unitId)
+                return
             default:
-                return card
+                return
         }
- 
+
     }
 
     buildUnitStats = (unitId) => {
-        return {
-            health: UnitConfig[unitId].health,
+        this.stats = {
+            health: UnitConfig[unitId].stats.max_health,
             movement: UnitConfig[unitId].stats.movement,
             mining: UnitConfig[unitId].stats.mining,
             physical_attack: UnitConfig[unitId].stats.physical_attack,

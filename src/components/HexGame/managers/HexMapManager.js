@@ -1,10 +1,10 @@
-import HexMapControllerClass from "../../controllers/hexmapControllers/HexMapController"
-import HexMapDataClass from "./HexMapData"
-import HexMapPrerendererClass from "./HexMapPrerenderer"
-import HexMapUiManagerClass from "./HexMapUiManager"
-import CameraManagerClass from "../camera/CameraManager"
-import TileStackManagerClass from "../tileStack/TileStackManager"
-import SpriteObjectManagerClass from "../spriteObjects/SpriteObjectManager"
+import HexMapControllerClass from "../controllers/hexmapControllers/HexMapController"
+import HexMapDataClass from "../gameObjects/hexMap/HexMapData"
+import HexMapPrerendererClass from "../gameObjects/hexMap/HexMapPrerenderer"
+import UiManagerClass from "./UiManager"
+import CameraManagerClass from "./CameraManager"
+import TileStackManagerClass from "./TileStackManager"
+import SpriteObjectManagerClass from "./SpriteObjectManager"
 
 export default class HexMapManagerClass {
 
@@ -19,7 +19,7 @@ export default class HexMapManagerClass {
 
         this.prerenderer = new HexMapPrerendererClass(this.data, this.tileManager, this.spriteManager)
         this.controller = new HexMapControllerClass(this.data, canvas)
-        this.uiManager = new HexMapUiManagerClass(this.data, canvas, uiController)
+        this.uiManager = new UiManagerClass(this.data, canvas, uiController)
 
     }
 

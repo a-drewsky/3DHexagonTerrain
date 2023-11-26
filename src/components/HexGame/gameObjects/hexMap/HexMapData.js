@@ -4,7 +4,7 @@ import StructureDataClass from "../spriteObjects/structures/StructureData"
 import UnitDataClass from "../spriteObjects/unit/UnitData"
 import ProjectileDataClass from "../spriteObjects/projectile/ProjectileData"
 import CameraDataClass from "../camera/CameraData"
-import SelectionDataClass from "./selections/SelectionData"
+import SelectionDataClass from "./SelectionData"
 
 import CardDataClass from "../cards/CardData"
 

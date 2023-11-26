@@ -1,5 +1,5 @@
 
-import CardBuilderClass from "../cards/CardBuilder"
+import CardClass from "./Card"
 
 export default class CardDataClass {
 
@@ -7,8 +7,6 @@ export default class CardDataClass {
         
         this.cards = []
         this.selectedCard = null
-
-        this.cardBuilder = new CardBuilderClass()
 
     }
 
@@ -23,7 +21,7 @@ export default class CardDataClass {
             'imperial_soldier'
         ]
 
-        this.cards.push(this.cardBuilder.buildCard(card_options[Math.floor(Math.random() * card_options.length)]))
+        this.cards.push(new CardClass(card_options[Math.floor(Math.random() * card_options.length)]))
     }
 
     getCard = (cardNum) => {

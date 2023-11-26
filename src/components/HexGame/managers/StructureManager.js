@@ -1,6 +1,6 @@
-import StructureRendererClass from "./StructureRenderer"
-import ModifierRendererClass from "./ModifierRenderer"
-import StructureBuilderClass from "./StructureBuilder"
+import StructureRendererClass from "../renderers/StructureRenderer"
+import ModifierRendererClass from "../renderers/ModifierRenderer"
+import StructureBuilderClass from "../gameObjects/spriteObjects/structures/StructureBuilder"
 
 export default class StructureManagerClass {
 

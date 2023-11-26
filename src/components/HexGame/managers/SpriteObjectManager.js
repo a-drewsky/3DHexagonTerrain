@@ -1,6 +1,6 @@
-import UnitManagerClass from "./unit/UnitManager"
-import StructureManagerClass from "./structures/StructureManager"
-import ProjectileManagerClass from "./projectile/ProjectileManager"
+import UnitManagerClass from "./UnitManager"
+import StructureManagerClass from "./StructureManager"
+import ProjectileManagerClass from "./ProjectileManager"
 
 export default class SpriteObjectManagerClass{
 

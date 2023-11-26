@@ -1,6 +1,6 @@
-import TileStackRendererClass from './TileStackRenderer'
-import TileStackBuilderClass from './TileStackBuilder'
-import CommonHexMapUtilsClass from '../../commonUtils/CommonHexMapUtils'
+import TileStackRendererClass from '../renderers/TileStackRenderer'
+import TileStackBuilderClass from '../gameObjects/tileStack/TileStackBuilder'
+import CommonHexMapUtilsClass from '../commonUtils/CommonHexMapUtils'
 
 export default class TileStackManagerClass {
 

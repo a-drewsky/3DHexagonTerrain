@@ -1,7 +1,5 @@
 import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
-import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-
-import { SHADOW_SIZE } from '../../CommonConstants'
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackRendererClass {
 
@@ -17,17 +15,6 @@ export default class TileStackRendererClass {
 
         this.utils = new CommonRendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
-
-
-        //starts at top position and rotates clockwise
-        this.shadowRotationDims = {
-            0: { q: 0.5 * SHADOW_SIZE, r: -0.5 * SHADOW_SIZE, left: 1, right: 0.8, offset: 0.6 },
-            1: { q: 0.5 * SHADOW_SIZE, r: 0 * SHADOW_SIZE, left: 0.8, right: 0.6, offset: 0.4 },
-            2: { q: 0 * SHADOW_SIZE, r: 0.5 * SHADOW_SIZE, left: 0.6, right: 0.4, offset: 0.6 },
-            3: { q: -0.5 * SHADOW_SIZE, r: 0.5 * SHADOW_SIZE, left: 0.4, right: 0.6, offset: 0.8 },
-            4: { q: -0.5 * SHADOW_SIZE, r: 0 * SHADOW_SIZE, left: 0.6, right: 0.8, offset: 1 },
-            5: { q: 0 * SHADOW_SIZE, r: -0.5 * SHADOW_SIZE, left: 0.8, right: 1, offset: 0.8 },
-        }
 
     }
 

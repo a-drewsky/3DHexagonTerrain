@@ -1,5 +1,5 @@
 import NoiseClass from "../../commonUtils/PerlinUtils"
-import CommonBuilderUtilsClass from "../commonUtils/CommonBuilderUtils"
+import CommonBuilderUtilsClass from "../../commonUtils/CommonBuilderUtils"
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 import { MAX_ELEVATION, SAND_HILL_ELVATION_DIVISOR, ELEVATION_MULTIPLIER, TEMP_RANGES, WATER_TEMP_RANGES, LOW_TERRAIN_GENERATION_RANGES, MIRROR_MAP } from './TileStackConstants'

@@ -1,6 +1,6 @@
-import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
-import CommonHexMapUtilsClass from "../../../commonUtils/CommonHexMapUtils"
-import ShadowRendererClass from "../common/ShadowRenderer"
+import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
+import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import ShadowRendererClass from "./common/ShadowRenderer"
 
 export default class ProjectileRendererClass {
 

@@ -1,6 +1,4 @@
-import HexMapManagerClass from './gameObjects/hexMap/HexMapManager'
-import UiControllerClass from './controllers/UiController'
-import GameViewClass from './GameView'
+import HexMapManagerClass from './managers/HexMapManager'
 
 export default class GameManagerClass {
 
