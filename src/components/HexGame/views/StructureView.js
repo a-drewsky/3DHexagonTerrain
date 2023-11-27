@@ -2,11 +2,11 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class StructureViewClass{
 
-    constructor(hexMapData) {
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.structureData = hexMapData.structureData
-        this.cameraData = hexMapData.cameraData
+    constructor(gameData) {
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.structureData = gameData.structureData
+        this.cameraData = gameData.cameraData
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 

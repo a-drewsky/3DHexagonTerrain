@@ -5,18 +5,18 @@ import HexMapPathFinderClass from "./HexMapPathFinder"
 
 export default class HexMapControllerUtilsClass {
 
-    constructor(hexMapData) {
-        this.mapData = hexMapData.mapData
-        this.cameraData = hexMapData.cameraData
-        this.selectionData = hexMapData.selectionData
-        this.unitData = hexMapData.unitData
-        this.structureData = hexMapData.structureData
-        this.tileData = hexMapData.tileData
-        this.cardData = hexMapData.cardData
+    constructor(gameData) {
+        this.mapData = gameData.mapData
+        this.cameraData = gameData.cameraData
+        this.selectionData = gameData.selectionData
+        this.unitData = gameData.unitData
+        this.structureData = gameData.structureData
+        this.tileData = gameData.tileData
+        this.cardData = gameData.cardData
 
         this.collision = new CollisionClass()
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.pathfinder = new HexMapPathFinderClass(hexMapData)
+        this.pathfinder = new HexMapPathFinderClass(gameData)
 
     }
 

@@ -4,10 +4,10 @@ import ProjectileManagerClass from "./ProjectileManager"
 
 export default class SpriteObjectManagerClass{
 
-    constructor(hexMapData, images){
-        this.structures = new StructureManagerClass(hexMapData, images)
-        this.units = new UnitManagerClass(hexMapData, images)
-        this.projectiles = new ProjectileManagerClass(hexMapData, images)
+    constructor(gameData, images){
+        this.structures = new StructureManagerClass(gameData, images)
+        this.units = new UnitManagerClass(gameData, images)
+        this.projectiles = new ProjectileManagerClass(gameData, images)
     }
 
     update = () => {

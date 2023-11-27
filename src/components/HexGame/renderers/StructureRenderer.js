@@ -5,17 +5,17 @@ import ShadowRendererClass from "./common/ShadowRenderer"
 
 export default class StructureRendererClass {
 
-    constructor(hexMapData, images) {
-        this.structureData = hexMapData.structureData
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.cameraData = hexMapData.cameraData
+    constructor(gameData, images) {
+        this.structureData = gameData.structureData
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.cameraData = gameData.cameraData
         this.images = images
 
-        this.StatusBarRenderer = new StatusBarRendererClass(this.mapData, this.images)
-        this.utils = new RendererUtilsClass(hexMapData)
+        this.StatusBarRenderer = new StatusBarRendererClass(gameData, images)
+        this.utils = new RendererUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
-        this.shadowRenderer = new ShadowRendererClass(hexMapData, images)
+        this.shadowRenderer = new ShadowRendererClass(gameData, images)
     }
 
     renderAll = (structure) => {

@@ -3,10 +3,10 @@ import { PRERENDER_STACKS_PER_FRAME } from "../constants/HexMapConstants"
 
 export default class RenderStackManagerClass {
 
-    constructor(hexMapData, tileManager, spriteManager) {
+    constructor(gameData, tileManager, spriteManager) {
 
-        this.tileData = hexMapData.tileData
-        this.structureData = hexMapData.structureData
+        this.tileData = gameData.tileData
+        this.structureData = gameData.structureData
         this.tileRenderer = tileManager.renderer
         this.structureRenderer = spriteManager.structures.structureRenderer
         this.modifierRenderer = spriteManager.structures.modifierRenderer

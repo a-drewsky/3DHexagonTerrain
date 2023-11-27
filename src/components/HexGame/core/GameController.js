@@ -3,10 +3,10 @@ import HexMapControllerClass from "../controllers/HexMapController"
 
 export default class GameControllerClass {
 
-   constructor(gameManager, canvas) {
+   constructor(gameManager, gameData, canvas) {
       this.gameManager = gameManager
       this.hexmapManager = gameManager.hexMapManager 
-      this.hexmapController = new HexMapControllerClass(this.hexmapManager.data, canvas)
+      this.hexmapController = new HexMapControllerClass(gameData, canvas)
 
       this.mouseMoveTimeStamp = 0
       this.mouseMoveTime = 1000 / 60

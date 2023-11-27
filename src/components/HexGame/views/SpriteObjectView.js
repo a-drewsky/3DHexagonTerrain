@@ -6,21 +6,21 @@ import ProjectileViewClass from "./ProjectileView"
 
 export default class SpriteObjectViewClass {
 
-   constructor(hexMapData, canvas) {
+   constructor(gameData, canvas) {
 
-      this.unitData = hexMapData.unitData
-      this.structureData = hexMapData.structureData
-      this.projectileData = hexMapData.projectileData
-      this.cameraData = hexMapData.cameraData
+      this.unitData = gameData.unitData
+      this.structureData = gameData.structureData
+      this.projectileData = gameData.projectileData
+      this.cameraData = gameData.cameraData
 
       this.commonUtils = new CommonHexMapUtilsClass()
 
       this.canvas = canvas
 
-      this.structures = new StructureViewClass(hexMapData)
-      this.modifiers = new ModifierViewClass(hexMapData)
-      this.units = new UnitViewClass(hexMapData)
-      this.projectiles = new ProjectileViewClass(hexMapData)
+      this.structures = new StructureViewClass(gameData)
+      this.modifiers = new ModifierViewClass(gameData)
+      this.units = new UnitViewClass(gameData)
+      this.projectiles = new ProjectileViewClass(gameData)
    }
 
    buildSpriteList = () => {

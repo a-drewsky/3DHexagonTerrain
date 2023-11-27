@@ -1,8 +1,8 @@
 
 export default class CameraManagerClass {
 
-    constructor(hexMapData) {
-        this.data = hexMapData.cameraData
+    constructor(gameData) {
+        this.data = gameData.cameraData
     }
 
     prerender = (hexmapCanvas) => {

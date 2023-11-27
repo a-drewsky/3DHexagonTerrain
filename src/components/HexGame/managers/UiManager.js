@@ -2,11 +2,11 @@ import CollisionClass from "../commonUtils/CollisionUtils"
 
 export default class UiManagerClass {
 
-    constructor(hexMapData, canvas, uiInterface) {
-        this.mapData = hexMapData.mapData
-        this.cardData = hexMapData.cardData
-        this.unitData = hexMapData.unitData
-        this.cameraData = hexMapData.cameraData
+    constructor(gameData, canvas, uiInterface) {
+        this.mapData = gameData.mapData
+        this.cardData = gameData.cardData
+        this.unitData = gameData.unitData
+        this.cameraData = gameData.cameraData
         
         this.canvas = canvas
         this.hexmapCanvas = null

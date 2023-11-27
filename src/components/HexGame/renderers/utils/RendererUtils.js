@@ -2,11 +2,11 @@ import CommonHexMapUtilsClass from '../../commonUtils/CommonHexMapUtils'
 
 export default class RendererUtilsClass {
 
-    constructor(hexMapData) {
+    constructor(gameData) {
 
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.cameraData = hexMapData.cameraData
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.cameraData = gameData.cameraData
 
         this.commonUtils = new CommonHexMapUtilsClass()
     }

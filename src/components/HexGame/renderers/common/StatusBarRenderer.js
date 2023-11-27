@@ -2,8 +2,8 @@
 
 export default class StatusBarRendererClass {
 
-    constructor(mapData, images){
-        this.mapData = mapData
+    constructor(gameData, images){
+        this.mapData = gameData.mapData
         this.images = images
     }    
 

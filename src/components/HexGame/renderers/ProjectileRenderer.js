@@ -4,17 +4,17 @@ import ShadowRendererClass from "./common/ShadowRenderer"
 
 export default class ProjectileRendererClass {
 
-    constructor(hexMapData, images) {
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.cameraData = hexMapData.cameraData
+    constructor(gameData, images) {
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.cameraData = gameData.cameraData
 
         this.images = images
 
-        this.utils = new RendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
-        this.shadowRenderer = new ShadowRendererClass(hexMapData, images)
+        this.shadowRenderer = new ShadowRendererClass(gameData, images)
     }
 
     render = (projectile) => {

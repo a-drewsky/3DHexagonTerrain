@@ -2,12 +2,12 @@ import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
 
 export default class HexMapPathFinderUtilsClass {
 
-    constructor(hexMapData) {
+    constructor(gameData) {
 
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.unitData = hexMapData.unitData
-        this.structureData = hexMapData.structureData
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.unitData = gameData.unitData
+        this.structureData = gameData.structureData
 
         this.commonUtils = new CommonHexMapUtilsClass()
 

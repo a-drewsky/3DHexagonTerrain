@@ -4,13 +4,13 @@ import CommonHexMapUtilsClass from '../commonUtils/CommonHexMapUtils'
 
 export default class TileStackManagerClass {
 
-    constructor(hexMapData, images) {
-        this.data = hexMapData.tileData
-        this.mapData = hexMapData.mapData
-        this.selectionData = hexMapData.selectionData
-        this.cameraData = hexMapData.cameraData
-        this.renderer = new TileStackRendererClass(hexMapData, images)
-        this.builder = new TileStackBuilderClass(hexMapData)
+    constructor(gameData, images) {
+        this.data = gameData.tileData
+        this.mapData = gameData.mapData
+        this.selectionData = gameData.selectionData
+        this.cameraData = gameData.cameraData
+        this.renderer = new TileStackRendererClass(gameData, images)
+        this.builder = new TileStackBuilderClass(gameData)
         this.utils = new CommonHexMapUtilsClass()
     }
 

@@ -5,21 +5,21 @@ import HexMapPathFinderClass from "./utils/HexMapPathFinder"
 
 export default class HexMapControllerClickClass {
 
-    constructor(hexMapData, hoverController) {
-        this.mapData = hexMapData.mapData
-        this.cameraData = hexMapData.cameraData
-        this.tileData = hexMapData.tileData
-        this.selectionData = hexMapData.selectionData
-        this.cardData = hexMapData.cardData
-        this.unitData = hexMapData.unitData
-        this.structureData = hexMapData.structureData
+    constructor(gameData, hoverController) {
+        this.mapData = gameData.mapData
+        this.cameraData = gameData.cameraData
+        this.tileData = gameData.tileData
+        this.selectionData = gameData.selectionData
+        this.cardData = gameData.cardData
+        this.unitData = gameData.unitData
+        this.structureData = gameData.structureData
 
-        this.pathfinder = new HexMapPathFinderClass(hexMapData)
-        this.utils = new HexMapControllerUtilsClass(hexMapData)
+        this.pathfinder = new HexMapPathFinderClass(gameData)
+        this.utils = new HexMapControllerUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
         this.hoverController = hoverController
-        this.actions = new HexMapControllerActionsClass(hexMapData)
+        this.actions = new HexMapControllerActionsClass(gameData)
     }
 
     click = (tileClicked, clickPos) => {

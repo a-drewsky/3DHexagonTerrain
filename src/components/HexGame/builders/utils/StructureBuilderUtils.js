@@ -3,11 +3,11 @@ import { BIOME_CONSTANTS } from '../../constants/BuilderConstants'
 
 export default class StructureBuilderUtilsClass {
 
-    constructor(hexMapData) {
+    constructor(gameData) {
 
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.structureData = hexMapData.structureData
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.structureData = gameData.structureData
     }
 
     flattenTerrain = (q, r, flatList, terrainHeight) => {

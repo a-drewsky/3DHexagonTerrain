@@ -1,8 +1,10 @@
+
+
 export default class CommonBuilderUtilsClass {
 
-    constructor(hexMapData) {
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
+    constructor(gameData) {
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
     }
 
     cloneTile = (tileToClone, keyObj) => {

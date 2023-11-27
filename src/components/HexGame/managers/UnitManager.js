@@ -3,16 +3,16 @@ import HexMapControllerUtilsClass from "../controllers/utils/HexMapControllerUti
 
 export default class UnitManagerClass {
 
-    constructor(hexMapData, images) {
-        this.mapData = hexMapData.mapData
-        this.selectionData = hexMapData.selectionData
-        this.projectileData = hexMapData.projectileData
-        this.data = hexMapData.unitData
+    constructor(gameData, images) {
+        this.mapData = gameData.mapData
+        this.selectionData = gameData.selectionData
+        this.projectileData = gameData.projectileData
+        this.data = gameData.unitData
 
-        this.structureData = hexMapData.structureData
+        this.structureData = gameData.structureData
 
-        this.renderer = new UnitRendererClass(hexMapData, images)
-        this.utils = new HexMapControllerUtilsClass(hexMapData)
+        this.renderer = new UnitRendererClass(gameData, images)
+        this.utils = new HexMapControllerUtilsClass(gameData)
     }
 
     update = () => {

@@ -4,14 +4,14 @@ import StructureBuilderClass from "../builders/StructureBuilder"
 
 export default class StructureManagerClass {
 
-    constructor(hexMapData, images) {
-        this.mapData = hexMapData.mapData
-        this.selectionData = hexMapData.selectionData
-        this.data = hexMapData.structureData
+    constructor(gameData, images) {
+        this.mapData = gameData.mapData
+        this.selectionData = gameData.selectionData
+        this.data = gameData.structureData
 
-        this.structureRenderer = new StructureRendererClass(hexMapData, images)
-        this.modifierRenderer = new ModifierRendererClass(hexMapData, images)
-        this.builder = new StructureBuilderClass(hexMapData)
+        this.structureRenderer = new StructureRendererClass(gameData, images)
+        this.modifierRenderer = new ModifierRendererClass(gameData, images)
+        this.builder = new StructureBuilderClass(gameData)
     }
 
     update = () => {

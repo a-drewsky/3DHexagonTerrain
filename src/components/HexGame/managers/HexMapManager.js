@@ -24,7 +24,7 @@ export default class HexMapManagerClass {
         this.spriteManager.structures.builder.generateStructures(mapSizeConstant)
         this.tileManager.builder.reduceTileHeights()
 
-        this.cameraManager.data.initializeCards()
+        this.uiManager.cardData.initializeCards()
     }
 
     prerender = (hexmapCanvas) => {

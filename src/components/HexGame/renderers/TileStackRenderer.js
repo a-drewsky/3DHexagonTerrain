@@ -3,17 +3,17 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackRendererClass {
 
-    constructor(hexMapData, images) {
+    constructor(gameData, images) {
 
-        this.mapData = hexMapData.mapData
-        this.tileData = hexMapData.tileData
-        this.structureData = hexMapData.structureData
-        this.unitData = hexMapData.unitData
-        this.cameraData = hexMapData.cameraData
+        this.mapData = gameData.mapData
+        this.tileData = gameData.tileData
+        this.structureData = gameData.structureData
+        this.unitData = gameData.unitData
+        this.cameraData = gameData.cameraData
 
         this.images = images
 
-        this.utils = new RendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
     }

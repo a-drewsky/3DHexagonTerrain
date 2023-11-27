@@ -6,23 +6,23 @@ import HexMapControllerHoverClass from './HexMapControllerHover'
 import HexMapPathFinderClass from './utils/HexMapPathFinder'
 export default class HexMapControllerClass {
 
-    constructor(hexMapData, canvas) {
-        this.mapData = hexMapData.mapData
-        this.cameraData = hexMapData.cameraData
-        this.tileData = hexMapData.tileData
-        this.selectionData = hexMapData.selectionData
-        this.cardData = hexMapData.cardData
-        this.unitData = hexMapData.unitData
+    constructor(gameData, canvas) {
+        this.mapData = gameData.mapData
+        this.cameraData = gameData.cameraData
+        this.tileData = gameData.tileData
+        this.selectionData = gameData.selectionData
+        this.cardData = gameData.cardData
+        this.unitData = gameData.unitData
 
         this.canvas = canvas
 
         this.collision = new CollisionClass()
 
-        this.utils = new HexMapControllerUtilsClass(hexMapData)
-        this.pathfinder = new HexMapPathFinderClass(hexMapData)
+        this.utils = new HexMapControllerUtilsClass(gameData)
+        this.pathfinder = new HexMapPathFinderClass(gameData)
 
-        this.hoverController = new HexMapControllerHoverClass(hexMapData)
-        this.clickController = new HexMapControllerClickClass(hexMapData, this.hoverController)
+        this.hoverController = new HexMapControllerHoverClass(gameData)
+        this.clickController = new HexMapControllerClickClass(gameData, this.hoverController)
 
     }
 

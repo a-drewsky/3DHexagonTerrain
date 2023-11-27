@@ -49,7 +49,7 @@ export default class GameMainClass {
       this.gameManager = new GameManagerClass(this.canvas, this.images, this.uiInterface, this.gameData, userConstants)
       console.log("DONE BUILDING")
 
-      this.gameController = new GameControllerClass(this.gameManager, this.canvas)
+      this.gameController = new GameControllerClass(this.gameManager, this.gameData, this.canvas)
       this.gameView = new GameViewClass(this.ctx, this.canvas, this.images, this.uiInterface, this.gameData, userConstants)
       let gameCanvas = this.gameView.initializeCanvas()
       this.gameManager.prerender(gameCanvas)

@@ -10,11 +10,11 @@ const TABLE_COLORS = {
 
 export default class HexMapViewTableClass {
 
-   constructor(hexMapData) {
+   constructor(gameData) {
 
-      this.mapData = hexMapData.mapData
-      this.tileData = hexMapData.tileData
-      this.cameraData = hexMapData.cameraData
+      this.mapData = gameData.mapData
+      this.tileData = gameData.tileData
+      this.cameraData = gameData.cameraData
       
       this.hexmapCanvas = null
 

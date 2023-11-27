@@ -2,14 +2,14 @@ import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
 
 export default class HexMapControllerActionsClass {
 
-    constructor(hexMapData) {
-        this.mapData = hexMapData.mapData
-        this.selectionData = hexMapData.selectionData
-        this.tileData = hexMapData.tileData
-        this.unitData = hexMapData.unitData
-        this.structureData = hexMapData.structureData
+    constructor(gameData) {
+        this.mapData = gameData.mapData
+        this.selectionData = gameData.selectionData
+        this.tileData = gameData.tileData
+        this.unitData = gameData.unitData
+        this.structureData = gameData.structureData
 
-        this.utils = new HexMapControllerUtilsClass(hexMapData)
+        this.utils = new HexMapControllerUtilsClass(gameData)
     }
 
     move = () => {

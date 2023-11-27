@@ -8,12 +8,12 @@ import { BIOME_CONSTANTS, SEED_MULTIPLIER, CELL_SIZE, MAP_SIZES } from '../const
 
 export default class StructureBuilderClass {
 
-   constructor(hexMapData) {
-      this.mapData = hexMapData.mapData
-      this.tileData = hexMapData.tileData
-      this.structureData = hexMapData.structureData
+   constructor(gameData) {
+      this.mapData = gameData.mapData
+      this.tileData = gameData.tileData
+      this.structureData = gameData.structureData
 
-      this.structureBuilderUtils = new StructureBuilderUtilsClass(hexMapData)
+      this.structureBuilderUtils = new StructureBuilderUtilsClass(gameData)
       this.commonUtils = new CommonHexMapUtilsClass()
       this.noise = new NoiseClass()
 

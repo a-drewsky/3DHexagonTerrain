@@ -7,18 +7,18 @@ import { INIT_CAMERA_POSITION } from '../constants/HexMapConstants'
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, hexMapData, userConstants, images, uiInterface) {
+   constructor(ctx, canvas, gameData, userConstants, images, uiInterface) {
       this.ctx = ctx
       this.canvas = canvas
-      this.cameraData = hexMapData.cameraData
-      this.mapData = hexMapData.mapData
-      this.tileData = hexMapData.tileData
-      this.unitData = hexMapData.unitData
-      this.strucutreData = hexMapData.strucutreData
+      this.cameraData = gameData.cameraData
+      this.mapData = gameData.mapData
+      this.tileData = gameData.tileData
+      this.unitData = gameData.unitData
+      this.strucutreData = gameData.strucutreData
 
-      this.tableView = new HexMapViewTableClass(hexMapData)
-      this.tileView = new TileStackViewClass(hexMapData, canvas)
-      this.spriteView = new SpriteObjectViewClass(hexMapData, canvas)
+      this.tableView = new HexMapViewTableClass(gameData)
+      this.tileView = new TileStackViewClass(gameData, canvas)
+      this.spriteView = new SpriteObjectViewClass(gameData, canvas)
 
       this.hexmapCanvas = null
       this.hexmapCtx = null

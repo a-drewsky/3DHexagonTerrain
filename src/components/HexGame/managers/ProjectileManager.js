@@ -3,12 +3,12 @@ import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class ProjectileManagerClass {
 
-    constructor(hexMapData, images) {
-        this.data = hexMapData.projectileData
-        this.mapData = hexMapData.mapData
-        this.unitData = hexMapData.unitData
-        this.structureData = hexMapData.structureData
-        this.renderer = new ProjectileRendererClass(hexMapData, images)
+    constructor(gameData, images) {
+        this.data = gameData.projectileData
+        this.mapData = gameData.mapData
+        this.unitData = gameData.unitData
+        this.structureData = gameData.structureData
+        this.renderer = new ProjectileRendererClass(gameData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 
