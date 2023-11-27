@@ -4,8 +4,8 @@ import ProjectileManagerClass from "./ProjectileManager"
 
 export default class SpriteObjectManagerClass{
 
-    constructor(hexMapData, images, uiController){
-        this.structures = new StructureManagerClass(hexMapData, images, uiController)
+    constructor(hexMapData, images){
+        this.structures = new StructureManagerClass(hexMapData, images)
         this.units = new UnitManagerClass(hexMapData, images)
         this.projectiles = new ProjectileManagerClass(hexMapData, images)
     }

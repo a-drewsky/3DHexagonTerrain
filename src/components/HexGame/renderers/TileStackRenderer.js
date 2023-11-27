@@ -1,4 +1,4 @@
-import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
+import RendererUtilsClass from "./utils/RendererUtils"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 
 export default class TileStackRendererClass {
@@ -13,7 +13,7 @@ export default class TileStackRendererClass {
 
         this.images = images
 
-        this.utils = new CommonRendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
     }

@@ -2,7 +2,7 @@ import CollisionClass from "../commonUtils/CollisionUtils"
 
 export default class UiManagerClass {
 
-    constructor(hexMapData, canvas, uiController) {
+    constructor(hexMapData, canvas, uiInterface) {
         this.mapData = hexMapData.mapData
         this.cardData = hexMapData.cardData
         this.unitData = hexMapData.unitData
@@ -11,7 +11,7 @@ export default class UiManagerClass {
         this.canvas = canvas
         this.hexmapCanvas = null
 
-        this.uiController = uiController
+        this.uiInterface = uiInterface
 
         this.collision = new CollisionClass()
 
@@ -22,16 +22,16 @@ export default class UiManagerClass {
     }
 
     update = () => {
-        this.uiController.setResourceBar(this.mapData.resources)
-        this.uiController.setCards(this.cardData.cards)
-        this.uiController.selectCard(this.cardData.selectedCard)
-        this.uiController.selectSprite(this.unitData.placementUnit || this.unitData.selectedUnit)
-        this.uiController.setEndGameMenu(this.mapData.curState() === 'end')
+        this.uiInterface.setResourceBar(this.mapData.resources)
+        this.uiInterface.setCards(this.cardData.cards)
+        this.uiInterface.selectCard(this.cardData.selectedCard)
+        this.uiInterface.selectSprite(this.unitData.placementUnit || this.unitData.selectedUnit)
+        this.uiInterface.setEndGameMenu(this.mapData.curState() === 'end')
 
         //set background
         let scale = this.canvas.width / (this.canvas.width + (this.cameraData.zoom * this.cameraData.zoomAmount))
-        this.uiController.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
-        this.uiController.setBgCanvasZoom(this.hexmapCanvas.width * scale, this.hexmapCanvas.height * scale)
+        this.uiInterface.setBgCanvasPosition(this.cameraData.position.x * -1 * scale, this.cameraData.position.y * -1 * scale)
+        this.uiInterface.setBgCanvasZoom(this.hexmapCanvas.width * scale, this.hexmapCanvas.height * scale)
 
     }
 

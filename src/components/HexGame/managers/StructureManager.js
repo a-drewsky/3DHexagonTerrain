@@ -1,15 +1,13 @@
 import StructureRendererClass from "../renderers/StructureRenderer"
 import ModifierRendererClass from "../renderers/ModifierRenderer"
-import StructureBuilderClass from "../gameObjects/spriteObjects/structures/StructureBuilder"
+import StructureBuilderClass from "../builders/StructureBuilder"
 
 export default class StructureManagerClass {
 
-    constructor(hexMapData, images, uiController) {
+    constructor(hexMapData, images) {
         this.mapData = hexMapData.mapData
         this.selectionData = hexMapData.selectionData
         this.data = hexMapData.structureData
-
-        this.uiController = uiController
 
         this.structureRenderer = new StructureRendererClass(hexMapData, images)
         this.modifierRenderer = new ModifierRendererClass(hexMapData, images)

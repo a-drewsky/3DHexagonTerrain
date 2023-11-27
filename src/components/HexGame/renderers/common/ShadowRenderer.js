@@ -1,5 +1,5 @@
 import CommonHexMapUtilsClass from "../../commonUtils/CommonHexMapUtils"
-import CommonRendererUtilsClass from "../../commonUtils/CommonRendererUtils"
+import RendererUtilsClass from "../utils/RendererUtils"
 
 export default class ShadowRendererClass {
 
@@ -10,7 +10,7 @@ export default class ShadowRendererClass {
 
         this.images = images
 
-        this.utils = new CommonRendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
     }
 

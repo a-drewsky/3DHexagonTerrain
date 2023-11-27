@@ -3,11 +3,11 @@ import HexMapViewTableClass from "./HexMapViewTable"
 import SpriteObjectViewClass from "./SpriteObjectView"
 import TileStackViewClass from './TileStackView'
 
-import { INIT_CAMERA_POSITION } from '../gameObjects/hexMap/HexMapConstants'
+import { INIT_CAMERA_POSITION } from '../constants/HexMapConstants'
 
 export default class HexMapViewClass {
 
-   constructor(ctx, canvas, hexMapData, userConstants, images, uiController) {
+   constructor(ctx, canvas, hexMapData, userConstants, images, uiInterface) {
       this.ctx = ctx
       this.canvas = canvas
       this.cameraData = hexMapData.cameraData
@@ -23,7 +23,7 @@ export default class HexMapViewClass {
       this.hexmapCanvas = null
       this.hexmapCtx = null
 
-      this.uiController = uiController
+      this.uiInterface = uiInterface
 
       //Debug Settings
       this.DEBUG = userConstants.DEBUG
@@ -62,7 +62,7 @@ export default class HexMapViewClass {
    drawTable = () => {
       if (this.mapData.renderBackground === true) {
          let tempCanvas = this.tableView.render()
-         this.uiController.setBgCanvasImage(tempCanvas)
+         this.uiInterface.setBgCanvasImage(tempCanvas)
          this.mapData.renderBackground = false
       }
    }
@@ -82,8 +82,8 @@ export default class HexMapViewClass {
       this.hexmapCanvas.style.imageRendering = 'pixelated'
       this.hexmapCtx = this.hexmapCanvas.getContext("2d")
 
-      this.uiController.setBgCanvasSize(this.hexmapCanvas.width, this.hexmapCanvas.height)
-      this.uiController.setBgCanvasZoom(this.hexmapCanvas.width, this.hexmapCanvas.height)
+      this.uiInterface.setBgCanvasSize(this.hexmapCanvas.width, this.hexmapCanvas.height)
+      this.uiInterface.setBgCanvasZoom(this.hexmapCanvas.width, this.hexmapCanvas.height)
 
       this.tableView.prerender(this.hexmapCanvas)
 

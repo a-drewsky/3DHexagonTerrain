@@ -1,4 +1,4 @@
-import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
+import RendererUtilsClass from "./utils/RendererUtils"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 import ShadowRendererClass from "./common/ShadowRenderer"
 
@@ -11,7 +11,7 @@ export default class ProjectileRendererClass {
 
         this.images = images
 
-        this.utils = new CommonRendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
 
         this.shadowRenderer = new ShadowRendererClass(hexMapData, images)

@@ -1,5 +1,5 @@
 import UnitRendererClass from "../renderers/UnitRenderer"
-import HexMapControllerUtilsClass from "../commonUtils/controllerUtils/HexMapControllerUtils"
+import HexMapControllerUtilsClass from "../controllers/utils/HexMapControllerUtils"
 
 export default class UnitManagerClass {
 

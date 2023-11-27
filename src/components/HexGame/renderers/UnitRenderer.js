@@ -1,4 +1,4 @@
-import CommonRendererUtilsClass from "../commonUtils/CommonRendererUtils"
+import RendererUtilsClass from "./utils/RendererUtils"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 import StatusBarRendererClass from "./common/StatusBarRenderer"
 import ShadowRendererClass from "./common/ShadowRenderer"
@@ -14,7 +14,7 @@ export default class UnitRendererClass {
         this.images = images
 
         this.statusBarRenderer = new StatusBarRendererClass(this.mapData, this.images)
-        this.utils = new CommonRendererUtilsClass(hexMapData)
+        this.utils = new RendererUtilsClass(hexMapData)
         this.commonUtils = new CommonHexMapUtilsClass()
         this.shadowRenderer = new ShadowRendererClass(hexMapData, images)
     }

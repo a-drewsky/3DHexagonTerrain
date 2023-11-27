@@ -1,5 +1,5 @@
 
-import { HEXMAP_SIDE_COLOR_MULTIPLIER } from '../CommonConstants'
+import { TABLE_SIDE_COLOR_MULTIPLIER } from '../constants/HexMapConstants'
 
 const TABLE_HEIGHT = 40
 
@@ -65,8 +65,8 @@ export default class HexMapViewTableClass {
          tempTablePosition.shift();
          tempTablePosition.shift();
 
-         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
-         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[this.cameraData.rotation]}%)`
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);
@@ -89,8 +89,8 @@ export default class HexMapViewTableClass {
          if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6;
 
 
-         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[0].x, tempTablePosition[0].y);
@@ -104,8 +104,8 @@ export default class HexMapViewTableClass {
          shiftedShadowRotation += 2;
          if (shiftedShadowRotation >= 6) shiftedShadowRotation -= 6
 
-         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
-         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * HEXMAP_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.fillStyle = `hsl(${TABLE_COLORS.fill.h}, ${TABLE_COLORS.fill.s}%, ${TABLE_COLORS.fill.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
+         tempctx.strokeStyle = `hsl(${TABLE_COLORS.stroke.h}, ${TABLE_COLORS.stroke.s}%, ${TABLE_COLORS.stroke.l * TABLE_SIDE_COLOR_MULTIPLIER * this.rotationAlpha[shiftedShadowRotation]}%)`
 
          tempctx.beginPath();
          tempctx.moveTo(tempTablePosition[2].x, tempTablePosition[2].y);
