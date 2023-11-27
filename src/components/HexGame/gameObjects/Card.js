@@ -13,8 +13,6 @@ export default class CardClass {
         this.description = CardConfig[cardId].description
         this.type = CardConfig[cardId].type
         this.flipped = true
-        this.stats = null
-
 
         switch (CardConfig[cardId].type) {
             case 'unit':
