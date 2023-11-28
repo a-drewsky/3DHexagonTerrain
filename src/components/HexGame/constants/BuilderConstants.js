@@ -90,7 +90,7 @@ export const BIOME_CONSTANTS = {
         terrainGenMaxNeighbors: 0,
         rockGenThreshold: 0.45
     },
-    woodlands: {
+    plains: {
         biomeName: 'grass',
         biomeGroup: ['grasshill'],
         minBiomeSmoothing: 12,

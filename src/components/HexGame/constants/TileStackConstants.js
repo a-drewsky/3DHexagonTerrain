@@ -9,7 +9,7 @@ export const MIRROR_MAP = false
 
 export const TEMP_RANGES = {
     tundra: 0.15,
-    woodlands: 0.28,
+    plains: 0.28,
     savanna: 0.36,
     desert: 1
 }

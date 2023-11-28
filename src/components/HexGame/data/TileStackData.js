@@ -128,6 +128,10 @@ export default class TileStackDataClass {
         this.maxHeight = Math.max(...this.getTileMap().map(entry => entry.value.height))
     }
 
+    setForest = (pos) => {
+        this.getAnyEntry(pos).biome = 'forest'
+    }
+
     getEntry = (pos) => {
         let entry = this.tileMap.get(this.utils.join(pos))
         if (entry && entry.groundShadowTile === false) return entry

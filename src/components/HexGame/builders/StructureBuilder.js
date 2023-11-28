@@ -202,8 +202,8 @@ export default class StructureBuilderClass {
    generateModifiers = (noiseFluctuation) => {
 
       let treeSeeds = {
-         woodlands1: Math.random() * SEED_MULTIPLIER,
-         woodlands2: Math.random() * SEED_MULTIPLIER,
+         plains1: Math.random() * SEED_MULTIPLIER,
+         plains2: Math.random() * SEED_MULTIPLIER,
          tundra1: Math.random() * SEED_MULTIPLIER,
          tundra2: Math.random() * SEED_MULTIPLIER,
          desert1: Math.random() * SEED_MULTIPLIER,
@@ -217,8 +217,8 @@ export default class StructureBuilderClass {
 
          //feature generation
          let tileTreeNoise = {
-            woodlands: this.noise.noise([treeSeeds['woodlands1'] + keyObj.q / noiseFluctuation, treeSeeds['woodlands1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['woodlands2'] + keyObj.q / noiseFluctuation, treeSeeds['woodlands2'] + keyObj.r / noiseFluctuation]),
-            grasshill: this.noise.noise([treeSeeds['woodlands1'] + keyObj.q / noiseFluctuation, treeSeeds['woodlands1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['woodlands2'] + keyObj.q / noiseFluctuation, treeSeeds['woodlands2'] + keyObj.r / noiseFluctuation]),
+            plains: this.noise.noise([treeSeeds['plains1'] + keyObj.q / noiseFluctuation, treeSeeds['plains1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['plains2'] + keyObj.q / noiseFluctuation, treeSeeds['plains2'] + keyObj.r / noiseFluctuation]),
+            grasshill: this.noise.noise([treeSeeds['plains1'] + keyObj.q / noiseFluctuation, treeSeeds['plains1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['plains2'] + keyObj.q / noiseFluctuation, treeSeeds['plains2'] + keyObj.r / noiseFluctuation]),
             tundra: this.noise.noise([treeSeeds['tundra1'] + keyObj.q / noiseFluctuation, treeSeeds['tundra1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['tundra2'] + keyObj.q / noiseFluctuation, treeSeeds['tundra2'] + keyObj.r / noiseFluctuation]),
             snowhill: this.noise.noise([treeSeeds['tundra1'] + keyObj.q / noiseFluctuation, treeSeeds['tundra1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['tundra2'] + keyObj.q / noiseFluctuation, treeSeeds['tundra2'] + keyObj.r / noiseFluctuation]),
             desert: this.noise.noise([treeSeeds['desert1'] + keyObj.q / noiseFluctuation, treeSeeds['desert1'] + keyObj.r / noiseFluctuation]) * this.noise.noise([treeSeeds['desert1'] + keyObj.q / noiseFluctuation, treeSeeds['desert1'] + keyObj.r / noiseFluctuation]),
@@ -230,13 +230,15 @@ export default class StructureBuilderClass {
          if (tileTreeNoise[entry.value.biome] > BIOME_CONSTANTS[entry.value.biome].terrainGenThreshold && !this.structureBuilderUtils.maxNeighbors(keyObj.q, keyObj.r, entry.value.biome)) {
 
             switch (entry.value.biome) {
-               case 'woodlands':
+               case 'plains':
                case 'grasshill':
                   this.structureData.setCombinedImageModifier(keyObj, 'oakTrees')
+                  this.tileData.setForest(keyObj)
                   break
                case 'tundra':
                case 'snowhill':
                   this.structureData.setCombinedImageModifier(keyObj, 'spruceTrees')
+                  this.tileData.setForest(keyObj)
                   break
                case 'desert':
                case 'sandhill':

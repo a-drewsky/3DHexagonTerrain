@@ -135,7 +135,7 @@ export default class TileStackBuilderClass {
 
         biome = 'snowhill'
         if (tileTemp > TEMP_RANGES['tundra']) biome = 'grasshill'
-        if (tileTemp > TEMP_RANGES['woodlands']) biome = 'savannahill'
+        if (tileTemp > TEMP_RANGES['plains']) biome = 'savannahill'
         if (tileTemp > TEMP_RANGES['savanna']) {
             biome = 'sandhill'
             if (tileHeight >= this.mapData.elevationRanges['mid']) tileHeight = tileHeight - Math.ceil((tileHeight - this.mapData.elevationRanges['mid']) / SAND_HILL_ELVATION_DIVISOR) //set sand hill elevation

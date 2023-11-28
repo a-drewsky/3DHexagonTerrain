@@ -1,4 +1,4 @@
-import woodlands_tile from '../../images/tiles/woodlands_tile.png'
+import plains_tile from '../../images/tiles/woodlands_tile.png'
 import desert_tile from '../../images/tiles/desert_tile.png'
 import water_tile from '../../images/tiles/water_tile.png'
 import frozenwater_tile from '../../images/tiles/frozenwater_tile.png'
@@ -26,7 +26,7 @@ export default class TileImagesClass extends TileImageLoaderClass {
             grasshill: grasshill_tile,
             savannahill: savannahill_tile,
             sandhill: sandhill_tile,
-            woodlands: woodlands_tile,
+            plains: plains_tile,
             savanna: savanna_tile,
             tundra: tundra_tile,
             desert: desert_tile,
