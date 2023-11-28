@@ -1,7 +1,6 @@
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
 import HexMapControllerActionsClass from "./HexMapControllerActions"
 import HexMapControllerUtilsClass from "./utils/HexMapControllerUtils"
-import HexMapPathFinderClass from "./utils/HexMapPathFinder"
 
 export default class HexMapControllerClickClass {
 
@@ -14,7 +13,6 @@ export default class HexMapControllerClickClass {
         this.unitData = gameData.unitData
         this.structureData = gameData.structureData
 
-        this.pathfinder = new HexMapPathFinderClass(gameData)
         this.utils = new HexMapControllerUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
 

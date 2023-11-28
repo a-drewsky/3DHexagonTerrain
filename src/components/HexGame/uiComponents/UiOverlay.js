@@ -1,9 +1,9 @@
 
-import ResourceBar from '../uiComponents/ResourceBar';
-import ControlButtons from '../uiComponents/ControlButtons'
-import PauseMenu from '../uiComponents/PauseMenu';
-import EndGameMenu from '../uiComponents/EndGameMenu';
-import CardDeck from '../uiComponents/CardDeck';
+import ResourceBar from './ResourceBar';
+import ControlButtons from './ControlButtons'
+import PauseMenu from './PauseMenu';
+import EndGameMenu from './EndGameMenu';
+import CardDeck from './CardDeck';
 
 import { Container } from 'react-bootstrap';
 

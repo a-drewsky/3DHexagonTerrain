@@ -3,7 +3,6 @@ import HexMapControllerUtilsClass from './utils/HexMapControllerUtils'
 import CollisionClass from '../commonUtils/CollisionUtils'
 import HexMapControllerClickClass from './HexMapControllerClick'
 import HexMapControllerHoverClass from './HexMapControllerHover'
-import HexMapPathFinderClass from './utils/HexMapPathFinder'
 export default class HexMapControllerClass {
 
     constructor(gameData, canvas) {
@@ -19,7 +18,6 @@ export default class HexMapControllerClass {
         this.collision = new CollisionClass()
 
         this.utils = new HexMapControllerUtilsClass(gameData)
-        this.pathfinder = new HexMapPathFinderClass(gameData)
 
         this.hoverController = new HexMapControllerHoverClass(gameData)
         this.clickController = new HexMapControllerClickClass(gameData, this.hoverController)

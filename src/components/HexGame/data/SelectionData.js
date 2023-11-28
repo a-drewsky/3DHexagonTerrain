@@ -125,7 +125,7 @@ export default class SelectionDataClass {
         return this.pathingSelections.locked
     }
 
-    getPath = () => {
+    getPathSelection = () => {
         return this.pathingSelections.path
     }
 

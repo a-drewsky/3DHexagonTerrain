@@ -5,7 +5,6 @@ export default class ModifierConfig {
         modifierType: 'singleImage',
         sprite: 'empty_mine',
         height: 1,
-        cost: 0,
         stats: {
             mvmt_mod: 0,
             agt_mod: 0,
@@ -20,7 +19,6 @@ export default class ModifierConfig {
         modifierType: 'singleImage',
         sprite: 'rubble_pile',
         height: 1,
-        cost: 0,
         stats: {
             mvmt_mod: 0,
             agt_mod: 0,
@@ -36,7 +34,6 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprites: ['rock_1', 'rock_2'],
         height: 1,
-        cost: 0,
         spriteChance: { 1: 1.0, 2: 0.4, 3: 0.2, 4: 0.08, 5: 0.02, 6: 0.005 },
         stats: {
             mvmt_mod: 0,
@@ -52,7 +49,6 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprites: ['woodland_tree_1', 'woodland_tree_2'],
         height: 2,
-        cost: 1,
         spriteChance: { 1: 1.0, 2: 0.4, 3: 0.2, 4: 0.08, 5: 0.02, 6: 0.005 },
         stats: {
             mvmt_mod: 0,
@@ -68,7 +64,6 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprites: ['tundra_tree_1', 'tundra_tree_2'],
         height: 2,
-        cost: 1,
         spriteChance: { 1: 1.0, 2: 0.4, 3: 0.2, 4: 0.08, 5: 0.02, 6: 0.005 },
         stats: {
             mvmt_mod: 0,
@@ -84,7 +79,6 @@ export default class ModifierConfig {
         modifierType: 'components',
         sprites: ['cacti_1', 'cacti_2'],
         height: 2,
-        cost: 0,
         spriteChance: { 1: 1.0, 2: 0.2, 3: 0.05, 4: 0.005, 5: 0.0, 6: 0.0 },
         stats: {
             mvmt_mod: 0,

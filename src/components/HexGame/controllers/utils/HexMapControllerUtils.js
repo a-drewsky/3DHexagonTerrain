@@ -43,8 +43,8 @@ export default class HexMapControllerUtilsClass {
         this.selectionData.setInfoSelection('unit', unit.position)
 
         this.mapData.setState('chooseRotation')
-        this.pathfinder.findActionSet()
-        this.pathfinder.findAttackSet()
+        this.pathfinder.setActionSet()
+        this.pathfinder.setAttackSet()
 
         let hoverTile = this.selectionData.getInfoSelection('hover')
         if (hoverTile) {
@@ -79,7 +79,7 @@ export default class HexMapControllerUtilsClass {
 
     setStartPlacement = () => {
         this.selectionData.clearAllSelections()
-        this.pathfinder.findPlacementSet()
+        this.pathfinder.setPlacementSet()
         this.unitData.createUnit(this.cardData.getSelectedCard().unitId)
         this.mapData.setState('placeUnit')
     }
@@ -94,7 +94,9 @@ export default class HexMapControllerUtilsClass {
     setSelectedUnit = (pos) => {
         this.selectionData.setInfoSelection('unit', pos)
         this.unitData.selectUnit(pos)
-        this.pathfinder.findMoveSet()
+        this.pathfinder.setMoveSet()
+        this.pathfinder.setActionSet()
+        this.pathfinder.setAttackSet()
         this.mapData.setState('selectMovement')
     }
 

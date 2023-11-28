@@ -72,11 +72,16 @@ export default class StructureDataClass {
         return false
     }
 
+    hasAttack = (pos) => {
+        if (this.hasStructure(pos) && this.getStructure(pos).spriteType === 'bunker') return true
+        return false
+    }
+
     getStructureMap = () => {
         return this.structureMap
     }
 
-    getBunkersArray = () => {
+    getAllBunkers = () => {
         return Array.from(this.structureMap.values()).filter(structure => structure.spriteType === 'bunker')
     }
 

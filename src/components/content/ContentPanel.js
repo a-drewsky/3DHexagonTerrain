@@ -5,7 +5,7 @@ import GameMainClass from '../HexGame/core/GameMain'
 
 import GameImagesClass from '../HexGame/imageLoaders/gameImages'
 
-import UiOverlay from './UiOverlay'
+import UiOverlay from '../HexGame/uiComponents/UiOverlay'
 
 const ContentPanel = () => {
 

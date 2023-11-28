@@ -36,47 +36,25 @@ export default class HexMapPathFinderUtilsClass {
         return Math.abs(this.tileData.getEntry(tile1).height - this.tileData.getEntry(tile2).height)
     }
 
-    isValidPathTile = (pos) => {
-        let terrain = this.structureData.getStructure(pos)
-        if(terrain !== null && terrain.spriteType !== 'modifier') return false
-        let unit = this.unitData.getUnit(pos)
-        if(unit !== null) return false
-        return true
-    }
-
     getTileCost = (tile) => {
         if(this.tileData.getEntry(tile).biome === 'water') return 2
-        let terrain = this.structureData.getStructure(tile)
-        if(terrain && terrain.cost) return terrain.cost
+        if(this.tileData.getEntry(tile).biome === 'forest') return 1
         return 0
     }
 
-    getPath = (startNode, endNode) => {
-        let currentPathNode = endNode
-        let path = []
-        while (!(currentPathNode.tile.q === startNode.tile.q && currentPathNode.tile.r === startNode.tile.r)) {
-            path.push(currentPathNode)
-            currentPathNode = currentPathNode.connection
-        }
-        return path.reverse()
-    }
-
-    pathCost = (path) => {
-
+    getPathCost = (unitPos, path) => {
         let cost = 0
-        for(let index in path){
-            if(index === '0') continue
-            let tile = path[index]
+        let testPath = [unitPos, ...path]
+        for(let i=1; i<testPath.length; i++){
+            let tile = testPath[i]
             let tileCost = this.getTileCost(tile)
-
-            cost += tileCost + this.getHeightDifference(path[index-1], path[index]) + 1
+            cost += tileCost + this.getHeightDifference(testPath[i-1], testPath[i]) + 1
         }
 
         return cost
-
     }
 
-    findMoveSet = (start, moveAmount) => {
+    getMoveSet = (start, moveAmount) => {
         let startNode = this.createNode(start)
 
         let toSearch = [startNode]
@@ -98,7 +76,7 @@ export default class HexMapPathFinderUtilsClass {
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
+            neighbors = neighbors.filter(neighbor => this.validatePathTile(neighbor.tile) === true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
 
 
@@ -125,48 +103,29 @@ export default class HexMapPathFinderUtilsClass {
         }
         let startIndex = processed.findIndex(node => node.tile.q === start.q && node.tile.r === start.r)
         processed.splice(startIndex, 1)
-        return processed
+        return processed.map(tileObj => this.tileData.getEntry(tileObj.tile))
     }
 
-    findAttackMoveSet = (start, range) => {
+    getAttackSet = (start, range) => {
         return this.tileData.getStarNeighbors(start, range)
     }
 
-    findActionMoveSet = (start) => {
+    getActionSet = (start) => {
         return this.tileData.getNeighbors(start, 1)
     }
 
-    findFullMoveSet = (moveSet, unitPos) => {
+    getPath = (start, target) => {
 
-        let newMoveSet = [...moveSet]
-        
-        //path neighbors
-        for(let node of moveSet){
-            let tile = node.tile
-
-            let neighbors = this.createNeighborNodes(tile)
-
-            for(let neighborNode of neighbors){
-                if(neighborNode.tile.q === unitPos.q && neighborNode.tile.r === unitPos.r) continue
-                if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q === neighborNode.tile.q && moveSetNode.tile.r === neighborNode.tile.r) !== -1) continue
-                newMoveSet.push(neighborNode)
+        let createPath = (startNode, endNode) => {
+            let currentPathNode = endNode
+            let path = []
+            while (!(currentPathNode.tile.q === startNode.tile.q && currentPathNode.tile.r === startNode.tile.r)) {
+                path.push(currentPathNode)
+                currentPathNode = currentPathNode.connection
             }
+            return path.reverse()
         }
 
-        //unit neighbors
-        let neighbors = this.createNeighborNodes(unitPos)
-
-        for(let neighborNode of neighbors){
-            if(neighborNode.tile.q === unitPos.q && neighborNode.tile.r === unitPos.r) continue
-            if(newMoveSet.findIndex(moveSetNode => moveSetNode.tile.q === neighborNode.tile.q && moveSetNode.tile.r === neighborNode.tile.r) !== -1) continue
-            newMoveSet.push(neighborNode)
-        }
-
-        return newMoveSet
-
-    }
-
-    findPath = (start, target) => {
         let startNode = this.createNode(start)
         let targetNode = this.createNode(target)
 
@@ -188,12 +147,12 @@ export default class HexMapPathFinderUtilsClass {
 
             //check if current tile is the target
             if (current.tile.q === targetNode.tile.q && current.tile.r === targetNode.tile.r) {
-                return this.getPath(startNode, current)
+                return createPath(startNode, current).map(tileObj => tileObj.tile)
             }
 
             //Get Neighbors
             let neighbors = this.createNeighborNodes(current.tile)
-            neighbors = neighbors.filter(neighbor => this.isValidPathTile(neighbor.tile) === true)
+            neighbors = neighbors.filter(neighbor => this.validatePathTile(neighbor.tile) === true)
             neighbors = neighbors.filter(neighbor => !processed.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r))
 
 
@@ -201,9 +160,7 @@ export default class HexMapPathFinderUtilsClass {
             for (let neighbor of neighbors) {
 
                 let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
-
                 let tileCost = this.getTileCost(neighbor.tile)
-
                 let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
 
                 if (!inSearch || costToNeighbor < neighbor.g) {
@@ -215,12 +172,68 @@ export default class HexMapPathFinderUtilsClass {
                         toSearch.push(neighbor)
                     }
                 }
-
             }
-
         }
 
         return null
+    }
+
+    validatePathTile = (pos) => {
+        let terrain = this.structureData.getStructure(pos)
+        if(terrain !== null && terrain.spriteType !== 'modifier') return false
+        let unit = this.unitData.getUnit(pos)
+        if(unit !== null) return false
+        return true
+    }
+
+    validateAttackTarget = (pos, target, dropAttack) => {
+
+        let validateTargetHeight = (pos, target) => {
+            let distance = this.commonUtils.getDistance(pos, target)
+            let heightDiff = this.tileData.getEntry(target).height - this.tileData.getEntry(pos).height
+
+            if (heightDiff <= 0 && dropAttack === true) return true
+
+            heightDiff = Math.abs(heightDiff)
+
+            if (heightDiff > distance) return false
+            return true
+        }
+
+        let validateTileHeight = (tile, percent) => {
+            let posHeight = this.tileData.getEntry(pos).height
+            let targetHeight = this.tileData.getEntry(target).height
+            let projectileHeight = posHeight + (targetHeight - posHeight) * percent + 1
+            if (tile.height > projectileHeight) return false
+            return true
+        }
+
+        let validateTile = (tile, percent) => {
+            tile = this.commonUtils.roundToNearestHex(tile)
+            tile = this.tileData.getEntry(tile)
+
+            if (tile === null) return true
+            if (!validateTileHeight(tile, percent)) return false
+            if (this.unitData.getUnit(tile.position) !== null) return false
+            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType !== 'modifier') return false
+
+            return true
+        }
+
+        if (!validateTargetHeight(pos, target)) return false
+
+        let dist = this.commonUtils.getDistance(pos, target)
+        let dirVector = { q: target.q - pos.q, r: target.r - pos.r }
+        dirVector.q /= dist
+        dirVector.r /= dist
+
+        for (let i = 1; i < dist; i++) {
+            let tile = { q: pos.q + dirVector.q * i, r: pos.r + dirVector.r * i }
+            if (validateTile(tile, i / dist) === false) return false
+        }
+
+        return true
+
     }
 
 }

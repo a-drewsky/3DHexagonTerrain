@@ -13,7 +13,7 @@ export default class HexMapControllerActionsClass {
     }
 
     move = () => {
-        this.unitData.selectedUnit.setMove(this.selectionData.getPath())
+        this.unitData.selectedUnit.setMove(this.selectionData.getPathSelection())
         this.utils.setStartAnimation()
     }
 
