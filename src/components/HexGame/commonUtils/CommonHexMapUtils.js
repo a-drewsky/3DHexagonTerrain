@@ -124,18 +124,6 @@ export default class CommonHexMapUtilsClass {
 
     }
 
-    getDoubleAxisDirection = (pos1, pos2) => {
-        let directionMap = [{ q: 1, r: -1 }, { q: 1, r: -0.5 }, { q: 1, r: 0 }, { q: 0.5, r: 0.5 }, { q: 0, r: 1 }, { q: -0.5, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0.5 }, { q: -1, r: 0 }, { q: -0.5, r: -0.5 }, { q: 0, r: -1 }, { q: 0.5, r: -1 }]
-
-        let dirVector = {q: pos2.q - pos1.q, r: pos2.r - pos1.r}
-        let dist = this.getDistance(pos1, pos2)
-        dirVector.q /= dist
-        dirVector.r /= dist
-
-        return this.getClosestPosIndex(dirVector, directionMap)
-
-    }
-
     getAdjacentPos = (pos, rotation) => {
         let directionMap = [{ q: 1, r: -1 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0 }, { q: 0, r: -1 }]
         
@@ -147,8 +135,8 @@ export default class CommonHexMapUtilsClass {
 
     }
 
-    getDoubleAxisAdjacentPos = (pos, rotation) => {
-        let directionMap = [{ q: 1, r: -1 }, { q: 1, r: -0.5 }, { q: 1, r: 0 }, { q: 0.5, r: 0.5 }, { q: 0, r: 1 }, { q: -0.5, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0.5 }, { q: -1, r: 0 }, { q: -0.5, r: -0.5 }, { q: 0, r: -1 }, { q: 0.5, r: -1 }]
+    getAdjacentHalfPos = (pos, rotation) => {
+        let directionMap = [{ q: 0.49, r: -0.49 }, { q: 0.49, r: 0 }, { q: 0, r: 0.49 }, { q: -0.49, r: 0.49 }, { q: -0.49, r: 0 }, { q: 0, r: -0.49 }]
         
         let direction = directionMap[rotation]
 

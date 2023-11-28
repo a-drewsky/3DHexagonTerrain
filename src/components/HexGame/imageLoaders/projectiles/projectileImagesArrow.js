@@ -9,18 +9,12 @@ export default class ProjectileImagesArrowClass extends SheetImageLoaderClass {
         super()
 
         this.sheet_rows = {
-             0: 'backRight',
-             1: 'right',
-             2: 'frontRight',
-             3: 'frontFrontRight',
-             4: 'front',
-             5: 'frontFrontLeft',
-             6: 'frontLeft',
-             7: 'left',
-             8: 'backLeft',
-             9: 'backBackLeft',
-            10: 'back',
-            11: 'backBackRight',
+            0: 'backRight',
+            1: 'frontRight',
+            2: 'front',
+            3: 'frontLeft',
+            4: 'backLeft',
+            5: 'back',
         }
 
         this.sheet_data = {
@@ -36,17 +30,11 @@ export default class ProjectileImagesArrowClass extends SheetImageLoaderClass {
 
         this.animation_rows = {
             0: 'backRight',
-            1: 'right',
-            2: 'frontRight',
-            3: 'frontFrontRight',
-            4: 'front',
-            5: 'frontFrontLeft',
-            6: 'frontLeft',
-            7: 'left',
-            8: 'backLeft',
-            9: 'backBackLeft',
-           10: 'back',
-           11: 'backBackRight',
+            1: 'frontRight',
+            2: 'front',
+            3: 'frontLeft',
+            4: 'backLeft',
+            5: 'back',
         }
 
         this.animation_data = {

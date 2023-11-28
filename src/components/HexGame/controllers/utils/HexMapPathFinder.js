@@ -36,13 +36,10 @@ export default class HexMapPathFinderClass {
     findMoveSet = () => {
 
         let unit = this.unitData.selectedUnit
-        if (unit === null) return
 
         let moveSet = this.utils.findMoveSet(unit.position, unit.stats.movement)
         let actionMoveSet = this.utils.findActionMoveSet(unit.position)
         let attackMoveSet = this.utils.findAttackMoveSet(unit.position, unit.stats.range)
-
-        if (!moveSet) return
 
         let movementSet = []
         let actionSet = []
@@ -50,22 +47,17 @@ export default class HexMapPathFinderClass {
 
         for (let tileObj of moveSet) {
             let tile = this.tileData.getEntry(tileObj.tile)
-
             movementSet.push({ ...tile.position })
         }
 
         //search for structures
-        for (let tile of actionMoveSet) {
-            if ((this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'resource')
-                || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'flag')) {
-                actionSet.push({ ...tile.position })
-            }
-        }
+        for (let tile of actionMoveSet) if (this.structureData.hasAction(tile.position)) actionSet.push({ ...tile.position })  
+        
 
         for (let tile of attackMoveSet) {
             if (this.unitData.getUnit(tile.position) !== null
                 || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
-                if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
+                if (this.validTarget(unit.position, tile.position, unit.stats['drop_attack'])) attackSet.push({ ...tile.position })
             }
         }
 
@@ -100,11 +92,10 @@ export default class HexMapPathFinderClass {
         let attackSet = []
 
         for (let tile of attackMoveSet) {
-            if (this.commonUtils.tilesEqual(tile.position, unit.position)) continue
             if (this.unitData.getUnit(tile.position) !== null
                 || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                if (this.validTarget(unit.position, tile.position)) attackSet.push({ ...tile.position })
+                if (this.validTarget(unit.position, tile.position, unit.stats['drop_attack'])) attackSet.push({ ...tile.position })
             }
         }
 
@@ -138,7 +129,7 @@ export default class HexMapPathFinderClass {
             if (this.unitData.getUnit(tile.position) !== null
                 || (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType === 'bunker')) {
                 if (this.selectionData.getPathingSelection('attack').some(pos => this.commonUtils.tilesEqual(tile.position, pos))) continue
-                if (this.validTarget(tilePos, tile.position)) attackSet.push({ ...tile.position })
+                if (this.validTarget(tilePos, tile.position, unit.stats['drop_attack'])) attackSet.push({ ...tile.position })
             }
         }
 
@@ -221,42 +212,41 @@ export default class HexMapPathFinderClass {
 
     }
 
-    validTarget = (pos, target) => {
+    validTarget = (pos, target, dropAttack) => {
 
-        let validateHalfTile = (tile) => {
-            let secondTile = { ...tile }
-            if ((secondTile.q - 0.5) % 1 === 0) secondTile.q -= 0.01
-            if ((secondTile.r - 0.5) % 1 === 0) secondTile.r -= 0.01
+        let validateTargetHeight = (pos, target) => {
+            let distance = this.commonUtils.getDistance(pos, target)
+            let heightDiff = this.tileData.getEntry(target).height - this.tileData.getEntry(pos).height
 
-            tile = this.commonUtils.roundToNearestHex(tile)
-            tile = this.tileData.getEntry(tile)
+            if(heightDiff <= 0 && dropAttack === true) return true
 
-            secondTile = this.commonUtils.roundToNearestHex(secondTile)
-            secondTile = this.tileData.getEntry(secondTile)
+            heightDiff = Math.abs(heightDiff)
 
-            let firstTileOpen = true
-            let secondTileOpen = true
-
-            if (tile === null || secondTile === null) return true
-
-            if (this.unitData.getUnit(tile.position) !== null) firstTileOpen = false
-            if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType !== 'modifier') firstTileOpen = false
-
-            if (this.unitData.getUnit(secondTile.position) !== null) secondTileOpen = false
-            if (this.structureData.hasStructure(secondTile.position) && this.structureData.getStructure(secondTile.position).spriteType !== 'modifier') secondTileOpen = false
-
-            if (firstTileOpen === false && secondTileOpen === false) return false
+            if(heightDiff > distance) return false
             return true
         }
 
-        let validateTile = (tile) => {
+        let validateTileHeight = (tile, percent) => {
+            let posHeight = this.tileData.getEntry(pos).height
+            let targetHeight = this.tileData.getEntry(target).height
+            let projectileHeight = posHeight + (targetHeight - posHeight) * percent + 1
+            if (tile.height > projectileHeight) return false
+            return true
+        }
+
+        let validateTile = (tile, percent) => {
             tile = this.commonUtils.roundToNearestHex(tile)
             tile = this.tileData.getEntry(tile)
+
             if (tile === null) return true
+            if(!validateTileHeight(tile, percent)) return false
             if (this.unitData.getUnit(tile.position) !== null) return false
             if (this.structureData.hasStructure(tile.position) && this.structureData.getStructure(tile.position).spriteType !== 'modifier') return false
+
             return true
         }
+
+        if(!validateTargetHeight(pos, target)) return false
 
         let dist = this.commonUtils.getDistance(pos, target)
         let dirVector = { q: target.q - pos.q, r: target.r - pos.r }
@@ -265,10 +255,7 @@ export default class HexMapPathFinderClass {
 
         for (let i = 1; i < dist; i++) {
             let tile = { q: pos.q + dirVector.q * i, r: pos.r + dirVector.r * i }
-            let validation
-            if ((tile.q - 0.5) % 1 === 0 || (tile.r - 0.5) % 1 === 0) validation = validateHalfTile(tile)
-            else validation = validateTile(tile)
-            if (validation === false) return false
+            if (validateTile(tile, i/dist) === false) return false
         }
 
         return true

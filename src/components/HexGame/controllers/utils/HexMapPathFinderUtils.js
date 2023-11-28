@@ -128,7 +128,7 @@ export default class HexMapPathFinderUtilsClass {
     }
 
     findAttackMoveSet = (start, range) => {
-        return this.tileData.getNeighbors(start, range)
+        return this.tileData.getStarNeighbors(start, range)
     }
 
     findActionMoveSet = (start) => {

@@ -29,8 +29,8 @@ export default class ProjectileClass extends SpriteObjectClass {
         this.commonUtils = new CommonHexMapUtilsClass()
 
         this.loc = loc
-        this.rotation = this.commonUtils.getDoubleAxisDirection(pos, target)
-        this.position = this.commonUtils.getDoubleAxisAdjacentPos(pos, this.rotation)
+        this.rotation = this.commonUtils.getDirection(pos, target)
+        this.position = this.commonUtils.getAdjacentHalfPos(pos, this.rotation)
         this.target = { ...target }
 
         //image data

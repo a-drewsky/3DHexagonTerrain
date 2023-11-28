@@ -174,6 +174,27 @@ export default class TileStackDataClass {
         return neighbors.map(key => this.getEntry(key))
     }
 
+    //returns keys of all neighbors adjacent to (q, r) in a straight line
+    getStarNeighbors = (pos, rows) => {
+
+        let isStarTile = (pos, tilePos) => {
+            let relPos = {
+                q: tilePos.q - pos.q,
+                r: tilePos.r - pos.r
+            }
+            if(relPos.q == 0) return true
+            if(relPos.r == 0) return true
+            if(relPos.q + relPos.r == 0) return true
+            return false
+        }
+
+        let neighbors = this.getNeighborKeys(pos, rows)
+
+        neighbors = neighbors.filter(key => isStarTile(pos, key))
+
+        return neighbors.map(key => this.getEntry(key))
+    }
+
     //returns keys of all neighbors adjacent to (q, r)
     getNeighborKeys = (pos, rows) => {
 

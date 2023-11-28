@@ -13,7 +13,7 @@ export default class UnitRendererClass {
 
         this.images = images
 
-        this.statusBarRenderer = new StatusBarRendererClass(this.mapData, this.images)
+        this.statusBarRenderer = new StatusBarRendererClass(gameData, images)
         this.utils = new RendererUtilsClass(gameData)
         this.commonUtils = new CommonHexMapUtilsClass()
         this.shadowRenderer = new ShadowRendererClass(gameData, images)

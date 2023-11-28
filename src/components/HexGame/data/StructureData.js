@@ -58,12 +58,18 @@ export default class StructureDataClass {
     }
 
     getStructure = (pos) => {
-        if(!this.hasStructure(pos)) return null
+        if (!this.hasStructure(pos)) return null
         return this.structureMap.get(this.commonUtils.join(pos))
     }
 
     hasStructure = (pos) => {
         return this.structureMap.has(this.commonUtils.join(pos))
+    }
+
+    hasAction = (pos) => {
+        if (this.hasStructure(pos) && this.getStructure(pos).spriteType === 'resource') return true
+        if (this.hasStructure(pos) && this.getStructure(pos).spriteType === 'flag') return true
+        return false
     }
 
     getStructureMap = () => {
@@ -75,7 +81,7 @@ export default class StructureDataClass {
     }
 
     deleteStructure = (pos) => {
-        if(this.hasStructure(pos)) this.structureMap.delete(this.commonUtils.join(pos))
+        if (this.hasStructure(pos)) this.structureMap.delete(this.commonUtils.join(pos))
     }
 
 }
