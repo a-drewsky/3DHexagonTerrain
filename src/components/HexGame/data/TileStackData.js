@@ -58,7 +58,7 @@ export default class TileStackDataClass {
             let rotatedMap = new Map()
 
             for (let j = 0; j < sortedArr.length; j++) {
-                rotatedMap.set(this.utils.join({ q: sortedArr[j].rotPosQ, r: sortedArr[j].rotPosR }), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR });
+                rotatedMap.set(this.utils.join({ q: sortedArr[j].rotPosQ, r: sortedArr[j].rotPosR }), { q: sortedArr[j].ogPosQ, r: sortedArr[j].ogPosR })
             }
 
             this.rotatedMapList[i] = rotatedMap
@@ -150,7 +150,7 @@ export default class TileStackDataClass {
 
     //returns the tileMap
     getTileMap = () => {
-        let map = Array.from(this.tileMap, ([key, value]) => ({ key, value }));
+        let map = Array.from(this.tileMap, ([key, value]) => ({ key, value }))
         let filteredMap = map.filter(entry => entry.value.groundShadowTile === false)
         return filteredMap
     }
@@ -241,10 +241,10 @@ export default class TileStackDataClass {
 
         let minR = Math.min(...keys.map(key => key.r));
         let maxR = Math.max(...keys.map(key => key.r));
-        let minRminQ = Math.min(...keys.filter(key => key.r === minR).map(key => key.q));
-        let minRmaxQ = Math.max(...keys.filter(key => key.r === minR).map(key => key.q));
-        let maxRminQ = Math.min(...keys.filter(key => key.r === maxR).map(key => key.q));
-        let maxRmaxQ = Math.max(...keys.filter(key => key.r === maxR).map(key => key.q));
+        let minRminQ = Math.min(...keys.filter(key => key.r === minR).map(key => key.q))
+        let minRmaxQ = Math.max(...keys.filter(key => key.r === minR).map(key => key.q))
+        let maxRminQ = Math.min(...keys.filter(key => key.r === maxR).map(key => key.q))
+        let maxRmaxQ = Math.max(...keys.filter(key => key.r === maxR).map(key => key.q))
 
         let tableDims = {
             q1: this.utils.rotateTile({ q: minRminQ - 0.5, r: minR - 1 }, rotation).q,
@@ -304,8 +304,8 @@ export default class TileStackDataClass {
         let xOffset
         let yOffset
 
-        xOffset = this.mapData.vecQ.x * keyObj.q + this.mapData.vecR.x * keyObj.r;
-        yOffset = this.mapData.vecQ.y * keyObj.q * this.mapData.squish + this.mapData.vecR.y * keyObj.r * this.mapData.squish;
+        xOffset = this.mapData.vecQ.x * keyObj.q + this.mapData.vecR.x * keyObj.r
+        yOffset = this.mapData.vecQ.y * keyObj.q * this.mapData.squish + this.mapData.vecR.y * keyObj.r * this.mapData.squish
 
         if(imageOffset !== undefined){ 
             xOffset -= this.mapData.size + imageOffset.x * this.mapData.size * 2

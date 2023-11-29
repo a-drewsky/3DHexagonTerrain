@@ -16,7 +16,6 @@ export default class ProjectileManagerClass {
         for (let projectile of this.data.projectileList) {
             this.updateProjectile(projectile)
         }
-        if(this.data.projectileList.length > 0) this.mapData.setState('animation')
     }
 
     updateProjectile = (projectile) => {

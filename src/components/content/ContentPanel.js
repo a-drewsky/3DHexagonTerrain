@@ -90,11 +90,6 @@ const ContentPanel = () => {
       setGameClass(new GameMainClass(canvas.current,bgCanvas.current,gameImages,uiComponents,updateUi))
    }, [gameImages])
 
-   useEffect(() => {
-      document.addEventListener('keydown', e => keyDown(e))
-      document.addEventListener('keyup', e => keyUp(e))
-   }, [gameClass])
-
 
    //INPUTS
    const mouseDown = ({ nativeEvent }) => {
@@ -126,17 +121,6 @@ const ContentPanel = () => {
       const { deltaY } = nativeEvent
 
       if (gameClass && gameClass.loaded) gameClass.mouseWheel(deltaY)
-   }
-
-   const keyDown = (nativeEvent) => {
-      nativeEvent.preventDefault()
-      if (nativeEvent.repeat) return
-      if (gameClass && gameClass.loaded) gameClass.keyDown(nativeEvent.key)
-   }
-
-   const keyUp = (nativeEvent) => {
-      nativeEvent.preventDefault()
-      if (gameClass && gameClass.loaded) gameClass.keyUp(nativeEvent.key)
    }
    //END INPUTS
 

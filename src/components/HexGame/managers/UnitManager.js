@@ -22,9 +22,6 @@ export default class UnitManagerClass {
 
             if (unit.endOfState()) this.endUnitState(unit)
         }
-
-        if(this.mapData.curState() === 'chooseRotation') return
-        if(this.data.unitList.some(unit => unit.curState() !== 'idle')) this.mapData.setState('animation')
     }
 
     endUnitState = (unit) => {
@@ -38,6 +35,9 @@ export default class UnitManagerClass {
                 return
             case 'attack':
                 this.endAttack(unit)
+                return
+            case 'post_attack':
+                this.endPostAttack(unit)
                 return
             case 'hit':
                 this.endHit(unit)
@@ -80,21 +80,25 @@ export default class UnitManagerClass {
 
     endProjectileAttack = (unit) => {
         this.projectileData.newProjectile('arrow_projectile', unit.position, this.data.unitTarget)
-        this.endAction(unit)
+        unit.setAnimation('post_attack')
     }
 
     endAdjacentAttack = (unit) => {
         let targetObject = this.utils.getTargetObject(this.data.unitTarget)
         targetObject.health -= 25
 
-        this.endAction(unit)
+        unit.setAnimation('post_attack')
 
         if (targetObject.spriteType === 'unit') {
             targetObject.setAnimation('hit')
         } else {
             targetObject.updateState()
-            this.mapData.resetState()
-        }    
+        }
+    }
+
+    endPostAttack = (unit) => {
+        this.endAction(unit)
+        this.mapData.resetState()
     }
 
     endMovement = (unit) => {
