@@ -29,11 +29,12 @@ export default class HexMapDataClass {
 
         //will be player data
         this.resources = {
-            gold: 10,
             copper: 10,
             iron: 10,
             ruby: 10,
-            amethyst: 10
+            amethyst: 10,
+            jade: 10,
+            lapis: 10
         }
     }
 
@@ -48,7 +49,6 @@ export default class HexMapDataClass {
     setState = (state) => {
         if (!this.state[state]) throw new Error(`STATE NAME ERROR - HexMapDataClass does not have a state called: ${state}`)
         this.state.current = this.state[state]
-        console.log(this.curState())
     }
 
 

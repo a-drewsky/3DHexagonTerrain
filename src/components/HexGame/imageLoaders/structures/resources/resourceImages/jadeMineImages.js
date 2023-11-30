@@ -1,11 +1,10 @@
-
 import SheetImageLoaderClass from '../../../imageLoaderBaseClass/sheetImageLoader'
 
-import amethyst_mine_sheet from '../../../../images/resources/amethyst_mine_sheet.png'
+import jade_mine_sheet from '../../../../images/resources/jade_mine_sheet.png'
 
 import { DEFAULT_ROWS, DEFAULT_RESOURCE_SPRITES, DEFAULT_RESOURCE_ANIMATION } from '../../../imageLoaderConstants'
 
-export default class AmethystMineImagesClass extends SheetImageLoaderClass {
+export default class JadeMineImagesClass extends SheetImageLoaderClass {
 
     constructor() {
 
@@ -15,7 +14,7 @@ export default class AmethystMineImagesClass extends SheetImageLoaderClass {
 
         this.sheet_data = {
             default: {
-                image: amethyst_mine_sheet,
+                image: jade_mine_sheet,
                 size: {w: 1, h: 1.5},
                 offset: {x: 0, y: 0.5},
                 sprites: { ...DEFAULT_RESOURCE_SPRITES }

@@ -11,7 +11,6 @@ export default class ResourceConfig {
         }
     }
 
-
     static coppermine = {
         id: 'copper_mine',
         sprite: 'copper_mine',
@@ -22,7 +21,6 @@ export default class ResourceConfig {
             max_resources: 20
         }
     }
-
 
     static ironmine = {
         id: 'iron_mine',
@@ -35,7 +33,6 @@ export default class ResourceConfig {
         }
     }
 
-
     static rubymine = {
         id: 'ruby_mine',
         sprite: 'ruby_mine',
@@ -46,7 +43,6 @@ export default class ResourceConfig {
             max_resources: 20
         }
     }
-
 
     static amethystmine = {
         id: 'amethyst_mine',
@@ -59,5 +55,26 @@ export default class ResourceConfig {
         }
     }
 
+    static jademine = {
+        id: 'jade_mine',
+        sprite: 'jade_mine',
+        shadow: 'large_round_shadow',
+        resource: 'jade',
+        height: 2,
+        stats: {
+            max_resources: 20
+        }
+    }
+
+    static lapismine = {
+        id: 'lapis_mine',
+        sprite: 'lapis_mine',
+        shadow: 'large_round_shadow',
+        resource: 'lapis',
+        height: 2,
+        stats: {
+            max_resources: 20
+        }
+    }
 
 }

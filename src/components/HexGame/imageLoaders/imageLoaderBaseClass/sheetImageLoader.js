@@ -1,6 +1,6 @@
 import ImageLoaderUtilsClass from "../utils/imageLoaderUtils"
 
-export default class SheetSheetImageLoaderClass {
+export default class SheetImageLoaderClass {
 
     constructor(noRows) {
         this.noRows = noRows
@@ -14,12 +14,12 @@ export default class SheetSheetImageLoaderClass {
 
         let imagesLoaded = 0
         for (let [key, value] of Object.entries(this.images)) {
-            this[key] = value
             value.image.onload = () => {
                 imagesLoaded++
                 if (imagesLoaded === Object.keys(this.images).length) {
+                    this.assignImages()
                     delete this.images
-                    this.assignImages(startGame)
+                    startGame()
                 }
             }
         }
@@ -90,13 +90,13 @@ export default class SheetSheetImageLoaderClass {
 
                 let image = tempCanvas.toDataURL('image/png')
 
-                this[this.sheet_rows[row] + '_' + sprites[col]].image.src = image
+                this.images[this.sheet_rows[row] + '_' + sprites[col]].image.src = image
 
             }
         }
     }
 
-    assignImages = (startGame) => {
+    assignImages = () => {
 
         for (let animation in this.animation_data) {
 
@@ -109,13 +109,11 @@ export default class SheetSheetImageLoaderClass {
             for (let frame of data) {
                 let animationRow = []
                 for (let row in this.animation_rows) {
-                    animationRow.push(this[this.animation_rows[row] + '_' + frame])
+                    animationRow.push(this.images[this.animation_rows[row] + '_' + frame])
                 }
                 this[animation].images.push(animationRow)
             }
         }
-
-        startGame()
     }
 
 }

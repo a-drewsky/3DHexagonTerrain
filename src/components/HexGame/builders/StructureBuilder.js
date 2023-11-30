@@ -106,9 +106,9 @@ export default class StructureBuilderClass {
 
       let bufferSize = mapConfig.bufferSize
 
-      let closeSpriteList = ['goldmine', 'coppermine']
+      let closeSpriteList = ['rubymine', 'coppermine']
 
-      let farSpriteList = ['goldmine', 'ironmine', 'rubymine', 'amethystmine']
+      let farSpriteList = ['rubymine', 'ironmine', 'jademine', 'lapismine', 'amethystmine']
 
       for (let rGen = 0; rGen < mapConfig.r; rGen++) {
          for (let qGen = 0; qGen < mapConfig.q; qGen++) {

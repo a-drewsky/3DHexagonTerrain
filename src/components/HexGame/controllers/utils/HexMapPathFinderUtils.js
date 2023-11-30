@@ -62,7 +62,6 @@ export default class HexMapPathFinderUtilsClass {
 
         while (toSearch.length > 0) {
             let current = toSearch[0]
-            console.log(this.tileData.getEntry(current.tile).biome)
 
             for (let t of toSearch) {
                 if (t.moveCost < current.moveCost){
