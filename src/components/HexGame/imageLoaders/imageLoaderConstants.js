@@ -77,3 +77,25 @@ export const DEFAULT_RESOURCE_ANIMATION = {
         'default_4'
     ]
 }
+
+export const DEFAULT_BUNKER_SPRITES = {
+    0: 'default_1',
+    1: 'default_2',
+    2: 'default_3',
+    3: 'default_4'
+}
+
+export const DEFAULT_BUNKER_ANIMATION = {
+    health_lte_100: [
+        'default_1'
+    ],
+    health_lte_75: [
+        'default_2'
+    ],
+    health_lte_50: [
+        'default_3'
+    ],
+    health_lte_25: [
+        'default_4'
+    ]
+}
