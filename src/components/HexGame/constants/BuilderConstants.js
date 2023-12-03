@@ -83,15 +83,15 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     sandhill: {
-        biomeName: 'sand',
-        biomeGroup: ['desert', 'mesa', 'rockhill'],
+        biomeName: 'desert',
+        biomeGroup: ['desert', 'playa', 'rockhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.5,
         terrainGenMaxNeighbors: 0,
         rockGenThreshold: 0.45
     },
     plains: {
-        biomeName: 'grass',
+        biomeName: 'plains',
         biomeGroup: ['grasshill'],
         minBiomeSmoothing: 12,
         terrainGenThreshold: 0.35,
@@ -99,7 +99,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     savanna: {
-        biomeName: 'grass',
+        biomeName: 'plains',
         biomeGroup: ['grasshill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.45,
@@ -107,7 +107,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     tundra: {
-        biomeName: 'snow',
+        biomeName: 'tundra',
         biomeGroup: ['snowmountain', 'frozenwater'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.4,
@@ -115,8 +115,8 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.45
     },
     desert: {
-        biomeName: 'sand',
-        biomeGroup: ['mesa', 'rockhill', 'sandhill'],
+        biomeName: 'desert',
+        biomeGroup: ['playa', 'rockhill', 'sandhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.45,
         terrainGenMaxNeighbors: 1,
@@ -131,7 +131,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: null
     },
     frozenwater: {
-        biomeName: 'snow',
+        biomeName: 'tundra',
         biomeGroup: ['tundra', 'snowmountain'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: null,
@@ -139,7 +139,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: null
     },
     playa: {
-        biomeName: 'sand',
+        biomeName: 'desert',
         biomeGroup: ['desert', 'sandhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: null,

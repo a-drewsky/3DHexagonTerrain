@@ -3,18 +3,22 @@ import LargeCardObject from "./LargeCard"
 
 import { Row } from 'react-bootstrap'
 
-import goldIcon from '../images/ui/gold_icon.png'
-import copperIcon from '../images/ui/copper_icon.png'
-import ironIcon from '../images/ui/iron_icon.png'
-import rubyIcon from '../images/ui/ruby_icon.png'
-import amethystIcon from '../images/ui/amethyst_icon.png'
+import goldIcon from '../images/ui/resourceIcons/gold_icon.png'
+import copperIcon from '../images/ui/resourceIcons/copper_icon.png'
+import ironIcon from '../images/ui/resourceIcons/iron_icon.png'
+import rubyIcon from '../images/ui/resourceIcons/ruby_icon.png'
+import amethystIcon from '../images/ui/resourceIcons/amethyst_icon.png'
+import jade_icon from '../images/ui/resourceIcons/jade_icon.png'
+import lapis_icon from '../images/ui/resourceIcons/lapis_icon.png'
 
 const resourceIcons = {
     gold: goldIcon,
     copper: copperIcon,
     iron: ironIcon,
     ruby: rubyIcon,
-    amethyst: amethystIcon
+    amethyst: amethystIcon,
+    jade: jade_icon,
+    lapis: lapis_icon
 }
 
 const CardDeck = (props) => {

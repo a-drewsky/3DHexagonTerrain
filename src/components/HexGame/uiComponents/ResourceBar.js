@@ -1,9 +1,9 @@
-import amethyst_icon from '../images/ui/amethyst_icon.png'
-import copper_icon from '../images/ui/copper_icon.png'
-import iron_icon from '../images/ui/iron_icon.png'
-import ruby_icon from '../images/ui/ruby_icon.png'
-import jade_icon from '../images/ui/jade_icon.png'
-import lapis_icon from '../images/ui/lapis_icon.png'
+import amethyst_icon from '../images/ui/resourceIcons/amethyst_icon.png'
+import copper_icon from '../images/ui/resourceIcons/copper_icon.png'
+import iron_icon from '../images/ui/resourceIcons/iron_icon.png'
+import ruby_icon from '../images/ui/resourceIcons/ruby_icon.png'
+import jade_icon from '../images/ui/resourceIcons/jade_icon.png'
+import lapis_icon from '../images/ui/resourceIcons/lapis_icon.png'
 
 import { Row, Col } from 'react-bootstrap'
 
