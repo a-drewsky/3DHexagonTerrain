@@ -5,7 +5,7 @@ import mine_sheet from '../../images/units/imperialSoldier/imperial_swordsman_mi
 import walk_sheet from '../../images/units/imperialSoldier/imperial_swordsman_walk_sheet.png'
 import idle_sheet from '../../images/units/imperialSoldier/imperial_swordsman_idle_sheet.png'
 
-import icon_image from '../../images/units/imperialSoldier/imperial_swordsman_icon.png'
+import icon_image from '../../images/ui/cardIcons/imperial_swordsman_icon.png'
 
 import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 

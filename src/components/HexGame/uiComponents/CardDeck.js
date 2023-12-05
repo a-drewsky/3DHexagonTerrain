@@ -30,7 +30,7 @@ const CardDeck = (props) => {
                 {props.selectedSprite !== null && <LargeCardObject card={props.selectedSprite} resourceIcons={resourceIcons} gameClass={props.gameClass} buttons={false} />}
             </Row>
             <Row className='m-0 p-0 ms-3 mb-3' >
-                {props.cards.map((card, index) => <CardObject key={index} cardNum={index} card={card} resourceIcons={resourceIcons} gameClass={props.gameClass} />)}
+                {props.cards.map((card, index) => <CardObject key={index} cardNum={index} card={card} selected={props.selectedCard !== null && props.selectedCard===index} resourceIcons={resourceIcons} gameClass={props.gameClass} />)}
             </Row>
         </div>
     )

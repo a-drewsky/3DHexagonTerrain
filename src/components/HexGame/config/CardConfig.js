@@ -1,6 +1,6 @@
-import villager_icon from '../images/units/villagerUnit/villager_unit_icon.png'
-import mountain_ranger_icon from '../images/units/mountainRanger/mountain_ranger_icon.png'
-import imperial_soldier_icon from '../images/units/imperialSoldier/imperial_swordsman_icon.png'
+import villager_icon from '../images/ui/cardIcons/villager_unit_icon.png'
+import mountain_ranger_icon from '../images/ui/cardIcons/mountain_ranger_icon.png'
+import imperial_soldier_icon from '../images/ui/cardIcons/imperial_swordsman_icon.png'
 
 export default class CardConfig {
 

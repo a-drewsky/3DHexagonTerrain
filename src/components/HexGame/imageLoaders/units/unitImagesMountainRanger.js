@@ -5,7 +5,7 @@ import mine_sheet from '../../images/units/mountainRanger/mountain_ranger_mine_s
 import walk_sheet from '../../images/units/mountainRanger/mountain_ranger_walk_sheet.png'
 import idle_sheet from '../../images/units/mountainRanger/mountain_ranger_idle_sheet.png'
 
-import icon_image from '../../images/units/mountainRanger/mountain_ranger_icon.png'
+import icon_image from '../../images/ui/cardIcons/mountain_ranger_icon.png'
 
 import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 

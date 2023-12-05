@@ -5,7 +5,7 @@ import mine_sheet from '../../images/units/villagerUnit/villager_unit_mine_sheet
 import walk_sheet from '../../images/units/villagerUnit/villager_unit_walk_sheet.png'
 import idle_sheet from '../../images/units/villagerUnit/villager_unit_idle_sheet.png'
 
-import icon_image from '../../images/units/villagerUnit/villager_unit_icon.png'
+import icon_image from '../../images/ui/cardIcons/villager_unit_icon.png'
 
 import SheetImageLoaderClass from '../imageLoaderBaseClass/sheetImageLoader'
 
