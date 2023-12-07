@@ -30,7 +30,7 @@ export default class StructureBuilderUtilsClass {
 
             tileToSet.height = terrainHeight
             tileToSet.biome = tileBiome
-
+            tileToSet.biomeRegion = BIOME_CONSTANTS[tileBiome].biomeRegion
         }
     }
 

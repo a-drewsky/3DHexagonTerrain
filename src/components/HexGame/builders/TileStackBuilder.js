@@ -166,7 +166,7 @@ export default class TileStackBuilderClass {
         tileObj.midBiome = tileMidBiome
         tileObj.highBiome = tileHighBiome
         tileObj.veryhighBiome = tileVeryhighBiome
-        tileObj.biomeName = BIOME_CONSTANTS[tileBiome].biomeName
+        tileObj.biomeRegion = BIOME_CONSTANTS[tileBiome].biomeRegion
 
     }
 
@@ -233,7 +233,6 @@ export default class TileStackBuilderClass {
             let neighborKeyToClone = neighborKeys[Math.floor(Math.random() * neighborKeys.length)]
             let tileToClone = this.tileData.getEntry(neighborKeyToClone)
             this.utils.cloneTile(tileToClone, keyObj)
-
             return true
         }
 
@@ -260,7 +259,6 @@ export default class TileStackBuilderClass {
             }
 
             //Check size of biome set and fix tiles if neccessary
-            console.log(biome)
             if (keyStrArr.length < BIOME_CONSTANTS[biome].minBiomeSmoothing) {
                 while (keyStrArr.length > 0) {
                     let keyStrArrObj = this.commonUtils.split(keyStrArr[0])

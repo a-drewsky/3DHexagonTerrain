@@ -54,7 +54,7 @@ export default class UnitViewClass {
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
         let tileObj = this.tileData.getEntry(unit.position)
-        let sprite = unit.imageObject[unit.curState()].images[unit.frame][this.cameraData.rotation]
+        let sprite = unit.sprite(this.cameraData.rotation)
 
         let spriteSize = {
             width: this.mapData.size * 2 * sprite.size.w,
@@ -102,7 +102,7 @@ export default class UnitViewClass {
     drawActionUnit = (hexmapCtx, unit) => {
 
         let keyObj = this.commonUtils.rotateTile(unit.position, this.cameraData.rotation)
-        let sprite = unit.imageObject[unit.curState()].images[unit.frame][this.cameraData.rotation]
+        let sprite = unit.sprite(this.cameraData.rotation)
         let height = this.tileData.getEntry(unit.position).height
 
         let pos = {

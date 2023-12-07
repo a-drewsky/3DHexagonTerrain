@@ -3,7 +3,7 @@ export const TILE_SIZE = 20
 
 export const HEXMAP_SQUISH = 2 / 3
 
-export const TILE_HEIGHT = 12
+export const TILE_HEIGHT = 16
 
 export const INIT_CAMERA_POSITION = 'bottom'
 

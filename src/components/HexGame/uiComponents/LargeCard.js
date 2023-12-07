@@ -6,7 +6,9 @@ const LargeCardObject = (props) => {
         <Col className='ms-2 p-0'>
             <Card className='pe-auto' style={{ width: '12rem', height: '16.8rem', backgroundColor: 'rgba(250,250,250,0.95)' }} onClick={() => { props.gameClass.uiInput(`card_${props.cardNum}`) }}>
                 <Card.Body className='p-0'>
+
                     <Card.Title className={`d-block m-0 p-1 text-center`} style={{ height: '2rem' }}>{props.card.name}</Card.Title>
+
                     <Row style={{ height: '5rem' }} className='m-0 p-0'>
                         <Col className='col-6 px-0'>
                             <Card.Img src={props.card.image || props.card.imageObject.icon} className={`d-block m-0 mx-auto p-1`} style={{ height: '5rem', width: 'auto' }} />
@@ -17,7 +19,8 @@ const LargeCardObject = (props) => {
                             <Card.Text className='w-100 m-0 p-0 font-monospace small '>MN {props.card.stats.mining}</Card.Text>
                         </Col>
                     </Row>
-                    <Row style={{ height: '4rem' }} className=' m-0 p-0'>
+
+                    {/* <Row style={{ height: '4rem' }} className=' m-0 p-0'>
                         <Col className='col-6 px-0 text-center my-auto'>
                             <Card.Text className='w-100 m-0 p-0 font-monospace small' style={{ height: '1rem' }}>PA {props.card.stats.physical_attack}</Card.Text>
                             <Card.Text className='w-100 m-0 p-0 font-monospace small fw-bold' style={{ fontSize: '0.5rem' }}>
@@ -78,10 +81,12 @@ const LargeCardObject = (props) => {
                                 )}
                             </Card.Text>
                         </Col>
-                    </Row>
+                    </Row> */}
+
                     <Card.Text className='small text-justify p-1 m-0 overflow-auto' style={{ height: '4.4rem', lineHeight: '0.9rem' }}>
                         {props.card.description}
                     </Card.Text>
+
                     <Card.Title className={`text-end d-block m-0 font-bold ${props.card.flipped && 'opacity-0'} `} style={{ height: '1.4rem', fontSize: '1rem' }}>
                         {props.card.cost && props.card.cost.map((cost, index) =>
                             <span
@@ -91,6 +96,7 @@ const LargeCardObject = (props) => {
                             </span>
                         )}
                     </Card.Title>
+
                 </Card.Body>
             </Card>
             {

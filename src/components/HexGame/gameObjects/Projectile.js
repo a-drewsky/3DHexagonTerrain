@@ -10,7 +10,7 @@ const PROJECTILE_STATE = {
 
 export default class ProjectileClass extends SpriteObjectClass {
 
-    constructor(loc, pos, target, projectileId, tileData, images) {
+    constructor(loc, pos, target, sender, abilityId, projectileId, tileData, images) {
         if (!ProjectileConfig[projectileId]) throw Error(`Invalid Projectile ID: (${projectileId}). Unit config properties are: [${Object.getOwnPropertyNames(ProjectileConfig).splice(3)}]`)
 
         super(
@@ -29,9 +29,11 @@ export default class ProjectileClass extends SpriteObjectClass {
         this.commonUtils = new CommonHexMapUtilsClass()
 
         this.loc = loc
-        this.rotation = this.commonUtils.getDirection(pos, target)
+        this.rotation = this.commonUtils.getDirection(pos, target.position)
         this.position = this.commonUtils.getAdjacentHalfPos(pos, this.rotation)
-        this.target = { ...target }
+        this.target = target
+        this.sender = sender
+        this.abilityId = abilityId
 
         //image data
         this.image = null
@@ -48,7 +50,7 @@ export default class ProjectileClass extends SpriteObjectClass {
 
     travelTime = () => {
         let nearestPos = this.nearestPosition()
-        let travelLength = this.commonUtils.getDistance(nearestPos, this.target)
+        let travelLength = this.commonUtils.getDistance(nearestPos, this.target.position)
         return this.tileTravelTime * travelLength
     }
 
@@ -63,14 +65,14 @@ export default class ProjectileClass extends SpriteObjectClass {
     spriteHeight = () => {
         let nearestPos = this.nearestPosition()
         let posHeight = this.tileData.getEntry(nearestPos).height
-        let targetHeight = this.tileData.getEntry(this.target).height
+        let targetHeight = this.tileData.getEntry(this.target.position).height
         return posHeight + (targetHeight - posHeight) * this.travelPercent() + this.height
     }
 
     shadowHeight = () => {
         let nearestPos = this.nearestPosition()
         let projectilePos = this.tileData.getEntry(nearestPos).position
-        let targetPos = this.tileData.getEntry(this.target).position
+        let targetPos = this.tileData.getEntry(this.target.position).position
         let lerpPos = this.commonUtils.getLerpPos(projectilePos, targetPos, this.travelPercent())
         lerpPos = this.commonUtils.roundToNearestHex(lerpPos)
         return this.tileData.getEntry(lerpPos).height
@@ -78,7 +80,6 @@ export default class ProjectileClass extends SpriteObjectClass {
 
     updatePath = () => {
         this.projectileCurTime = Date.now()
-
         if (this.projectileCurTime - this.projectileStartTime >= this.travelTime()) {
             this.actionComplete = true
         }

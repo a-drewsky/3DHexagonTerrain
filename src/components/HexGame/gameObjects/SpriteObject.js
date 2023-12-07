@@ -58,11 +58,9 @@ export default class SpriteObjectClass {
         if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
             this.render = true
             this.frameStartTime = Date.now()
-
             this.frame++
             if (this.frame >= this.imageObject[this.curState()].images.length) this.frame = 0
         }
-
     }
 
 }

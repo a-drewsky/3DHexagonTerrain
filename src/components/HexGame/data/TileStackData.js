@@ -129,7 +129,7 @@ export default class TileStackDataClass {
     }
 
     setForest = (pos) => {
-        this.getAnyEntry(pos).biome = 'forest'
+        this.getAnyEntry(pos).biomeRegion = 'forest'
     }
 
     getEntry = (pos) => {

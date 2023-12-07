@@ -9,11 +9,9 @@ export default class HexMapManagerClass {
 
     constructor(canvas, images, uiInterface, gameData) {
 
-        this.images = images
-
         this.cameraManager = new CameraManagerClass(gameData)
-        this.tileManager = new TileStackManagerClass(gameData, this.images)
-        this.spriteManager = new SpriteObjectManagerClass(gameData, this.images)
+        this.tileManager = new TileStackManagerClass(gameData, images)
+        this.spriteManager = new SpriteObjectManagerClass(gameData, images)
         this.renderStackManager = new RenderStackManagerClass(gameData, this.tileManager, this.spriteManager)
         this.uiManager = new UiManagerClass(gameData, canvas, uiInterface)
 
@@ -40,6 +38,7 @@ export default class HexMapManagerClass {
         this.uiManager.update()
         this.spriteManager.update()
         this.tileManager.update()
+        
     }
 
 }

@@ -141,7 +141,7 @@ const ContentPanel = () => {
          {/*CANVAS*/}
          <div className={(gameClass === null || gameClass.loaded === false || imagesLoaded === false) && 'd-none'}>
             <Row className='py-2'>
-               <div style={{ width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
+               <div style={{ width: window.innerWidth * 0.6, height: window.innerHeight * 0.6, position: 'relative', overflow: 'hidden' }} className='border mx-auto p-0'>
                <canvas
                      ref={bgCanvas}
                      width={0}
@@ -152,8 +152,8 @@ const ContentPanel = () => {
                   />
                   <canvas
                      ref={canvas}
-                     width={Math.min(window.innerWidth, 1000)}
-                     height={window.innerHeight / 2}
+                     width={window.innerWidth * 0.6}
+                     height={window.innerHeight * 0.6}
                      onPointerDown={mouseDown}
                      onPointerUp={mouseUp}
                      onPointerMove={mouseMove}
@@ -161,7 +161,7 @@ const ContentPanel = () => {
 
                      onWheel={mouseWheel}
                      style={
-                        { imageRendering: 'pixelated', touchAction: 'none', width: Math.min(window.innerWidth, 1000), height: window.innerHeight / 2, position: 'absolute' }
+                        { imageRendering: 'pixelated', touchAction: 'none', width: window.innerWidth * 0.6, height: window.innerHeight * 0.6, position: 'absolute' }
                      }
                   />
 

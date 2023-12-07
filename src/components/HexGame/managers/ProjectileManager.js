@@ -1,5 +1,6 @@
 import ProjectileRendererClass from "../renderers/ProjectileRenderer"
 import CommonHexMapUtilsClass from "../commonUtils/CommonHexMapUtils"
+import AbilityInterfaceClass from "./AbilityInterface"
 
 export default class ProjectileManagerClass {
 
@@ -10,6 +11,8 @@ export default class ProjectileManagerClass {
         this.structureData = gameData.structureData
         this.renderer = new ProjectileRendererClass(gameData, images)
         this.commonUtils = new CommonHexMapUtilsClass()
+
+        this.abilityInterface = new AbilityInterfaceClass(gameData)
     }
 
     update = () => {
@@ -28,17 +31,10 @@ export default class ProjectileManagerClass {
 
     endProjectile = (projectile) => {
         
-        let targetObject = this.unitData.getUnit(projectile.target) || this.structureData.getStructure(projectile.target)
-        targetObject.health -= 25
+        this.abilityInterface.executeAbility(projectile.abilityId, projectile.target, projectile.sender)
         
         this.data.deleteProjectile(projectile.loc)
-
-        if(targetObject && targetObject.spriteType === 'unit'){
-            targetObject.setAnimation('hit')
-        } else if(targetObject && targetObject.spriteType === 'bunker') {
-            targetObject.updateState()
-            this.mapData.resetState()
-        }
+        this.mapData.resetState()
 
     }
 

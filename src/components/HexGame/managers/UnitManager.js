@@ -1,6 +1,8 @@
 import UnitRendererClass from "../renderers/UnitRenderer"
 import HexMapControllerUtilsClass from "../controllers/utils/HexMapControllerUtils"
 
+import AbilityInterfaceClass from "./AbilityInterface"
+
 export default class UnitManagerClass {
 
     constructor(gameData, images) {
@@ -13,6 +15,7 @@ export default class UnitManagerClass {
 
         this.renderer = new UnitRendererClass(gameData, images)
         this.utils = new HexMapControllerUtilsClass(gameData)
+        this.abilityInterface = new AbilityInterfaceClass(gameData)
     }
 
     update = () => {
@@ -68,32 +71,15 @@ export default class UnitManagerClass {
     }
 
     endAttack = (unit) => {
-        switch (unit.id) {
-            case 'mountain_ranger':
-                this.endProjectileAttack(unit)
-                return
-            default:
-                this.endAdjacentAttack(unit)
-                return
-        }
-    }
-
-    endProjectileAttack = (unit) => {
-        this.projectileData.newProjectile('arrow_projectile', unit.position, this.data.unitTarget)
-        unit.setAnimation('post_attack')
-    }
-
-    endAdjacentAttack = (unit) => {
         let targetObject = this.utils.getTargetObject(this.data.unitTarget)
-        targetObject.health -= 25
+
+        if(unit.abilities.current.projectile){
+            this.projectileData.newProjectile(unit.abilities.current.projectile, unit.position, targetObject, unit, unit.abilities.current.ability_id)
+        } else {
+            this.abilityInterface.executeAbility(unit.abilities.current.ability_id, targetObject, unit)
+        }
 
         unit.setAnimation('post_attack')
-
-        if (targetObject.spriteType === 'unit') {
-            targetObject.setAnimation('hit')
-        } else {
-            targetObject.updateState()
-        }
     }
 
     endPostAttack = (unit) => {
@@ -106,7 +92,6 @@ export default class UnitManagerClass {
         if (unit.actionComplete) {
             unit.setIdle()
             this.utils.setChooseRotation(unit)
-        } else {
         }
     }
 

@@ -50,7 +50,12 @@ export default class UnitClass extends SpriteObjectClass {
         this.actionComplete = false
         this.stats = { ...UnitConfig[unitId].stats }
         this.health = this.stats['max_health']
-        this.abilities = { ...UnitConfig[unitId].abilities }
+        this.attachments = []
+        this.abilities = [{ ...UnitConfig[unitId].basic_ability, locked: false }]
+        for (let ability in UnitConfig[unitId].basic_ability) {
+            this.abilities.push({ ...ability, locked: true })
+        }
+        this.abilities.current = this.abilities[0]
 
     }
 
@@ -63,6 +68,30 @@ export default class UnitClass extends SpriteObjectClass {
         if (this.state.current.duration === 'continuous') return true
         if (this.animationCurTime - this.animationStartTime < this.state.current.duration) return false
         return true
+    }
+
+    sprite = (cameraRotation) => {
+        if (this.curState() != 'attack' && this.curState() != 'post_attack') {
+            return this.imageObject[this.curState()].images[this.frame][this.spriteRotation(cameraRotation)]
+        } else {
+            return this.imageObject[`${this.abilities.current['ability_id']}_${this.curState()}`].images[this.frame][this.spriteRotation(cameraRotation)]
+        }
+    }
+
+    setFrame = () => {
+        this.frameCurTime = Date.now()
+        this.animationCurTime = Date.now()
+        if (this.state.current.rate === 0) return
+        if (this.frameCurTime - this.frameStartTime > this.state.current.rate) {
+            this.render = true
+            this.frameStartTime = Date.now()
+            this.frame++
+            if (this.curState() != 'attack' && this.curState() != 'post_attack') {
+                if (this.frame >= this.imageObject[this.curState()].images.length) this.frame = 0
+            } else {
+                if (this.frame >= this.imageObject[`${this.abilities.current['ability_id']}_${this.curState()}`].images.length) this.frame = 0
+            }
+        }
     }
 
 

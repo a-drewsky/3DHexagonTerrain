@@ -36,10 +36,8 @@ export default class HexMapPathFinderUtilsClass {
         return Math.abs(this.tileData.getEntry(tile1).height - this.tileData.getEntry(tile2).height)
     }
 
-    getTileCost = (tile) => {
-        if(this.tileData.getEntry(tile).biome === 'water') return 2
-        if(this.tileData.getEntry(tile).biome === 'forest') return 1
-        return 0
+    getTileCost = (tileObj) => {
+        return this.unitData.selectedUnit.stats['movement_cost'][tileObj.biomeRegion]
     }
 
     getPathCost = (unitPos, path) => {
@@ -47,8 +45,7 @@ export default class HexMapPathFinderUtilsClass {
         let testPath = [unitPos, ...path]
         for(let i=1; i<testPath.length; i++){
             let tile = testPath[i]
-            let tileCost = this.getTileCost(tile)
-            cost += tileCost + this.getHeightDifference(testPath[i-1], testPath[i]) + 1
+            cost += this.getTileCost(tile) + this.getHeightDifference(testPath[i-1], testPath[i])
         }
 
         return cost
@@ -84,9 +81,7 @@ export default class HexMapPathFinderUtilsClass {
 
                 let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
 
-                let tileCost = this.getTileCost(neighbor.tile)
-
-                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
+                let costToNeighbor = current.moveCost + this.getTileCost(this.tileData.getEntry(neighbor.tile)) + this.getHeightDifference(current.tile, neighbor.tile)
 
                 if (!inSearch || costToNeighbor < neighbor.g) {
                     neighbor.moveCost = costToNeighbor
@@ -159,8 +154,8 @@ export default class HexMapPathFinderUtilsClass {
             for (let neighbor of neighbors) {
 
                 let inSearch = toSearch.some(node => node.tile.q === neighbor.tile.q && node.tile.r === neighbor.tile.r)
-                let tileCost = this.getTileCost(neighbor.tile)
-                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile) + 1
+                let tileCost = this.getTileCost(this.tileData.getEntry(neighbor.tile))
+                let costToNeighbor = current.moveCost + tileCost + this.getHeightDifference(current.tile, neighbor.tile)
 
                 if (!inSearch || costToNeighbor < neighbor.g) {
                     neighbor.moveCost = costToNeighbor

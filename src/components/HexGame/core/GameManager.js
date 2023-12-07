@@ -4,14 +4,10 @@ export default class GameManagerClass {
 
     constructor(canvas, images, uiInterface, gameData, userConstants) {
 
-        this.canvas = canvas
-        this.images = images
-
         this.hexMapManager = new HexMapManagerClass(canvas, images, uiInterface, gameData)
         this.hexMapManager.build(userConstants.MAP_SIZE)
 
         this.uiInterface = uiInterface
-        this.gameData = gameData
 
         //create all state objects like this
         this.state = {

@@ -194,14 +194,7 @@ export default class HexMapControllerUtilsClass {
     }
 
     getTargetObject = (pos) => {
-        let targetObject
-        if (this.unitData.getUnit(pos) !== null) {
-            targetObject = this.unitData.getUnit(pos)
-        } else {
-            if (this.structureData.getStructure(pos) === null) return
-            targetObject = this.structureData.getStructure(pos)
-        }
-        return targetObject
+        return this.unitData.getUnit(pos) || this.structureData.getStructure(pos)
     }
 
 }

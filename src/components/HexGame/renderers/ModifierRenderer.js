@@ -228,8 +228,6 @@ export default class ModifierRendererClass {
             tempCanvas.height = canvasSize.height
             let tempctx = tempCanvas.getContext('2d')
 
-            console.log(modifier)
-
             tempctx.drawImage(modifier.imageObject[modifier.sprite].sprite, 0, 0, tempCanvas.width, tempCanvas.height)
 
             imageList[rotation] = {

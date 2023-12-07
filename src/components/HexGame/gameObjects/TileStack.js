@@ -17,6 +17,7 @@ export default class TileStackClass {
         this.midBiome = null
         this.highBiome = null
         this.veryhighBiome = null
+        this.biomeRegion = null
 
         this.images = []
         if(!images) return

@@ -1,4 +1,5 @@
 
+import { BIOME_CONSTANTS } from "../../constants/BuilderConstants"
 
 export default class CommonBuilderUtilsClass {
 
@@ -18,6 +19,7 @@ export default class CommonBuilderUtilsClass {
         newTile.midBiome = tileToClone.midBiome
         newTile.highBiome = tileToClone.highBiome
         newTile.veryhighBiome = tileToClone.veryhighBiome
+        newTile.biomeRegion = tileToClone.biomeRegion
     }
 
     setTileBiome = (tile) => {
@@ -26,6 +28,7 @@ export default class CommonBuilderUtilsClass {
         if (tile.height >= this.mapData.elevationRanges['mid']) tile.biome = tile.midBiome
         if (tile.height >= this.mapData.elevationRanges['high']) tile.biome = tile.highBiome
         if (tile.height >= this.mapData.elevationRanges['veryhigh']) tile.biome = tile.veryhighBiome
+        tile.biomeRegion = BIOME_CONSTANTS[tile.biome].biomeRegion
     }
 
 }

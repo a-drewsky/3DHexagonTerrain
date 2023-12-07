@@ -10,8 +10,8 @@ export default class ProjectileDataClass {
 
     }
 
-    newProjectile = (projectileId, pos, target) => {
-        let newProjectile = new ProjectileClass(this.projectileList.length, pos, target, projectileId, this.tileData, this.images)
+    newProjectile = (projectileId, pos, target, sender, abilityId) => {
+        let newProjectile = new ProjectileClass(this.projectileList.length, pos, target, sender, abilityId, projectileId, this.tileData, this.images)
         this.projectileList.push(newProjectile)
         return newProjectile
     }

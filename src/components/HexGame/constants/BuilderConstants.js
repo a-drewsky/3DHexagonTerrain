@@ -43,7 +43,7 @@ export const MAP_SIZES = {
 
 export const BIOME_CONSTANTS = {
     snowmountain: {
-        biomeName: 'hill',
+        biomeRegion: 'hills',
         biomeGroup: ['tundra', 'rockmountain', 'snowhill'],
         minBiomeSmoothing: 6,
         terrainGenThreshold: null,
@@ -51,7 +51,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.4
     },
     rockmountain: {
-        biomeName: 'hill',
+        biomeRegion: 'hills',
         biomeGroup: ['grasshill', 'snowmountain'],
         minBiomeSmoothing: 6,
         terrainGenThreshold: null,
@@ -59,7 +59,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.4
     },
     snowhill: {
-        biomeName: 'hill',
+        biomeRegion: 'hills',
         biomeGroup: ['tundra', 'rockmountain', 'snowmountain'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.4,
@@ -67,7 +67,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.45
     },
     grasshill: {
-        biomeName: 'hill',
+        biomeRegion: 'hills',
         biomeGroup: ['rockmountain', 'snowmountain'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.4,
@@ -75,7 +75,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     savannahill: {
-        biomeName: 'hill',
+        biomeRegion: 'hills',
         biomeGroup: ['rockmountain', 'snowmountain'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.5,
@@ -83,7 +83,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     sandhill: {
-        biomeName: 'desert',
+        biomeRegion: 'desert',
         biomeGroup: ['desert', 'playa', 'rockhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.5,
@@ -91,7 +91,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.45
     },
     plains: {
-        biomeName: 'plains',
+        biomeRegion: 'plains',
         biomeGroup: ['grasshill'],
         minBiomeSmoothing: 12,
         terrainGenThreshold: 0.35,
@@ -99,7 +99,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     savanna: {
-        biomeName: 'plains',
+        biomeRegion: 'plains',
         biomeGroup: ['grasshill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.45,
@@ -107,7 +107,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.5
     },
     tundra: {
-        biomeName: 'tundra',
+        biomeRegion: 'tundra',
         biomeGroup: ['snowmountain', 'frozenwater'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.4,
@@ -115,7 +115,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.45
     },
     desert: {
-        biomeName: 'desert',
+        biomeRegion: 'desert',
         biomeGroup: ['playa', 'rockhill', 'sandhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: 0.45,
@@ -123,7 +123,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: 0.4
     },
     water: {
-        biomeName: 'water',
+        biomeRegion: 'water',
         biomeGroup: ['frozenwater', 'playa'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: null,
@@ -131,7 +131,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: null
     },
     frozenwater: {
-        biomeName: 'tundra',
+        biomeRegion: 'tundra',
         biomeGroup: ['tundra', 'snowmountain'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: null,
@@ -139,7 +139,7 @@ export const BIOME_CONSTANTS = {
         rockGenThreshold: null
     },
     playa: {
-        biomeName: 'desert',
+        biomeRegion: 'desert',
         biomeGroup: ['desert', 'sandhill'],
         minBiomeSmoothing: 10,
         terrainGenThreshold: null,

@@ -26,21 +26,16 @@ export default class ProjectileRendererClass {
 
     renderSprite = (projectile) => {
 
-        let pos = this.commonUtils.rotateTile(projectile.position, this.cameraData.rotation)
-
-        //set pos
         let percent = projectile.travelPercent()
-        let lerpPos = this.commonUtils.getLerpPos(projectile.position, projectile.target, percent)
-        pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
+        let lerpPos = this.commonUtils.getLerpPos(projectile.position, projectile.target.position, percent)
+        let pos = this.commonUtils.rotateTile(lerpPos, this.cameraData.rotation)
         let closestTile = this.commonUtils.roundToNearestHex(lerpPos)
 
         let height = projectile.spriteHeight()
 
         let sprite = projectile.sprite(this.cameraData.rotation)
 
-        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation)
-        spritePos.x -= this.mapData.size + sprite.offset.x * this.mapData.size * 2
-        spritePos.y -= (this.mapData.size * this.mapData.squish) + sprite.offset.y * this.mapData.size * 2
+        let spritePos = this.tileData.hexPositionToXYPosition(pos, height, this.cameraData.rotation, sprite.offset)
 
         let spriteSize = {
             width: this.mapData.size * 2 * sprite.size.w,
@@ -66,7 +61,7 @@ export default class ProjectileRendererClass {
     renderShadow = (projectile) => {
 
         let percent = projectile.travelPercent()
-        let lerpPos = this.commonUtils.getLerpPos(projectile.position, projectile.target, percent)
+        let lerpPos = this.commonUtils.getLerpPos(projectile.position, projectile.target.position, percent)
 
         this.shadowRenderer.renderActionShadow(projectile, lerpPos)
 

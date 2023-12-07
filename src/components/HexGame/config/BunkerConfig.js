@@ -6,7 +6,8 @@ export default class BunkerConfig {
         shadow: 'base_shadow',
         height: 2,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -17,7 +18,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 0,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -28,7 +30,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 1,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -39,7 +42,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 2,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -50,7 +54,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 3,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -61,7 +66,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 4,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
@@ -72,7 +78,8 @@ export default class BunkerConfig {
         height: 3,
         rotation: 5,
         stats: {
-            max_health: 100
+            max_health: 100,
+            resistance: {}
         }
     }
 
